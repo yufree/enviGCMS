@@ -37,7 +37,4 @@ list intergration data such as peak area, peak hight, signal and the slope data.
 \description{
 GetIntegration was mainly used for get the intergration of certain ion's chromatogram data and plot the data
 }
-\examples{
-NULL
-}
 

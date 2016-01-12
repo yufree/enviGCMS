@@ -17,7 +17,4 @@ The filtered data
 \description{
 filter data by average moving box
 }
-\examples{
-ma(c(1:10), 2)
-}
 

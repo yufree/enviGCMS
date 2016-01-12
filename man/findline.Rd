@@ -4,7 +4,7 @@
 \alias{findline}
 \title{findline of the regression model}
 \usage{
-findline(data, threshold = 2)
+findline(data, threshold = 2, temp = c(100, 320))
 }
 \description{
 findline of the regression model

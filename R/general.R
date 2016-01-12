@@ -3,13 +3,13 @@
 #' @importFrom rcdk get.formula
 #' @importFrom rcdk get.isotopes.pattern
 NULL
+
 #' filter data by average moving box
 #'
 #' @param x a vector
 #' @param n A number to indentify the size of the moving box.
 #' @return The filtered data
-#' @examples
-#' ma(c(1:10), 2)
+#' @export
 ma <- function(x,n){
         filter(x,rep(1/n,n),circular = T)
 }
@@ -19,13 +19,14 @@ ma <- function(x,n){
 #' @param data imported data matrix of GC-MS
 #' @param col custumized color
 #' @return heatmap
+#' @export
 plotms <- function(data,col = heat.colors(108),...){
         .pardefault <- par(no.readonly = T)
         layout(matrix(c(1,2), nrow=2), heights = c(1,5))
         # get the mz and rt range and rotate the matrix to adapt the image function
         indmz <- as.numeric(rownames(data))
         indrt <- as.numeric(colnames(data))
-        z <- log10(t(data+1))
+        z <- log10(t(data))
         # show the intensity scale in log 10 based scale
         par(mar=c(2,4,1,2))
         zlim <- range(z)
@@ -65,13 +66,14 @@ plotms <- function(data,col = heat.colors(108),...){
 #' @param col custumized color
 #' @param temp temprature range for constant speed
 #' @return heatmap
+#' @export
 plott <- function(data,col = heat.colors(108),temp = c(100,320),...){
         .pardefault <- par(no.readonly = T)
         layout(matrix(c(1,2), nrow=2), heights = c(1,5))
         # get the mz and rt range and rotate the matrix to adapt the image function
         indmz <- as.numeric(rownames(data))
         indrt <- as.numeric(colnames(data))
-        z <- log10(t(data+1))
+        z <- log10(t(data))
         # show the intensity scale in log 10 based scale
         par(mar=c(2,4,1,2))
         zlim <- range(z)
@@ -112,6 +114,7 @@ plott <- function(data,col = heat.colors(108),temp = c(100,320),...){
 #' @param rt vector range of the retention time
 #' @param ms vector range of the m/z
 #' @return plot and MSP files for NIST search
+#' @export
 plotrtms <- function(data,rt,ms){
         data <- getsubmd(data,rt,ms)
         temp <- apply(data,1,mean)
@@ -134,6 +137,7 @@ plotrtms <- function(data,rt,ms){
 #' @param rt vector range of the retention time
 #' @param n logical smooth or not
 #' @return dataframe with  with the first column RT and second column intensity of the SIM ions.
+#' @export
 plotmsrt <- function(data,ms,rt=c(3.1,25),n=F){
         data <- getsubmd(data,rt,c(ms,ms+1))[1,]
         if(n){
@@ -158,6 +162,7 @@ plotmsrt <- function(data,ms,rt=c(3.1,25),n=F){
 #' @param rt vector range of the retention time
 #' @param n logical smooth or not
 #' @return plot
+#' @export
 plottic <- function(data,rt=c(3.1,25),ms=c(100,1000),n=F){
         data <- getsubmd(data,rt,ms)
         data <- apply(data,2,sum)
@@ -176,6 +181,7 @@ plottic <- function(data,rt=c(3.1,25),ms=c(100,1000),n=F){
 #' @param list list from getinteragtion
 #' @param name the title of the plot
 #' @return NULL
+#' @export
 plotint <- function(list,name=NULL){
         area <- list$area
         height <- list$height
@@ -217,6 +223,7 @@ plotint <- function(list,name=NULL){
 #' @param list list from getinteragtion
 #' @param name the title of the plot
 #' @return NULL
+#' @export
 plotintslope <- function(list,name=NULL){
         area <- list$area
         height <- list$height

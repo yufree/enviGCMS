@@ -1,6 +1,7 @@
 #' import data and return the annotated matrix
 #' @param data file type which xcmsRaw could handle
 #' @return matrix with the row as increasing m/z in second and column as increasing scantime
+#' @export
 getmd <- function(data){
         data <- xcmsRaw(data)
         z1 <- data@env$profile
@@ -17,7 +18,7 @@ getmd <- function(data){
 #' @param data2 matrix higher mass range
 #' @param ... matrix even higher mass range
 #' @return matrix with the row as scantime in second and column as m/z
-#'
+#' @export
 conbinemd <- function(data1,data2,...){
         if(missing(...)){
                 z1 <- getmd(data1)
@@ -39,6 +40,7 @@ conbinemd <- function(data1,data2,...){
 #' @param rt vector range of the retention time
 #' @param ms vector range of the m/z
 #' @return data matrix
+#' @export
 getsubmd <- function(data,rt,ms){
         mzindexstart <- as.numeric(head(rownames(data),1))
         rtindexstart <- as.numeric(head(colnames(data),1))
@@ -57,6 +59,7 @@ getsubmd <- function(data,rt,ms){
 #' @param mz a intensity vector, who name is the mass in m/z
 #' @param outfilename the name of the MSP file, default is 'unknown'
 #' @return none a MSP file will be created at the subfolder working dictionary with name 'MSP'
+#' @export
 writeMSP<-function(mz, outfilename="unknown"){
         mz <- paste(names(mz),round(mz))
         dir.create('MSP')

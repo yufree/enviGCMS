@@ -9,6 +9,10 @@ Maintainer: Miao YU <yufreecas@gmail.com>
 Description: More about what it does (maybe more than one line)
 License: GPL-2
 LazyData: TRUE
+Imports:
+        rcdk,
+        xcms,
+        mixtools
 Suggests:
     knitr
 VignetteBuilder: knitr
