@@ -40,7 +40,7 @@ plotms <- function(data,col = heat.colors(108),...){
              xaxs="i", yaxs="i",
              ylab = '',xlab = '',...)
         mtext('Intensity',side = 2,line = 0.5,las = 1)
-        axis(1,at=breaks,labels = 10^(breaks),las=1)
+        axis(1,at=breaks,labels = round(10^(breaks)),las=1)
         bks <- seq(zlim[1], zlim[2], length.out=(length(col)+1))
         for(i in seq(poly)){
                 polygon(c(bks[i], bks[i+1], bks[i+1], bks[i]), c(0,0,1,1), col=col[i], border=NA)
@@ -88,7 +88,7 @@ plott <- function(data,col = heat.colors(108),temp = c(100,320),...){
              xaxs="i", yaxs="i",
              ylab = '',xlab = '',...)
         mtext('Intensity',side = 2,line = 0.5,las = 1)
-        axis(1,at=breaks,labels = 10^(breaks),las=1)
+        axis(1,at=breaks,labels = round(10^(breaks)),las=1)
         bks <- seq(zlim[1], zlim[2], length.out=(length(col)+1))
         for(i in seq(poly)){
                 polygon(c(bks[i], bks[i+1], bks[i+1], bks[i]), c(0,0,1,1), col=col[i], border=NA)
