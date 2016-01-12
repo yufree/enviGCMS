@@ -1,0 +1,70 @@
+---
+title: "Data analysis of GC-MS in Envrionmental Science"
+author: "Miao Yu"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+Analysis is the core of the Environmental Science. When we want to know the amounts of certain pullutions, analytical method were employed. GC-MS might be the most popular instrument for the development of analytical methond. Previous works such as `xcms` were devoloped for GC-MS data. However, such packages have limited functions for environmental analysis. For example, the isotope information of certain compounds is missing in almost all of the GC-MS data analysis software. In this package. I added many functions for those data analysis. Such feature could not only reveal certain problem, but also help the user find out the real data structure of GC-MS and DIY for their intentions.
+
+## Data structure of GC-MS full scan mode
+
+GC is used for separation and MS is used for detection. The real single is counts of certain mass. So when we perform a full-scan on certain column, the counts of different mass were collect in each cycle. Each cycle might only last for 500ms or less. The next scan begins. Here we could use a matrix to stand for those data. Each column stands for each mass and row stands for the retention time of that scan. Such matrix could be treated as a time-seris data. In this package, we treat such data as `matrix` type. 
+
+## Data structure of GC-MS SIM mode
+
+When you perform a selected ions monitor(SIM) mode, only few mass data were collected and each mass would have counts and retention time as a time seris data. In this package, we treat such data as `data.frame` type.
+
+## Find the real
+
+Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The `html_vignette` output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The `html_vignette` format:
+
+- Never uses retina figures
+- Has a smaller default figure size
+- Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style
+
+## Vignette Info
+
+Note the various macros within the `vignette` section of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
+
+## Styles
+
+The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
+
+    output: 
+      rmarkdown::html_vignette:
+        css: mystyles.css
+
+## Figures
+
+The figure sizes have been customised so that you can easily put two images side-by-side. 
+
+```{r, fig.show='hold'}
+plot(1:10)
+plot(10:1)
+```
+
+You can enable figure captions by `fig_caption: yes` in YAML:
+
+    output:
+      rmarkdown::html_vignette:
+        fig_caption: yes
+
+Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
+
+## More Examples
+
+You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
+
+```{r, echo=FALSE, results='asis'}
+knitr::kable(head(mtcars, 10))
+```
+
+Also a quote using `>`:
+
+> "He who gives up [code] safety for [code] speed deserves neither."
+([via](https://twitter.com/hadleywickham/status/504368538874703872))
