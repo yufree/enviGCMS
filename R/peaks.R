@@ -124,12 +124,12 @@ batch <- function(file,mz1,mz2,...){
         return(ratio)
 }
 #' Just intergrate data according to fixed rt and fixed noise area
-#' @param data
-#' @param minrt
-#' @param maxrt
-#' @param minbrt
-#' @param maxbrt
-#' @param smoothit
+#' @param data file should be a dataframe with the first column RT and second column intensity of the SIM ions.
+#' @param minrt a rough smallest RT range contained only one peak to get the area
+#' @param maxrt a rough largest RT range contained only one peak to get the area
+#' @param minbrt a rough smallest RT range contained only one peak and enough noisy to get the area
+#' @param maxbrt a rough largest RT range contained only one peak and enough noisy to get the area
+#' @param smoothit logical, if using an average smooth box or not. If using, n will be used
 #' @return area intergration data
 Integration <- function(data, minrt = 8.3 , maxrt = 9,minbrt = 8.3, maxbrt = 8.4,smoothit = T){
         # subset the data

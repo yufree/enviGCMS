@@ -4,10 +4,12 @@ Title: GC-MS Data Analysis for Environmental Science
 Version: 0.1
 Date: 2015-12-17
 Author: person("Miao","YU", email =
- "yufreecas@gmail.com", role = c("aut", "cre"))
+    "yufreecas@gmail.com", role = c("aut", "cre"))
 Maintainer: Miao YU <yufreecas@gmail.com>
 Description: More about what it does (maybe more than one line)
 License: GPL-2
 LazyData: TRUE
-Suggests: knitr
+Suggests:
+    knitr
 VignetteBuilder: knitr
+RoxygenNote: 5.0.1

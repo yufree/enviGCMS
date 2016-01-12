@@ -1,13 +1,8 @@
-#' function for molecular isotope ratio
-#' load the rcdk package
-library(rcdk)
-
-#' source("http://bioconductor.org/biocLite.R")
-#' biocLite("xcms")
-library(xcms)
-#' Distiguished the distribution by MLE
-library(mixtools)
-
+#' @importFrom xcms xcmsRaw
+#' @importFrom mixtools normalmixEM
+#' @importFrom rcdk get.formula
+#' @importFrom rcdk get.isotopes.pattern
+NULL
 #' filter data by average moving box
 #'
 #' @param x a vector

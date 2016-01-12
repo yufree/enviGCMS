@@ -113,3 +113,11 @@ plotsms <- function(meanmatrix,sdmatrix,...){
         abline(a = 0, b = 1)
         abline(v=2)
 }
+plothist <- function(data){
+        data1=sample(data,100000)
+        mixmdl = normalmixEM(log10(data1))
+        plot(mixmdl,which=2,breaks=100,
+             xlab2 = 'Intensity(log scale based 10)')
+        lines(density(log10(data1)), lty=2, lwd=2)
+        legend("topright",c('noise','signal','density'),box.lty=0,pch = c(-1,-1,-1),lty=c(1,1,2),lwd=c(2,2,2),col=c('red','green','black'))
+}
