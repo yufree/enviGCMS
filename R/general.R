@@ -26,15 +26,16 @@ plotms <- function(data,col = heat.colors(108),...){
         # get the mz and rt range and rotate the matrix to adapt the image function
         indmz <- as.numeric(rownames(data))
         indrt <- as.numeric(colnames(data))
+        data[data==0] <- NA
         z <- log10(t(data))
         # show the intensity scale in log 10 based scale
         par(mar=c(2,4,1,2))
-        zlim <- range(z)
+        zlim <- range(z,na.rm = T)
         breaks <- seq(zlim[1], zlim[2], round((zlim[2]-zlim[1])/7))
         poly <- vector(mode="list", length(col))
         plot(1,1,
              t="n",
-             ylim=c(0,1), xlim=range(z),
+             ylim=c(0,1), xlim=zlim,
              xaxt='n', yaxt='n',
              xaxs="i", yaxs="i",
              ylab = '',xlab = '',...)
@@ -73,10 +74,11 @@ plott <- function(data,col = heat.colors(108),temp = c(100,320),...){
         # get the mz and rt range and rotate the matrix to adapt the image function
         indmz <- as.numeric(rownames(data))
         indrt <- as.numeric(colnames(data))
+        data[data==0] <- NA
         z <- log10(t(data))
         # show the intensity scale in log 10 based scale
         par(mar=c(2,4,1,2))
-        zlim <- range(z)
+        zlim <- range(z,na.rm = T)
         breaks <- seq(zlim[1], zlim[2], round((zlim[2]-zlim[1])/7))
         poly <- vector(mode="list", length(col))
         plot(1,1,
