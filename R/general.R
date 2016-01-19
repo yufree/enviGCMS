@@ -115,7 +115,7 @@ plott <- function(data,col = heat.colors(108),temp = c(100,320),...){
 #' @param data imported data matrix of GC-MS
 #' @param rt vector range of the retention time
 #' @param ms vector range of the m/z
-#' @return plot and MSP files for NIST search
+#' @return plot, vector and MSP files for NIST search
 #' @export
 plotrtms <- function(data,rt,ms){
         data <- getsubmd(data,rt,ms)
@@ -131,6 +131,7 @@ plotrtms <- function(data,rt,ms){
         index <- seq(1,length(temp))
         axis(1, at=index[mz%%100==0], labels= mz[mz%%100==0])
         writeMSP(temp)
+        return(temp)
 }
 
 #' Plot EIC of certain m/z and return dataframe for intergration
@@ -250,6 +251,22 @@ plotintslope <- function(list,name=NULL){
         lines(c(rtend,rtend), c(-.1*max(slopedata), .1*max(slopedata)), "l", col="blue")
         lines(c(rtpeak,rtpeak), c(-.5*max(slopedata), .5*max(slopedata)), "l", col="blue")
 }
+
+#' plot the kendrick mass defect diagram
+#' @param data vector with the name m/z
+#' @param cutoff remove the low intensity
+#' @return NULL
+#' @export
+plotkms <- function(data,cutoff = 100){
+        data <- data[data>cutoff]
+        mz <- as.numeric(names(data))
+        km <- mz*14/14.01565
+        kmd <- round(km)-km
+        smoothScatter(kmd~round(km),
+                      xlab = "Kendrick nominal mass",
+                      ylab = "Kendrick mass defect",
+                      xlim = c(100,1000),
+                      ylim = c(-0.5,0.5))
+}
 #' to do
 #' Van Krevelen diagram
-#' kendrick mass defect diagram

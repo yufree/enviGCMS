@@ -14,7 +14,7 @@ plotrtms(data, rt, ms)
 \item{ms}{vector range of the m/z}
 }
 \value{
-plot and MSP files for NIST search
+plot, vector and MSP files for NIST search
 }
 \description{
 Plot mass spectrum of certain retention time and return mass spectrum vector (MSP file) for NIST search

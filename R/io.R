@@ -1,14 +1,15 @@
 #' import data and return the annotated matrix
 #' @param data file type which xcmsRaw could handle
+#' @param step resolution of the MS
 #' @return matrix with the row as increasing m/z in second and column as increasing scantime
 #' @export
-getmd <- function(data){
-        data <- xcmsRaw(data)
+getmd <- function(data,step = 1){
+        data <- xcmsRaw(data,profstep = step)
         z1 <- data@env$profile
         zf <- as.factor(round(data@scantime))
         df <- aggregate(t(z1), list(zf), sum)[-1]
         rownames(df) <- unique(round(data@scantime))
-        colnames(df) <- seq(data@mzrange[1],data@mzrange[2])
+        colnames(df) <- seq(data@mzrange[1],data@mzrange[2],by = step)
         return(t(as.matrix(df)))
 }
 
