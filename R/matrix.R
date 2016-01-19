@@ -23,14 +23,17 @@ findline <- function(data,threshold=2,temp = c(100,320)){
              frame.plot = F)
         # display the temperature as x
         rtx <- seq(min(x),max(x),length.out=length(x))
-        temp <- round(seq(temp[1],temp[2],length.out=length(x)),0)
+        temp <- round(seq(temp[1],temp[2],length.out=length(x)))
         axis(1, at=x[temp%%20==0], labels= temp[temp%%20==0])
         # display the m/z as y
         mzy <- seq(min(y0),max(y0),length.out=length(y0))
         axis(2, at=mzy[y0%%100==0], labels= y0[y0%%100==0], las=2)
         abline(lm(data$y~data$x), col="red",lwd = 5)
         lines(lowess(data$y~data$x), col="blue",lwd = 5)
-        fit <- lm(data$y~data$x)
+        slope <- (max(temp)-min(temp))/(max(data$x)-min(data$x))
+        intercept <- min(data$x)
+        data$x0 <- slope*data$x+intercept
+        fit <- lm(data$y~data$x0)
         rmse <- round(sqrt(mean(resid(fit)^2)), 2)
         coefs <- coef(fit)
         b0 <- round(coefs[1],2)
@@ -89,6 +92,7 @@ comparems <- function(data1,data2,...){
 #' Plot the response group of GC-MS
 #' @export
 plotgroup <- function(data,threshold=2){
+        .pardefault <- par(no.readonly = T)
         group <- ifelse(log10(data)>threshold,1,0)
         ind <- as.numeric(rownames(data))
         par(mfrow=c(1,2))
@@ -113,6 +117,7 @@ plotgroup <- function(data,threshold=2){
              xlab='Distribution of Intensity(log base 10)')
         abline(v=threshold,lwd=5,lty=2,col='red')
         legend("topright","threshold",box.lty=0,pch = -1,lty=2,lwd=2,col='red')
+        par(.pardefault)
 }
 
 #' Plot the backgrond of data

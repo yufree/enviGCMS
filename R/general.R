@@ -250,3 +250,6 @@ plotintslope <- function(list,name=NULL){
         lines(c(rtend,rtend), c(-.1*max(slopedata), .1*max(slopedata)), "l", col="blue")
         lines(c(rtpeak,rtpeak), c(-.5*max(slopedata), .5*max(slopedata)), "l", col="blue")
 }
+#' to do
+#' Van Krevelen diagram
+#' kendrick mass defect diagram
