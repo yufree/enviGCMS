@@ -92,7 +92,7 @@ plott <- function(data,col = heat.colors(108),temp = c(100,320),...){
         poly <- vector(mode="list", length(col))
         plot(1,1,
              t="n",
-             ylim=c(0,1), xlim=range(z),
+             ylim=c(0,1), xlim = zlim,
              xaxt='n', yaxt='n',
              xaxs="i", yaxs="i",
              ylab = '',xlab = '',...)
