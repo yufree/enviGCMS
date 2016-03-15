@@ -21,15 +21,14 @@ ma <- function(x,n){
 #' @return heatmap
 #' @export
 plotms <- function(data,col = heat.colors(108),...){
-        .pardefault <- par(no.readonly = T)
-        layout(matrix(c(1,2), nrow=2), heights = c(1,5))
         # get the mz and rt range and rotate the matrix to adapt the image function
+
         indmz <- as.numeric(rownames(data))
         indrt <- as.numeric(colnames(data))
         data[data==0] <- NA
         z <- log10(t(data))
         # show the intensity scale in log 10 based scale
-        par(mar=c(2,4,1,2))
+        par(mar=c(2,5,1,4),fig=c(0,1,0.9,1), new=F)
         zlim <- range(z,na.rm = T)
         breaks <- seq(zlim[1], zlim[2], round((zlim[2]-zlim[1])/7))
         poly <- vector(mode="list", length(col))
@@ -39,29 +38,41 @@ plotms <- function(data,col = heat.colors(108),...){
              xaxt='n', yaxt='n',
              xaxs="i", yaxs="i",
              ylab = '',xlab = '',...)
-        mtext('Intensity',side = 2,line = 0.5,las = 1)
+        mtext('intensity',side = 2,line = 0.5,las = 1,cex = 1.5)
         axis(1,at=breaks,labels = round(10^(breaks)),las=1)
         bks <- seq(zlim[1], zlim[2], length.out=(length(col)+1))
         for(i in seq(poly)){
                 polygon(c(bks[i], bks[i+1], bks[i+1], bks[i]), c(0,0,1,1), col=col[i], border=NA)
         }
         # show the heatmap
-        par(mar=c(4,4,1,2))
+        par(mar=c(4,5,0,4),fig=c(0,1,0,0.9), new=T)
         image(z,
-              xlab = 'retention time(min)',
-              ylab = 'm/z',
+              ylab = '',
               axes = F,
               col = col,
               useRaster = T)
-        # display the RT as x
-        rtx <- seq(0,1,length.out=length(indrt))
-        axis(1, at=c(0,rtx[indrt%%300==0],1), labels= c('',indrt[indrt%%300==0]/60,''))
         # display the m/z as y
         mzy <- seq(0,1,length.out=length(indmz))
-        axis(2, at=mzy[indmz%%100==0], labels= indmz[indmz%%100==0], las=2)
-        par(.pardefault)
+        axis(4, at=mzy[indmz%%100==0][1:9],labels = c(rep('',length(indmz[indmz%%100==0])-1)))
+        # add the lable for double y axis
+        text(1.07,0.6, labels = 'm/z', srt = 270, pos = 1, xpd = TRUE,cex = 1.5)
+        text(1.03,mzy[indmz%%100==0][1:9], labels= indmz[indmz%%100==0][1:9],srt = 270, xpd = TRUE)
+        text(-0.075,0.6, labels = 'intensity',srt = 90, pos = 1, xpd = TRUE,cex = 1.5)
+        par(mar=c(4,5,4,4),fig=c(0,1,0,0.9), new=T,cex.lab = 1.5)
+        data[is.na(data)] <- 0
+        data <- apply(data,2,sum)
+        plot(data~indrt,
+             type = 'l',
+             ylab = '',
+             xlab = 'retention time(min)',
+             frame.plot = F,
+             xaxs = "i",
+             yaxs = "i",
+             xaxt = 'n'
+        )
+        # display the RT as x
+        axis(1, at=c(0,indrt[indrt%%300==0],1), labels= c('',indrt[indrt%%300==0]/60,''))
 }
-
 #' plot GC-MS data as a heatmap for constant speed of temperature rising
 #' @param data imported data matrix of GC-MS
 #' @param col custumized color
@@ -69,15 +80,13 @@ plotms <- function(data,col = heat.colors(108),...){
 #' @return heatmap
 #' @export
 plott <- function(data,col = heat.colors(108),temp = c(100,320),...){
-        .pardefault <- par(no.readonly = T)
-        layout(matrix(c(1,2), nrow=2), heights = c(1,5))
+        par(mar=c(2,5,1,4),fig=c(0,1,0.9,1), new=F)
         # get the mz and rt range and rotate the matrix to adapt the image function
         indmz <- as.numeric(rownames(data))
         indrt <- as.numeric(colnames(data))
         data[data==0] <- NA
         z <- log10(t(data))
         # show the intensity scale in log 10 based scale
-        par(mar=c(2,4,1,2))
         zlim <- range(z,na.rm = T)
         breaks <- seq(zlim[1], zlim[2], round((zlim[2]-zlim[1])/7))
         poly <- vector(mode="list", length(col))
@@ -87,14 +96,14 @@ plott <- function(data,col = heat.colors(108),temp = c(100,320),...){
              xaxt='n', yaxt='n',
              xaxs="i", yaxs="i",
              ylab = '',xlab = '',...)
-        mtext('Intensity',side = 2,line = 0.5,las = 1)
+        mtext('intensity',side = 2,line = 0.5,las = 1)
         axis(1,at=breaks,labels = round(10^(breaks)),las=1)
         bks <- seq(zlim[1], zlim[2], length.out=(length(col)+1))
         for(i in seq(poly)){
                 polygon(c(bks[i], bks[i+1], bks[i+1], bks[i]), c(0,0,1,1), col=col[i], border=NA)
         }
         # show the heatmap
-        par(mar=c(4,4,1,2))
+        par(mar=c(4,5,0,4),fig=c(0,1,0,0.9), new=T)
         image(z,
               xlab = 'Temperature(°C)',
               ylab = 'm/z',
@@ -108,7 +117,6 @@ plott <- function(data,col = heat.colors(108),temp = c(100,320),...){
         # display the m/z as y
         mzy <- seq(0,1,length.out=length(indmz))
         axis(2, at=mzy[indmz%%100==0], labels= indmz[indmz%%100==0], las=2)
-        par(.pardefault)
 }
 
 #' Plot mass spectrum of certain retention time and return mass spectrum vector (MSP file) for NIST search
@@ -121,6 +129,7 @@ plotrtms <- function(data,rt,ms){
         data <- getsubmd(data,rt,ms)
         temp <- apply(data,1,mean)
         plot(temp,
+             xaxs='i',yaxs='i',
              type = 'h',
              ylab = 'intensity',
              xlab = 'm/z',
@@ -149,6 +158,7 @@ plotmsrt <- function(data,ms,rt=c(3.1,25),n=F){
         x <- as.numeric(names(data))/60
         plot(data~x,
              type = 'l',
+             xaxs='i',yaxs='i',
              main = bquote('m/z = '~.(ms)),
              ylab = 'intensity',
              xlab = 'retention time(min)',
@@ -264,9 +274,7 @@ plotkms <- function(data,cutoff = 100){
         kmd <- round(km)-km
         smoothScatter(kmd~round(km),
                       xlab = "Kendrick nominal mass",
-                      ylab = "Kendrick mass defect",
-                      xlim = c(100,1000),
-                      ylim = c(-0.5,0.5))
+                      ylab = "Kendrick mass defect")
 }
 #' to do
 #' Van Krevelen diagram

@@ -7,6 +7,24 @@
 qbatch(file, mz1, mz2, minrt = 8.65, maxrt = 8.74, minbrt = 8.85,
   maxbrt = 8.87)
 }
+\arguments{
+\item{file}{data file, CDF or other format supportted by xcmsRaw}
+
+\item{mz1}{the lowest mass}
+
+\item{mz2}{the highest mass}
+
+\item{minrt}{a rough smallest RT range contained only one peak to get the area}
+
+\item{maxrt}{a rough largest RT range contained only one peak to get the area}
+
+\item{minbrt}{a rough smallest RT range contained only one peak and enough noisy to get the area}
+
+\item{maxbrt}{a rough largest RT range contained only one peak and enough noisy to get the area}
+}
+\value{
+arearatio
+}
 \description{
 Get the MIR from the file
 }

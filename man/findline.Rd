@@ -6,6 +6,13 @@
 \usage{
 findline(data, threshold = 2, temp = c(100, 320))
 }
+\arguments{
+\item{data}{imported data matrix of GC-MS}
+
+\item{threshold}{the threshold of the response (log based 10)}
+
+\item{temp}{the scale of the oven temprature(constant rate)}
+}
 \description{
 findline of the regression model
 }

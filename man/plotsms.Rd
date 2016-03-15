@@ -6,6 +6,11 @@
 \usage{
 plotsms(meanmatrix, sdmatrix, ...)
 }
+\arguments{
+\item{meanmatrix}{mean data matrix of GC-MS(n=5)}
+
+\item{sdmatrix}{standard deviation matrix of GC-MS(n=5)}
+}
 \description{
 Plot the intensity distribution of GC-MS
 }

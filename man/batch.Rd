@@ -6,6 +6,16 @@
 \usage{
 batch(file, mz1, mz2, ...)
 }
+\arguments{
+\item{file}{data file, CDF or other format supportted by xcmsRaw}
+
+\item{mz1}{the lowest mass}
+
+\item{mz2}{the highest mass}
+}
+\value{
+Molecular isotope ratio
+}
 \description{
 Get the MIR and related information from the files
 }

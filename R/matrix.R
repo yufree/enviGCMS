@@ -1,13 +1,20 @@
 #' findline of the regression model
+#' @param data imported data matrix of GC-MS
+#' @param threshold the threshold of the response (log based 10)
+#' @param temp the scale of the oven temprature(constant rate)
 #' @export
 findline <- function(data,threshold=2,temp = c(100,320)){
         y0 <- as.numeric(rownames(data))
         x <- as.numeric(colnames(data))/60
+        # get the group
         group <- ifelse(log10(data)>threshold,1,0)
+        # get the difference matrix
         diffmatrix <- apply(group,2,diff)
+        # get the points with the smallest differences at the smallest m/z
         difftemp <- apply(diffmatrix,2,which.min)
         y <- y0[difftemp]
         data <- data.frame(y,x)
+        # remove the meaningless bottom
         data <- data[data$y>101,]
         rangemz <- range(y0)
         rangert <- range(x)
@@ -31,8 +38,8 @@ findline <- function(data,threshold=2,temp = c(100,320)){
         abline(lm(data$y~data$x), col="red",lwd = 5)
         lines(lowess(data$y~data$x), col="blue",lwd = 5)
         slope <- (max(temp)-min(temp))/(max(data$x)-min(data$x))
-        intercept <- min(data$x)
-        data$x0 <- slope*data$x+intercept
+        intercept <- min(temp)
+        data$x0 <- slope*(data$x-min(data$x))+intercept
         fit <- lm(data$y~data$x0)
         rmse <- round(sqrt(mean(resid(fit)^2)), 2)
         coefs <- coef(fit)
@@ -49,6 +56,9 @@ findline <- function(data,threshold=2,temp = c(100,320)){
 }
 
 #' substrict two GC-MS data
+#' @param data1 the first data
+#' @param data2 the second data and will substrict the first one
+#' @return NULL
 #' @export
 comparems <- function(data1,data2,...){
         z <- data2-data1
@@ -90,12 +100,23 @@ comparems <- function(data1,data2,...){
 }
 
 #' Plot the response group of GC-MS
+#' @param data imported data matrix of GC-MS
+#' @param threshold the threshold of the response (log based 10) to seperate the group
+#' @return NULL
 #' @export
 plotgroup <- function(data,threshold=2){
         .pardefault <- par(no.readonly = T)
         group <- ifelse(log10(data)>threshold,1,0)
         ind <- as.numeric(rownames(data))
-        par(mfrow=c(1,2))
+        m <- matrix(c(1, 3, 2,  3), nrow = 2, ncol = 2)
+        layout(m)
+        hist(log10(data),
+             breaks=100,
+             main='',
+             xlab='Distribution of Intensity(log base 10)')
+        abline(v=threshold,lwd=5,lty=2,col='red')
+        legend('topright',"threshold",box.lty=0,pch = -1,lty=2,lwd=2,col='red')
+
         image(t(group),
               xlab = 'retention time(min)',
               ylab = 'm/z',
@@ -111,16 +132,13 @@ plotgroup <- function(data,threshold=2){
         mzy <- seq(0,1,length.out=length(indmz))
         axis(2, at=mzy[indmz%%100==0], labels= indmz[indmz%%100==0], las=2)
 
-        hist(log10(data),
-             breaks=100,
-             main='',
-             xlab='Distribution of Intensity(log base 10)')
-        abline(v=threshold,lwd=5,lty=2,col='red')
-        legend("topright","threshold",box.lty=0,pch = -1,lty=2,lwd=2,col='red')
+        findline(data)
         par(.pardefault)
 }
 
 #' Plot the backgrond of data
+#' @param data imported data matrix of GC-MS
+#' @return NULL
 #' @export
 plotsub <- function(data,...){
         datan <- apply(data,1,diff)
@@ -130,15 +148,22 @@ plotsub <- function(data,...){
         findline(datan)
 }
 #' Plot the intensity distribution of GC-MS
+#' @param meanmatrix mean data matrix of GC-MS(n=5)
+#' @param sdmatrix standard deviation matrix of GC-MS(n=5)
+#' @return NULL
 #' @export
 plotsms <- function(meanmatrix,sdmatrix,...){
         smoothScatter(log10(c(sdmatrix))~log10(c(meanmatrix)),
+                      main = 'N=5',
                       xlab = 'Mean(log scale based 10)',
                       ylab = 'Standard Deviation(log scale based 10)',
                       frame.plot = F,...)
-        abline(a = 0, b = 1)
-        abline(v=2)
+        #abline(a = 0, b = 3)
+        #abline(v=2)
 }
+#' plot the density of the GC-MS data with EM algorithm to seperate the data into two log normal distribution.
+#' @param data imported data matrix of GC-MS
+#' @return NULL
 #' @export
 plothist <- function(data){
         data1=sample(data,100000)

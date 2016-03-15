@@ -3,6 +3,7 @@
 export(GetIntegration)
 export(Getisotopologues)
 export(Integration)
+export(batch)
 export(comparems)
 export(conbinemd)
 export(findline)

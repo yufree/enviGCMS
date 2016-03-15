@@ -6,6 +6,9 @@
 \usage{
 plotsub(data, ...)
 }
+\arguments{
+\item{data}{imported data matrix of GC-MS}
+}
 \description{
 Plot the backgrond of data
 }

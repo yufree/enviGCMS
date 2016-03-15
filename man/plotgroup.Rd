@@ -6,6 +6,11 @@
 \usage{
 plotgroup(data, threshold = 2)
 }
+\arguments{
+\item{data}{imported data matrix of GC-MS}
+
+\item{threshold}{the threshold of the response (log based 10) to seperate the group}
+}
 \description{
 Plot the response group of GC-MS
 }

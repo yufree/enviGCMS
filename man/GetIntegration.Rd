@@ -19,9 +19,9 @@ GetIntegration(data, minrt = 8.3, maxrt = 9, n = 5, m = 5,
 
 \item{m}{numbers of points for regression to get the slope}
 
-\item{startslope}{the threshold value for start peak (%max slope)}
+\item{startslope}{the threshold value for start peak as percentage of max slope}
 
-\item{stopslope}{the threshold value for stop peak (%max slope)}
+\item{stopslope}{the threshold value for stop peak as percentage of max slope}
 
 \item{baseline}{numbers of the points for the baseline of the signal}
 
@@ -32,7 +32,7 @@ GetIntegration(data, minrt = 8.3, maxrt = 9, n = 5, m = 5,
 \item{half}{logical, if using the left half peak to caculate the area}
 }
 \value{
-list intergration data such as peak area, peak hight, signal and the slope data.
+intergration data such as peak area, peak hight, signal and the slope data.
 }
 \description{
 GetIntegration was mainly used for get the intergration of certain ion's chromatogram data and plot the data

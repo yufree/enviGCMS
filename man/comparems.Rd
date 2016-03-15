@@ -6,6 +6,11 @@
 \usage{
 comparems(data1, data2, ...)
 }
+\arguments{
+\item{data1}{the first data}
+
+\item{data2}{the second data and will substrict the first one}
+}
 \description{
 substrict two GC-MS data
 }

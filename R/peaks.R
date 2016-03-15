@@ -4,13 +4,13 @@
 #' @param maxrt a rough largest RT range contained only one peak to get the area
 #' @param n points in the moving average smooth box, default value is 5
 #' @param m numbers of points for regression to get the slope
-#' @param startslope the threshold value for start peak (%max slope)
-#' @param stopslope the threshold value for stop peak (%max slope)
+#' @param startslope the threshold value for start peak as percentage of max slope
+#' @param stopslope the threshold value for stop peak as percentage of max slope
 #' @param baseline numbers of the points for the baseline of the signal
 #' @param noslope logical, if using a horizon line to get area or not
 #' @param smoothit logical, if using an average smooth box or not. If using, n will be used
 #' @param half logical, if using the left half peak to caculate the area
-#' @return list intergration data such as peak area, peak hight, signal and the slope data.
+#' @return intergration data such as peak area, peak hight, signal and the slope data.
 #' @export
 GetIntegration <- function(data, minrt = 8.3 , maxrt = 9, n=5, m=5, startslope = 2, stopslope = 2, baseline = 20, noslope = T, smoothit = T,name = NULL,half = F,...){
         # subset the data
@@ -93,6 +93,11 @@ GetIntegration <- function(data, minrt = 8.3 , maxrt = 9, n=5, m=5, startslope =
         return(list)
 }
 #' Get the MIR and related information from the files
+#' @param file data file, CDF or other format supportted by xcmsRaw
+#' @param mz1 the lowest mass
+#' @param mz2 the highest mass
+#' @return Molecular isotope ratio
+#' @export
 batch <- function(file,mz1,mz2,...){
         data1 <- xcmsRaw(file)
         df <- data1@env$profile
@@ -156,6 +161,14 @@ Integration <- function(data, minrt = 8.3 , maxrt = 9,minbrt = 8.3, maxbrt = 8.4
         return(area)
 }
 #' Get the MIR from the file
+#' @param file data file, CDF or other format supportted by xcmsRaw
+#' @param mz1 the lowest mass
+#' @param mz2 the highest mass
+#' @param minrt a rough smallest RT range contained only one peak to get the area
+#' @param maxrt a rough largest RT range contained only one peak to get the area
+#' @param minbrt a rough smallest RT range contained only one peak and enough noisy to get the area
+#' @param maxbrt a rough largest RT range contained only one peak and enough noisy to get the area
+#' @return arearatio
 #' @export
 qbatch <- function(file,mz1,mz2,minrt = 8.65,maxrt = 8.74,minbrt = 8.85, maxbrt = 8.87){
         data1 <- xcmsRaw(file)
@@ -173,6 +186,9 @@ qbatch <- function(file,mz1,mz2,minrt = 8.65,maxrt = 8.74,minbrt = 8.85, maxbrt 
 }
 
 #' Get the selected isotopologues at certain MS data
+#' @param formula the molecular formula. C12OH6Br4 means BDE-47 as default
+#' @param charge the charge of that molecular. 1 in EI mode as default
+#' @param width the width of the peak width on mass spectrum. 0.3 as default for low resolution mass spectrum.
 #' @export
 Getisotopologues <- function(formula = 'C12OH6Br4', charge = '1',width = 0.3){
         # input the forlmula and charge for your molecular, this demo was for BDE-47
