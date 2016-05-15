@@ -6,7 +6,7 @@
 \usage{
 GetIntegration(data, minrt = 8.3, maxrt = 9, n = 5, m = 5,
   startslope = 2, stopslope = 2, baseline = 20, noslope = T,
-  smoothit = T, name = NULL, half = F, ...)
+  smoothit = T, half = F)
 }
 \arguments{
 \item{data}{file should be a dataframe with the first column RT and second column intensity of the SIM ions.}

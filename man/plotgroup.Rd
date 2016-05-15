@@ -11,6 +11,9 @@ plotgroup(data, threshold = 2)
 
 \item{threshold}{the threshold of the response (log based 10) to seperate the group}
 }
+\value{
+list linear regression model for the data matrix
+}
 \description{
 Plot the response group of GC-MS
 }

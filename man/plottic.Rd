@@ -2,7 +2,7 @@
 % Please edit documentation in R/general.R
 \name{plottic}
 \alias{plottic}
-\title{Plot TIC}
+\title{Plot Total Ion Chromatogram (TIC)}
 \usage{
 plottic(data, rt = c(3.1, 25), ms = c(100, 1000), n = F)
 }
@@ -19,6 +19,6 @@ plottic(data, rt = c(3.1, 25), ms = c(100, 1000), n = F)
 plot
 }
 \description{
-Plot TIC
+Plot Total Ion Chromatogram (TIC)
 }
 

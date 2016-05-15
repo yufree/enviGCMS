@@ -38,7 +38,7 @@ conbinemd <- function(data1,data2,...){
 
 #' Subset the data mass spectrum of certain retention time and plot them
 #' @param data imported data matrix of GC-MS
-#' @param rt vector range of the retention time
+#' @param rt vector range of the retention time min
 #' @param ms vector range of the m/z
 #' @return data matrix
 #' @export

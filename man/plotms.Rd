@@ -4,7 +4,7 @@
 \alias{plotms}
 \title{plot GC-MS data as a heatmap}
 \usage{
-plotms(data, col = heat.colors(108), ...)
+plotms(data, col = heat.colors(108))
 }
 \arguments{
 \item{data}{imported data matrix of GC-MS}

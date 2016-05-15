@@ -4,7 +4,7 @@
 \alias{batch}
 \title{Get the MIR and related information from the files}
 \usage{
-batch(file, mz1, mz2, ...)
+batch(file, mz1, mz2)
 }
 \arguments{
 \item{file}{data file, CDF or other format supportted by xcmsRaw}

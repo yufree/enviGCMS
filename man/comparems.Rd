@@ -4,12 +4,19 @@
 \alias{comparems}
 \title{substrict two GC-MS data}
 \usage{
-comparems(data1, data2, ...)
+comparems(data1, data2, lab1 = "", lab2 = "")
 }
 \arguments{
 \item{data1}{the first data}
 
 \item{data2}{the second data and will substrict the first one}
+
+\item{lab1}{character the title of the first data}
+
+\item{lab2}{character the title of the second data}
+}
+\value{
+list linear regression model for the diff matrix
 }
 \description{
 substrict two GC-MS data

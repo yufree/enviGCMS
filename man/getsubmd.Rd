@@ -9,7 +9,7 @@ getsubmd(data, rt, ms)
 \arguments{
 \item{data}{imported data matrix of GC-MS}
 
-\item{rt}{vector range of the retention time}
+\item{rt}{vector range of the retention time min}
 
 \item{ms}{vector range of the m/z}
 }

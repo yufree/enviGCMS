@@ -2,7 +2,7 @@
 % Please edit documentation in R/matrix.R
 \name{findline}
 \alias{findline}
-\title{findline of the regression model}
+\title{find line of the regression model}
 \usage{
 findline(data, threshold = 2, temp = c(100, 320))
 }
@@ -13,7 +13,10 @@ findline(data, threshold = 2, temp = c(100, 320))
 
 \item{temp}{the scale of the oven temprature(constant rate)}
 }
+\value{
+list linear regression model for the matrix
+}
 \description{
-findline of the regression model
+find line of the regression model
 }
 

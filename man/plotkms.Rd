@@ -4,7 +4,7 @@
 \alias{plotkms}
 \title{plot the kendrick mass defect diagram}
 \usage{
-plotkms(data, cutoff = 100)
+plotkms(data, cutoff = 1000)
 }
 \arguments{
 \item{data}{vector with the name m/z}

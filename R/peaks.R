@@ -1,3 +1,38 @@
+#' Just intergrate data according to fixed rt and fixed noise area
+#' @param data file should be a dataframe with the first column RT and second column intensity of the SIM ions.
+#' @param minrt a rough smallest RT range contained only one peak to get the area
+#' @param maxrt a rough largest RT range contained only one peak to get the area
+#' @param minbrt a rough smallest RT range contained only one peak and enough noisy to get the area
+#' @param maxbrt a rough largest RT range contained only one peak and enough noisy to get the area
+#' @param smoothit logical, if using an average smooth box or not. If using, n will be used
+#' @return area intergration data
+#' @export
+Integration <- function(data, minrt = 8.3 , maxrt = 9,minbrt = 8.3, maxbrt = 8.4,smoothit = T){
+        # subset the data
+        subdata <- data[data[,1] > minrt&data[,1] < maxrt,]
+        # get the signal and the RT
+        RTrange <- subdata[,1]
+        signal <- subdata[,2]
+        # subset the noise
+        subnoise <- data[data[,1]>minbrt&data[,1]<maxbrt,]
+        # get the noise and the RT
+        RTrange2 <- subnoise[,1]
+        noise <- subnoise[,2]
+        # data smooth
+        if(smoothit) {
+                signal <- ma(signal,n=5)
+                noise <- ma(noise,n=5)
+        }
+        baseline <- mean(noise)
+        signaln <- signal-baseline
+        area <- 0
+        # calculate area; using a Riemann integral (dimension: intensity x delta time)
+        for(i in 1:(length(RTrange)-1)) {
+                area <- area + signaln[i]*(RTrange[i+1]-RTrange[i])*60
+        }
+        return(area)
+}
+
 #' GetIntegration was mainly used for get the intergration of certain ion's chromatogram data and plot the data
 #' @param data file should be a dataframe with the first column RT and second column intensity of the SIM ions.
 #' @param minrt a rough smallest RT range contained only one peak to get the area
@@ -12,7 +47,7 @@
 #' @param half logical, if using the left half peak to caculate the area
 #' @return intergration data such as peak area, peak hight, signal and the slope data.
 #' @export
-GetIntegration <- function(data, minrt = 8.3 , maxrt = 9, n=5, m=5, startslope = 2, stopslope = 2, baseline = 20, noslope = T, smoothit = T,name = NULL,half = F,...){
+GetIntegration <- function(data, minrt = 8.3 , maxrt = 9, n=5, m=5, startslope = 2, stopslope = 2, baseline = 20, noslope = T, smoothit = T,half = F){
         # subset the data
         subdata <- data[data[,1] > minrt&data[,1] < maxrt,]
         # get the signal and the RT
@@ -92,13 +127,14 @@ GetIntegration <- function(data, minrt = 8.3 , maxrt = 9, n=5, m=5, startslope =
         list <- list(area=area,height=height,peakdata=peakdata,RTrange=RTrange,signal=signal,slopedata=slopedata)
         return(list)
 }
+
 #' Get the MIR and related information from the files
 #' @param file data file, CDF or other format supportted by xcmsRaw
 #' @param mz1 the lowest mass
 #' @param mz2 the highest mass
 #' @return Molecular isotope ratio
 #' @export
-batch <- function(file,mz1,mz2,...){
+batch <- function(file,mz1,mz2){
         data1 <- xcmsRaw(file)
         df <- data1@env$profile
         rt <- data1@scantime/60
@@ -109,8 +145,8 @@ batch <- function(file,mz1,mz2,...){
         xb <- data.frame(rt,xb)
         name1 <- paste('m/z:',mz1)
         name2 <- paste('m/z:',mz2)
-        xl <- GetIntegration(xa,name1,...)
-        xh <- GetIntegration(xb,name2,...)
+        xl <- GetIntegration(xa,name1)
+        xh <- GetIntegration(xb,name2)
         par(mfrow = c(2,2),mar = c(2,2,2,2),oma=c(0,0,0,0))
         plotint(xl,name1)
         plotintslope(xl,name1)
@@ -126,40 +162,7 @@ batch <- function(file,mz1,mz2,...){
         names(ratio) <- c('area ratio', 'height ratio','points')
         return(ratio)
 }
-#' Just intergrate data according to fixed rt and fixed noise area
-#' @param data file should be a dataframe with the first column RT and second column intensity of the SIM ions.
-#' @param minrt a rough smallest RT range contained only one peak to get the area
-#' @param maxrt a rough largest RT range contained only one peak to get the area
-#' @param minbrt a rough smallest RT range contained only one peak and enough noisy to get the area
-#' @param maxbrt a rough largest RT range contained only one peak and enough noisy to get the area
-#' @param smoothit logical, if using an average smooth box or not. If using, n will be used
-#' @return area intergration data
-#' @export
-Integration <- function(data, minrt = 8.3 , maxrt = 9,minbrt = 8.3, maxbrt = 8.4,smoothit = T){
-        # subset the data
-        subdata <- data[data[,1] > minrt&data[,1] < maxrt,]
-        # get the signal and the RT
-        RTrange <- subdata[,1]
-        signal <- subdata[,2]
-        # subset the noise
-        subnoise <- data[data[,1]>minbrt&data[,1]<maxbrt,]
-        # get the noise and the RT
-        RTrange2 <- subnoise[,1]
-        noise <- subnoise[,2]
-        # data smooth
-        if(smoothit) {
-                signal <- ma(signal,n=5)
-                noise <- ma(noise,n=5)
-        }
-        baseline <- mean(noise)
-        signaln <- signal-baseline
-        area <- 0
-        # calculate area; using a Riemann integral (dimension: intensity x delta time)
-        for(i in 1:(length(RTrange)-1)) {
-                area <- area + signaln[i]*(RTrange[i+1]-RTrange[i])*60
-        }
-        return(area)
-}
+
 #' Get the MIR from the file
 #' @param file data file, CDF or other format supportted by xcmsRaw
 #' @param mz1 the lowest mass

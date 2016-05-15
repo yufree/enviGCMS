@@ -4,7 +4,7 @@
 \alias{plotsub}
 \title{Plot the backgrond of data}
 \usage{
-plotsub(data, ...)
+plotsub(data)
 }
 \arguments{
 \item{data}{imported data matrix of GC-MS}

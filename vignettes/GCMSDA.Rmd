@@ -4,12 +4,12 @@ author: "Miao Yu"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{enviGCMS}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-Analysis is the core of the Environmental Science. When we want to know the amounts of certain pullutions, analytical method were employed. GC-MS might be the most popular instrument for the development of analytical methond. Previous works such as `xcms` were devoloped for GC-MS data. However, such packages have limited functions for environmental analysis. For example, the isotope information of certain compounds is missing in almost all of the GC-MS data analysis software. In this package. I added many functions for those data analysis. Such feature could not only reveal certain problem, but also help the user find out the real data structure of GC-MS and DIY for their intentions.
+Analysis is the core of the Environmental Science. When we want to know the amounts of certain pullutions, analytical method were employed. GC-MS might be the most popular instrument for the development of analytical methond. Previous works such as `xcms` were devoloped for GC-MS data. However, such packages have limited functions for environmental analysis. For example, the isotope information of certain compounds is missing in almost all of the GC-MS data analysis software. In this package. I added many functions for those data analysis. Such feature could not only reveal certain problem, but also help the user find out the real data structure of GC-MS and DIY according to their intentions.
 
 ## Data structure of GC-MS full scan mode
 
@@ -19,15 +19,66 @@ GC is used for separation and MS is used for detection. The real single is count
 
 When you perform a selected ions monitor(SIM) mode, only few mass data were collected and each mass would have counts and retention time as a time seris data. In this package, we treat such data as `data.frame` type.
 
-## Find the real
+## Data input
 
-Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The `html_vignette` output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The `html_vignette` format:
+You could use `getmd` to import the mass spectrum data as supported by `xcms` such as:
 
-- Never uses retina figures
-- Has a smaller default figure size
-- Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style
+```
+data <- getmd('data/data1.CDF')
+```
 
-## Vignette Info
+You could only read in part of the data by index the mass(m/z 100-1000) and retention time range(3.1-25min) in `getsubmd` function:
 
-Note the various macros within the `vignette` section of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
+```
+data <- getsubmd(data,rt=c(3.1,25),mz=c(100,1000))
+```
 
+You could combined the mass full-scan data with the same range of retention time by `combinemd`:
+
+```
+data <- combinemd(data1,data2,data3)
+```
+
+## Basic visulation of mass spectrum data
+
+You could plot the Total Ion Chromatogram(TIC) for certain RT and mass range.
+
+```
+plottic(data,rt=c(3.1,25),ms=c(100,1000))
+```
+
+You could also plot the mass spectrum for certain RT range. You could use the returned MSP files for NIST search:
+
+```
+plotrtms(data,rt=c(3.1,25),ms=c(100,1000))
+```
+
+The Extracted Ion Chromatogram(EIC) is also support by `enviGCMS` and the returned data could be analysised for molecular isotopes:
+
+```
+plotmsrt(data,ms=500,rt=c(3.1,25))
+```
+
+You could use `plotms` to show the heatmap of GC-MS data, which is very useful for exploratory data analysis.
+
+```
+plotms(data)
+```
+
+You could change the retention time into the temprature if it is a constant speed of temperature rising process. But you need show the temprature range as parameters.
+
+```
+plott(data,temp = c(100,320))
+```
+
+## Data analysis for influnces from GC-MS
+
+`enviGCMS` supplied many function for decreasing the noisy during the analysis process. `findline` could be used for find line of the boundary regression model for noisy. `comparems` could be used to make a point-to-point data  subtraction of two full-scan mass spectrum data. `plotgroup` could be used convert the data matrix into a 0-1 heatmap according to threshold. `plotsub` could be used to show the self backgroud subtraction of full-scan data. `plotsms` shows the RSD of the intensity of full scan data. `plothist` could be used to find the data distribution of the histgram of the intensities of full scan data.
+
+## Data analysis for molecular isotope ratio
+
+Some functions could be used to auto-caculate the molecular isotope ratio. EIC data could be import into `GetIntergration` and return the infomation of found peaks. `Getisotoplogues` could be used to caculate the molecular isotope ratio of certain molecular. Some shortcut function such as `batch` and `qbatch` could be used to caculate molecular isotope ratio for mutiple and single molecular in EIC data.
+
+## Summary
+
+When data were extracted, you might use any data analysis method for them.

@@ -1,5 +1,4 @@
 #' @importFrom xcms xcmsRaw
-#' @importFrom mixtools normalmixEM
 #' @importFrom rcdk get.formula
 #' @importFrom rcdk get.isotopes.pattern
 NULL
@@ -20,15 +19,14 @@ ma <- function(x,n){
 #' @param col custumized color
 #' @return heatmap
 #' @export
-plotms <- function(data,col = heat.colors(108),...){
+plotms <- function(data,col = heat.colors(108)){
         # get the mz and rt range and rotate the matrix to adapt the image function
-
         indmz <- as.numeric(rownames(data))
         indrt <- as.numeric(colnames(data))
         data[data==0] <- NA
         z <- log10(t(data))
         # show the intensity scale in log 10 based scale
-        par(mar=c(2,5,1,4),fig=c(0,1,0.9,1), new=F)
+        par(mar=c(2,5,1,4),fig=c(0,1,0.9,1))
         zlim <- range(z,na.rm = T)
         breaks <- seq(zlim[1], zlim[2], round((zlim[2]-zlim[1])/7))
         poly <- vector(mode="list", length(col))
@@ -37,7 +35,7 @@ plotms <- function(data,col = heat.colors(108),...){
              ylim=c(0,1), xlim=zlim,
              xaxt='n', yaxt='n',
              xaxs="i", yaxs="i",
-             ylab = '',xlab = '',...)
+             ylab = '',xlab = '')
         mtext('intensity',side = 2,line = 0.5,las = 1,cex = 1.5)
         axis(1,at=breaks,labels = round(10^(breaks)),las=1)
         bks <- seq(zlim[1], zlim[2], length.out=(length(col)+1))
@@ -79,7 +77,7 @@ plotms <- function(data,col = heat.colors(108),...){
 #' @param temp temprature range for constant speed
 #' @return heatmap
 #' @export
-plott <- function(data,col = heat.colors(108),temp = c(100,320),...){
+plott <- function(data,col = heat.colors(108),temp = c(100,320)){
         par(mar=c(2,5,1,4),fig=c(0,1,0.9,1), new=F)
         # get the mz and rt range and rotate the matrix to adapt the image function
         indmz <- as.numeric(rownames(data))
@@ -95,7 +93,7 @@ plott <- function(data,col = heat.colors(108),temp = c(100,320),...){
              ylim=c(0,1), xlim = zlim,
              xaxt='n', yaxt='n',
              xaxs="i", yaxs="i",
-             ylab = '',xlab = '',...)
+             ylab = '',xlab = '')
         mtext('intensity',side = 2,line = 0.5,las = 1)
         axis(1,at=breaks,labels = round(10^(breaks)),las=1)
         bks <- seq(zlim[1], zlim[2], length.out=(length(col)+1))
@@ -169,7 +167,7 @@ plotmsrt <- function(data,ms,rt=c(3.1,25),n=F){
         return(data)
 }
 
-#' Plot TIC
+#' Plot Total Ion Chromatogram (TIC)
 #' @param data imported data matrix of GC-MS
 #' @param ms vector range of the m/z
 #' @param rt vector range of the retention time
@@ -267,7 +265,7 @@ plotintslope <- function(list,name=NULL){
 #' @param cutoff remove the low intensity
 #' @return NULL
 #' @export
-plotkms <- function(data,cutoff = 100){
+plotkms <- function(data,cutoff = 1000){
         data <- data[data>cutoff]
         mz <- as.numeric(names(data))
         km <- mz*14/14.01565
