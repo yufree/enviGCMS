@@ -17,14 +17,19 @@ ma <- function(x,n){
 #'
 #' @param data imported data matrix of GC-MS
 #' @param col custumized color
+#' @param log transform the intensity into log based 10
 #' @return heatmap
 #' @export
-plotms <- function(data,col = heat.colors(108)){
+plotms <- function(data,col = heat.colors(108),log=F){
         # get the mz and rt range and rotate the matrix to adapt the image function
         indmz <- as.numeric(rownames(data))
         indrt <- as.numeric(colnames(data))
         data[data==0] <- NA
-        z <- log10(t(data))
+        if(log){
+                z <- log10(t(data))
+        }else{
+                z <- t(data)
+        }
         # show the intensity scale in log 10 based scale
         par(mar=c(2,5,1,4),fig=c(0,1,0.9,1))
         zlim <- range(z,na.rm = T)
@@ -37,7 +42,12 @@ plotms <- function(data,col = heat.colors(108)){
              xaxs="i", yaxs="i",
              ylab = '',xlab = '')
         mtext('intensity',side = 2,line = 0.5,las = 1,cex = 1.5)
-        axis(1,at=breaks,labels = round(10^(breaks)),las=1)
+        if(log){
+                axis(1,at=breaks,labels = round(10^(breaks)),las=1)
+        }else{
+                axis(1,at=breaks,labels = round(breaks),las=1)
+        }
+
         bks <- seq(zlim[1], zlim[2], length.out=(length(col)+1))
         for(i in seq(poly)){
                 polygon(c(bks[i], bks[i+1], bks[i+1], bks[i]), c(0,0,1,1), col=col[i], border=NA)

@@ -4,12 +4,14 @@
 \alias{plotms}
 \title{plot GC-MS data as a heatmap}
 \usage{
-plotms(data, col = heat.colors(108))
+plotms(data, col = heat.colors(108), log = F)
 }
 \arguments{
 \item{data}{imported data matrix of GC-MS}
 
 \item{col}{custumized color}
+
+\item{log}{transform the intensity into log based 10}
 }
 \value{
 heatmap
