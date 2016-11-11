@@ -3,12 +3,12 @@
 #' @param step resolution of the MS
 #' @return matrix with the row as increasing m/z in second and column as increasing scantime
 #' @export
-getmd <- function(data,step = 1){
+getmd <- function(data,step = 1,time=0){
         data <- xcmsRaw(data,profstep = step)
         z1 <- data@env$profile
-        zf <- as.factor(round(data@scantime))
+        zf <- as.factor(round(data@scantime,time))
         df <- aggregate(t(z1), list(zf), sum)[-1]
-        rownames(df) <- unique(round(data@scantime))
+        rownames(df) <- unique(round(data@scantime,time))
         colnames(df) <- seq(data@mzrange[1],data@mzrange[2],by = step)
         return(t(as.matrix(df)))
 }
@@ -45,9 +45,10 @@ conbinemd <- function(data1,data2,...){
 getsubmd <- function(data,rt,ms){
         mzindexstart <- as.numeric(head(rownames(data),1))
         rtindexstart <- as.numeric(head(colnames(data),1))
-        rts <- rt*60-rtindexstart
-        rt1 <- min(rts)
-        rt2 <- max(rts)
+        rts <- rt*60
+        
+        rt1 <- which(round(as.numeric(colnames(data))) == round(rts[1]))[1]
+        rt2 <- which(round(as.numeric(colnames(data))) == round(rts[2]))[1]
         mzs <- ms-mzindexstart+1
         mz1 <- min(mzs)
         mz2 <- max(mzs)
