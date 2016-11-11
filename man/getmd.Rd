@@ -4,7 +4,7 @@
 \alias{getmd}
 \title{import data and return the annotated matrix}
 \usage{
-getmd(data, step = 1)
+getmd(data, step = 1, time = 0)
 }
 \arguments{
 \item{data}{file type which xcmsRaw could handle}

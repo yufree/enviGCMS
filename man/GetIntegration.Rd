@@ -4,24 +4,19 @@
 \alias{GetIntegration}
 \title{GetIntegration was mainly used for get the intergration of certain ion's chromatogram data and plot the data}
 \usage{
-GetIntegration(data, minrt = 8.3, maxrt = 9, n = 5, m = 5,
-  startslope = 2, stopslope = 2, baseline = 20, noslope = T,
-  smoothit = T, half = F)
+GetIntegration(data, rt = c(8.3, 9), n = 5, m = 5, slope = c(2, 2),
+  baseline = 10, noslope = T, smoothit = T, half = F)
 }
 \arguments{
 \item{data}{file should be a dataframe with the first column RT and second column intensity of the SIM ions.}
 
-\item{minrt}{a rough smallest RT range contained only one peak to get the area}
-
-\item{maxrt}{a rough largest RT range contained only one peak to get the area}
+\item{rt}{a rough RT range contained only one peak to get the area}
 
 \item{n}{points in the moving average smooth box, default value is 5}
 
 \item{m}{numbers of points for regression to get the slope}
 
-\item{startslope}{the threshold value for start peak as percentage of max slope}
-
-\item{stopslope}{the threshold value for stop peak as percentage of max slope}
+\item{slope}{the threshold value for start/stop peak as percentage of max slope}
 
 \item{baseline}{numbers of the points for the baseline of the signal}
 

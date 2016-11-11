@@ -4,19 +4,14 @@
 \alias{Integration}
 \title{Just intergrate data according to fixed rt and fixed noise area}
 \usage{
-Integration(data, minrt = 8.3, maxrt = 9, minbrt = 8.3, maxbrt = 8.4,
-  smoothit = T)
+Integration(data, rt = c(8.3, 9), brt = c(8.3, 8.4), smoothit = T)
 }
 \arguments{
 \item{data}{file should be a dataframe with the first column RT and second column intensity of the SIM ions.}
 
-\item{minrt}{a rough smallest RT range contained only one peak to get the area}
+\item{rt}{a rough RT range contained only one peak to get the area}
 
-\item{maxrt}{a rough largest RT range contained only one peak to get the area}
-
-\item{minbrt}{a rough smallest RT range contained only one peak and enough noisy to get the area}
-
-\item{maxbrt}{a rough largest RT range contained only one peak and enough noisy to get the area}
+\item{brt}{a rough RT range contained only one peak and enough noises to get the area}
 
 \item{smoothit}{logical, if using an average smooth box or not. If using, n will be used}
 }
