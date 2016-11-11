@@ -10,6 +10,8 @@ getmd(data, step = 1, time = 0)
 \item{data}{file type which xcmsRaw could handle}
 
 \item{step}{resolution of the MS}
+
+\item{time}{round numbers of retention time, default is 0}
 }
 \value{
 matrix with the row as increasing m/z in second and column as increasing scantime

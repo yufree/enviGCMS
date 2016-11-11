@@ -1,6 +1,7 @@
 #' import data and return the annotated matrix
 #' @param data file type which xcmsRaw could handle
 #' @param step resolution of the MS
+#' @param time round numbers of retention time, default is 0
 #' @return matrix with the row as increasing m/z in second and column as increasing scantime
 #' @export
 getmd <- function(data,step = 1,time=0){
@@ -46,7 +47,7 @@ getsubmd <- function(data,rt,ms){
         mzindexstart <- as.numeric(head(rownames(data),1))
         rtindexstart <- as.numeric(head(colnames(data),1))
         rts <- rt*60
-        
+
         rt1 <- which(round(as.numeric(colnames(data))) == round(rts[1]))[1]
         rt2 <- which(round(as.numeric(colnames(data))) == round(rts[2]))[1]
         mzs <- ms-mzindexstart+1
