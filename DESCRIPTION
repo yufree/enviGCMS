@@ -6,7 +6,7 @@ Date: 2016-11-28
 Authors@R: person("Miao","YU", email =
     "yufreecas@gmail.com", role = c("aut", "cre"))
 Maintainer: Miao YU <yufreecas@gmail.com>
-Description: Gas Chromatography-Mass Spectrometer Data Analysis for Environmental Science. This package covered the topics such as raw data process, moleculor isotope ratio, matrix effects, etc.
+Description: Gas Chromatography-Mass Spectrometer Data Analysis for Environmental Science. This package covered topics such as raw data process, moleculor isotope ratio, matrix effects, etc. in environmental analysis.
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
