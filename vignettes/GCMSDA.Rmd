@@ -9,11 +9,13 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-Analysis is the core of the Environmental Science. When we want to know the amounts of certain pullutions, analytical method were employed. GC-MS might be the most popular instrument for the development of analytical methond. Previous works such as `xcms` were devoloped for GC-MS data. However, such packages have limited functions for environmental analysis. For example, the isotope information of certain compounds is missing in almost all of the GC-MS data analysis software. In this package. I added many functions for those data analysis. Such feature could not only reveal certain problem, but also help the user find out the real data structure of GC-MS and DIY according to their intentions.
+Analysis is the core of the Environmental Science. When we want to know the amounts of certain pullutions, analytical methods were employed. GC-MS might be the most popular instrument for the development of analytical methond. Previous works such as `xcms` were devoloped for GC-MS data. However, such packages have limited functions for environmental analysis. For example, the isotope information of certain compounds is missing in almost all of the GC-MS data analysis software. In this package. I added functions for those kind of data analysis. Such feature could not only reveal certain problems, but also help the user find out the unknown patterns in the dataset of GC-MS.
 
 ## Data structure of GC-MS full scan mode
 
-GC is used for separation and MS is used for detection. The real single is counts of certain mass. So when we perform a full-scan on certain column, the counts of different mass were collect in each cycle. Each cycle might only last for 500ms or less. The next scan begins. Here we could use a matrix to stand for those data. Each column stands for each mass and row stands for the retention time of that scan. Such matrix could be treated as a time-seris data. In this package, we treat such data as `matrix` type. 
+GC is used for separation and MS is used for detection in a GC-MS system. The singals are intensities of certain mass. So when we perform analysis on certain column in full scan mode, the counts of different mass were collected in each cycle. Each cycle might only last for 500ms or less. Then the next scan begins. Here we could use a matrix to stand for those data. Each column stands for each mass and row stands for the retention time of that scan. Such matrix could be treated as time series data. In this package, we treat such data as `matrix` type. 
+
+For high-resolution MS, building such matrix is tricky. We need to convert the RAW data into low-resolution version to make identity columns for each scan.
 
 ## Data structure of GC-MS SIM mode
 
@@ -27,7 +29,7 @@ You could use `getmd` to import the mass spectrum data as supported by `xcms` su
 data <- getmd('data/data1.CDF')
 ```
 
-You could only read in part of the data by index the mass(m/z 100-1000) and retention time range(3.1-25min) in `getsubmd` function:
+You could subset the data by index the mass(m/z 100-1000) and retention time range(3.1-25min) in `getsubmd` function:
 
 ```
 data <- getsubmd(data,rt=c(3.1,25),mz=c(100,1000))
@@ -65,7 +67,7 @@ You could use `plotms` to show the heatmap of GC-MS data, which is very useful f
 plotms(data)
 ```
 
-You could change the retention time into the temprature if it is a constant speed of temperature rising process. But you need show the temprature range as parameters.
+You could change the retention time into the temprature if it is a constant speed of temperature rising process. But you need show the temprature range.
 
 ```
 plott(data,temp = c(100,320))
@@ -77,8 +79,8 @@ plott(data,temp = c(100,320))
 
 ## Data analysis for molecular isotope ratio
 
-Some functions could be used to auto-caculate the molecular isotope ratio. EIC data could be import into `GetIntergration` and return the infomation of found peaks. `Getisotoplogues` could be used to caculate the molecular isotope ratio of certain molecular. Some shortcut function such as `batch` and `qbatch` could be used to caculate molecular isotope ratio for mutiple and single molecular in EIC data.
+Some functions could be used to caculate the molecular isotope ratio. EIC data could be import into `GetIntergration` and return the infomation of found peaks. `Getisotoplogues` could be used to caculate the molecular isotope ratio of certain molecular. Some shortcut function such as `batch` and `qbatch` could be used to caculate molecular isotope ratio for mutiple and single molecular in EIC data.
 
 ## Summary
 
-When data were extracted, you might use any data analysis method for them.
+In general, `enviGCMS` could be used to explore the data from GC-MS and extract certain patterns in the data.

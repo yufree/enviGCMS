@@ -168,11 +168,10 @@ plotsms <- function(meanmatrix,rsdmatrix){
 #' plot the density of the GC-MS data with EM algorithm to seperate the data into two log normal distribution.
 #' @param data imported data matrix of GC-MS
 #' @return NULL
-#' @importFrom mixtools normalmixEM
 #' @export
 plothist <- function(data){
         data1=sample(data,100000)
-        mixmdl = normalmixEM(log10(data1))
+        mixmdl = mixtools::normalmixEM(log10(data1))
         plot(mixmdl,which=2,breaks=100,
              xlab2 = 'Intensity')
         lines(density(log10(data1)), lty=2, lwd=2)

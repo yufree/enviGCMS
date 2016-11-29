@@ -2,7 +2,7 @@
 % Please edit documentation in R/io.R
 \name{conbinemd}
 \alias{conbinemd}
-\title{Combine two or more dataset}
+\title{Combine two or more matrix}
 \usage{
 conbinemd(data1, data2, ...)
 }
@@ -17,6 +17,6 @@ conbinemd(data1, data2, ...)
 matrix with the row as scantime in second and column as m/z
 }
 \description{
-Combine two or more dataset
+Combine two or more matrix
 }
 
