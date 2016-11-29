@@ -1,20 +1,20 @@
-#' import data and return the annotated matrix
+#' import data and return the annotated matrix for GC-MS
 #' @param data file type which xcmsRaw could handle
-#' @param step resolution of the MS
-#' @param time round numbers of retention time, default is 0
-#' @return matrix with the row as increasing m/z in second and column as increasing scantime
+#' @param profstep the m/z step for generating matrix data from raw mass spectral data.
+#' @param time round numbers of retention time, default is 1
+#' @return matrix with the row as increasing m/z second and column as increasing scantime
 #' @export
-getmd <- function(data,step = 1,time=0){
-        data <- xcmsRaw(data,profstep = step)
+getmd <- function(data,profstep = 1,time = 1){
+        data <- xcms::xcmsRaw(data,profstep)
         z1 <- data@env$profile
         zf <- as.factor(round(data@scantime,time))
         df <- aggregate(t(z1), list(zf), sum)[-1]
         rownames(df) <- unique(round(data@scantime,time))
-        colnames(df) <- seq(data@mzrange[1],data@mzrange[2],by = step)
+        colnames(df) <- seq(data@mzrange[1],data@mzrange[2],by = profstep)
         return(t(as.matrix(df)))
 }
 
-#' Combine two or more dataset
+#' Combine two or more matrix
 #'
 #' @param data1 matrix lower mass range
 #' @param data2 matrix higher mass range
@@ -47,7 +47,6 @@ getsubmd <- function(data,rt,ms){
         mzindexstart <- as.numeric(head(rownames(data),1))
         rtindexstart <- as.numeric(head(colnames(data),1))
         rts <- rt*60
-
         rt1 <- which(round(as.numeric(colnames(data))) == round(rts[1]))[1]
         rt2 <- which(round(as.numeric(colnames(data))) == round(rts[2]))[1]
         mzs <- ms-mzindexstart+1

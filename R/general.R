@@ -1,8 +1,3 @@
-#' @importFrom xcms xcmsRaw
-#' @importFrom rcdk get.formula
-#' @importFrom rcdk get.isotopes.pattern
-NULL
-
 #' filter data by average moving box
 #'
 #' @param x a vector

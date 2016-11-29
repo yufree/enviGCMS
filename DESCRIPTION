@@ -6,14 +6,14 @@ Date: 2016-11-28
 Authors@R: person("Miao","YU", email =
     "yufreecas@gmail.com", role = c("aut", "cre"))
 Maintainer: Miao YU <yufreecas@gmail.com>
-Description: GC-MS Data Analysis for Environmental Science
+Description: Gas Chromatography-Mass Spectrometer Data Analysis for Environmental Science. This package covered the topics such as raw data process, moleculor isotope ratio, matrix effects, etc.
 License: GPL-2
-LazyData: TRUE
-Imports:
-        rcdk,
-        xcms,
-        mixtools
-Suggests:
-    knitr
+Encoding: UTF-8
+LazyData: true
+Suggests: knitr,
+    rmarkdown
 VignetteBuilder: knitr
+Imports: xcms,
+    rcdk,
+    mixtools
 RoxygenNote: 5.0.1

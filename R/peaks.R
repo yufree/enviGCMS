@@ -134,7 +134,7 @@ GetIntegration <- function(data, rt=c(8.3,9), n=5, m=5, slope = c(2,2), baseline
 #' @return Molecular isotope ratio
 #' @export
 batch <- function(file,mz1,mz2){
-        data1 <- xcmsRaw(file)
+        data1 <- xcms::xcmsRaw(file)
         df <- data1@env$profile
         rt <- data1@scantime/60
         rownames(df) <- seq(data1@mzrange[1],data1@mzrange[2])
@@ -171,7 +171,7 @@ batch <- function(file,mz1,mz2){
 #' @return arearatio
 #' @export
 qbatch <- function(file,mz1,mz2,rt=c(8.65,8.74),brt=c(8.74,8.85)){
-        data1 <- xcmsRaw(file)
+        data1 <- xcms::xcmsRaw(file)
         df <- data1@env$profile
         rt <- data1@scantime/60
         rownames(df) <- seq(data1@mzrange[1],data1@mzrange[2])
@@ -192,7 +192,7 @@ qbatch <- function(file,mz1,mz2,rt=c(8.65,8.74),brt=c(8.74,8.85)){
 #' @export
 Getisotopologues <- function(formula = 'C12OH6Br4', charge = '1',width = 0.3){
         # input the forlmula and charge for your molecular, this demo was for BDE-47
-        formula <- get.formula(formula, charge)
+        formula <- rcdk::get.formula(formula, charge)
         # get the isotopes pattern of your molecular with high abandances. Here
         # we suggest more than 10% abundance of your base peak would meet the SNR
         isotopes <- data.frame(get.isotopes.pattern(formula,minAbund=0.1))
@@ -208,7 +208,7 @@ Getisotopologues <- function(formula = 'C12OH6Br4', charge = '1',width = 0.3){
         isotopologuesL <- min(isotopologues1,isotopologues2)
         isotopologuesH <- max(isotopologues1,isotopologues2)
         # get the caculated ratio at certain resolution
-        isotopes2 <- get.isotopes.pattern(formula,minAbund=0.00000001)
+        isotopes2 <- rcdk::get.isotopes.pattern(formula,minAbund=0.00000001)
         ratio <- sum(isotopes2[isotopes2[,1]>isotopologuesL-width & isotopes2[,1]<isotopologuesL+width,2])/sum(isotopes2[isotopes2[,1]>isotopologuesH-width & isotopes2[,1]<isotopologuesH+width,2])
         peak <- c(round(isotopologuesL,digits = 1),round(isotopologuesH,digits = 1),round(ratio,digits = 5))
         # peak <- as.character(peak)
