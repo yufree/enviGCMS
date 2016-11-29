@@ -1,0 +1,6 @@
+language: r
+r: bioc-release
+sudo: true
+cache:
+  packages: true
+apt_packages: libnetcdf-dev
