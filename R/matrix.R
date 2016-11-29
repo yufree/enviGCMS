@@ -20,7 +20,7 @@ findline <- function(data,threshold=2,temp = c(100,320)){
         rangemz <- range(y0)
         rangert <- range(x)
         plot(data$y~data$x,
-             xlab = 'Temperature(°C)',
+             xlab = 'Temperature(\u00b0C)',
              ylab = 'm/z',
              pch = 19,
              xlim = rangert,
