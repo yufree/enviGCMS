@@ -195,7 +195,7 @@ Getisotopologues <- function(formula = 'C12OH6Br4', charge = '1',width = 0.3){
         formula <- rcdk::get.formula(formula, charge)
         # get the isotopes pattern of your molecular with high abandances. Here
         # we suggest more than 10% abundance of your base peak would meet the SNR
-        isotopes <- data.frame(get.isotopes.pattern(formula,minAbund=0.1))
+        isotopes <- data.frame(rcdk::get.isotopes.pattern(formula,minAbund=0.1))
         # order the intensity by the abandance
         findpairs <- isotopes[order(isotopes[,2],decreasing = T),]
         # find the most similar pairs with high abandance

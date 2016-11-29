@@ -21,21 +21,20 @@ getmd <- function(data,profstep = 1,time = 1){
 #' @param ... matrix even higher mass range
 #' @return matrix with the row as scantime in second and column as m/z
 #' @export
-conbinemd <- function(data1,data2,...){
+combinemd <- function(data1,data2,...){
         if(missing(...)){
                 z1 <- getmd(data1)
                 z2 <- getmd(data2)
                 ind <- intersect(colnames(z1),colnames(z2))
-                z <- rbind(,z1[as.character(ind)],z2[,as.character(ind)])
-                rownames(z) <- c(seq(min(colnames(z1)),max(colnames(z2))),seq(min(colnames(z2)),max(colnames(z3))))
+                z <- rbind(z1[as.character(ind)],z2[,as.character(ind)])
+                rownames(z) <- c(seq(min(rownames(z1)),max(rownames(z1))),seq(min(colnames(z2)),max(colnames(z2))))
                 colnames(z) <- ind
                 return(z)
         }
         else{
-                conbinedmd(data1, conbinedmd(data2, ...))
+                combinemd(data1, combinemd(data2, ...))
         }
 }
-
 
 #' Subset the data mass spectrum of certain retention time and plot them
 #' @param data imported data matrix of GC-MS
