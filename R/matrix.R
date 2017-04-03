@@ -20,7 +20,7 @@ findline <- function(data,threshold=2,temp = c(100,320)){
         rangemz <- range(y0)
         rangert <- range(x)
         plot(data$y~data$x,
-             xlab = 'Temperature(°C)',
+             xlab = 'Temperature(\u00b0C)',
              ylab = 'm/z',
              pch = 19,
              xlim = rangert,
@@ -168,11 +168,10 @@ plotsms <- function(meanmatrix,rsdmatrix){
 #' plot the density of the GC-MS data with EM algorithm to seperate the data into two log normal distribution.
 #' @param data imported data matrix of GC-MS
 #' @return NULL
-#' @importFrom mixtools normalmixEM
 #' @export
 plothist <- function(data){
         data1=sample(data,100000)
-        mixmdl = normalmixEM(log10(data1))
+        mixmdl = mixtools::normalmixEM(log10(data1))
         plot(mixmdl,which=2,breaks=100,
              xlab2 = 'Intensity')
         lines(density(log10(data1)), lty=2, lwd=2)

@@ -1,20 +1,18 @@
 #' Just intergrate data according to fixed rt and fixed noise area
 #' @param data file should be a dataframe with the first column RT and second column intensity of the SIM ions.
-#' @param minrt a rough smallest RT range contained only one peak to get the area
-#' @param maxrt a rough largest RT range contained only one peak to get the area
-#' @param minbrt a rough smallest RT range contained only one peak and enough noisy to get the area
-#' @param maxbrt a rough largest RT range contained only one peak and enough noisy to get the area
+#' @param rt a rough RT range contained only one peak to get the area
+#' @param brt a rough RT range contained only one peak and enough noises to get the area
 #' @param smoothit logical, if using an average smooth box or not. If using, n will be used
 #' @return area intergration data
 #' @export
-Integration <- function(data, minrt = 8.3 , maxrt = 9,minbrt = 8.3, maxbrt = 8.4,smoothit = T){
+Integration <- function(data, rt=c(8.3,9),brt=c(8.3,8.4),smoothit = T){
         # subset the data
-        subdata <- data[data[,1] > minrt&data[,1] < maxrt,]
+        subdata <- data[data[,1] > rt[2]&data[,1] < rt[1],]
         # get the signal and the RT
         RTrange <- subdata[,1]
         signal <- subdata[,2]
         # subset the noise
-        subnoise <- data[data[,1]>minbrt&data[,1]<maxbrt,]
+        subnoise <- data[data[,1]>brt[2]&data[,1]<brt[1],]
         # get the noise and the RT
         RTrange2 <- subnoise[,1]
         noise <- subnoise[,2]
@@ -35,21 +33,19 @@ Integration <- function(data, minrt = 8.3 , maxrt = 9,minbrt = 8.3, maxbrt = 8.4
 
 #' GetIntegration was mainly used for get the intergration of certain ion's chromatogram data and plot the data
 #' @param data file should be a dataframe with the first column RT and second column intensity of the SIM ions.
-#' @param minrt a rough smallest RT range contained only one peak to get the area
-#' @param maxrt a rough largest RT range contained only one peak to get the area
+#' @param rt a rough RT range contained only one peak to get the area
 #' @param n points in the moving average smooth box, default value is 5
 #' @param m numbers of points for regression to get the slope
-#' @param startslope the threshold value for start peak as percentage of max slope
-#' @param stopslope the threshold value for stop peak as percentage of max slope
+#' @param slope the threshold value for start/stop peak as percentage of max slope
 #' @param baseline numbers of the points for the baseline of the signal
 #' @param noslope logical, if using a horizon line to get area or not
 #' @param smoothit logical, if using an average smooth box or not. If using, n will be used
 #' @param half logical, if using the left half peak to caculate the area
 #' @return intergration data such as peak area, peak hight, signal and the slope data.
 #' @export
-GetIntegration <- function(data, minrt = 8.3 , maxrt = 9, n=5, m=5, startslope = 2, stopslope = 2, baseline = 20, noslope = T, smoothit = T,half = F){
+GetIntegration <- function(data, rt=c(8.3,9), n=5, m=5, slope = c(2,2), baseline = 10, noslope = T, smoothit = T,half = F){
         # subset the data
-        subdata <- data[data[,1] > minrt&data[,1] < maxrt,]
+        subdata <- data[data[,1] > rt[1]&data[,1] < rt[2],]
         # get the signal and the RT
         RTrange <- subdata[,1]
         signal <- subdata[,2]
@@ -80,7 +76,7 @@ GetIntegration <- function(data, minrt = 8.3 , maxrt = 9, n=5, m=5, startslope =
         }
         # search for peak start
         i <- baseline
-        while((slopedata[i]<=(startslope/100*max(slopedata)))&(i<length(signal))) i <- i+1
+        while((slopedata[i]<=(slope[1]/100*max(slopedata)))&(i<length(signal))) i <- i+1
         rtstart <- RTrange[i] # peak start found
         scanstart <- i # (slope > threshold)
         sigstart <- mean(signal[(i-baseline+1):i]) # baseline intensity found
@@ -92,7 +88,7 @@ GetIntegration <- function(data, minrt = 8.3 , maxrt = 9, n=5, m=5, startslope =
         sigpeak <- signal[i]
         # search for peak end
         i <- which.min(slopedata) # jump to slope min.
-        while((slopedata[i]<= -(stopslope/100*max(slopedata))) & (i<(length(signal)-baseline))) i <- i+1
+        while((slopedata[i]<= -(slope[2]/100*max(slopedata))) & (i<(length(signal)-baseline))) i <- i+1
         rtend <- RTrange[i] # peak end found
         scanend <- i # (-slope < threshold)
         sigend <- mean(signal[i:(i+ baseline-1)])
@@ -120,9 +116,12 @@ GetIntegration <- function(data, minrt = 8.3 , maxrt = 9, n=5, m=5, startslope =
         # calculate height
         sigpeakbase <- sigstart+(sigend-sigstart)/(scanend-scanstart)*(scanpeak-scanstart)
         height <- sigpeak - sigpeakbase
+        # SNR
+        snrnoise <- abs(diff(range(signal[(scanstart-baseline+1):scanstart])))
+        SNR <- height/snrnoise
         # collect the data for plot peak and slope
-        peakdata <- c(baseline,rtstart,rtend,rtpeak,scanstart,scanend,scanpeak,sigstart,sigend,sigpeak,sigpeakbase,lengthsig)
-        names(peakdata) <- c('baseline','peak start RT','peak end RT','peak RT','baseline start RT ID','baseline end RT ID','baseline peak RT ID','start RT intensity','end RT intensity','peak RT intensity','peak baseline','points')
+        peakdata <- c(baseline,rtstart,rtend,rtpeak,scanstart,scanend,scanpeak,sigstart,sigend,sigpeak,sigpeakbase,lengthsig,SNR)
+        names(peakdata) <- c('baseline','peak start RT','peak end RT','peak RT','baseline start RT ID','baseline end RT ID','baseline peak RT ID','start RT intensity','end RT intensity','peak RT intensity','peak baseline','points','SNR')
         # return the result as a list
         list <- list(area=area,height=height,peakdata=peakdata,RTrange=RTrange,signal=signal,slopedata=slopedata)
         return(list)
@@ -135,7 +134,7 @@ GetIntegration <- function(data, minrt = 8.3 , maxrt = 9, n=5, m=5, startslope =
 #' @return Molecular isotope ratio
 #' @export
 batch <- function(file,mz1,mz2){
-        data1 <- xcmsRaw(file)
+        data1 <- xcms::xcmsRaw(file)
         df <- data1@env$profile
         rt <- data1@scantime/60
         rownames(df) <- seq(data1@mzrange[1],data1@mzrange[2])
@@ -167,14 +166,12 @@ batch <- function(file,mz1,mz2){
 #' @param file data file, CDF or other format supportted by xcmsRaw
 #' @param mz1 the lowest mass
 #' @param mz2 the highest mass
-#' @param minrt a rough smallest RT range contained only one peak to get the area
-#' @param maxrt a rough largest RT range contained only one peak to get the area
-#' @param minbrt a rough smallest RT range contained only one peak and enough noisy to get the area
-#' @param maxbrt a rough largest RT range contained only one peak and enough noisy to get the area
+#' @param rt a rough RT range contained only one peak to get the area
+#' @param brt a rough RT range contained only one peak and enough noises to get the area
 #' @return arearatio
 #' @export
-qbatch <- function(file,mz1,mz2,minrt = 8.65,maxrt = 8.74,minbrt = 8.85, maxbrt = 8.87){
-        data1 <- xcmsRaw(file)
+qbatch <- function(file,mz1,mz2,rt=c(8.65,8.74),brt=c(8.74,8.85)){
+        data1 <- xcms::xcmsRaw(file)
         df <- data1@env$profile
         rt <- data1@scantime/60
         rownames(df) <- seq(data1@mzrange[1],data1@mzrange[2])
@@ -182,8 +179,8 @@ qbatch <- function(file,mz1,mz2,minrt = 8.65,maxrt = 8.74,minbrt = 8.85, maxbrt 
         xa <- data.frame(rt,xa)
         xb <- df[as.character(mz2),]
         xb <- data.frame(rt,xb)
-        xl <- Integration(xa,minrt,maxrt,minbrt,maxbrt)
-        xh <- Integration(xb,minrt,maxrt,minbrt,maxbrt)
+        xl <- Integration(xa,rt,brt)
+        xh <- Integration(xb,rt,brt)
         arearatio <- xl/xh
         return(arearatio)
 }
@@ -195,10 +192,10 @@ qbatch <- function(file,mz1,mz2,minrt = 8.65,maxrt = 8.74,minbrt = 8.85, maxbrt 
 #' @export
 Getisotopologues <- function(formula = 'C12OH6Br4', charge = '1',width = 0.3){
         # input the forlmula and charge for your molecular, this demo was for BDE-47
-        formula <- get.formula(formula, charge)
+        formula <- rcdk::get.formula(formula, charge)
         # get the isotopes pattern of your molecular with high abandances. Here
         # we suggest more than 10% abundance of your base peak would meet the SNR
-        isotopes <- data.frame(get.isotopes.pattern(formula,minAbund=0.1))
+        isotopes <- data.frame(rcdk::get.isotopes.pattern(formula,minAbund=0.1))
         # order the intensity by the abandance
         findpairs <- isotopes[order(isotopes[,2],decreasing = T),]
         # find the most similar pairs with high abandance
@@ -211,7 +208,7 @@ Getisotopologues <- function(formula = 'C12OH6Br4', charge = '1',width = 0.3){
         isotopologuesL <- min(isotopologues1,isotopologues2)
         isotopologuesH <- max(isotopologues1,isotopologues2)
         # get the caculated ratio at certain resolution
-        isotopes2 <- get.isotopes.pattern(formula,minAbund=0.00000001)
+        isotopes2 <- rcdk::get.isotopes.pattern(formula,minAbund=0.00000001)
         ratio <- sum(isotopes2[isotopes2[,1]>isotopologuesL-width & isotopes2[,1]<isotopologuesL+width,2])/sum(isotopes2[isotopes2[,1]>isotopologuesH-width & isotopes2[,1]<isotopologuesH+width,2])
         peak <- c(round(isotopologuesL,digits = 1),round(isotopologuesH,digits = 1),round(ratio,digits = 5))
         # peak <- as.character(peak)

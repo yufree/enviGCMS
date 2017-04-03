@@ -1,40 +1,40 @@
-#' import data and return the annotated matrix
+#' import data and return the annotated matrix for GC-MS
 #' @param data file type which xcmsRaw could handle
-#' @param step resolution of the MS
-#' @return matrix with the row as increasing m/z in second and column as increasing scantime
+#' @param profstep the m/z step for generating matrix data from raw mass spectral data.
+#' @param time round numbers of retention time, default is 1
+#' @return matrix with the row as increasing m/z second and column as increasing scantime
 #' @export
-getmd <- function(data,step = 1){
-        data <- xcmsRaw(data,profstep = step)
+getmd <- function(data,profstep = 1,time = 1){
+        data <- xcms::xcmsRaw(data,profstep)
         z1 <- data@env$profile
-        zf <- as.factor(round(data@scantime))
+        zf <- as.factor(round(data@scantime,time))
         df <- aggregate(t(z1), list(zf), sum)[-1]
-        rownames(df) <- unique(round(data@scantime))
-        colnames(df) <- seq(data@mzrange[1],data@mzrange[2],by = step)
+        rownames(df) <- unique(round(data@scantime,time))
+        colnames(df) <- seq(data@mzrange[1],data@mzrange[2],by = profstep)
         return(t(as.matrix(df)))
 }
 
-#' Combine two or more dataset
+#' Combine two or more matrix
 #'
 #' @param data1 matrix lower mass range
 #' @param data2 matrix higher mass range
 #' @param ... matrix even higher mass range
 #' @return matrix with the row as scantime in second and column as m/z
 #' @export
-conbinemd <- function(data1,data2,...){
+combinemd <- function(data1,data2,...){
         if(missing(...)){
                 z1 <- getmd(data1)
                 z2 <- getmd(data2)
                 ind <- intersect(colnames(z1),colnames(z2))
-                z <- rbind(,z1[as.character(ind)],z2[,as.character(ind)])
-                rownames(z) <- c(seq(min(colnames(z1)),max(colnames(z2))),seq(min(colnames(z2)),max(colnames(z3))))
+                z <- rbind(z1[as.character(ind)],z2[,as.character(ind)])
+                rownames(z) <- c(seq(min(rownames(z1)),max(rownames(z1))),seq(min(colnames(z2)),max(colnames(z2))))
                 colnames(z) <- ind
                 return(z)
         }
         else{
-                conbinedmd(data1, conbinedmd(data2, ...))
+                combinemd(data1, combinemd(data2, ...))
         }
 }
-
 
 #' Subset the data mass spectrum of certain retention time and plot them
 #' @param data imported data matrix of GC-MS
@@ -45,9 +45,9 @@ conbinemd <- function(data1,data2,...){
 getsubmd <- function(data,rt,ms){
         mzindexstart <- as.numeric(head(rownames(data),1))
         rtindexstart <- as.numeric(head(colnames(data),1))
-        rts <- rt*60-rtindexstart
-        rt1 <- min(rts)
-        rt2 <- max(rts)
+        rts <- rt*60
+        rt1 <- which(round(as.numeric(colnames(data))) == round(rts[1]))[1]
+        rt2 <- which(round(as.numeric(colnames(data))) == round(rts[2]))[1]
         mzs <- ms-mzindexstart+1
         mz1 <- min(mzs)
         mz2 <- max(mzs)

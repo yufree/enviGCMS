@@ -1,8 +1,3 @@
-#' @importFrom xcms xcmsRaw
-#' @importFrom rcdk get.formula
-#' @importFrom rcdk get.isotopes.pattern
-NULL
-
 #' filter data by average moving box
 #'
 #' @param x a vector
@@ -113,7 +108,7 @@ plott <- function(data,col = heat.colors(108),temp = c(100,320)){
         # show the heatmap
         par(mar=c(4,5,0,4),fig=c(0,1,0,0.9), new=T)
         image(z,
-              xlab = 'Temperature(°C)',
+              xlab = 'Temperature(\u00b0C)',
               ylab = 'm/z',
               axes = F,
               col = col,
