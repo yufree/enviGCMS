@@ -265,19 +265,3 @@ plotintslope <- function(list,name=NULL){
         lines(c(rtpeak,rtpeak), c(-.5*max(slopedata), .5*max(slopedata)), "l", col="blue")
 }
 
-#' plot the kendrick mass defect diagram
-#' @param data vector with the name m/z
-#' @param cutoff remove the low intensity
-#' @return NULL
-#' @export
-plotkms <- function(data,cutoff = 1000){
-        data <- data[data>cutoff]
-        mz <- as.numeric(names(data))
-        km <- mz*14/14.01565
-        kmd <- round(km)-km
-        smoothScatter(kmd~round(km),
-                      xlab = "Kendrick nominal mass",
-                      ylab = "Kendrick mass defect")
-}
-#' to do
-#' Van Krevelen diagram
