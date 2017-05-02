@@ -278,13 +278,13 @@ plotc <- function(data1, data2, method = 'max', p = 0.5, mzrange = c(100,1000)){
         data2 <- data.frame(peaks(data2))
         if(method == 'max'){
                 plot(data1$mz[data1$into > max(data1$into)*p]~data1$rt[data1$into > max(data1$into)*p], xlab = 'Retention Time', ylab = 'm/z',ylim = mzrange)
-                points(data2$mz[data1$into > max(data2$into)*p]~data2$rt[data2$into > max(data2$into)*p], col = 'red')
+                points(data2$mz[data2$into > max(data2$into)*p]~data2$rt[data2$into > max(data2$into)*p], col = 'red')
         }else if( method == 'mean') {
                 plot(data1$mz[data1$into > mean(data1$into)*p]~data1$rt[data1$into > mean(data1$into)*p], xlab = 'Retention Time', ylab = 'm/z',ylim = mzrange)
-                points(data2$mz[data1$into > mean(data2$into)*p]~data2$rt[data2$into > mean(data2$into)*p], col = 'red')
+                points(data2$mz[data2$into > mean(data2$into)*p]~data2$rt[data2$into > mean(data2$into)*p], col = 'red')
         }else if ( method == 'median') {
                 plot(data1$mz[data1$into > median(data1$into)*p]~data1$rt[data1$into > median(data1$into)*p], xlab = 'Retention Time', ylab = 'm/z',ylim = mzrange)
-                points(data2$mz[data1$into > median(data2$into)*p]~data2$rt[data2$into > median(data2$into)*p], col = 'red')
+                points(data2$mz[data2$into > median(data2$into)*p]~data2$rt[data2$into > median(data2$into)*p], col = 'red')
         }else {
                 plot(data1$mz~data1$rt, xlab = 'Retention Time', ylab = 'm/z',ylim = mzrange)
                 points(data2$mz~data2$rt, col = 'red')
