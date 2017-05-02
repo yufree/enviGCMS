@@ -291,3 +291,16 @@ plotc <- function(data1, data2, method = 'max', p = 0.5, mzrange = c(100,1000),.
                 points(data2$mz~data2$rt, col = 'red')
         }
 }
+#' plot EIC and boxplot for all peaks and return diffreport
+#' @param xset xcmsset object
+#' @param name filebase of the sub dir
+#' @param test 't' means two-sample welch t-test, 't.equalvar' means two-sample welch t-test with equal variance, 'wilcoxon' means rank sum wilcoxon test, 'f' means F-test, 'pairt' means paired t test, 'blockf' means Two-way analysis of variance, default 't'
+#' @param nonpara 'y' means using nonparametric ranked data, 'n' means original data
+#' @param ... other parameters for `diffreport`
+#' @return diffreport and pdf figure for EIC and boxplot
+#' @export
+plote <- function(xset, name = 'test', test = 't', nonpara = 'n',...){
+        gt <- xcms::groups(xset)
+        a <- xcms::diffreport(xset,filebase = name,eicmax = nrow(gt),nonpara = nonpara,...)
+        return(a)
+}
