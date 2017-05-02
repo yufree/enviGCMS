@@ -384,7 +384,7 @@ getsim <- function(xset1,xset2){
 
         data <- merge(data1, data2, by = 'mzmedn')
         data <- data[complete.cases(data),]
-        cor1 <- cor(data$rt.x, data$rt.y)
+        cor1 <- cor(data$rtmed.x, data$rtmed.y)
         cor2 <- cor(data$rsd.x, data$rsd.y)
         cor <- c(cor1,cor2)
         return(cor)
