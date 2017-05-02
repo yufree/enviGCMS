@@ -4,7 +4,7 @@
 \alias{plotc}
 \title{plot the comparision of two xcmsset according to certain method}
 \usage{
-plotc(data1, data2, method = "max", p = 0.5, mzrange = c(100, 1000))
+plotc(data1, data2, method = "max", p = 0.5, mzrange = c(100, 1000), ...)
 }
 \arguments{
 \item{data1}{the first xcmsset data set}
@@ -16,6 +16,8 @@ plotc(data1, data2, method = "max", p = 0.5, mzrange = c(100, 1000))
 \item{p}{filtered peaks larger than the propotion of the max, mean or median}
 
 \item{mzrange}{the mass range to plot the data}
+
+\item{...}{parameters for `plot` function}
 }
 \description{
 plot the comparision of two xcmsset according to certain method
