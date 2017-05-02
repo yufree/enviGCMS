@@ -12,4 +12,3 @@ plotsub(data)
 \description{
 Plot the backgrond of data
 }
-

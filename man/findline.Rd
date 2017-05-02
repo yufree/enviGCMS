@@ -19,4 +19,3 @@ list linear regression model for the matrix
 \description{
 find line of the regression model
 }
-

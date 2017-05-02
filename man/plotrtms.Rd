@@ -19,4 +19,3 @@ plot, vector and MSP files for NIST search
 \description{
 Plot mass spectrum of certain retention time and return mass spectrum vector (MSP file) for NIST search
 }
-

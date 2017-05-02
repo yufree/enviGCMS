@@ -23,4 +23,3 @@ arearatio
 \description{
 Get the MIR from the file
 }
-

@@ -14,4 +14,3 @@ plotintslope(list, name = NULL)
 \description{
 plot the information of intergretion
 }
-

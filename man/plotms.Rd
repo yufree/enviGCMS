@@ -19,4 +19,3 @@ heatmap
 \description{
 plot GC-MS data as a heatmap
 }
-

@@ -19,4 +19,3 @@ data matrix
 \description{
 Subset the data mass spectrum of certain retention time and plot them
 }
-

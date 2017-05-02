@@ -17,4 +17,3 @@ The filtered data
 \description{
 filter data by average moving box
 }
-

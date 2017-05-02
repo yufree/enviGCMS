@@ -17,4 +17,3 @@ none a MSP file will be created at the subfolder working dictionary with name 'M
 \description{
 Write MSP files for NIST search
 }
-

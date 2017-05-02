@@ -14,4 +14,3 @@ plotsms(meanmatrix, rsdmatrix)
 \description{
 Plot the intensity distribution of GC-MS
 }
-

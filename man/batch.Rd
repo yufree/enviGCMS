@@ -19,4 +19,3 @@ Molecular isotope ratio
 \description{
 Get the MIR and related information from the files
 }
-

@@ -19,4 +19,3 @@ matrix with the row as increasing m/z second and column as increasing scantime
 \description{
 import data and return the annotated matrix for GC-MS
 }
-

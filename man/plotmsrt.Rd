@@ -21,4 +21,3 @@ dataframe with  with the first column RT and second column intensity of the SIM 
 \description{
 Plot EIC of certain m/z and return dataframe for intergration
 }
-

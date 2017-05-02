@@ -19,4 +19,3 @@ matrix with the row as scantime in second and column as m/z
 \description{
 Combine two or more matrix
 }
-

@@ -21,4 +21,3 @@ plot
 \description{
 Plot Total Ion Chromatogram (TIC)
 }
-

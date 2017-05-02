@@ -21,4 +21,3 @@ list linear regression model for the diff matrix
 \description{
 substrict two GC-MS data
 }
-
