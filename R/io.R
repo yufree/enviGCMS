@@ -366,28 +366,27 @@ getsim <- function(xset1,xset2){
         data1 <- gettechrep(xset1)[,c('mzmed','rtmed','rsd')]
         data2 <- gettechrep(xset2)[,c('mzmed','rtmed','rsd')]
 
-        data1$weight <- ifelse(data1$rsd > 100, 0, 0.2)
-        data1$weight[data1$rsd < 80] <- 0.4
-        data1$weight[data1$rsd < 60] <- 0.6
-        data1$weight[data1$rsd < 40] <- 0.8
-        data1$weight[data1$rsd < 20] <- 1
-        data1$rtorder <- order(data1$rtmed)
+        # data1$weight <- ifelse(data1$rsd > 100, 0, 0.2)
+        # data1$weight[data1$rsd < 80] <- 0.4
+        # data1$weight[data1$rsd < 60] <- 0.6
+        # data1$weight[data1$rsd < 40] <- 0.8
+        # data1$weight[data1$rsd < 20] <- 1
+        # data1$rtorder <- order(data1$rtmed)
         data1$mzmedn <- round(data1$mzmed,0.1)
 
-        data2$weight <- ifelse(data2$rsd > 100, 0, 0.2)
-        data2$weight[data2$rsd < 80] <- 0.4
-        data2$weight[data2$rsd < 60] <- 0.6
-        data2$weight[data2$rsd < 40] <- 0.8
-        data2$weight[data2$rsd < 20] <- 1
-        data2$rtorder <- order(data2$rtmed)
+        # data2$weight <- ifelse(data2$rsd > 100, 0, 0.2)
+        # data2$weight[data2$rsd < 80] <- 0.4
+        # data2$weight[data2$rsd < 60] <- 0.6
+        # data2$weight[data2$rsd < 40] <- 0.8
+        # data2$weight[data2$rsd < 20] <- 1
+        # data2$rtorder <- order(data2$rtmed)
         data2$mzmedn <- round(data2$mzmed,0.1)
 
         data <- merge(data1, data2, by = 'mzmedn')
         data <- data[complete.cases(data),]
-        cor1 <- cor(data$rtorder.x, data$rtorder.y)
-        cor2 <- cor(data$weight.x, data$weight.y)
-        cor <- (cor1 + cor2)/2
-
+        cor1 <- cor(data$rt.x, data$rt.y)
+        cor2 <- cor(data$rsd.x, data$rsd.y)
+        cor <- c(cor1,cor2)
         return(cor)
 }
 
