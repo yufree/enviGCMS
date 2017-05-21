@@ -1,17 +1,22 @@
-#' import data and return the annotated matrix for GC-MS
+#' import data and return the annotated matrix for GC-MS by m/z range and retention time
 #' @param data file type which xcmsRaw could handle
-#' @param profstep the m/z step for generating matrix data from raw mass spectral data.
-#' @param time round numbers of retention time, default is 1
+#' @param mzstep the m/z step for generating matrix data from raw mass spectral data.
+#' @param mzrange vector range of the m/z, default all
+#' @param rtrange vector range of the retention time, default all
 #' @return matrix with the row as increasing m/z second and column as increasing scantime
 #' @export
-getmd <- function(data,profstep = 1,time = 1){
-        data <- xcms::xcmsRaw(data,profstep)
-        z1 <- data@env$profile
-        zf <- as.factor(round(data@scantime,time))
-        df <- aggregate(t(z1), list(zf), sum)[-1]
-        rownames(df) <- unique(round(data@scantime,time))
-        colnames(df) <- seq(data@mzrange[1],data@mzrange[2],by = profstep)
-        return(t(as.matrix(df)))
+getmd <- function(data, mzstep = 1, mzrange = F, rtrange = F){
+        data <- xcms::xcmsRaw(data,profstep = mzstep)
+        pf <- xcms::profMat(data)
+        rownames(pf) <- mz <- xcms::profMz(data)
+        colnames(pf) <- rt <- data@scantime
+        if(mzrange[1]){
+                pf <- pf[mz > mzrange[1] & mz < mzrange[2],]
+        }
+        if(rtrange[1]){
+                pf <- pf[,rt > rtrange[1] & rt < rtrange[2]]
+        }
+        return(pf)
 }
 
 #' Combine two or more matrix
@@ -25,35 +30,16 @@ combinemd <- function(data1,data2,...){
         if(missing(...)){
                 z1 <- getmd(data1)
                 z2 <- getmd(data2)
-                ind <- intersect(colnames(z1),colnames(z2))
-                z <- rbind(z1[as.character(ind)],z2[,as.character(ind)])
-                rownames(z) <- c(seq(min(rownames(z1)),max(rownames(z1))),seq(min(colnames(z2)),max(colnames(z2))))
+                ind <- intersect(round(as.numeric(colnames(z1)),1),round(as.numeric(colnames(z2)),1))
+                ind0 <- intersect(colnames(z1),colnames(z2))
+                z <- rbind(z1[,as.character(ind0)],z2[,as.character(ind0)])
+                rownames(z) <- c(seq(min(rownames(z1)),max(rownames(z1))),seq(min(rownames(z2)),max(rownames(z2))))
                 colnames(z) <- ind
                 return(z)
         }
         else{
                 combinemd(data1, combinemd(data2, ...))
         }
-}
-
-#' Subset the data mass spectrum of certain retention time and plot them
-#' @param data imported data matrix of GC-MS
-#' @param rt vector range of the retention time min
-#' @param ms vector range of the m/z
-#' @return data matrix
-#' @export
-getsubmd <- function(data,rt,ms){
-        mzindexstart <- as.numeric(head(rownames(data),1))
-        rtindexstart <- as.numeric(head(colnames(data),1))
-        rts <- rt*60
-        rt1 <- which(round(as.numeric(colnames(data))) == round(rts[1]))[1]
-        rt2 <- which(round(as.numeric(colnames(data))) == round(rts[2]))[1]
-        mzs <- ms-mzindexstart+1
-        mz1 <- min(mzs)
-        mz2 <- max(mzs)
-        data <- data[mz1:mz2,]
-        data <- t(data)[rt1:rt2,]
-        return(t(data))
 }
 
 #' Write MSP files for NIST search

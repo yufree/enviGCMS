@@ -2,20 +2,22 @@
 % Please edit documentation in R/io.R
 \name{getmd}
 \alias{getmd}
-\title{import data and return the annotated matrix for GC-MS}
+\title{import data and return the annotated matrix for GC-MS by m/z range and retention time}
 \usage{
-getmd(data, profstep = 1, time = 1)
+getmd(data, mzstep = 1, mzrange = F, rtrange = F)
 }
 \arguments{
 \item{data}{file type which xcmsRaw could handle}
 
-\item{profstep}{the m/z step for generating matrix data from raw mass spectral data.}
+\item{mzstep}{the m/z step for generating matrix data from raw mass spectral data.}
 
-\item{time}{round numbers of retention time, default is 1}
+\item{mzrange}{vector range of the m/z, default all}
+
+\item{rtrange}{vector range of the retention time, default all}
 }
 \value{
 matrix with the row as increasing m/z second and column as increasing scantime
 }
 \description{
-import data and return the annotated matrix for GC-MS
+import data and return the annotated matrix for GC-MS by m/z range and retention time
 }

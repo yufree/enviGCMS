@@ -23,19 +23,19 @@ When you perform a selected ions monitor(SIM) mode, only few mass data were coll
 
 ## Data input
 
-You could use `getmd` to import the mass spectrum data as supported by `xcms` such as:
+You could use `getmd` to import the mass spectrum data as supported by `xcms` and get the profile of GC-MS data matrix. `mzstep` is the bin step for mass:
 
 ```
-data <- getmd('data/data1.CDF')
+data <- getmd('data/data1.CDF', mzstep = 0.1)
 ```
 
-You could subset the data by index the mass(m/z 100-1000) and retention time range(3.1-25min) in `getsubmd` function:
+You could also subset the data by the mass(m/z 100-1000) or retention time range(40-100s) in `getmd` function:
 
 ```
-data <- getsubmd(data,rt=c(3.1,25),mz=c(100,1000))
+data <- getmd(data,mzrange=c(100,1000),rtrange=c(40,100))
 ```
 
-You could combined the mass full-scan data with the same range of retention time by `combinemd`:
+You could also combined the mass full-scan data with the same range of retention time by `combinemd`:
 
 ```
 data <- combinemd(data1,data2,data3)
