@@ -346,7 +346,7 @@ gettechbiorep <-
 #' output the similarity of two dataset
 #' @param xset1 the first dataset
 #' @param xset2 the second dateset
-#' @return similarity
+#' @return similarity on retention time and rsd
 #' @export
 getsim <- function(xset1,xset2){
         data1 <- gettechrep(xset1)[,c('mzmed','rtmed','rsd')]
