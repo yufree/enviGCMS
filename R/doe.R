@@ -30,7 +30,6 @@ getfeaturest <- function(xod, power = 0.8, pt = 0.05, qt = 0.05, n = 3, rsdt = 5
         df <- cbind.data.frame(sd,dm,p,q,mz,rt,data0)
         df <- df[order(df$p),]
         df$alpha <- c(1:m)*pt/m
-        df <- df[df$p < pt & df$q < qt,]
         rp <- vector()
         for (i in c(1:nrow(df))){
 
@@ -59,6 +58,7 @@ getfeaturesanova <- function(xod, power = 0.8, pt = 0.05, qt = 0.05, n = 3, ng =
         data1 <- as.data.frame(xcms::groups(xod))
         lv <- xod@phenoData[,1]
         data0 <- data[idx,]
+        
         sd <- genefilter::rowSds(data0[,1:n])
         mean <- stats::aggregate(t(data0), list(lv), mean)
         mean <- t(mean[, -1])
@@ -76,7 +76,6 @@ getfeaturesanova <- function(xod, power = 0.8, pt = 0.05, qt = 0.05, n = 3, ng =
         df <- cbind.data.frame(sd,sd2,p,q,mz,rt,data0)
         df <- df[order(df$p),]
         df$alpha <- c(1:m)*pt/m
-        df <- df[df$p < pt & df$q < qt,]
         rp <- vector()
         for (i in c(1:nrow(df))){
                 r <- stats::power.anova.test(groups = ng, between.var = df$sd2[i], within.var = df$sd[i], sig.level = df$alpha[i], n = n)

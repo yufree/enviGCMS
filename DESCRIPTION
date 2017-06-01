@@ -1,7 +1,7 @@
 Package: enviGCMS
 Type: Package
 Title: GC/LC-MS Data Analysis for Environmental Science
-Version: 0.2.1
+Version: 0.3.1
 Date: 2016-11-28
 Authors@R: person("Miao","YU", email =
     "yufreecas@gmail.com", role = c("aut", "cre"))
@@ -17,6 +17,10 @@ VignetteBuilder: knitr
 biocViews:
 Imports: xcms,
     rcdk,
+    RColorBrewer,
+    limma,
+    qvalue,
+    sva,
     mixtools,
     BiocParallel,
     genefilter,

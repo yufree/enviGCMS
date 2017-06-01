@@ -12,7 +12,7 @@ getsim(xset1, xset2)
 \item{xset2}{the second dateset}
 }
 \value{
-similarity
+similarity on retention time and rsd
 }
 \description{
 output the similarity of two dataset
