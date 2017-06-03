@@ -50,8 +50,8 @@ svacor <- function(xset, lv = NULL, method = "medret",
         datacor <- signal + error
         svaX2 <- stats::model.matrix(~lv)
         lmfit2 <- limma::lmFit(data, svaX2)
-        signal2 <- lmfit2$coef[, 1:nlevels(lv)] %*% t(svaX2[, 
-            1:nlevels(lv)])
+        signal2 <- lmfit2$coef[, 1:nlevels(lv)] %*% 
+            t(svaX2[, 1:nlevels(lv)])
         error2 <- data - signal2
         rownames(signal2) <- rownames(error2) <- rownames(datacor) <- rownames(signal) <- rownames(batch) <- rownames(error) <- rownames(data)
         colnames(signal2) <- colnames(error2) <- colnames(datacor) <- colnames(signal) <- colnames(batch) <- colnames(error) <- colnames(data)
@@ -70,10 +70,10 @@ svacor <- function(xset, lv = NULL, method = "medret",
             qValuesSv, svafit$pprob.gam, svafit$pprob.b, 
             mz, rt)
         names(li) <- c("data", "dataCorrected", "signal", 
-            "batch", "error", "signal2", "error2", "p-values", 
-            "q-values", "p-valuesCorrected", "q-valuesCorrected", 
-            "PosteriorProbabilitiesSurrogate", "PosteriorProbabilitiesMod", 
-            "mz", "rt")
+            "batch", "error", "signal2", "error2", 
+            "p-values", "q-values", "p-valuesCorrected", 
+            "q-valuesCorrected", "PosteriorProbabilitiesSurrogate", 
+            "PosteriorProbabilitiesMod", "mz", "rt")
         message("Done!")
     }
     return(li)
@@ -101,12 +101,14 @@ svapca <- function(list, center = T, scale = T, lv = NULL) {
     graphics::par(mfrow = c(2, 5), mar = c(4, 4, 2.6, 
         1))
     
-    pcao <- stats::prcomp(t(data), center = center, scale = scale)
+    pcao <- stats::prcomp(t(data), center = center, 
+        scale = scale)
     pcaoVars = signif(((pcao$sdev)^2)/(sum((pcao$sdev)^2)), 
         3) * 100
     graphics::plot(pcao, type = "l", main = "PCA")
     
-    pca <- stats::prcomp(t(Signal), center = TRUE, scale = TRUE)
+    pca <- stats::prcomp(t(Signal), center = TRUE, 
+        scale = TRUE)
     pcaVars = signif(((pca$sdev)^2)/(sum((pca$sdev)^2)), 
         3) * 100
     graphics::plot(pca, type = "l", main = "PCA-signal")
@@ -198,12 +200,13 @@ svadata <- function(list, pqvalues = "sv", pt = 0.05,
             rt <- rt[pValues < pt & qValues < qt]
             li <- list(data, pValues < pt & qValues < 
                 qt, mz, rt)
-            names(li) <- c("data", "pqvalues", mz, rt)
+            names(li) <- c("data", "pqvalues", mz, 
+                rt)
             return(li)
         } else if (pqvalues == "anova") {
             message("Have SVs while p-values and q-values have no results")
-        } else if (pqvalues == "sv" & sum(pValuesSv < pt & 
-            qValuesSv < qt) != 0) {
+        } else if (pqvalues == "sv" & sum(pValuesSv < 
+            pt & qValuesSv < qt) != 0) {
             message("SVs corrected while p-values and q-values have results")
             data <- data[pValuesSv < pt & qValuesSv < 
                 qt, ]
@@ -213,8 +216,8 @@ svadata <- function(list, pqvalues = "sv", pt = 0.05,
             rt <- rt[pValuesSv < pt & qValuesSv < qt]
             li <- list(datacor, data, pValuesSv < pt & 
                 qValuesSv < qt, mz, rt)
-            names(li) <- c("dataCorrected", "data", "pqvalues", 
-                "mz", "rt")
+            names(li) <- c("dataCorrected", "data", 
+                "pqvalues", "mz", "rt")
             return(li)
         } else {
             message("SVs corrected while p-values and q-values have no results")
@@ -290,7 +293,8 @@ svaplot <- function(list, pqvalues = "sv", pt = 0.05,
     }
     plotimage1 <- function(data, signal, error, zlim) {
         graphics::image(t(data), col = icolors, xlab = "samples", 
-            main = "peaks", xaxt = "n", yaxt = "n", zlim = zlim)
+            main = "peaks", xaxt = "n", yaxt = "n", 
+            zlim = zlim)
         graphics::axis(1, at = pos, labels = levels(lv), 
             cex.axis = 0.8)
         graphics::axis(2, at = seq(0, 1, 1/(nrow(data) - 
@@ -322,7 +326,8 @@ svaplot <- function(list, pqvalues = "sv", pt = 0.05,
         datacor, zlim) {
         
         graphics::image(t(data), col = icolors, xlab = "samples", 
-            main = "peaks", xaxt = "n", yaxt = "n", zlim = zlim)
+            main = "peaks", xaxt = "n", yaxt = "n", 
+            zlim = zlim)
         graphics::axis(1, at = pos, labels = levels(lv))
         graphics::axis(2, at = seq(0, 1, 1/(nrow(data) - 
             1)), labels = rownames(data), las = 1)
@@ -353,9 +358,9 @@ svaplot <- function(list, pqvalues = "sv", pt = 0.05,
             1)), labels = rownames(error), las = 1)
         graphics::abline(v = posv)
         
-        graphics::image(t(datacor), col = icolors, xlab = "samples", 
-            main = "peaks-corrected", xaxt = "n", yaxt = "n", 
-            zlim = zlim)
+        graphics::image(t(datacor), col = icolors, 
+            xlab = "samples", main = "peaks-corrected", 
+            xaxt = "n", yaxt = "n", zlim = zlim)
         graphics::axis(1, at = pos, labels = levels(lv))
         graphics::axis(2, at = seq(0, 1, 1/(nrow(datacor) - 
             1)), labels = rownames(datacor), las = 1)
@@ -367,14 +372,14 @@ svaplot <- function(list, pqvalues = "sv", pt = 0.05,
         if (pqvalues == "anova" & sum(pValues < pt & 
             qValues < qt) != 0) {
             message("No SV while p-values and q-values have results")
-            graphics::layout(matrix(rep(c(1, 1, 2, 2, 
-                3, 3, 4, 4, 5), 9), 9, 9, byrow = TRUE))
+            graphics::layout(matrix(rep(c(1, 1, 2, 
+                2, 3, 3, 4, 4, 5), 9), 9, 9, byrow = TRUE))
             data <- data[pValues < pt & qValues < qt, 
                 ]
             signal <- signal[pValues < pt & qValues < 
                 qt, ]
-            error <- error[pValues < pt & qValues < qt, 
-                ]
+            error <- error[pValues < pt & qValues < 
+                qt, ]
             
             zlim <- range(c(data, signal, error))
             graphics::par(mar = c(3, 6, 2, 1))
@@ -388,8 +393,8 @@ svaplot <- function(list, pqvalues = "sv", pt = 0.05,
             return(li)
         } else {
             message("No SV while p-values and q-values have no results")
-            graphics::layout(matrix(rep(c(1, 1, 1, 2, 
-                2, 3, 3, 4), 8), 8, 8, byrow = TRUE))
+            graphics::layout(matrix(rep(c(1, 1, 1, 
+                2, 2, 3, 3, 4), 8), 8, 8, byrow = TRUE))
             zlim <- range(c(data, signal, error))
             graphics::par(mar = c(3, 6, 2, 1))
             plotimage1(data, signal, error, zlim)
@@ -400,8 +405,8 @@ svaplot <- function(list, pqvalues = "sv", pt = 0.05,
         if (pqvalues == "anova" & sum(pValues < pt & 
             qValues < qt) != 0) {
             message("Have SVs while p-values and q-values have results")
-            graphics::layout(matrix(rep(c(1, 1, 2, 2, 
-                3, 3, 4), 7), 7, 7, byrow = TRUE))
+            graphics::layout(matrix(rep(c(1, 1, 2, 
+                2, 3, 3, 4), 7), 7, 7, byrow = TRUE))
             data <- data[pValues < pt & qValues < qt, 
                 ]
             signal <- signal2[pValues < pt & qValues < 
@@ -420,19 +425,20 @@ svaplot <- function(list, pqvalues = "sv", pt = 0.05,
             return(li)
         } else if (pqvalues == "anova") {
             message("Have SVs while p-values and q-values have no results")
-            graphics::layout(matrix(rep(c(1, 1, 1, 2, 
-                2, 3, 3, 4), 8), 8, 8, byrow = TRUE))
+            graphics::layout(matrix(rep(c(1, 1, 1, 
+                2, 2, 3, 3, 4), 8), 8, 8, byrow = TRUE))
             zlim <- range(c(data, signal2, error2))
             
             graphics::par(mar = c(3, 6, 2, 1))
             plotimage1(data, signal2, error2, zlim)
             graphics::par(mar = c(3, 1, 2, 6))
             plotchange(zlim)
-        } else if (pqvalues == "sv" & sum(pValuesSv < pt & 
-            qValuesSv < qt) != 0) {
+        } else if (pqvalues == "sv" & sum(pValuesSv < 
+            pt & qValuesSv < qt) != 0) {
             message("SVs corrected while p-values and q-values have results")
-            graphics::layout(matrix(rep(c(1, 1, 2, 2, 
-                3, 3, 4, 4, 5, 5, 6), 11), 11, 11, byrow = TRUE))
+            graphics::layout(matrix(rep(c(1, 1, 2, 
+                2, 3, 3, 4, 4, 5, 5, 6), 11), 11, 11, 
+                byrow = TRUE))
             data <- data[pValuesSv < pt & qValuesSv < 
                 qt, ]
             signal <- signal[pValuesSv < pt & qValuesSv < 
@@ -446,24 +452,25 @@ svaplot <- function(list, pqvalues = "sv", pt = 0.05,
             zlim <- range(c(data, signal, batch, error, 
                 datacor))
             graphics::par(mar = c(3, 6, 2, 1))
-            plotimage2(data, signal, batch, error, datacor, 
-                zlim)
+            plotimage2(data, signal, batch, error, 
+                datacor, zlim)
             graphics::par(mar = c(3, 1, 2, 5))
             plotchange(zlim)
             li <- list(datacor, data, pValuesSv < pt & 
                 qValuesSv < qt)
-            names(li) <- c("dataCorrected", "data", "pqvalues")
+            names(li) <- c("dataCorrected", "data", 
+                "pqvalues")
             return(li)
         } else {
             message("SVs corrected while p-values and q-values have no results")
-            graphics::layout(matrix(rep(c(1, 1, 1, 2, 
-                2, 3, 3, 4, 4, 5, 5, 5, 6), 13), 13, 
-                13, byrow = TRUE))
+            graphics::layout(matrix(rep(c(1, 1, 1, 
+                2, 2, 3, 3, 4, 4, 5, 5, 5, 6), 13), 
+                13, 13, byrow = TRUE))
             zlim <- range(c(signal, data, batch, error, 
                 datacor))
             graphics::par(mar = c(3, 6, 2, 1))
-            plotimage2(data, signal, batch, error, datacor, 
-                zlim)
+            plotimage2(data, signal, batch, error, 
+                datacor, zlim)
             graphics::par(mar = c(3, 1, 2, 6))
             plotchange(zlim)
         }
@@ -513,7 +520,8 @@ svabatch <- function(df, dfsv, dfanova) {
     big <- p0 - p1
     
     graphics::plot(df$PosteriorProbabilitiesSurrogate[big < 
-        0] ~ df$PosteriorProbabilitiesMod[big < 0], xlab = "Influences  from primary variable", 
+        0] ~ df$PosteriorProbabilitiesMod[big < 0], 
+        xlab = "Influences  from primary variable", 
         ylab = "Influences  from surrogate variable", 
         main = "Peaks with larger p-values", pch = 19, 
         cex = 1.2, ylim = c(0, 1), xlim = c(0, 1.02), 
@@ -527,7 +535,8 @@ svabatch <- function(df, dfsv, dfanova) {
         0 & !dfsv$pqvalues & dfanova$pqvalue], pch = 19, 
         col = "green")
     graphics::plot(df$PosteriorProbabilitiesSurrogate[big > 
-        0] ~ df$PosteriorProbabilitiesMod[big > 0], xlab = "Influences  from primary variable", 
+        0] ~ df$PosteriorProbabilitiesMod[big > 0], 
+        xlab = "Influences  from primary variable", 
         ylab = "Influences  from surrogate variable", 
         main = "Peaks with smaller p-values", pch = 19, 
         cex = 1.2, ylim = c(0, 1), xlim = c(0, 1.02), 

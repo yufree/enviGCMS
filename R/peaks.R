@@ -8,8 +8,8 @@
 Integration <- function(data, rt = c(8.3, 9), brt = c(8.3, 
     8.4), smoothit = T) {
     # subset the data
-    subdata <- data[data[, 1] > rt[2] & data[, 1] < rt[1], 
-        ]
+    subdata <- data[data[, 1] > rt[2] & data[, 1] < 
+        rt[1], ]
     # get the signal and the RT
     RTrange <- subdata[, 1]
     signal <- subdata[, 2]
@@ -52,8 +52,8 @@ GetIntegration <- function(data, rt = c(8.3, 9), n = 5,
     m = 5, slope = c(2, 2), baseline = 10, noslope = T, 
     smoothit = T, half = F) {
     # subset the data
-    subdata <- data[data[, 1] > rt[1] & data[, 1] < rt[2], 
-        ]
+    subdata <- data[data[, 1] > rt[1] & data[, 1] < 
+        rt[2], ]
     # get the signal and the RT
     RTrange <- subdata[, 1]
     signal <- subdata[, 2]
@@ -81,7 +81,8 @@ GetIntegration <- function(data, rt = c(8.3, 9), n = 5,
         delta_t <- (t[length(RTrangemsec)] - RTrangemsec[1]/(length(RTrangemsec) - 
             1))
         for (i in 2:length(signal)) {
-            slopedata[i] <- (signal[i] - signal[i - 1])/delta_t
+            slopedata[i] <- (signal[i] - signal[i - 
+                1])/delta_t
         }
         slopedata[1] <- 0
     }
@@ -102,7 +103,8 @@ GetIntegration <- function(data, rt = c(8.3, 9), n = 5,
     # search for peak end
     i <- which.min(slopedata)  # jump to slope min.
     while ((slopedata[i] <= -(slope[2]/100 * max(slopedata))) & 
-        (i < (length(signal) - baseline))) i <- i + 1
+        (i < (length(signal) - baseline))) i <- i + 
+        1
     rtend <- RTrange[i]  # peak end found
     scanend <- i  # (-slope < threshold)
     sigend <- mean(signal[i:(i + baseline - 1)])
@@ -129,8 +131,8 @@ GetIntegration <- function(data, rt = c(8.3, 9), n = 5,
         for (i in scanstart:scanpeak) area <- area + 
             subsignal[i] * scantime
     } else {
-        for (i in scanstart:scanend) area <- area + subsignal[i] * 
-            scantime
+        for (i in scanstart:scanend) area <- area + 
+            subsignal[i] * scantime
     }
     bgstart <- RTrange[scanstart - baseline + 1]
     bgend <- RTrange[scanend + baseline - 1]
@@ -139,13 +141,13 @@ GetIntegration <- function(data, rt = c(8.3, 9), n = 5,
         scanstart) * (scanpeak - scanstart)
     height <- sigpeak - sigpeakbase
     # SNR
-    snrnoise <- abs(diff(range(signal[(scanstart - baseline + 
-        1):scanstart])))
+    snrnoise <- abs(diff(range(signal[(scanstart - 
+        baseline + 1):scanstart])))
     SNR <- height/snrnoise
     # collect the data for plot peak and slope
-    peakdata <- c(baseline, rtstart, rtend, rtpeak, scanstart, 
-        scanend, scanpeak, sigstart, sigend, sigpeak, 
-        sigpeakbase, lengthsig, SNR)
+    peakdata <- c(baseline, rtstart, rtend, rtpeak, 
+        scanstart, scanend, scanpeak, sigstart, sigend, 
+        sigpeak, sigpeakbase, lengthsig, SNR)
     names(peakdata) <- c("baseline", "peak start RT", 
         "peak end RT", "peak RT", "baseline start RT ID", 
         "baseline end RT ID", "baseline peak RT ID", 
@@ -176,8 +178,8 @@ batch <- function(file, mz1, mz2) {
     name2 <- paste("m/z:", mz2)
     xl <- GetIntegration(xa, name1)
     xh <- GetIntegration(xb, name2)
-    graphics::par(mfrow = c(2, 2), mar = c(2, 2, 2, 2), 
-        oma = c(0, 0, 0, 0))
+    graphics::par(mfrow = c(2, 2), mar = c(2, 2, 2, 
+        2), oma = c(0, 0, 0, 0))
     plotint(xl, name1)
     plotintslope(xl, name1)
     plotint(xh, name2)
@@ -189,7 +191,8 @@ batch <- function(file, mz1, mz2) {
     heightratio <- height[1]/height[2]
     points <- round(mean(sapply(list, function(x) x$peakdata[12])))
     ratio <- c(arearatio, heightratio, points)
-    names(ratio) <- c("area ratio", "height ratio", "points")
+    names(ratio) <- c("area ratio", "height ratio", 
+        "points")
     return(ratio)
 }
 
@@ -222,8 +225,8 @@ qbatch <- function(file, mz1, mz2, rt = c(8.65, 8.74),
 #' @param charge the charge of that molecular. 1 in EI mode as default
 #' @param width the width of the peak width on mass spectrum. 0.3 as default for low resolution mass spectrum.
 #' @export
-Getisotopologues <- function(formula = "C12OH6Br4", charge = "1", 
-    width = 0.3) {
+Getisotopologues <- function(formula = "C12OH6Br4", 
+    charge = "1", width = 0.3) {
     # input the forlmula and charge for your molecular,
     # this demo was for BDE-47
     formula <- rcdk::get.formula(formula, charge)

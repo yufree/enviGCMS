@@ -12,8 +12,8 @@ findline <- function(data, threshold = 2, temp = c(100,
     group <- ifelse(log10(data) > threshold, 1, 0)
     # get the difference matrix
     diffmatrix <- apply(group, 2, diff)
-    # get the points with the smallest differences at the
-    # smallest m/z
+    # get the points with the smallest differences at
+    # the smallest m/z
     difftemp <- apply(diffmatrix, 2, which.min)
     y <- y0[difftemp]
     data <- data.frame(y, x)
@@ -21,9 +21,10 @@ findline <- function(data, threshold = 2, temp = c(100,
     data <- data[data$y > 101, ]
     rangemz <- range(y0)
     rangert <- range(x)
-    graphics::plot(data$y ~ data$x, xlab = "Temperature(°C)", 
-        ylab = "m/z", pch = 19, xlim = rangert, ylim = rangemz, 
-        xaxt = "n", yaxt = "n", main = "", frame.plot = F)
+    graphics::plot(data$y ~ data$x, xlab = expression("Temperature (" * 
+        degree * C * ")"), ylab = "m/z", pch = 19, 
+        xlim = rangert, ylim = rangemz, xaxt = "n", 
+        yaxt = "n", main = "", frame.plot = F)
     # display the temperature as x
     rtx <- seq(min(x), max(x), length.out = length(x))
     temp <- round(seq(temp[1], temp[2], length.out = length(x)))
@@ -35,13 +36,15 @@ findline <- function(data, threshold = 2, temp = c(100,
         0], las = 2)
     graphics::abline(stats::lm(data$y ~ data$x), col = "red", 
         lwd = 5)
-    graphics::lines(stats::lowess(data$y ~ data$x), col = "blue", 
-        lwd = 5)
-    slope <- (max(temp) - min(temp))/(max(data$x) - min(data$x))
+    graphics::lines(stats::lowess(data$y ~ data$x), 
+        col = "blue", lwd = 5)
+    slope <- (max(temp) - min(temp))/(max(data$x) - 
+        min(data$x))
     intercept <- min(temp)
     data$x0 <- slope * (data$x - min(data$x)) + intercept
     fit <- stats::lm(data$y ~ data$x0)
-    rmse <- round(sqrt(mean(stats::resid(fit)^2)), 2)
+    rmse <- round(sqrt(mean(stats::resid(fit)^2)), 
+        2)
     coefs <- stats::coef(fit)
     b0 <- round(coefs[1], 2)
     b1 <- round(coefs[2], 2)
@@ -50,8 +53,10 @@ findline <- function(data, threshold = 2, temp = c(100,
     eqn <- bquote(italic(m/z) == .(b0) + .(b1) * "*" * 
         italic(Temprature))
     eqn2 <- bquote(r^2 == .(r2) * "," ~ ~p == .(pv))
-    graphics::text(5, 950, adj = c(0, 0), cex = 1, eqn)
-    graphics::text(5, 900, adj = c(0, 0), cex = 1, eqn2)
+    graphics::text(5, 950, adj = c(0, 0), cex = 1, 
+        eqn)
+    graphics::text(5, 900, adj = c(0, 0), cex = 1, 
+        eqn2)
     graphics::legend("topright", c("OLS", "lowess"), 
         box.lty = 0, pch = c(-1, -1), lty = c(1, 1), 
         lwd = c(2, 2), col = c("red", "blue"))
@@ -157,8 +162,8 @@ plotsms <- function(meanmatrix, rsdmatrix) {
     graphics::par(mar = c(0, 4.2, 1, 1.5), oma = c(0, 
         0, 0, 0), fig = c(0, 1, 0.8, 1), new = T, cex.axis = 1.5, 
         cex.lab = 1.5)
-    graphics::hist(log10(meanmatrix), breaks = 100, xlab = "Intensity", 
-        main = "", xaxt = "n")
+    graphics::hist(log10(meanmatrix), breaks = 100, 
+        xlab = "Intensity", main = "", xaxt = "n")
     graphics::axis(1, at = c(0, 1, 2, 3, 4, 5, 6, 7), 
         labels = c("1", "10", "100", "1000", "10000", 
             "100000", "1000000", "100000000"))
@@ -170,7 +175,8 @@ plotsms <- function(meanmatrix, rsdmatrix) {
 plothist <- function(data) {
     data1 = sample(data, 1e+05)
     mixmdl = mixtools::normalmixEM(log10(data1))
-    graphics::plot(mixmdl, which = 2, breaks = 100, xlab2 = "Intensity")
+    graphics::plot(mixmdl, which = 2, breaks = 100, 
+        xlab2 = "Intensity")
     graphics::lines(stats::density(log10(data1)), lty = 2, 
         lwd = 2)
     graphics::legend("topright", c("noise", "signal", 

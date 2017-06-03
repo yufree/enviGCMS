@@ -11,7 +11,8 @@ getmd <- function(data, mzstep = 1, mzrange = F, rtrange = F) {
     rownames(pf) <- mz <- xcms::profMz(data)
     colnames(pf) <- rt <- data@scantime
     if (mzrange[1]) {
-        pf <- pf[mz > mzrange[1] & mz < mzrange[2], ]
+        pf <- pf[mz > mzrange[1] & mz < mzrange[2], 
+            ]
     }
     if (rtrange[1]) {
         pf <- pf[, rt > rtrange[1] & rt < rtrange[2]]
@@ -51,8 +52,8 @@ combinemd <- function(data1, data2, ...) {
 writeMSP <- function(mz, outfilename = "unknown") {
     mz <- paste(names(mz), round(mz))
     dir.create("MSP")
-    zz <- file(file.path("MSP", paste(outfilename, ".msp", 
-        sep = "")), "w")
+    zz <- file(file.path("MSP", paste(outfilename, 
+        ".msp", sep = "")), "w")
     nPeaks <- length(mz)
     cat("Name: unknown", paste("Num Peaks: ", nPeaks), 
         file = zz, sep = "\n")
@@ -82,7 +83,8 @@ writeMSP <- function(mz, outfilename = "unknown") {
 #' @export
 getdata <- function(path, index = F, BPPARAM = BiocParallel::SnowParam(workers = 12), 
     pmethod = "hplcorbitrap", ...) {
-    cdffiles <- list.files(path, recursive = TRUE, full.names = TRUE)
+    cdffiles <- list.files(path, recursive = TRUE, 
+        full.names = TRUE)
     if (index) {
         cdffiles <- cdffiles[index]
     }
@@ -191,7 +193,8 @@ getdata <- function(path, index = F, BPPARAM = BiocParallel::SnowParam(workers =
 #' @export
 getupload <- function(xset, method = "medret", intensity = "into", 
     name = "Peaklist") {
-    peakIntensities <- xcms::groupval(xset, method, intensity)
+    peakIntensities <- xcms::groupval(xset, method, 
+        intensity)
     if (intensity == "intb") {
         peakIntensities[is.na(peakIntensities)] = 0
     }
@@ -239,8 +242,8 @@ gettechbiorep <- function(xset, anno = F, peaklist = F,
     mean <- stats::aggregate(data, list(lv, lv2), mean)
     sd <- stats::aggregate(data, list(lv, lv2), sd)
     suppressWarnings(rsd <- sd/mean * 100)
-    result <- data.frame(cbind(t(mean[, -c(1:2)]), t(sd[, 
-        -c(1:2)]), t(rsd[, -c(1:2)])))
+    result <- data.frame(cbind(t(mean[, -c(1:2)]), 
+        t(sd[, -c(1:2)]), t(rsd[, -c(1:2)])))
     name <- unique(c(paste0(lv, lv2)))
     colnames(result) <- c(paste0(name, "mean"), paste0(name, 
         "sd"), paste0(name, "rsd%"))
@@ -275,16 +278,16 @@ getsim <- function(xset1, xset2) {
     # data1$weight[data1$rsd < 80] <- 0.4
     # data1$weight[data1$rsd < 60] <- 0.6
     # data1$weight[data1$rsd < 40] <- 0.8
-    # data1$weight[data1$rsd < 20] <- 1 data1$rtorder <-
-    # order(data1$rtmed)
+    # data1$weight[data1$rsd < 20] <- 1 data1$rtorder
+    # <- order(data1$rtmed)
     data1$mzmedn <- round(data1$mzmed, 0.1)
     
     # data2$weight <- ifelse(data2$rsd > 100, 0, 0.2)
     # data2$weight[data2$rsd < 80] <- 0.4
     # data2$weight[data2$rsd < 60] <- 0.6
     # data2$weight[data2$rsd < 40] <- 0.8
-    # data2$weight[data2$rsd < 20] <- 1 data2$rtorder <-
-    # order(data2$rtmed)
+    # data2$weight[data2$rsd < 20] <- 1 data2$rtorder
+    # <- order(data2$rtmed)
     data2$mzmedn <- round(data2$mzmed, 0.1)
     
     data <- merge(data1, data2, by = "mzmedn")
@@ -303,7 +306,8 @@ getsim <- function(xset1, xset2) {
 #' @return number vector, each number indicate the peak area of that mass and retention time range
 #' @export
 getQCraw <- function(path, mzrange, rtrange, index = NULL) {
-    cdffiles <- list.files(path, recursive = TRUE, full.names = TRUE)
+    cdffiles <- list.files(path, recursive = TRUE, 
+        full.names = TRUE)
     if (index) {
         cdffiles <- cdffiles[index]
     }

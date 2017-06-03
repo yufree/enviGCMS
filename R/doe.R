@@ -34,8 +34,9 @@ getfeaturest <- function(xod, power = 0.8, pt = 0.05,
     rp <- vector()
     for (i in c(1:nrow(df))) {
         
-        r <- stats::power.t.test(delta = df$dm[i], sd = df$sd[i], 
-            sig.level = df$alpha[i], n = n)
+        r <- stats::power.t.test(delta = df$dm[i], 
+            sd = df$sd[i], sig.level = df$alpha[i], 
+            n = n)
         rp[i] <- r$power
     }
     df <- cbind(power = rp, df)

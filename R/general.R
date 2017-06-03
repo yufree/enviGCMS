@@ -67,8 +67,9 @@ plotms <- function(data, col = grDevices::heat.colors(108),
     # add the lable for double y axis
     graphics::text(1.07, 0.6, labels = "m/z", srt = 270, 
         pos = 1, xpd = TRUE, cex = 1.5)
-    graphics::text(1.03, mzy[indmz%%100 == 0][1:9], labels = indmz[indmz%%100 == 
-        0][1:9], srt = 270, xpd = TRUE)
+    graphics::text(1.03, mzy[indmz%%100 == 0][1:9], 
+        labels = indmz[indmz%%100 == 0][1:9], srt = 270, 
+        xpd = TRUE)
     graphics::text(-0.075, 0.6, labels = "intensity", 
         srt = 90, pos = 1, xpd = TRUE, cex = 1.5)
     graphics::par(mar = c(4, 5, 4, 4), fig = c(0, 1, 
@@ -79,9 +80,9 @@ plotms <- function(data, col = grDevices::heat.colors(108),
         xlab = "retention time(min)", frame.plot = F, 
         xaxs = "i", yaxs = "i", xaxt = "n")
     # display the RT as x
-    graphics::axis(1, at = c(0, indrt[indrt%%300 == 0], 
-        1), labels = c("", indrt[indrt%%300 == 0]/60, 
-        ""))
+    graphics::axis(1, at = c(0, indrt[indrt%%300 == 
+        0], 1), labels = c("", indrt[indrt%%300 == 
+        0]/60, ""))
 }
 #' plot GC-MS data as a heatmap for constant speed of temperature rising
 #' @param data imported data matrix of GC-MS
@@ -121,8 +122,9 @@ plott <- function(data, col = grDevices::heat.colors(108),
     # show the heatmap
     graphics::par(mar = c(4, 5, 0, 4), fig = c(0, 1, 
         0, 0.9), new = T)
-    graphics::image(z, xlab = "Temperature(°C)", ylab = "m/z", 
-        axes = F, col = col, useRaster = T)
+    graphics::image(z, xlab = expression("Temperature (" * 
+        degree * C * ")"), ylab = "m/z", axes = F, 
+        col = col, useRaster = T)
     # display the temperature as x
     rtx <- seq(0, 1, length.out = length(indrt))
     temp <- round(seq(temp[1], temp[2], length.out = length(indrt)), 
@@ -221,9 +223,10 @@ plotint <- function(list, name = NULL) {
     lengthsig <- peakdata[12]
     graphics::plot(RTrange, signal, xlab = "time (min)", 
         ylab = "intensity", "l", ylim = c(-0.02 * max(signal), 
-            1.02 * max(signal)), main = paste(name, "Peak"))
-    graphics::lines(c(rtstart, rtend), c(sigstart, sigend), 
-        "l", col = "red")
+            1.02 * max(signal)), main = paste(name, 
+            "Peak"))
+    graphics::lines(c(rtstart, rtend), c(sigstart, 
+        sigend), "l", col = "red")
     graphics::lines(c(RTrange[scanstart - baseline + 
         1], rtstart), c(sigstart, sigstart), "l", col = "darkgreen")
     graphics::lines(c(rtend, RTrange[scanend + baseline - 
@@ -332,8 +335,8 @@ plotc <- function(data1, data2, method = "max", p = 0.5,
 #' @param ... other parameters for `diffreport`
 #' @return diffreport and pdf figure for EIC and boxplot
 #' @export
-plote <- function(xset, name = "test", test = "t", nonpara = "n", 
-    ...) {
+plote <- function(xset, name = "test", test = "t", 
+    nonpara = "n", ...) {
     gt <- xcms::groups(xset)
     a <- xcms::diffreport(xset, filebase = name, eicmax = nrow(gt), 
         nonpara = nonpara, ...)
