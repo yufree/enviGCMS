@@ -218,7 +218,7 @@ plotmr <- function(data1,
                 ylab = "m/z",
                 ylim = ms,
                 cex = log10(data1$into+1) - threshold + 1,
-                col = grDevices::rgb(0,0, 1, 0.1),
+                col = grDevices::rgb(0,0, 1, 0.2),
                 pch = 19,
                 ...
         )
@@ -231,7 +231,7 @@ plotmr <- function(data1,
                 data2 <- cbind.data.frame(mz,rt,into)
                 graphics::points(data2$mz[log10(data2$into+1) > threshold] ~ data2$rt[log10(data2$into+1) > threshold],
                                  cex = log10(data2$into+1) - threshold + 1,
-                                 col = grDevices::rgb(1,0, 0, 0.1),
+                                 col = grDevices::rgb(1,0, 0, 0.2),
                                  pch = 19)
         }
 }
