@@ -214,14 +214,14 @@ plotmr <- function(data1,
                 ylab = "m/z",
                 ylim = ms,
                 cex = log10(data1$into+1) - threshold + 1,
-                col = grDevices::rgb(0,0, 255, 0.1),
+                col = grDevices::rgb(0,0, 1, 0.1),
                 pch = 19,
                 ...
         )
         if(!is.null(data2)){
                 graphics::points(data2$mz[log10(data2$into+1) > threshold] ~ data2$rt[log10(data2$into+1) > threshold],
                                  cex = log10(data2$into+1) - threshold + 1,
-                                 col = grDevices::rgb(255,0, 0, 0.1),
+                                 col = grDevices::rgb(1,0, 0, 0.1),
                                  pch = 19)
         }
 }
