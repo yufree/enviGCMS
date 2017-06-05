@@ -208,7 +208,7 @@ plotmr <- function(data1,
         data1mzrt <- xcms::groups(data1)
         mz <- data1mzrt[,1]
         rt <- data1mzrt[,4]
-        data1into <- xcms::groupval(data1)
+        data1into <- xcms::groupval(data1,'medret','into')
         into <- apply(data1into,1,mean)
         data1 <- cbind.data.frame(mz,rt,into)
 
@@ -226,8 +226,8 @@ plotmr <- function(data1,
                 data2mzrt <- xcms::groups(data2)
                 mz <- data2mzrt[,1]
                 rt <- data2mzrt[,4]
-                data2into <- xcms::groupval(data2)
-                into <- apply(data1into,1,mean)
+                data2into <- xcms::groupval(data2,'medret','into')
+                into <- apply(data2into,1,mean)
                 data2 <- cbind.data.frame(mz,rt,into)
                 graphics::points(data2$mz[log10(data2$into+1) > threshold] ~ data2$rt[log10(data2$into+1) > threshold],
                                  cex = log10(data2$into+1) - threshold + 1,
