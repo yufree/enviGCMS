@@ -19,3 +19,6 @@ influnces plot
 \description{
 Plot the influnces of DoE and Batch effects on each peaks
 }
+\seealso{
+\code{\link{svacor}}, \code{\link{svaplot}}, \code{\link{svapca}}
+}

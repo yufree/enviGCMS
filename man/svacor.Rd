@@ -24,3 +24,6 @@ Surrogate variable analysis(SVA) to correct the unknown batch effects
 \details{
 this is used for reviesed version of SVA to correct the unknown batch effects
 }
+\seealso{
+\code{\link{svapca}}, \code{\link{svaplot}}, \code{\link{svabatch}}
+}

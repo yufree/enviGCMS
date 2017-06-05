@@ -26,3 +26,6 @@ heatmap for the data
 \description{
 Filter the data with p value and q value and show them
 }
+\seealso{
+\code{\link{svacor}}, \code{\link{svapca}}, \code{\link{svabatch}}
+}

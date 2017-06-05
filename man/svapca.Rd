@@ -21,3 +21,6 @@ plot
 \description{
 Principal component analysis(PCA) for SVA corrected data and raw data
 }
+\seealso{
+\code{\link{svacor}}, \code{\link{svaplot}}, \code{\link{svabatch}}
+}

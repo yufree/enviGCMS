@@ -2,14 +2,12 @@
 % Please edit documentation in R/general.R
 \name{plotms}
 \alias{plotms}
-\title{plot GC-MS data as a heatmap}
+\title{plot GC/LC-MS data as a heatmap with TIC}
 \usage{
-plotms(data, col = grDevices::heat.colors(108), log = F)
+plotms(data, log = F)
 }
 \arguments{
 \item{data}{imported data matrix of GC-MS}
-
-\item{col}{custumized color}
 
 \item{log}{transform the intensity into log based 10}
 }
@@ -17,5 +15,5 @@ plotms(data, col = grDevices::heat.colors(108), log = F)
 heatmap
 }
 \description{
-plot GC-MS data as a heatmap
+plot GC/LC-MS data as a heatmap with TIC
 }
