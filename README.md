@@ -55,13 +55,19 @@ databrsd <- datasd/data
 - plot the smooth scatter
 
 ~~~
-sshplot(data,datarsd)
+plotsms(datarsd)
 ~~~
 
 - plot the heatmap
 
 ~~~
-mhplot(data)
+plotms(data)
+~~~
+
+- plot the mz-rt scatter plot
+
+~~~
+plotmz(data)
 ~~~
 
 - plot the boundary model
