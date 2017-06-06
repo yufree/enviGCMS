@@ -193,8 +193,8 @@ gettechbiorep <- function(xset, anno = F, peaklist = F,
 
 
 #' plot the scatter plot for xcmsset (or two) objects with threshold
-#' @param data1 the first xcmsset data set
-#' @param data2 the second xcmsset data set
+#' @param data1 the first xcmsset object
+#' @param data2 the second xcmsset object
 #' @param threshold the threshold of the response (log based 10)
 #' @param ms the mass range to plot the data
 #' @param ... parameters for `plot` function
@@ -235,6 +235,56 @@ plotmr <- function(data1,
                                  pch = 19)
         }
 }
+
+#' plot the diff scatter plot for one xcmsset objects with threshold and two groups
+#' @param data xcmsset object with two groups
+#' @param threshold the threshold of the response (log based 10)
+#' @param ms the mass range to plot the data
+#' @param ... parameters for `plot` function
+#' @return NULL
+#' @export
+plotmrc <- function(data,
+                   threshold = 5,
+                   ms = c(100, 1000),
+                   ...) {
+        mzrt <- xcms::groups(data)
+        mz <- mzrt[,1]
+        rt <- mzrt[,4]
+        into <- xcms::groupval(data,'medret','into')
+        lv <- data@phenoData[, 1]
+        mean <- t(stats::aggregate(t(into), list(lv), mean)[,-1])
+        lvname <- stats::aggregate(t(into), list(lv), mean)[,1]
+        diff1 <- mean[,1]-mean[,2]
+        diff2 <- mean[,2]-mean[,1]
+        diff1[diff1 < 0] <- 0
+        diff2[diff2 < 0] <- 0
+        name1 <- paste0(lvname[1],"-",lvname[2])
+        name2 <- paste0(lvname[2],"-",lvname[1])
+        data <- cbind.data.frame(mz,rt,diff1,diff2)
+
+        graphics::plot(
+                data$mz[log10(data$diff1+1) > threshold] ~ data$rt[log10(data$diff1+1) > threshold],
+                xlab = "Retention Time",
+                ylab = "m/z",
+                ylim = ms,
+                cex = log10(data$diff1+1) - threshold + 1,
+                col = grDevices::rgb(0,0, 1, 0.618),
+                pch = 19,
+                ...
+        )
+
+        graphics::points(
+                data$mz[log10(data$diff2+1) > threshold] ~ data$rt[log10(data$diff2+1) > threshold],
+                cex = log10(data$diff2+1) - threshold + 1,
+                col = grDevices::rgb(1,0, 0, 0.618),
+                pch = 19,
+                ...
+        )
+
+        graphics::legend('topright', legend = c(name1,name2),pch = 19,col = c(grDevices::rgb(0,0, 1, 0.618),grDevices::rgb(1,0, 0, 0.618)),bty = 'n')
+
+}
+
 
 #' plot EIC and boxplot for all peaks and return diffreport
 #' @param xset xcmsset object

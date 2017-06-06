@@ -7,9 +7,9 @@
 plotmr(data1, data2 = NULL, threshold = 5, ms = c(100, 1000), ...)
 }
 \arguments{
-\item{data1}{the first xcmsset data set}
+\item{data1}{the first xcmsset object}
 
-\item{data2}{the second xcmsset data set}
+\item{data2}{the second xcmsset object}
 
 \item{threshold}{the threshold of the response (log based 10)}
 
