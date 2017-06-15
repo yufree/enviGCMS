@@ -153,6 +153,30 @@ gettechrep <- function(xset, method = "medret", intensity = "into") {
         return(report)
 }
 
+#' Get the report for technique replicates.
+#' @param xset the xcmsset object which for all of your technique replicates for bio replicated sample
+#' @param method parameter for groupval function
+#' @param intensity parameter for groupval function
+#' @return dataframe with mean, standard deviation and RSD for those technique replicates & biological replicates combined with raw data
+#' @export
+getbiotechrep <- function(xset, method = "medret", intensity = "into") {
+        data <- t(xcms::groupval(xset, method, intensity))
+        lv <- xset@phenoData[, 1]
+        mean <- stats::aggregate(data, list(lv), mean)
+        sd <- stats::aggregate(data, list(lv), sd)
+        suppressWarnings(rsd <- sd/mean * 100)
+        result <- data.frame(cbind(t(mean[, -1]), t(sd[,-1]), t(rsd[, -1])))
+        colnames(result) <- c(paste0(t(mean[, 1]), "mean"), paste0(t(sd[,1]),"sd"), paste0(t(rsd[, 1]), "rsd%"))
+
+        mean <- apply(t(mean[, -1]),1,mean)
+        sd <- apply(t(sd[,-1]),1,sd)
+        rsd <- sd/mean * 100
+
+        datap <- xcms::groups(xset)
+        report <- cbind.data.frame(datap, result,mean,sd ,rsd)
+        return(report)
+}
+
 #' Get the report for samples with technique replicates
 #' @param xset the xcmsset object all of samples with technique replicates
 #' @param anno logical if set as True, it will return the table for further annotation, default false
@@ -285,6 +309,19 @@ plotmrc <- function(data,
 
 }
 
+#' plot the rsd% influnces of data
+#' @param xset xcmsset data
+#' @param ... other parameters for `plot` function
+#' @export
+plotrsd <- function(xset,...){
+        df <- getbiotechrep(xset)
+        mz <- df$mzmed
+        rt <- df$rtmin
+        cex <- df$rsd
+        plot(mz~rt,cex = scale(cex),
+             xlab = 'retention time', ylab = 'm/z',
+             ...)
+}
 
 #' plot EIC and boxplot for all peaks and return diffreport
 #' @param xset xcmsset object
