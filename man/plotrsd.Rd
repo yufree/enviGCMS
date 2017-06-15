@@ -2,7 +2,7 @@
 % Please edit documentation in R/xcmsplus.R
 \name{plotrsd}
 \alias{plotrsd}
-\title{plot the rsd% influnces of data}
+\title{plot the rsd influnces of data}
 \usage{
 plotrsd(xset, ...)
 }
@@ -12,5 +12,5 @@ plotrsd(xset, ...)
 \item{...}{other parameters for `plot` function}
 }
 \description{
-plot the rsd% influnces of data
+plot the rsd influnces of data
 }
