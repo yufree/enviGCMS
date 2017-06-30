@@ -137,9 +137,11 @@ getupload <- function(xset, method = "medret", intensity = "into",
 #' @param xset the xcmsset object which for all of your technique replicates for one sample
 #' @param method parameter for groupval function
 #' @param intensity parameter for groupval function
+#' @param rsdcf rsd cutoff for peaks, default 0
+#' @param inscf intensity cutoff for peaks, default 0
 #' @return dataframe with mean, standard deviation and RSD for those technique replicates combined with raw data
 #' @export
-gettechrep <- function(xset, method = "medret", intensity = "into") {
+gettechrep <- function(xset, method = "medret", intensity = "into", rsdcf = 0, inscf = 0) {
         data <- t(xcms::groupval(xset, method, intensity))
         lv <- xset@phenoData[, 1]
         mean <- stats::aggregate(data, list(lv), mean)
@@ -147,9 +149,11 @@ gettechrep <- function(xset, method = "medret", intensity = "into") {
         suppressWarnings(rsd <- sd/mean * 100)
         result <- data.frame(cbind(t(mean[, -1]), t(sd[,
                                                        -1]), t(rsd[, -1])))
+        index <- t(rsd[, -1]) > rsdcf & t(mean[, -1]) > inscf
         colnames(result) <- c("mean", "sd", "rsd")
         datap <- xcms::groups(xset)
         report <- cbind.data.frame(datap, result)
+        report <- report[index,]
         return(report)
 }
 
