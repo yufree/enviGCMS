@@ -296,7 +296,7 @@ gettimegrouprep <- function(xset, file = NULL, method = "medret", intensity = "i
 
         if (!is.null(file)) {
                 result <- data.frame(t(meanB[, -c(1:2)]))[index,]
-                data <- rbind(time = as.numeric(as.factor(meanB[, 1])), group = as.character(meanB[, 2]), result)
+                data <- rbind(time = as.character(meanB[, 1]), group = as.character(meanB[, 2]), result)
                 utils::write.csv(data, file = paste0(file,'.csv'))
                 return(data)
         } else {
