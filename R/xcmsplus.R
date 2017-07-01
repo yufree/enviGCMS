@@ -253,14 +253,14 @@ getgrouprep <- function(xset, file = NULL, method = "medret", intensity = "into"
         }
 }
 
-#' Get the time series report for samples with biological and technique replicates in different groups
-#' @param xset the xcmsset object all of samples with technique replicates in time series
+#' Get the time series or two factor DoE report for samples with biological and technique replicates in different groups
+#' @param xset the xcmsset object all of samples with technique replicates in time series or two factor DoE
 #' @param method parameter for groupval function
 #' @param intensity parameter for groupval function
 #' @param file file name for the peaklist to MetaboAnalyst
 #' @param rsdcf rsd cutoff for peaks, default 30
 #' @param inscf intensity cutoff for peaks, default 1000
-#' @return dataframe with time series mean, standard deviation and RSD for those technique replicates & biological replicates combined with raw data in different groups if file are defaults NULL.
+#' @return dataframe with time series or two factor DoE mean, standard deviation and RSD for those technique replicates & biological replicates combined with raw data in different groups if file are defaults NULL.
 #' @export
 gettimegrouprep <- function(xset, file = NULL, method = "medret", intensity = "into", rsdcf = 30, inscf = 1000) {
         data <- t(xcms::groupval(xset, method, intensity))

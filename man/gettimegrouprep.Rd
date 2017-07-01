@@ -2,13 +2,13 @@
 % Please edit documentation in R/xcmsplus.R
 \name{gettimegrouprep}
 \alias{gettimegrouprep}
-\title{Get the time series report for samples with biological and technique replicates in different groups}
+\title{Get the time series or two factor DoE report for samples with biological and technique replicates in different groups}
 \usage{
 gettimegrouprep(xset, file = NULL, method = "medret", intensity = "into",
   rsdcf = 30, inscf = 1000)
 }
 \arguments{
-\item{xset}{the xcmsset object all of samples with technique replicates in time series}
+\item{xset}{the xcmsset object all of samples with technique replicates in time series or two factor DoE}
 
 \item{file}{file name for the peaklist to MetaboAnalyst}
 
@@ -21,8 +21,8 @@ gettimegrouprep(xset, file = NULL, method = "medret", intensity = "into",
 \item{inscf}{intensity cutoff for peaks, default 1000}
 }
 \value{
-dataframe with time series mean, standard deviation and RSD for those technique replicates & biological replicates combined with raw data in different groups if file are defaults NULL.
+dataframe with time series or two factor DoE mean, standard deviation and RSD for those technique replicates & biological replicates combined with raw data in different groups if file are defaults NULL.
 }
 \description{
-Get the time series report for samples with biological and technique replicates in different groups
+Get the time series or two factor DoE report for samples with biological and technique replicates in different groups
 }
