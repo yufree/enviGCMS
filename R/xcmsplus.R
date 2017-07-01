@@ -137,11 +137,11 @@ getupload <- function(xset, method = "medret", intensity = "into",
 #' @param xset the xcmsset object which for all of your technique replicates for one sample
 #' @param method parameter for groupval function
 #' @param intensity parameter for groupval function
-#' @param rsdcf rsd cutoff for peaks, default 0
-#' @param inscf intensity cutoff for peaks, default 0
+#' @param rsdcf rsd cutoff for peaks, default 30
+#' @param inscf intensity cutoff for peaks, default 1000
 #' @return dataframe with mean, standard deviation and RSD for those technique replicates combined with raw data
 #' @export
-gettechrep <- function(xset, method = "medret", intensity = "into", rsdcf = 0, inscf = 0) {
+gettechrep <- function(xset, method = "medret", intensity = "into", rsdcf = 30, inscf = 1000) {
         data <- t(xcms::groupval(xset, method, intensity))
         lv <- xset@phenoData[, 1]
         mean <- stats::aggregate(data, list(lv), mean)
@@ -149,7 +149,7 @@ gettechrep <- function(xset, method = "medret", intensity = "into", rsdcf = 0, i
         suppressWarnings(rsd <- sd/mean * 100)
         result <- data.frame(cbind(t(mean[, -1]), t(sd[,
                                                        -1]), t(rsd[, -1])))
-        index <- t(rsd[, -1]) > rsdcf & t(mean[, -1]) > inscf
+        index <- t(rsd[, -1]) < rsdcf & t(mean[, -1]) > inscf
         colnames(result) <- c("mean", "sd", "rsd")
         datap <- xcms::groups(xset)
         report <- cbind.data.frame(datap, result)
@@ -157,63 +157,92 @@ gettechrep <- function(xset, method = "medret", intensity = "into", rsdcf = 0, i
         return(report)
 }
 
-#' Get the report for technique replicates.
-#' @param xset the xcmsset object which for all of your technique replicates for bio replicated sample
+#' Get the report for biological replicates.
+#' @param xset the xcmsset object which for all of your technique replicates for bio replicated sample in single group
 #' @param method parameter for groupval function
 #' @param intensity parameter for groupval function
+#' @param file file name for further annotation, default NULL
+#' @param rsdcf rsd cutoff for peaks, default 30
+#' @param inscf intensity cutoff for peaks, default 0
 #' @return dataframe with mean, standard deviation and RSD for those technique replicates & biological replicates combined with raw data
 #' @export
-getbiotechrep <- function(xset, method = "medret", intensity = "into") {
+getbiotechrep <- function(xset, method = "medret", intensity = "into", file = NULL, rsdcf = 30, inscf = 1000) {
         data <- t(xcms::groupval(xset, method, intensity))
         lv <- xset@phenoData[, 1]
         mean <- stats::aggregate(data, list(lv), mean)
         sd <- stats::aggregate(data, list(lv), sd)
         suppressWarnings(rsd <- sd/mean * 100)
         result <- data.frame(cbind(t(mean[, -1]), t(sd[,-1]), t(rsd[, -1])))
-        colnames(result) <- c(paste0(t(mean[, 1]), "mean"), paste0(t(sd[,1]),"sd"), paste0(t(rsd[, 1]), "rsd%"))
+        colnames(result) <- c(paste0(t(mean[, 1]), "mean"), paste0(t(sd[,1]),"sd"), paste0(t(mean[, 1]), "rsd%"))
 
-        mean <- apply(t(mean[, -1]),1,mean)
-        sd <- apply(t(sd[,-1]),1,sd)
-        rsd <- sd/mean * 100
+        meanB <- apply(t(mean[, -1]),1,mean)
+        sdB <- apply(t(mean[,-1]),1,sd)
+        rsdB <- sdB/meanB * 100
+
+        index <- rsdB < rsdcf & meanB > inscf
 
         datap <- xcms::groups(xset)
-        report <- cbind.data.frame(datap, result,mean,sd ,rsd)
-        return(report)
+        report <- cbind.data.frame(datap, result,meanB,sdB,rsdB)
+        report <- report[index,]
+
+        N <- sum(index)
+        L <- length(index)
+
+        message(paste(N,'out of',L,'peaks found with rsd cutoff',rsdcf,'and intensity cutoff', inscf))
+
+        if (!is.null(file)) {
+                anno <- cbind.data.frame(xset@groups[, 1], xset@groups[, 4], t(mean[, -1]))
+                colnames(anno) <- c("mz", "time", as.character(t(mean[, 1])))
+                utils::write.csv(anno, file = paste0(file,'.csv'), row.names = F)
+                return(anno)
+        } else {
+                return(report)
+        }
 }
 
-#' Get the report for samples with technique replicates
+#' Get the report for samples with biological and technique replicates in different groups
 #' @param xset the xcmsset object all of samples with technique replicates
-#' @param anno logical if set as True, it will return the table for further annotation, default false
-#' @param peaklist logical if set as True, it will return csv files for metaboanalyst, default false
-#' @param file file name for the peaklist
 #' @param method parameter for groupval function
 #' @param intensity parameter for groupval function
-#' @return dataframe with mean, standard deviation and RSD for those technique replicates combined with raw data for all of the samples if anno and peaklist are defaults false.
+#' @param file file name for the peaklist to MetaboAnalyst
+#' @param rsdcf rsd cutoff for peaks, default 30
+#' @param inscf intensity cutoff for peaks, default 1000
+#' @return dataframe with mean, standard deviation and RSD for those technique replicates & biological replicates combined with raw data in different groups if file are defaults NULL.
 #' @export
-gettechbiorep <- function(xset, anno = F, peaklist = F,
-                          file = NULL, method = "medret", intensity = "into") {
+getgrouprep <- function(xset, file = NULL, method = "medret", intensity = "into", rsdcf = 30, inscf = 1000) {
         data <- t(xcms::groupval(xset, method, intensity))
         lv <- xset@phenoData[, 1]
         lv2 <- xset@phenoData[, 2]
         mean <- stats::aggregate(data, list(lv, lv2), mean)
         sd <- stats::aggregate(data, list(lv, lv2), sd)
         suppressWarnings(rsd <- sd/mean * 100)
-        result <- data.frame(cbind(t(mean[, -c(1:2)]),
-                                   t(sd[, -c(1:2)]), t(rsd[, -c(1:2)])))
-        name <- unique(c(paste0(lv, lv2)))
-        colnames(result) <- c(paste0(name, "mean"), paste0(name,
-                                                           "sd"), paste0(name, "rsd%"))
+        result <- cbind.data.frame(t(mean[, -c(1:2)]), t(sd[, -c(1:2)]), t(rsd[, -c(1:2)]))
+        name <- paste0(t(mean[, 1]),t(mean[, 2]))
+        colnames(result) <- c(paste0(name, "mean"), paste0(name, "sd"), paste0(name, "rsd%"))
+
+        meanB <- stats::aggregate(mean[, -c(1:2)], list(as.vector(t(mean[, 1]))), mean)
+        sdB <- stats::aggregate(mean[, -c(1:2)], list(as.vector(t(mean[, 1]))), sd)
+        suppressWarnings(rsdB <- sdB[,-1]/meanB[,-1] * 100)
+
+        resultB <- cbind.data.frame(t(meanB[,-1]), t(sdB[,-1]), t(rsdB))
+        nameB <- as.vector(t(meanB[, 1]))
+        colnames(resultB) <- c(paste0(nameB, "mean"), paste0(nameB,"sd"), paste0(nameB, "rsd%"))
+
         datap <- xcms::groups(xset)
-        report <- cbind.data.frame(datap, result)
-        if (anno) {
-                anno <- as.data.frame(cbind(xset@groups[, 1],
-                                            xset@groups[, 4], cbind(t(mean[, -c(1:2)]))))
-                colnames(anno) <- c("mz", "time", name)
-                return(anno)
-        } else if (peaklist) {
-                result <- data.frame(t(mean[, -c(1:2)]))
-                data <- rbind(group = name, result)
-                utils::write.csv(data, file = file)
+        report <- cbind.data.frame(datap, result, resultB)
+
+        index <- as.vector(apply(rsdB,2,function(x) all(x<rsdcf))) & as.vector(apply(meanB[,-1],2,function(x) all(x>inscf)))
+
+        N <- sum(index)
+        L <- length(index)
+
+        message(paste(N,'out of',L,'peaks found with rsd cutoff',rsdcf,'and intensity cutoff', inscf))
+
+        if (!is.null(file)) {
+                result <- data.frame(t(mean[, -c(1:2)]))[index,]
+                data <- rbind(group = as.character(mean[, 1]), result)
+                utils::write.csv(data, file = paste0(file,'.csv'))
+                return(data)
         } else {
                 return(report)
         }

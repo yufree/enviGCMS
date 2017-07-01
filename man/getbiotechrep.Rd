@@ -2,20 +2,27 @@
 % Please edit documentation in R/xcmsplus.R
 \name{getbiotechrep}
 \alias{getbiotechrep}
-\title{Get the report for technique replicates.}
+\title{Get the report for biological replicates.}
 \usage{
-getbiotechrep(xset, method = "medret", intensity = "into")
+getbiotechrep(xset, method = "medret", intensity = "into", file = NULL,
+  rsdcf = 30, inscf = 1000)
 }
 \arguments{
-\item{xset}{the xcmsset object which for all of your technique replicates for bio replicated sample}
+\item{xset}{the xcmsset object which for all of your technique replicates for bio replicated sample in single group}
 
 \item{method}{parameter for groupval function}
 
 \item{intensity}{parameter for groupval function}
+
+\item{file}{file name for further annotation, default NULL}
+
+\item{rsdcf}{rsd cutoff for peaks, default 30}
+
+\item{inscf}{intensity cutoff for peaks, default 0}
 }
 \value{
 dataframe with mean, standard deviation and RSD for those technique replicates & biological replicates combined with raw data
 }
 \description{
-Get the report for technique replicates.
+Get the report for biological replicates.
 }
