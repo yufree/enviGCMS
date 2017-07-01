@@ -190,10 +190,13 @@ getbiotechrep <- function(xset, method = "medret", intensity = "into", file = NU
 
         message(paste(N,'out of',L,'peaks found with rsd cutoff',rsdcf,'and intensity cutoff', inscf))
 
+        report <- report[index,]
+
         if (!is.null(file)) {
                 anno <- cbind.data.frame(xset@groups[, 1], xset@groups[, 4], t(mean[, -1]))
                 colnames(anno) <- c("mz", "time", as.character(t(mean[, 1])))
                 utils::write.csv(anno, file = paste0(file,'.csv'), row.names = F)
+                anno <- anno[index,]
                 return(anno)
         } else {
                 return(report)
@@ -238,6 +241,8 @@ getgrouprep <- function(xset, file = NULL, method = "medret", intensity = "into"
 
         message(paste(N,'out of',L,'peaks found with rsd cutoff',rsdcf,'and intensity cutoff', inscf))
 
+        report <- report[index,]
+
         if (!is.null(file)) {
                 result <- data.frame(t(mean[, -c(1:2)]))[index,]
                 data <- rbind(group = as.character(mean[, 1]), result)
@@ -248,6 +253,56 @@ getgrouprep <- function(xset, file = NULL, method = "medret", intensity = "into"
         }
 }
 
+#' Get the time series report for samples with biological and technique replicates in different groups
+#' @param xset the xcmsset object all of samples with technique replicates in time series
+#' @param method parameter for groupval function
+#' @param intensity parameter for groupval function
+#' @param file file name for the peaklist to MetaboAnalyst
+#' @param rsdcf rsd cutoff for peaks, default 30
+#' @param inscf intensity cutoff for peaks, default 1000
+#' @return dataframe with time series mean, standard deviation and RSD for those technique replicates & biological replicates combined with raw data in different groups if file are defaults NULL.
+#' @export
+gettimegrouprep <- function(xset, file = NULL, method = "medret", intensity = "into", rsdcf = 30, inscf = 1000) {
+        data <- t(xcms::groupval(xset, method, intensity))
+        lv <- xset@phenoData[, 1]
+        lv2 <- xset@phenoData[, 2]
+        lv3 <- xset@phenoData[, 3]
+        mean <- stats::aggregate(data, list(lv, lv2, lv3), mean)
+        sd <- stats::aggregate(data, list(lv, lv2, lv3), sd)
+        suppressWarnings(rsd <- sd/mean * 100)
+        result <- cbind.data.frame(t(mean[, -c(1:3)]), t(sd[, -c(1:3)]), t(rsd[, -c(1:3)]))
+        name <- paste0(t(mean[, 1]),t(mean[, 2]),t(mean[, 3]))
+        colnames(result) <- c(paste0(name, "mean"), paste0(name, "sd"), paste0(name, "rsd%"))
+
+        meanB <- stats::aggregate(mean[, -c(1:3)], list(as.vector(t(mean[, 1])),as.vector(t(mean[, 2]))), mean)
+        sdB <- stats::aggregate(mean[, -c(1:3)], list(as.vector(t(mean[, 1])),as.vector(t(mean[, 2]))), sd)
+        suppressWarnings(rsdB <- sdB[,-c(1:2)]/meanB[,-c(1:2)] * 100)
+
+        resultB <- cbind.data.frame(t(meanB[,-c(1:2)]), t(sdB[,-c(1:2)]), t(rsdB))
+        nameB <- paste0(t(meanB[, 1]), t(meanB[, 2]))
+        colnames(resultB) <- c(paste0(nameB, "mean"), paste0(nameB,"sd"), paste0(nameB, "rsd%"))
+
+        datap <- xcms::groups(xset)
+        report <- cbind.data.frame(datap, result, resultB)
+
+        index <- as.vector(apply(rsdB,2,function(x) all(x<rsdcf))) & as.vector(apply(meanB[,-c(1,2)],2,function(x) all(x>inscf)))
+
+        N <- sum(index)
+        L <- length(index)
+
+        message(paste(N,'out of',L,'peaks found with rsd cutoff',rsdcf,'and intensity cutoff', inscf))
+
+        report <- report[index,]
+
+        if (!is.null(file)) {
+                result <- data.frame(t(meanB[, -c(1:2)]))[index,]
+                data <- rbind(time = as.numeric(as.factor(meanB[, 1])), group = as.character(meanB[, 2]), result)
+                utils::write.csv(data, file = paste0(file,'.csv'))
+                return(data)
+        } else {
+                return(report)
+        }
+}
 
 #' plot the scatter plot for xcmsset (or two) objects with threshold
 #' @param data1 the first xcmsset object
