@@ -133,16 +133,61 @@ getupload <- function(xset, method = "medret", intensity = "into",
         utils::write.csv(data, file = filename)
         return(data)
 }
+
+#' Get the peak list with blank samples' peaks removed
+#' @param xset the xcmsset object with blank and certain group samples' data
+#' @param method parameter for groupval function
+#' @param intensity parameter for groupval function
+#' @param file file name for further annotation, default NULL
+#' @param rsdcf rsd cutoff for peaks, default 30
+#' @param inscf intensity cutoff for peaks, default 1000
+#' @return diff report
+#' @export
+getbgremove <- function(xset, method = "medret", intensity = "into", fill = NULL, rsdcf = 30, inscf = 1000){
+        data0 <- xcms::groupval(xset, method, intensity)
+        if (intensity == "intb") {
+                data0[is.na(data0)] = 0
+        }
+        data <- t(data0)
+        lv <- xset@phenoData[, 1]
+        mean <- stats::aggregate(data, list(lv), mean)
+        sd <- stats::aggregate(data, list(lv), sd)
+        suppressWarnings(rsd <- sd/mean * 100)
+        result <- data.frame(cbind(t(mean[,-1]), t(rsd[, -1])))
+        index <- t(rsd[, -1]) < rsdcf & t(mean[, -1]) > inscf
+
+        diff <- result[,2] - result[,1]
+        datap <- xcms::groups(xset)
+        report <- cbind.data.frame(xset@groups[, 1], xset@groups[, 4], diff)
+        colnames(report) <- c("mz", "time", "diff")
+
+        N <- sum(index)
+        L <- length(index)
+
+        report <- report[index,]
+
+        message(paste(N,'out of',L,'peaks found with rsd cutoff',rsdcf,'and intensity cutoff', inscf))
+        if (!is.null(file)) {
+                utils::write.csv(report, file = paste0(file,'.csv'), row.names = F)}
+        return(report)
+}
+
+
 #' Get the report for technique replicates.
 #' @param xset the xcmsset object which for all of your technique replicates for one sample
 #' @param method parameter for groupval function
 #' @param intensity parameter for groupval function
+#' @param file file name for further annotation, default NULL
 #' @param rsdcf rsd cutoff for peaks, default 30
 #' @param inscf intensity cutoff for peaks, default 1000
 #' @return dataframe with mean, standard deviation and RSD for those technique replicates combined with raw data
 #' @export
 gettechrep <- function(xset, method = "medret", intensity = "into", rsdcf = 30, inscf = 1000) {
-        data <- t(xcms::groupval(xset, method, intensity))
+        data0 <- xcms::groupval(xset, method, intensity)
+        if (intensity == "intb") {
+                data0[is.na(data0)] = 0
+        }
+        data <- t(data0)
         lv <- xset@phenoData[, 1]
         mean <- stats::aggregate(data, list(lv), mean)
         sd <- stats::aggregate(data, list(lv), sd)
@@ -153,8 +198,22 @@ gettechrep <- function(xset, method = "medret", intensity = "into", rsdcf = 30, 
         colnames(result) <- c("mean", "sd", "rsd")
         datap <- xcms::groups(xset)
         report <- cbind.data.frame(datap, result)
+        N <- sum(index)
+        L <- length(index)
+
+        message(paste(N,'out of',L,'peaks found with rsd cutoff',rsdcf,'and intensity cutoff', inscf))
+
         report <- report[index,]
-        return(report)
+
+        if (!is.null(file)) {
+                anno <- cbind.data.frame(xset@groups[, 1], xset@groups[, 4], t(mean[, -1]))
+                colnames(anno) <- c("mz", "time", as.character(t(mean[, 1])))
+                utils::write.csv(anno, file = paste0(file,'.csv'), row.names = F)
+                anno <- anno[index,]
+                return(anno)
+        } else {
+                return(report)
+        }
 }
 
 #' Get the report for biological replicates.
@@ -167,7 +226,11 @@ gettechrep <- function(xset, method = "medret", intensity = "into", rsdcf = 30, 
 #' @return dataframe with mean, standard deviation and RSD for those technique replicates & biological replicates combined with raw data
 #' @export
 getbiotechrep <- function(xset, method = "medret", intensity = "into", file = NULL, rsdcf = 30, inscf = 1000) {
-        data <- t(xcms::groupval(xset, method, intensity))
+        data0 <- xcms::groupval(xset, method, intensity)
+        if (intensity == "intb") {
+                data0[is.na(data0)] = 0
+        }
+        data <- t(data0)
         lv <- xset@phenoData[, 1]
         mean <- stats::aggregate(data, list(lv), mean)
         sd <- stats::aggregate(data, list(lv), sd)
@@ -213,7 +276,11 @@ getbiotechrep <- function(xset, method = "medret", intensity = "into", file = NU
 #' @return dataframe with mean, standard deviation and RSD for those technique replicates & biological replicates combined with raw data in different groups if file are defaults NULL.
 #' @export
 getgrouprep <- function(xset, file = NULL, method = "medret", intensity = "into", rsdcf = 30, inscf = 1000) {
-        data <- t(xcms::groupval(xset, method, intensity))
+        data0 <- xcms::groupval(xset, method, intensity)
+        if (intensity == "intb") {
+                data0[is.na(data0)] = 0
+        }
+        data <- t(data0)
         lv <- xset@phenoData[, 1]
         lv2 <- xset@phenoData[, 2]
         mean <- stats::aggregate(data, list(lv, lv2), mean)
@@ -263,7 +330,11 @@ getgrouprep <- function(xset, file = NULL, method = "medret", intensity = "into"
 #' @return dataframe with time series or two factor DoE mean, standard deviation and RSD for those technique replicates & biological replicates combined with raw data in different groups if file are defaults NULL.
 #' @export
 gettimegrouprep <- function(xset, file = NULL, method = "medret", intensity = "into", rsdcf = 30, inscf = 1000) {
-        data <- t(xcms::groupval(xset, method, intensity))
+        data0 <- xcms::groupval(xset, method, intensity)
+        if (intensity == "intb") {
+                data0[is.na(data0)] = 0
+        }
+        data <- t(data0)
         lv <- xset@phenoData[, 1]
         lv2 <- xset@phenoData[, 2]
         lv3 <- xset@phenoData[, 3]
@@ -473,7 +544,7 @@ plote <- function(xset,
 #' @export
 
 getfeaturest <- function(xod, power = 0.8, pt = 0.05,
-    qt = 0.05, n = 3, rsdt = 50) {
+    qt = 0.05, n = 3, rsdt = 30) {
     data <- xcms::groupval(xod, value = "into")
     idx <- stats::complete.cases(data)
     data1 <- as.data.frame(xcms::groups(xod))
@@ -520,7 +591,7 @@ getfeaturest <- function(xod, power = 0.8, pt = 0.05,
 #' @export
 
 getfeaturesanova <- function(xod, power = 0.8, pt = 0.05,
-    qt = 0.05, n = 3, ng = 3, rsdt = 50) {
+    qt = 0.05, n = 3, ng = 3, rsdt = 30) {
     data <- xcms::groupval(xod, value = "into")
     idx <- stats::complete.cases(data)
     data1 <- as.data.frame(xcms::groups(xod))

@@ -5,7 +5,7 @@
 \title{Get the features from anova, with p value, q value, rsd and power restriction}
 \usage{
 getfeaturesanova(xod, power = 0.8, pt = 0.05, qt = 0.05, n = 3,
-  ng = 3, rsdt = 50)
+  ng = 3, rsdt = 30)
 }
 \arguments{
 \item{xod}{xcmsSet objects}
