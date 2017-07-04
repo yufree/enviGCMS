@@ -143,7 +143,7 @@ getupload <- function(xset, method = "medret", intensity = "into",
 #' @param inscf intensity cutoff for peaks, default 1000
 #' @return diff report
 #' @export
-getbgremove <- function(xset, method = "medret", intensity = "into", fill = NULL, rsdcf = 30, inscf = 1000){
+getbgremove <- function(xset, method = "medret", intensity = "into", file = NULL, rsdcf = 30, inscf = 1000){
         data0 <- xcms::groupval(xset, method, intensity)
         if (intensity == "intb") {
                 data0[is.na(data0)] = 0
@@ -182,7 +182,7 @@ getbgremove <- function(xset, method = "medret", intensity = "into", fill = NULL
 #' @param inscf intensity cutoff for peaks, default 1000
 #' @return dataframe with mean, standard deviation and RSD for those technique replicates combined with raw data
 #' @export
-gettechrep <- function(xset, method = "medret", intensity = "into", rsdcf = 30, inscf = 1000) {
+gettechrep <- function(xset, method = "medret", intensity = "into", file = NULL, rsdcf = 30, inscf = 1000) {
         data0 <- xcms::groupval(xset, method, intensity)
         if (intensity == "intb") {
                 data0[is.na(data0)] = 0

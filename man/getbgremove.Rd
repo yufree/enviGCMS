@@ -4,7 +4,7 @@
 \alias{getbgremove}
 \title{Get the peak list with blank samples' peaks removed}
 \usage{
-getbgremove(xset, method = "medret", intensity = "into", fill = NULL,
+getbgremove(xset, method = "medret", intensity = "into", file = NULL,
   rsdcf = 30, inscf = 1000)
 }
 \arguments{
@@ -14,11 +14,11 @@ getbgremove(xset, method = "medret", intensity = "into", fill = NULL,
 
 \item{intensity}{parameter for groupval function}
 
+\item{file}{file name for further annotation, default NULL}
+
 \item{rsdcf}{rsd cutoff for peaks, default 30}
 
 \item{inscf}{intensity cutoff for peaks, default 1000}
-
-\item{file}{file name for further annotation, default NULL}
 }
 \value{
 diff report

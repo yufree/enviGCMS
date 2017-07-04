@@ -4,8 +4,8 @@
 \alias{gettechrep}
 \title{Get the report for technique replicates.}
 \usage{
-gettechrep(xset, method = "medret", intensity = "into", rsdcf = 30,
-  inscf = 1000)
+gettechrep(xset, method = "medret", intensity = "into", file = NULL,
+  rsdcf = 30, inscf = 1000)
 }
 \arguments{
 \item{xset}{the xcmsset object which for all of your technique replicates for one sample}
@@ -14,11 +14,11 @@ gettechrep(xset, method = "medret", intensity = "into", rsdcf = 30,
 
 \item{intensity}{parameter for groupval function}
 
+\item{file}{file name for further annotation, default NULL}
+
 \item{rsdcf}{rsd cutoff for peaks, default 30}
 
 \item{inscf}{intensity cutoff for peaks, default 1000}
-
-\item{file}{file name for further annotation, default NULL}
 }
 \value{
 dataframe with mean, standard deviation and RSD for those technique replicates combined with raw data
