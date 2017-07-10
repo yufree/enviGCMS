@@ -21,3 +21,8 @@ area intergration data
 \description{
 Just intergrate data according to fixed rt and fixed noise area
 }
+\examples{
+\dontrun{
+area <- Intergration(data)
+}
+}

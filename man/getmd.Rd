@@ -2,7 +2,7 @@
 % Please edit documentation in R/general.R
 \name{getmd}
 \alias{getmd}
-\title{Import data and return the annotated matrix for GC-MS by m/z range and retention time}
+\title{Import data and return the annotated matrix for GC/LC-MS by m/z range and retention time}
 \usage{
 getmd(data, mzstep = 0.1, mzrange = F, rtrange = F)
 }
@@ -19,5 +19,13 @@ getmd(data, mzstep = 0.1, mzrange = F, rtrange = F)
 matrix with the row as increasing m/z second and column as increasing scantime
 }
 \description{
-Import data and return the annotated matrix for GC-MS by m/z range and retention time
+Import data and return the annotated matrix for GC/LC-MS by m/z range and retention time
+}
+\examples{
+\dontrun{
+library(faahKO)
+cdfpath <- system.file("cdf", package = "faahKO")
+cdffiles <- list.files(cdfpath, recursive = TRUE, full.names = TRUE)
+matrix <- getmd(cdffiles[1])
+}
 }

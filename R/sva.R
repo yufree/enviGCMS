@@ -5,6 +5,18 @@
 #' @param intensity parameter for groupval function
 #' @details this is used for reviesed version of SVA to correct the unknown batch effects
 #' @return list object with various components such raw data, corrected data, signal part, random errors part, batch part, p-values, q-values, mass, rt, Posterior Probabilities of Surrogate variables and Posterior Probabilities of Mod. If no surrogate variable found, corresponding part would miss.
+#' @examples
+#' \dontrun{
+#' library(faahKO)
+#' cdfpath <- system.file("cdf", package = "faahKO")
+#' cdffiles <- list.files(cdfpath, recursive = TRUE, full.names = TRUE)
+#' xset <- xcmsSet(cdffiles)
+#' xset <- group(xset)
+#' xset2 <- retcor(xset, family = "symmetric", plottype = "mdevden")
+#' xset2 <- group(xset2, bw = 10)
+#' xset3 <- fillPeaks(xset2)
+#' df <- svacor(xset3)
+#' }
 #' @seealso \code{\link{svapca}}, \code{\link{svaplot}}, \code{\link{svabatch}}
 #' @export
 svacor <- function(xset, lv = NULL, method = "medret",
@@ -86,6 +98,19 @@ svacor <- function(xset, lv = NULL, method = "medret",
 #' @param scale parameters for scale
 #' @param lv group information
 #' @return plot
+#' @examples
+#' \dontrun{
+#' library(faahKO)
+#' cdfpath <- system.file("cdf", package = "faahKO")
+#' cdffiles <- list.files(cdfpath, recursive = TRUE, full.names = TRUE)
+#' xset <- xcmsSet(cdffiles)
+#' xset <- group(xset)
+#' xset2 <- retcor(xset, family = "symmetric", plottype = "mdevden")
+#' xset2 <- group(xset2, bw = 10)
+#' xset3 <- fillPeaks(xset2)
+#' df <- svacor(xset3)
+#' svapca(df)
+#' }
 #' @seealso \code{\link{svacor}}, \code{\link{svaplot}}, \code{\link{svabatch}}
 #' @export
 svapca <- function(list, center = T, scale = T, lv = NULL) {
@@ -164,6 +189,19 @@ svapca <- function(list, center = T, scale = T, lv = NULL) {
 #' @param pt threshold for p value, default is 0.05
 #' @param qt threshold for q value, default is 0.05
 #' @return data, corrected data, mz and retention for fileted data
+#' @examples
+#' \dontrun{
+#' library(faahKO)
+#' cdfpath <- system.file("cdf", package = "faahKO")
+#' cdffiles <- list.files(cdfpath, recursive = TRUE, full.names = TRUE)
+#' xset <- xcmsSet(cdffiles)
+#' xset <- group(xset)
+#' xset2 <- retcor(xset, family = "symmetric", plottype = "mdevden")
+#' xset2 <- group(xset2, bw = 10)
+#' xset3 <- fillPeaks(xset2)
+#' df <- svacor(xset3)
+#' svadata(df)
+#' }
 #' @export
 svadata <- function(list, pqvalues = "sv", pt = 0.05,
     qt = 0.05) {
@@ -234,6 +272,19 @@ svadata <- function(list, pqvalues = "sv", pt = 0.05,
 #' @param lv group information
 #' @param index index for selected peaks
 #' @return heatmap for the data
+#' @examples
+#' \dontrun{
+#' library(faahKO)
+#' cdfpath <- system.file("cdf", package = "faahKO")
+#' cdffiles <- list.files(cdfpath, recursive = TRUE, full.names = TRUE)
+#' xset <- xcmsSet(cdffiles)
+#' xset <- group(xset)
+#' xset2 <- retcor(xset, family = "symmetric", plottype = "mdevden")
+#' xset2 <- group(xset2, bw = 10)
+#' xset3 <- fillPeaks(xset2)
+#' df <- svacor(xset3)
+#' svaplot(df)
+#' }
 #' @seealso \code{\link{svacor}}, \code{\link{svapca}}, \code{\link{svabatch}}
 #' @export
 svaplot <- function(list, pqvalues = "sv", pt = 0.05,
@@ -484,6 +535,18 @@ svaplot <- function(list, pqvalues = "sv", pt = 0.05,
 #' @param xset xcmsset object
 #' @param lv group information
 #' @return csv files for both raw and corrected data for metabolanalyst if SVA could be applied
+#' @examples
+#' \dontrun{
+#' library(faahKO)
+#' cdfpath <- system.file("cdf", package = "faahKO")
+#' cdffiles <- list.files(cdfpath, recursive = TRUE, full.names = TRUE)
+#' xset <- xcmsSet(cdffiles)
+#' xset <- group(xset)
+#' xset2 <- retcor(xset, family = "symmetric", plottype = "mdevden")
+#' xset2 <- group(xset2, bw = 10)
+#' xset3 <- fillPeaks(xset2)
+#' svaupload(xset3)
+#' }
 #' @export
 svaupload <- function(xset, lv = NULL) {
     raw <- svacor(xset, lv = lv)
@@ -509,6 +572,21 @@ svaupload <- function(xset, lv = NULL) {
 #' @param dfsv data output from `svaplot` function for corrected data
 #' @param dfanova data output from `svaplot` function for raw data
 #' @return influnces plot
+#' @examples
+#' \dontrun{
+#' library(faahKO)
+#' cdfpath <- system.file("cdf", package = "faahKO")
+#' cdffiles <- list.files(cdfpath, recursive = TRUE, full.names = TRUE)
+#' xset <- xcmsSet(cdffiles)
+#' xset <- group(xset)
+#' xset2 <- retcor(xset, family = "symmetric", plottype = "mdevden")
+#' xset2 <- group(xset2, bw = 10)
+#' xset3 <- fillPeaks(xset2)
+#' df <- svacor(xset3)
+#' dfsv <- svaplot(xset3)
+#' dfanova <- svaplot(xset3, pqvalues = "anova")
+#' svabatch(df,dfsv,dfanova)
+#' }
 #' @seealso \code{\link{svacor}}, \code{\link{svaplot}}, \code{\link{svapca}}
 #' @export
 svabatch <- function(df, dfsv, dfanova) {

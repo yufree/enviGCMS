@@ -12,3 +12,9 @@ plothist(data)
 \description{
 plot the density of the GC-MS data with EM algorithm to seperate the data into two log normal distribution.
 }
+\examples{
+\dontrun{
+matrix <- getmd(rawdata)
+plothist(matrix)
+}
+}

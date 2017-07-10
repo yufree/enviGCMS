@@ -21,3 +21,9 @@ matrix with the row as scantime in second and column as m/z
 \description{
 Combine two data with similar retention time while different mass range
 }
+\examples{
+\dontrun{
+# mz100_200 and mz201_300 were the path to the raw data
+matrix <- getmd(mz100_200,mz201_300)
+}
+}

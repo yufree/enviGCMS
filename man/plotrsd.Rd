@@ -14,3 +14,11 @@ plotrsd(xset, ...)
 \description{
 plot the rsd influnces of data
 }
+\examples{
+\dontrun{
+library(faahKO)
+cdfpath <- system.file("cdf", package = "faahKO")
+xset <- getdata(cdfpath, pmethod = ' ')
+plotrsd(xset)
+}
+}

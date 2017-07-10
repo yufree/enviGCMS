@@ -23,3 +23,8 @@ arearatio
 \description{
 Get the MIR from the file
 }
+\examples{
+\dontrun{
+arearatio <- qbatch(datafile)
+}
+}

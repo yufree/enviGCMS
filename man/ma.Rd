@@ -17,3 +17,6 @@ The filtered data
 \description{
 filter data by average moving box
 }
+\examples{
+ma(rnorm(1000),5)
+}

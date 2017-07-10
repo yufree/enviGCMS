@@ -4,6 +4,10 @@
 #' @param brt a rough RT range contained only one peak and enough noises to get the area
 #' @param smoothit logical, if using an average smooth box or not. If using, n will be used
 #' @return area intergration data
+#' @examples
+#' \dontrun{
+#' area <- Intergration(data)
+#' }
 #' @export
 Integration <- function(data, rt = c(8.3, 9), brt = c(8.3,
     8.4), smoothit = T) {
@@ -47,6 +51,10 @@ Integration <- function(data, rt = c(8.3, 9), brt = c(8.3,
 #' @param smoothit logical, if using an average smooth box or not. If using, n will be used
 #' @param half logical, if using the left half peak to caculate the area
 #' @return intergration data such as peak area, peak hight, signal and the slope data.
+#' @examples
+#' \dontrun{
+#' list <- GetIntergration(data)
+#' }
 #' @export
 GetIntegration <- function(data, rt = c(8.3, 9), n = 5,
     m = 5, slope = c(2, 2), baseline = 10, noslope = T,
@@ -164,6 +172,10 @@ GetIntegration <- function(data, rt = c(8.3, 9), n = 5,
 #' @param mz1 the lowest mass
 #' @param mz2 the highest mass
 #' @return Molecular isotope ratio
+#' @examples
+#' \dontrun{
+#' mr <- batch(data,mz1 = 79, mz2 = 81)
+#' }
 #' @export
 batch <- function(file, mz1, mz2) {
     data1 <- xcms::xcmsRaw(file)
@@ -203,6 +215,10 @@ batch <- function(file, mz1, mz2) {
 #' @param rt a rough RT range contained only one peak to get the area
 #' @param brt a rough RT range contained only one peak and enough noises to get the area
 #' @return arearatio
+#' @examples
+#' \dontrun{
+#' arearatio <- qbatch(datafile)
+#' }
 #' @export
 qbatch <- function(file, mz1, mz2, rt = c(8.65, 8.74),
     brt = c(8.74, 8.85)) {
@@ -224,6 +240,11 @@ qbatch <- function(file, mz1, mz2, rt = c(8.65, 8.74),
 #' @param formula the molecular formula. C12OH6Br4 means BDE-47 as default
 #' @param charge the charge of that molecular. 1 in EI mode as default
 #' @param width the width of the peak width on mass spectrum. 0.3 as default for low resolution mass spectrum.
+#' @examples
+#' \dontrun{
+#' # show isotopologues for BDE-47
+#' ir <- Getisotopologues(formula = "C12OH6Br4")
+#' }
 #' @export
 Getisotopologues <- function(formula = "C12OH6Br4",
     charge = "1", width = 0.3) {
@@ -267,6 +288,11 @@ Getisotopologues <- function(formula = "C12OH6Br4",
 #' @param mass vector of mass
 #' @param sf scaled factors
 #' @return dataframe with mass, scaled mass and scaled mass defect
+#' @examples
+#' mass <- c(100.1022,245.2122,267.3144,400.1222,707.2294)
+#' sf <- 0.9988
+#' mf <- getmassdefect(mass,sf)
+#' @export
 getmassdefect <- function(mass, sf) {
         sm <- mass * sf
         sd <- ceiling(sm) - sm
@@ -275,11 +301,16 @@ getmassdefect <- function(mass, sf) {
         return(df)
 }
 
-
 #' plot the kendrick mass defect diagram
 #' @param data vector with the name m/z
 #' @param cutoff remove the low intensity
 #' @return NULL
+#' @examples
+#' \dontrun{
+#' mz <- c(10000,5000,20000,100,40000)
+#' names(mz) <- c(100.1022,245.2122,267.3144,400.1222,707.2294)
+#' plotkms(mz)
+#' }
 #' @export
 plotkms <- function(data, cutoff = 1000) {
         data <- data[data > cutoff]

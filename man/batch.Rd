@@ -19,3 +19,8 @@ Molecular isotope ratio
 \description{
 Get the MIR and related information from the files
 }
+\examples{
+\dontrun{
+mr <- batch(data,mz1 = 79, mz2 = 81)
+}
+}

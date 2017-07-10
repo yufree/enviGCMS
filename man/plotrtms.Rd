@@ -19,3 +19,9 @@ plot, vector and MSP files for NIST search
 \description{
 Plot mass spectrum of certain retention time and return mass spectrum vector (MSP file) for NIST search
 }
+\examples{
+\dontrun{
+matrix <- getmd(rawdata)
+plotrtms(matrix,rt = c(500,1000),ms = (300,500))
+}
+}

@@ -19,3 +19,14 @@ scatter plot
 \description{
 plot GC/LC-MS data as scatter plot
 }
+\examples{
+\dontrun{
+library(faahKO)
+cdfpath <- system.file("cdf", package = "faahKO")
+cdffiles <- list.files(cdfpath, recursive = TRUE, full.names = TRUE)
+matrix <- getmd(cdffiles[1])
+png('test.png')
+plotmz(matrix)
+dev.off()
+}
+}

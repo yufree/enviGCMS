@@ -12,3 +12,9 @@ plotsub(data)
 \description{
 Plot the backgrond of data
 }
+\examples{
+\dontrun{
+matrix <- getmd(rawdata)
+plotsub(matrix)
+}
+}

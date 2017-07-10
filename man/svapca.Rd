@@ -21,6 +21,20 @@ plot
 \description{
 Principal component analysis(PCA) for SVA corrected data and raw data
 }
+\examples{
+\dontrun{
+library(faahKO)
+cdfpath <- system.file("cdf", package = "faahKO")
+cdffiles <- list.files(cdfpath, recursive = TRUE, full.names = TRUE)
+xset <- xcmsSet(cdffiles)
+xset <- group(xset)
+xset2 <- retcor(xset, family = "symmetric", plottype = "mdevden")
+xset2 <- group(xset2, bw = 10)
+xset3 <- fillPeaks(xset2)
+df <- svacor(xset3)
+svapca(df)
+}
+}
 \seealso{
 \code{\link{svacor}}, \code{\link{svaplot}}, \code{\link{svabatch}}
 }

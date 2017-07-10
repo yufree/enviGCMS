@@ -3,17 +3,26 @@
 #' @param x a vector
 #' @param n A number to indentify the size of the moving box.
 #' @return The filtered data
+#' @examples
+#' ma(rnorm(1000),5)
 #' @export
 ma <- function(x, n) {
         stats::filter(x, rep(1 / n, n), circular = T)
 }
 
-#' Import data and return the annotated matrix for GC-MS by m/z range and retention time
+#' Import data and return the annotated matrix for GC/LC-MS by m/z range and retention time
 #' @param data file type which xcmsRaw could handle
 #' @param mzstep the m/z step for generating matrix data from raw mass spectral data
 #' @param mzrange vector range of the m/z, default all
 #' @param rtrange vector range of the retention time, default all
 #' @return matrix with the row as increasing m/z second and column as increasing scantime
+#' @examples
+#' \dontrun{
+#' library(faahKO)
+#' cdfpath <- system.file("cdf", package = "faahKO")
+#' cdffiles <- list.files(cdfpath, recursive = TRUE, full.names = TRUE)
+#' matrix <- getmd(cdffiles[1])
+#' }
 #' @export
 getmd <- function(data,
                   mzstep = 0.1,
@@ -39,6 +48,11 @@ getmd <- function(data,
 #' @param mzstep the m/z step for generating matrix data from raw mass spectral data
 #' @param rtstep the alignment accuracy of retention time, e.g. 0.01 means the retention times of combined data should be the same at the accuracy 0.01s. Higher rtstep would return less scans for combined data
 #' @return matrix with the row as scantime in second and column as m/z
+#' @examples
+#' \dontrun{
+#' # mz100_200 and mz201_300 were the path to the raw data
+#' matrix <- getmd(mz100_200,mz201_300)
+#' }
 #' @export
 cbmd <- function(data1,
                  data2,
@@ -63,6 +77,13 @@ cbmd <- function(data1,
 #' @param mzstep the m/z step for generating matrix data from raw mass spectral data
 #' @param rtstep the alignment accuracy of retention time, e.g. 0.01 means the retention times of combined data should be the same at the accuracy 0.01s. Higher rtstep would return less scans for combined data
 #' @return list four matrix with the row as scantime in second and column as m/z, the first matrix refer to data 1, the second matrix refer to data 2, the third matrix refer to data1 - data2 while the fourth refer to data2 - data1, minus values are imputed by 0
+#' @examples
+#' \dontrun{
+#' library(faahKO)
+#' cdfpath <- system.file("cdf", package = "faahKO")
+#' cdffiles <- list.files(cdfpath, recursive = TRUE, full.names = TRUE)
+#' matrix <- submd(cdffiles[1],cdffiles[7])
+#' }
 #' @export
 submd <- function(data1,
                   data2,
@@ -117,11 +138,22 @@ submd <- function(data1,
 #' @param data imported data matrix of GC-MS
 #' @param log transform the intensity into log based 10
 #' @return heatmap
+#' @examples
+#' \dontrun{
+#' library(faahKO)
+#' cdfpath <- system.file("cdf", package = "faahKO")
+#' cdffiles <- list.files(cdfpath, recursive = TRUE, full.names = TRUE)
+#' matrix <- getmd(cdffiles[1])
+#' png('test.png')
+#' plotms(matrix)
+#' dev.off()
+#' }
 #' @export
 plotms <- function(data, log = F) {
         # get the mz and rt range and rotate the matrix to
         # adapt the image function
         indmz <- as.numeric(rownames(data))
+        indrt <- as.numeric(colnames(data))
         col <-
                 (grDevices::colorRampPalette(rev(
                         RColorBrewer::brewer.pal(11,"RdYlBu")
@@ -242,8 +274,17 @@ plotms <- function(data, log = F) {
 #' @param threshold the threshold of the response (log based 10)
 #' @param ... parameters for `plot` function
 #' @return scatter plot
+#' @examples
+#' \dontrun{
+#' library(faahKO)
+#' cdfpath <- system.file("cdf", package = "faahKO")
+#' cdffiles <- list.files(cdfpath, recursive = TRUE, full.names = TRUE)
+#' matrix <- getmd(cdffiles[1])
+#' png('test.png')
+#' plotmz(matrix)
+#' dev.off()
+#' }
 #' @export
-
 plotmz <- function(data, threshold = 5,...){
         mz <- as.numeric(rownames(data))
         rt <- as.numeric(colnames(data))
@@ -267,6 +308,11 @@ plotmz <- function(data, threshold = 5,...){
 #' @param log transform the intensity into log based 10
 #' @param temp temprature range for constant speed
 #' @return heatmap
+#' @examples
+#' \dontrun{
+#' matrix <- getmd(rawdata)
+#' plott(matrix)
+#' }
 #' @export
 plott <- function(data,
                   log = F,
@@ -370,6 +416,11 @@ plott <- function(data,
 #' Plot the backgrond of data
 #' @param data imported data matrix of GC-MS
 #' @return NULL
+#' @examples
+#' \dontrun{
+#' matrix <- getmd(rawdata)
+#' plotsub(matrix)
+#' }
 #' @export
 plotsub <- function(data) {
         datan <- apply(data, 1, diff)
@@ -383,6 +434,11 @@ plotsub <- function(data) {
 #' @param rt vector range of the retention time
 #' @param ms vector range of the m/z
 #' @return plot, vector and MSP files for NIST search
+#' @examples
+#' \dontrun{
+#' matrix <- getmd(rawdata)
+#' plotrtms(matrix,rt = c(500,1000),ms = (300,500))
+#' }
 #' @export
 plotrtms <- function(data, rt, ms) {
         data <- getmd(data, rt, ms)
@@ -411,10 +467,15 @@ plotrtms <- function(data, rt, ms) {
 #' @param rt vector range of the retention time
 #' @param n logical smooth or not
 #' @return dataframe with  with the first column RT and second column intensity of the SIM ions.
+#' @examples
+#' \dontrun{
+#' matrix <- getmd(rawdata)
+#' plotmsrt(matrix,rt = c(500,1000),ms = 300)
+#' }
 #' @export
 plotmsrt <- function(data,
                      ms,
-                     rt = c(3.1, 25),
+                     rt,
                      n = F) {
         data <- getmd(data, rt, c(ms, ms + 1))[1,]
         if (n) {
@@ -442,6 +503,11 @@ plotmsrt <- function(data,
 #' @param rt vector range of the retention time
 #' @param n logical smooth or not
 #' @return plot
+#' @examples
+#' \dontrun{
+#' matrix <- getmd(rawdata)
+#' plottic(matrix)
+#' }
 #' @export
 plottic <- function(data,
                     rt = c(3.1, 25),
@@ -466,6 +532,11 @@ plottic <- function(data,
 #' @param list list from getinteragtion
 #' @param name the title of the plot
 #' @return NULL
+#' @examples
+#' \dontrun{
+#' list <- getinteragtion(rawdata)
+#' plotint(list)
+#' }
 #' @export
 plotint <- function(list, name = NULL) {
         area <- list$area
@@ -531,10 +602,15 @@ plotint <- function(list, name = NULL) {
                              format(sigpeak, digits = 2)),
                        col = "red")
 }
-#' plot the information of intergretion
+#' plot the slope information of intergretion
 #' @param list list from getinteragtion
 #' @param name the title of the plot
 #' @return NULL
+#' @examples
+#' \dontrun{
+#' list <- getinteragtion(rawdata)
+#' plotintslope(list)
+#' }
 #' @export
 plotintslope <- function(list, name = NULL) {
         area <- list$area
@@ -576,6 +652,11 @@ plotintslope <- function(list, name = NULL) {
 #' @param threshold the threshold of the response (log based 10)
 #' @param temp the scale of the oven temprature(constant rate)
 #' @return list linear regression model for the matrix
+#' @examples
+#' \dontrun{
+#' data <- getmd(rawdata)
+#' findline(data)
+#' }
 #' @export
 findline <- function(data,
                      threshold = 2,
@@ -669,6 +750,11 @@ findline <- function(data,
 #' @param data imported data matrix of GC-MS
 #' @param threshold the threshold of the response (log based 10) to seperate the group
 #' @return list linear regression model for the data matrix
+#' @examples
+#' \dontrun{
+#' data <- getmd(rawdata)
+#' plotgroup(data)
+#' }
 #' @export
 plotgroup <- function(data, threshold = 2) {
         group <- ifelse(log10(data) > threshold, 1, 0)
@@ -728,6 +814,18 @@ plotgroup <- function(data, threshold = 2) {
 #' @param meanmatrix mean data matrix of GC-MS(n=5)
 #' @param rsdmatrix standard deviation matrix of GC-MS(n=5)
 #' @return NULL
+#' @examples
+#' \dontrun{
+#' data1 <- getmd(‘sample1-1’)
+#' data2 <- getmd(‘sample1-2’)
+#' data3 <- getmd(‘sample1-3’)
+#' data4 <- getmd(‘sample1-4’)
+#' data5 <- getmd(‘sample1-5’)
+#' data <- (data1+data2+data3+data4+data5)/5
+#' datasd <- sqrt(((data1-data)^2+(data2-data)^2+(data3-data)^2+(data4-data)^2+(data5-data)^2)/4)
+#' databrsd <- datasd/data
+#' plotsms(meanmatrix,rsdmatrix)
+#' }
 #' @export
 plotsms <- function(meanmatrix, rsdmatrix) {
         graphics::par(
@@ -800,6 +898,11 @@ plotsms <- function(meanmatrix, rsdmatrix) {
 #' plot the density of the GC-MS data with EM algorithm to seperate the data into two log normal distribution.
 #' @param data imported data matrix of GC-MS
 #' @return NULL
+#' @examples
+#' \dontrun{
+#' matrix <- getmd(rawdata)
+#' plothist(matrix)
+#' }
 #' @export
 plothist <- function(data) {
         data1 = sample(data, 1e+05)

@@ -17,3 +17,9 @@ list linear regression model for the data matrix
 \description{
 Plot the response group of GC-MS
 }
+\examples{
+\dontrun{
+data <- getmd(rawdata)
+plotgroup(data)
+}
+}

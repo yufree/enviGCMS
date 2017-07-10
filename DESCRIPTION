@@ -1,8 +1,8 @@
 Package: enviGCMS
 Type: Package
 Title: GC/LC-MS Data Analysis for Environmental Science
-Version: 0.3.3
-Date: 2017-06-05
+Version: 0.3.4
+Date: 2017-07-05
 Authors@R: person("Miao","YU", email =
     "yufreecas@gmail.com", role = c("aut", "cre"))
 Maintainer: Miao YU <yufreecas@gmail.com>
@@ -12,7 +12,8 @@ License: GPL-2
 Encoding: UTF-8
 LazyData: true
 Suggests: knitr,
-    rmarkdown
+    rmarkdown,
+    faahKO
 VignetteBuilder: knitr
 biocViews:
 Imports: xcms,

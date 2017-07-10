@@ -18,3 +18,11 @@ plotmrc(data, threshold = 5, ms = c(100, 1000), ...)
 \description{
 plot the diff scatter plot for one xcmsset objects with threshold and two groups
 }
+\examples{
+\dontrun{
+library(faahKO)
+cdfpath <- system.file("cdf", package = "faahKO")
+xset <- getdata(cdfpath, pmethod = ' ')
+plotmrc(xset)
+}
+}

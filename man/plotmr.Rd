@@ -20,3 +20,11 @@ plotmr(data1, data2 = NULL, threshold = 5, ms = c(100, 1000), ...)
 \description{
 plot the scatter plot for xcmsset (or two) objects with threshold
 }
+\examples{
+\dontrun{
+library(faahKO)
+cdfpath <- system.file("cdf", package = "faahKO")
+xset <- getdata(cdfpath, pmethod = ' ')
+plotmr(xset)
+}
+}

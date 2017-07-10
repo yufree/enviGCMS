@@ -21,3 +21,11 @@ dataframe with data needed for Metaboanalyst if your want to perform local analy
 \description{
 Get the csv files to be submitted to Metaboanalyst
 }
+\examples{
+\dontrun{
+library(faahKO)
+cdfpath <- system.file("cdf", package = "faahKO")
+xset <- getdata(cdfpath, pmethod = ' ')
+getupload(xset)
+}
+}

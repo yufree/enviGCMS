@@ -2,7 +2,7 @@
 % Please edit documentation in R/general.R
 \name{plotintslope}
 \alias{plotintslope}
-\title{plot the information of intergretion}
+\title{plot the slope information of intergretion}
 \usage{
 plotintslope(list, name = NULL)
 }
@@ -12,5 +12,11 @@ plotintslope(list, name = NULL)
 \item{name}{the title of the plot}
 }
 \description{
-plot the information of intergretion
+plot the slope information of intergretion
+}
+\examples{
+\dontrun{
+list <- getinteragtion(rawdata)
+plotintslope(list)
+}
 }

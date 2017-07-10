@@ -23,3 +23,11 @@ diffreport and pdf figure for EIC and boxplot
 \description{
 plot EIC and boxplot for all peaks and return diffreport
 }
+\examples{
+\dontrun{
+library(faahKO)
+cdfpath <- system.file("cdf", package = "faahKO")
+xset <- getdata(cdfpath, pmethod = ' ')
+plote(xset)
+}
+}

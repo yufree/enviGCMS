@@ -19,6 +19,22 @@ influnces plot
 \description{
 Plot the influnces of DoE and Batch effects on each peaks
 }
+\examples{
+\dontrun{
+library(faahKO)
+cdfpath <- system.file("cdf", package = "faahKO")
+cdffiles <- list.files(cdfpath, recursive = TRUE, full.names = TRUE)
+xset <- xcmsSet(cdffiles)
+xset <- group(xset)
+xset2 <- retcor(xset, family = "symmetric", plottype = "mdevden")
+xset2 <- group(xset2, bw = 10)
+xset3 <- fillPeaks(xset2)
+df <- svacor(xset3)
+dfsv <- svaplot(xset3)
+dfanova <- svaplot(xset3, pqvalues = "anova")
+svabatch(df,dfsv,dfanova)
+}
+}
 \seealso{
 \code{\link{svacor}}, \code{\link{svaplot}}, \code{\link{svapca}}
 }

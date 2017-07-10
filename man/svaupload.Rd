@@ -17,3 +17,16 @@ csv files for both raw and corrected data for metabolanalyst if SVA could be app
 \description{
 Get the corrected data after SVA for metabolanalyst
 }
+\examples{
+\dontrun{
+library(faahKO)
+cdfpath <- system.file("cdf", package = "faahKO")
+cdffiles <- list.files(cdfpath, recursive = TRUE, full.names = TRUE)
+xset <- xcmsSet(cdffiles)
+xset <- group(xset)
+xset2 <- retcor(xset, family = "symmetric", plottype = "mdevden")
+xset2 <- group(xset2, bw = 10)
+xset3 <- fillPeaks(xset2)
+svaupload(xset3)
+}
+}

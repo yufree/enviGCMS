@@ -20,3 +20,11 @@ plotpca(xset, lv = NULL, center = T, scale = T, ...)
 \description{
 plot the PCA of xcmsset
 }
+\examples{
+\dontrun{
+library(faahKO)
+cdfpath <- system.file("cdf", package = "faahKO")
+xset <- getdata(cdfpath, pmethod = ' ')
+plotpca(xset)
+}
+}

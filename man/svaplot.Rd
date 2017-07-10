@@ -26,6 +26,20 @@ heatmap for the data
 \description{
 Filter the data with p value and q value and show them
 }
+\examples{
+\dontrun{
+library(faahKO)
+cdfpath <- system.file("cdf", package = "faahKO")
+cdffiles <- list.files(cdfpath, recursive = TRUE, full.names = TRUE)
+xset <- xcmsSet(cdffiles)
+xset <- group(xset)
+xset2 <- retcor(xset, family = "symmetric", plottype = "mdevden")
+xset2 <- group(xset2, bw = 10)
+xset3 <- fillPeaks(xset2)
+df <- svacor(xset3)
+svaplot(df)
+}
+}
 \seealso{
 \code{\link{svacor}}, \code{\link{svapca}}, \code{\link{svabatch}}
 }

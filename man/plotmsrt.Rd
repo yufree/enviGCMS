@@ -4,7 +4,7 @@
 \alias{plotmsrt}
 \title{Plot EIC of certain m/z and return dataframe for intergration}
 \usage{
-plotmsrt(data, ms, rt = c(3.1, 25), n = F)
+plotmsrt(data, ms, rt, n = F)
 }
 \arguments{
 \item{data}{imported data matrix of GC-MS}
@@ -20,4 +20,10 @@ dataframe with  with the first column RT and second column intensity of the SIM 
 }
 \description{
 Plot EIC of certain m/z and return dataframe for intergration
+}
+\examples{
+\dontrun{
+matrix <- getmd(rawdata)
+plotmsrt(matrix,rt = c(500,1000),ms = 300)
+}
 }

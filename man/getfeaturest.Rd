@@ -25,3 +25,11 @@ dataframe with peaks fit the setting above
 \description{
 Get the features from t test, with p value, q value, rsd and power restriction
 }
+\examples{
+\dontrun{
+library(faahKO)
+cdfpath <- system.file("cdf", package = "faahKO")
+xset <- getdata(cdfpath, pmethod = ' ')
+getfeaturest(xset)
+}
+}

@@ -26,3 +26,11 @@ diff report
 \description{
 Get the peak list with blank samples' peaks removed
 }
+\examples{
+\dontrun{
+library(faahKO)
+cdfpath <- system.file("cdf", package = "faahKO")
+xset <- getdata(cdfpath, pmethod = ' ')
+getbgremove(xset)
+}
+}

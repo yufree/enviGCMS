@@ -7,6 +7,12 @@
 #' @details the parameters are extracted from the papers. If you use name other than the name above, you will use the default setting of XCMS. Also I suggest IPO packages or apLCMS packages to get reasonable data for your own instrumental. If you want to summit the results to a paper, remember to include those parameters.
 #' @return a xcmsset object for that path or selected samples
 #' @references Patti, G. J.; Tautenhahn, R.; Siuzdak, G. Nat. Protocols 2012, 7 (3), 508–516.
+#' @examples
+#' \dontrun{
+#' library(faahKO)
+#' cdfpath <- system.file("cdf", package = "faahKO")
+#' xset <- getdata(cdfpath, pmethod = ' ')
+#' }
 #' @export
 getdata <- function(path, index = F, BPPARAM = BiocParallel::SnowParam(workers = 12),
                     pmethod = "hplcorbitrap", ...) {
@@ -118,6 +124,13 @@ getdata <- function(path, index = F, BPPARAM = BiocParallel::SnowParam(workers =
 #' @param intensity parameter for groupval function
 #' @param name file name
 #' @return dataframe with data needed for Metaboanalyst if your want to perform local analysis.
+#' @examples
+#' \dontrun{
+#' library(faahKO)
+#' cdfpath <- system.file("cdf", package = "faahKO")
+#' xset <- getdata(cdfpath, pmethod = ' ')
+#' getupload(xset)
+#' }
 #' @export
 getupload <- function(xset, method = "medret", intensity = "into",
                       name = "Peaklist") {
@@ -142,6 +155,13 @@ getupload <- function(xset, method = "medret", intensity = "into",
 #' @param rsdcf rsd cutoff for peaks, default 30
 #' @param inscf intensity cutoff for peaks, default 1000
 #' @return diff report
+#' @examples
+#' \dontrun{
+#' library(faahKO)
+#' cdfpath <- system.file("cdf", package = "faahKO")
+#' xset <- getdata(cdfpath, pmethod = ' ')
+#' getbgremove(xset)
+#' }
 #' @export
 getbgremove <- function(xset, method = "medret", intensity = "into", file = NULL, rsdcf = 30, inscf = 1000){
         data0 <- xcms::groupval(xset, method, intensity)
@@ -382,6 +402,13 @@ gettimegrouprep <- function(xset, file = NULL, method = "medret", intensity = "i
 #' @param ms the mass range to plot the data
 #' @param ... parameters for `plot` function
 #' @return NULL
+#' @examples
+#' \dontrun{
+#' library(faahKO)
+#' cdfpath <- system.file("cdf", package = "faahKO")
+#' xset <- getdata(cdfpath, pmethod = ' ')
+#' plotmr(xset)
+#' }
 #' @export
 plotmr <- function(data1,
                    data2 = NULL,
@@ -425,6 +452,13 @@ plotmr <- function(data1,
 #' @param ms the mass range to plot the data
 #' @param ... parameters for `plot` function
 #' @return NULL
+#' @examples
+#' \dontrun{
+#' library(faahKO)
+#' cdfpath <- system.file("cdf", package = "faahKO")
+#' xset <- getdata(cdfpath, pmethod = ' ')
+#' plotmrc(xset)
+#' }
 #' @export
 plotmrc <- function(data,
                    threshold = 5,
@@ -472,6 +506,13 @@ plotmrc <- function(data,
 #' @param xset xcmsset data
 #' @param ... other parameters for `plot` function
 #' @return NULL
+#' @examples
+#' \dontrun{
+#' library(faahKO)
+#' cdfpath <- system.file("cdf", package = "faahKO")
+#' xset <- getdata(cdfpath, pmethod = ' ')
+#' plotrsd(xset)
+#' }
 #' @export
 plotrsd <- function(xset,...){
         df <- getbiotechrep(xset)
@@ -490,6 +531,13 @@ plotrsd <- function(xset,...){
 #' @param scale parameters for scale
 #' @param ... other parameters for `plot` function
 #' @return NULL
+#' @examples
+#' \dontrun{
+#' library(faahKO)
+#' cdfpath <- system.file("cdf", package = "faahKO")
+#' xset <- getdata(cdfpath, pmethod = ' ')
+#' plotpca(xset)
+#' }
 #' @export
 
 plotpca <- function(xset,lv = NULL,center = T, scale = T,...){
@@ -515,6 +563,13 @@ plotpca <- function(xset,lv = NULL,center = T, scale = T,...){
 #' @param nonpara 'y' means using nonparametric ranked data, 'n' means original data
 #' @param ... other parameters for `diffreport`
 #' @return diffreport and pdf figure for EIC and boxplot
+#' @examples
+#' \dontrun{
+#' library(faahKO)
+#' cdfpath <- system.file("cdf", package = "faahKO")
+#' xset <- getdata(cdfpath, pmethod = ' ')
+#' plote(xset)
+#' }
 #' @export
 plote <- function(xset,
                   name = "test",
@@ -541,6 +596,13 @@ plote <- function(xset,
 #' @param n sample numbers in one group
 #' @param rsdt rsd threshold to filter the data
 #' @return dataframe with peaks fit the setting above
+#' @examples
+#' \dontrun{
+#' library(faahKO)
+#' cdfpath <- system.file("cdf", package = "faahKO")
+#' xset <- getdata(cdfpath, pmethod = ' ')
+#' getfeaturest(xset)
+#' }
 #' @export
 
 getfeaturest <- function(xod, power = 0.8, pt = 0.05,

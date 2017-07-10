@@ -19,3 +19,9 @@ heatmap
 \description{
 plot GC-MS data as a heatmap for constant speed of temperature rising
 }
+\examples{
+\dontrun{
+matrix <- getmd(rawdata)
+plott(matrix)
+}
+}

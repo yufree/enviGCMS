@@ -14,3 +14,9 @@ plotint(list, name = NULL)
 \description{
 plot the information of intergretion
 }
+\examples{
+\dontrun{
+list <- getinteragtion(rawdata)
+plotint(list)
+}
+}
