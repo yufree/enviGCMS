@@ -4,7 +4,7 @@ r:
   - devel
   - bioc-release
 
-sudo: false
+sudo: required
 cran: https://cran.rstudio.com
 
 cache:
