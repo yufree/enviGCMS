@@ -88,11 +88,17 @@ In environmetnal non-target analysis, some specific functions such as comparisio
 
 - `getdata` could be used to get the `xcmsSet` object in one step with optimized methods 
 
+- `getbgremove` could subtract the background group from `xcmsSet` object with two groups (the first group is background group)
+
 - `getupload` could get the csv files to be submitted to Metaboanalyst 
 
 - `gettechrep` could get the report for technique replicates
 
-- `gettechbiorep` could get the report for samples with technique replicates
+- `getbiotechrep` could get the report for all of your technique replicates for bio replicated sample in single group
+
+- `getgrouprep` could get the report for samples with biological and technique replicates in different groups
+
+- `gettimegrouprep` could get the report for the time series or two factor groups for samples with biological and technique replicates in different groups
 
 - `plotmr` could plot the scatter plot for xcmsset (or two) objects with threshold
 
