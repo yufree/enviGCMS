@@ -13,9 +13,10 @@ Encoding: UTF-8
 LazyData: true
 Suggests: knitr,
     rmarkdown,
-    faahKO
+    faahKO,
+    testthat
 VignetteBuilder: knitr
-biocViews:
+biocViews: 
 Imports: xcms,
     rcdk,
     RColorBrewer,

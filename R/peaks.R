@@ -293,6 +293,7 @@ Getisotopologues <- function(formula = "C12OH6Br4",
 #' sf <- 0.9988
 #' mf <- getmassdefect(mass,sf)
 #' @export
+
 getmassdefect <- function(mass, sf) {
         sm <- mass * sf
         sd <- ceiling(sm) - sm
