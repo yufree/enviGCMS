@@ -499,8 +499,6 @@ plotmsrt <- function(data,
 
 #' Plot Total Ion Chromatogram (TIC)
 #' @param data imported data matrix of GC-MS
-#' @param ms vector range of the m/z
-#' @param rt vector range of the retention time
 #' @param n logical smooth or not
 #' @return plot
 #' @examples
@@ -510,11 +508,7 @@ plotmsrt <- function(data,
 #' }
 #' @export
 plottic <- function(data,
-                    rt = c(3.1, 25),
-                    ms = c(100,
-                           1000),
                     n = F) {
-        data <- getmd(data, rt, ms)
         data <- apply(data, 2, sum)
         if (n) {
                 data <- ma(data, n)
