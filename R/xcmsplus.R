@@ -3,6 +3,7 @@
 #' @param index the index of the files
 #' @param BPPARAM used for BiocParallel package
 #' @param pmethod parameters used for different instrumentals such as 'hplcorbitrap', 'uplcorbitrap', 'hplcqtof', 'hplchqtof', 'uplcqtof', 'uplchqtof'. The parameters were from the references
+#' @param minfrac minimum fraction of samples necessary in at least one of the sample groups for it to be a valid group, default 0.67
 #' @param ... arguments for xcmsSet function
 #' @details the parameters are extracted from the papers. If you use name other than the name above, you will use the default setting of XCMS. Also I suggest IPO packages or apLCMS packages to get reasonable data for your own instrumental. If you want to summit the results to a paper, remember to include those parameters.
 #' @return a xcmsset object for that path or selected samples
@@ -15,7 +16,7 @@
 #' }
 #' @export
 getdata <- function(path, index = F, BPPARAM = BiocParallel::SnowParam(workers = 12),
-                    pmethod = "hplcorbitrap", ...) {
+                    pmethod = "hplcorbitrap", minfrac = 0.67,...) {
         cdffiles <- list.files(path, recursive = TRUE,
                                full.names = TRUE)
         if (index) {
@@ -28,22 +29,22 @@ getdata <- function(path, index = F, BPPARAM = BiocParallel::SnowParam(workers =
                 if (index & length(index) == 1) {
                         xset3 <- xset
                 } else {
-                        xset <- xcms::group(xset, bw = 5, mzwid = 0.015)
-                        xset2 <- xcms::retcor(xset)
+                        xset <- xcms::group(xset, bw = 5, mzwid = 0.015, minfrac = min)
+                        xset2 <- xcms::retcor(xset,'obiwarp')
                         # you need group the peaks again for this corrected
                         # data
-                        xset2 <- xcms::group(xset2, bw = 5, mzwid = 0.015)
+                        xset2 <- xcms::group(xset2, bw = 5, mzwid = 0.015, minfrac = minfrac)
                         xset3 <- xcms::fillPeaks(xset2, BPPARAM = BPPARAM)
                 }
         } else if (pmethod == "uplcorbitrap") {
                 xset <- xcms::xcmsSet(cdffiles, BPPARAM = BPPARAM,
                                       method = "centWave", ppm = 2.5, peakwidth = c(5,
                                                                                     20), prefilter = c(3, 5000), ...)
-                xset <- xcms::group(xset, bw = 2, mzwid = 0.015)
-                xset2 <- xcms::retcor(xset)
+                xset <- xcms::group(xset, bw = 2, mzwid = 0.015, minfrac = minfrac)
+                xset2 <- xcms::retcor(xset,'obiwarp')
                 # you need group the peaks again for this corrected
                 # data
-                xset2 <- xcms::group(xset2, bw = 2, mzwid = 0.015)
+                xset2 <- xcms::group(xset2, bw = 2, mzwid = 0.015, minfrac = minfrac)
                 xset3 <- xcms::fillPeaks(xset2, BPPARAM = BPPARAM)
         } else if (pmethod == "hplcqtof") {
                 xset <- xcms::xcmsSet(cdffiles, BPPARAM = BPPARAM,
@@ -52,11 +53,11 @@ getdata <- function(path, index = F, BPPARAM = BiocParallel::SnowParam(workers =
                 if (index & length(index) == 1) {
                         xset3 <- xset
                 } else {
-                        xset <- xcms::group(xset, bw = 5, mzwid = 0.025)
-                        xset2 <- xcms::retcor(xset)
+                        xset <- xcms::group(xset, bw = 5, mzwid = 0.025, minfrac = minfrac)
+                        xset2 <- xcms::retcor(xset,'obiwarp')
                         # you need group the peaks again for this corrected
                         # data
-                        xset2 <- xcms::group(xset2, bw = 5, mzwid = 0.025)
+                        xset2 <- xcms::group(xset2, bw = 5, mzwid = 0.025, minfrac = minfrac)
                         xset3 <- xcms::fillPeaks(xset2, BPPARAM = BPPARAM)
                 }
         } else if (pmethod == "hplchqtof") {
@@ -66,11 +67,11 @@ getdata <- function(path, index = F, BPPARAM = BiocParallel::SnowParam(workers =
                 if (index & length(index) == 1) {
                         xset3 <- xset
                 } else {
-                        xset <- xcms::group(xset, bw = 5, mzwid = 0.015)
-                        xset2 <- xcms::retcor(xset)
+                        xset <- xcms::group(xset, bw = 5, mzwid = 0.015, minfrac = minfrac)
+                        xset2 <- xcms::retcor(xset,'obiwarp')
                         # you need group the peaks again for this corrected
                         # data
-                        xset2 <- xcms::group(xset2, bw = 5, mzwid = 0.015)
+                        xset2 <- xcms::group(xset2, bw = 5, mzwid = 0.015, minfrac = minfrac)
                         xset3 <- xcms::fillPeaks(xset2, BPPARAM = BPPARAM)
                 }
         } else if (pmethod == "uplcqtof") {
@@ -80,11 +81,11 @@ getdata <- function(path, index = F, BPPARAM = BiocParallel::SnowParam(workers =
                 if (index & length(index) == 1) {
                         xset3 <- xset
                 } else {
-                        xset <- xcms::group(xset, bw = 2, mzwid = 0.025)
-                        xset2 <- xcms::retcor(xset)
+                        xset <- xcms::group(xset, bw = 2, mzwid = 0.025, minfrac = minfrac)
+                        xset2 <- xcms::retcor(xset,'obiwarp')
                         # you need group the peaks again for this corrected
                         # data
-                        xset2 <- xcms::group(xset2, bw = 2, mzwid = 0.025)
+                        xset2 <- xcms::group(xset2, bw = 2, mzwid = 0.025, minfrac = minfrac)
                         xset3 <- xcms::fillPeaks(xset2, BPPARAM = BPPARAM)
                 }
         } else if (pmethod == "uplchqtof") {
@@ -94,11 +95,11 @@ getdata <- function(path, index = F, BPPARAM = BiocParallel::SnowParam(workers =
                 if (index & length(index) == 1) {
                         xset3 <- xset
                 } else {
-                        xset <- xcms::group(xset, bw = 2, mzwid = 0.015)
-                        xset2 <- xcms::retcor(xset)
+                        xset <- xcms::group(xset, bw = 2, mzwid = 0.015, minfrac = minfrac)
+                        xset2 <- xcms::retcor(xset,'obiwarp')
                         # you need group the peaks again for this corrected
                         # data
-                        xset2 <- xcms::group(xset2, bw = 2, mzwid = 0.015)
+                        xset2 <- xcms::group(xset2, bw = 2, mzwid = 0.015, minfrac = minfrac)
                         xset3 <- xcms::fillPeaks(xset2, BPPARAM = BPPARAM)
                 }
         } else {
@@ -107,15 +108,38 @@ getdata <- function(path, index = F, BPPARAM = BiocParallel::SnowParam(workers =
                 if (index & length(index) == 1) {
                         xset3 <- xset
                 } else {
-                        xset <- xcms::group(xset)
-                        xset2 <- xcms::retcor(xset)
+                        xset <- xcms::group(xset, minfrac = minfrac)
+                        xset2 <- xcms::retcor(xset,'obiwarp')
                         # you need group the peaks again for this corrected
                         # data
-                        xset2 <- xcms::group(xset2)
+                        xset2 <- xcms::group(xset2, minfrac = minfrac)
                         xset3 <- xcms::fillPeaks(xset2, BPPARAM = BPPARAM)
                 }
         }
         return(xset3)
+}
+
+#' Get OnDiskMSnExp object in one step with optimized methods.
+#' @param OnDiskMSnExp OnDiskMSnExp object
+#' @param BPPARAM used for BiocParallel package
+#' @param ppp parameters for peaks picking, e.g. xcms::CentWaveParam()
+#' @param rtp parameters for retention time correction, e.g. xcms::ObiwarpParam()
+#' @param gpp parameters for peaks grouping, e.g. xcms::PeakDensityParam()
+#' @param fpp parameters for peaks filling, e.g. xcms::FillChromPeaksParam()
+#' @details This is a wrap function for metabolomics data process based on MSnbase objects.
+#' @return a XCMSnExp object with processed data
+#' @references Patti, G. J.; Tautenhahn, R.; Siuzdak, G. Nat. Protocols 2012, 7 (3), 508–516.
+getdata2 <- function(OnDiskMSnExp,
+                     BPPARAM = BiocParallel::SnowParam(workers = 4),
+                     ppp = xcms::CentWaveParam(ppm = 5, peakwidth = c(5,25), prefilter = c(3, 5000)),
+                     rtp = xcms::ObiwarpParam(),
+                     gpp = xcms::PeakDensityParam(minFraction = 0.67, bw = 2, binSize = 0.025),
+                     fpp = xcms::FillChromPeaksParam()){
+        xod <- xcms::findChromPeaks(OnDiskMSnExp, param = ppp, BPPARAM = BPPARAM)
+        xod <- xcms::adjustRtime(xod, param = rtp)
+        xod <- xcms::groupChromPeaks(xod, param = gpp)
+        xod <- xcms::fillChromPeaks(xod, param = fpp, BPPARAM = BPPARAM)
+        return(xod)
 }
 
 #' Get the csv files to be submitted to Metaboanalyst
