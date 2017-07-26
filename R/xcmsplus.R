@@ -119,7 +119,7 @@ getdata <- function(path, index = F, BPPARAM = BiocParallel::SnowParam(workers =
         return(xset3)
 }
 
-#' Get OnDiskMSnExp object in one step with optimized methods.
+#' Get XCMSnExp object in one step from structured folder path for xcms 3.
 #' @param path the path to your data
 #' @param index the index of the files
 #' @param snames sample names. By default the file name without extension is used
@@ -130,9 +130,8 @@ getdata <- function(path, index = F, BPPARAM = BiocParallel::SnowParam(workers =
 #' @param rtp parameters for retention time correction, e.g. xcms::ObiwarpParam()
 #' @param gpp parameters for peaks grouping, e.g. xcms::PeakDensityParam()
 #' @param fpp parameters for peaks filling, e.g. xcms::FillChromPeaksParam()
-#' @details This is a wrap function for metabolomics data process based on MSnbase objects.
+#' @details This is a wrap function for metabolomics data process for xcms 3.
 #' @return a XCMSnExp object with processed data
-#' @references Patti, G. J.; Tautenhahn, R.; Siuzdak, G. Nat. Protocols 2012, 7 (3), 508–516.
 getdata2 <- function(path,index = F,
                      snames = NULL, sclass = NULL, phenoData = NULL,
                      BPPARAM = BiocParallel::SnowParam(workers = 4),
