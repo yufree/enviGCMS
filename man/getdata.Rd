@@ -5,7 +5,7 @@
 \title{Get xcmsset object in one step with optimized methods.}
 \usage{
 getdata(path, index = F, BPPARAM = BiocParallel::SnowParam(workers = 12),
-  pmethod = "hplcorbitrap", ...)
+  pmethod = "hplcorbitrap", minfrac = 0.67, ...)
 }
 \arguments{
 \item{path}{the path to your data}
@@ -15,6 +15,8 @@ getdata(path, index = F, BPPARAM = BiocParallel::SnowParam(workers = 12),
 \item{BPPARAM}{used for BiocParallel package}
 
 \item{pmethod}{parameters used for different instrumentals such as 'hplcorbitrap', 'uplcorbitrap', 'hplcqtof', 'hplchqtof', 'uplcqtof', 'uplchqtof'. The parameters were from the references}
+
+\item{minfrac}{minimum fraction of samples necessary in at least one of the sample groups for it to be a valid group, default 0.67}
 
 \item{...}{arguments for xcmsSet function}
 }

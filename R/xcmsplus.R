@@ -120,7 +120,11 @@ getdata <- function(path, index = F, BPPARAM = BiocParallel::SnowParam(workers =
 }
 
 #' Get OnDiskMSnExp object in one step with optimized methods.
-#' @param OnDiskMSnExp OnDiskMSnExp object
+#' @param path the path to your data
+#' @param index the index of the files
+#' @param snames sample names. By default the file name without extension is used
+#' @param sclass sample classes.
+#' @param phenoData data.frame or NAnnotatedDataFrame defining the sample names and classes and other sample related properties. If not provided, the argument sclass or the subdirectories in which the samples are stored will be used to specify sample grouping.
 #' @param BPPARAM used for BiocParallel package
 #' @param ppp parameters for peaks picking, e.g. xcms::CentWaveParam()
 #' @param rtp parameters for retention time correction, e.g. xcms::ObiwarpParam()
@@ -129,19 +133,53 @@ getdata <- function(path, index = F, BPPARAM = BiocParallel::SnowParam(workers =
 #' @details This is a wrap function for metabolomics data process based on MSnbase objects.
 #' @return a XCMSnExp object with processed data
 #' @references Patti, G. J.; Tautenhahn, R.; Siuzdak, G. Nat. Protocols 2012, 7 (3), 508–516.
-getdata2 <- function(OnDiskMSnExp,
+getdata2 <- function(path,index = F,
+                     snames = NULL, sclass = NULL, phenoData = NULL,
                      BPPARAM = BiocParallel::SnowParam(workers = 4),
                      ppp = xcms::CentWaveParam(ppm = 5, peakwidth = c(5,25), prefilter = c(3, 5000)),
                      rtp = xcms::ObiwarpParam(),
                      gpp = xcms::PeakDensityParam(minFraction = 0.67, bw = 2, binSize = 0.025),
                      fpp = xcms::FillChromPeaksParam()){
-        xod <- xcms::findChromPeaks(OnDiskMSnExp, param = ppp, BPPARAM = BPPARAM)
+        files <- list.files(path, recursive = TRUE,
+                            full.names = TRUE)
+        if (index) {
+                files <- files[index]
+        }
+
+        fromPaths <- xcms:::phenoDataFromPaths(files)
+        if (is.null(snames)) {
+                snames <- rownames(fromPaths)
+        } else {
+                rownames(fromPaths) <- snames
+        }
+
+        if (is.null(snames)) {
+                snames <- rownames(fromPaths)
+        } else {
+                rownames(fromPaths) <- snames
+        }
+        pdata <- phenoData
+        if (is.null(pdata)) {
+                pdata <- sclass
+                if (is.null(pdata))
+                        pdata <- new("NAnnotatedDataFrame", fromPaths)
+        }else{
+                if (class(pdata) == "data.frame")
+                        pdata <- new("NAnnotatedDataFrame", fromPaths)
+                if (class(pdata) != "NAnnotatedDataFrame")
+                        stop("phenoData has to be a data.frame or NAnnotatedDataFrame!")
+        }
+        raw_data <- xcms::readMSData2(files, pdata = pdata)
+        xod <- xcms::findChromPeaks(raw_data, param = ppp, BPPARAM = BPPARAM)
         xod <- xcms::adjustRtime(xod, param = rtp)
         xod <- xcms::groupChromPeaks(xod, param = gpp)
         xod <- xcms::fillChromPeaks(xod, param = fpp, BPPARAM = BPPARAM)
         return(xod)
 }
 
+path2exp <- function(path,index,snames = NULL, sclass = NULL, phenoData = NULL){
+
+}
 #' Get the csv files to be submitted to Metaboanalyst
 #' @param xset the xcmsset object which you want to submitted to Metaboanalyst
 #' @param method parameter for groupval function
