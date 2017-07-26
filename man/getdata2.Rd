@@ -7,7 +7,7 @@
 getdata2(path, index = F, snames = NULL, sclass = NULL,
   phenoData = NULL, BPPARAM = BiocParallel::SnowParam(workers = 4),
   ppp = xcms::CentWaveParam(ppm = 5, peakwidth = c(5, 25), prefilter = c(3,
-  5000)), rtp = xcms::ObiwarpParam(),
+  5000)), rtp = xcms::PeakGroupsParam(minFraction = 0.67),
   gpp = xcms::PeakDensityParam(minFraction = 0.67, bw = 2, binSize = 0.025),
   fpp = xcms::FillChromPeaksParam())
 }
@@ -30,7 +30,7 @@ getdata2(path, index = F, snames = NULL, sclass = NULL,
 
 \item{gpp}{parameters for peaks grouping, e.g. xcms::PeakDensityParam()}
 
-\item{fpp}{parameters for peaks filling, e.g. xcms::FillChromPeaksParam()}
+\item{fpp}{parameters for peaks filling, e.g. xcms::FillChromPeaksParam(), PeakGroupsParam()}
 }
 \value{
 a XCMSnExp object with processed data

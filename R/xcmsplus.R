@@ -129,7 +129,7 @@ getdata <- function(path, index = F, BPPARAM = BiocParallel::SnowParam(workers =
 #' @param ppp parameters for peaks picking, e.g. xcms::CentWaveParam()
 #' @param rtp parameters for retention time correction, e.g. xcms::ObiwarpParam()
 #' @param gpp parameters for peaks grouping, e.g. xcms::PeakDensityParam()
-#' @param fpp parameters for peaks filling, e.g. xcms::FillChromPeaksParam()
+#' @param fpp parameters for peaks filling, e.g. xcms::FillChromPeaksParam(), PeakGroupsParam()
 #' @details This is a wrap function for metabolomics data process for xcms 3.
 #' @return a XCMSnExp object with processed data
 #' @export
@@ -137,7 +137,7 @@ getdata2 <- function(path,index = F,
                      snames = NULL, sclass = NULL, phenoData = NULL,
                      BPPARAM = BiocParallel::SnowParam(workers = 4),
                      ppp = xcms::CentWaveParam(ppm = 5, peakwidth = c(5,25), prefilter = c(3, 5000)),
-                     rtp = xcms::ObiwarpParam(),
+                     rtp = xcms::PeakGroupsParam(minFraction = 0.67),
                      gpp = xcms::PeakDensityParam(minFraction = 0.67, bw = 2, binSize = 0.025),
                      fpp = xcms::FillChromPeaksParam()){
         files <- list.files(path, recursive = TRUE,
@@ -174,12 +174,13 @@ getdata2 <- function(path,index = F,
         xod <- xcms::adjustRtime(xod, param = rtp)
         xod <- xcms::groupChromPeaks(xod, param = gpp)
         xod <- xcms::fillChromPeaks(xod, param = fpp, BPPARAM = BPPARAM)
+        xod <- xcms::groupChromPeaks(xod, param = gpp)
+        xod <- xcms::adjustRtime(xod, param = rtp)
+        xod <- xcms::groupChromPeaks(xod, param = gpp)
+        xod <- xcms::fillChromPeaks(xod, param = fpp, BPPARAM = BPPARAM)
         return(xod)
 }
 
-path2exp <- function(path,index,snames = NULL, sclass = NULL, phenoData = NULL){
-
-}
 #' Get the csv files to be submitted to Metaboanalyst
 #' @param xset the xcmsset object which you want to submitted to Metaboanalyst
 #' @param method parameter for groupval function
@@ -198,9 +199,8 @@ getupload <- function(xset, method = "medret", intensity = "into",
                       name = "Peaklist") {
         peakIntensities <- xcms::groupval(xset, method,
                                           intensity)
-        if (intensity == "intb") {
-                peakIntensities[is.na(peakIntensities)] = 0
-        }
+        peakIntensities[is.na(peakIntensities)] = 0
+
         data <- rbind(group = as.character(xcms::phenoData(xset)$class),
                       peakIntensities)
         data <- data[!duplicated(rownames(data)), ]
@@ -227,9 +227,7 @@ getupload <- function(xset, method = "medret", intensity = "into",
 #' @export
 getbgremove <- function(xset, method = "medret", intensity = "into", file = NULL, rsdcf = 30, inscf = 1000){
         data0 <- xcms::groupval(xset, method, intensity)
-        if (intensity == "intb") {
-                data0[is.na(data0)] = 0
-        }
+        data0[is.na(data0)] = 0
         data <- t(data0)
         lv <- xset@phenoData[, 1]
         mean <- stats::aggregate(data, list(lv), mean)
@@ -266,9 +264,7 @@ getbgremove <- function(xset, method = "medret", intensity = "into", file = NULL
 #' @export
 gettechrep <- function(xset, method = "medret", intensity = "into", file = NULL, rsdcf = 30, inscf = 1000) {
         data0 <- xcms::groupval(xset, method, intensity)
-        if (intensity == "intb") {
-                data0[is.na(data0)] = 0
-        }
+        data0[is.na(data0)] = 0
         data <- t(data0)
         lv <- xset@phenoData[, 1]
         mean <- stats::aggregate(data, list(lv), mean)
@@ -309,9 +305,7 @@ gettechrep <- function(xset, method = "medret", intensity = "into", file = NULL,
 #' @export
 getbiotechrep <- function(xset, method = "medret", intensity = "into", file = NULL, rsdcf = 30, inscf = 1000) {
         data0 <- xcms::groupval(xset, method, intensity)
-        if (intensity == "intb") {
-                data0[is.na(data0)] = 0
-        }
+        data0[is.na(data0)] = 0
         data <- t(data0)
         lv <- xset@phenoData[, 1]
         mean <- stats::aggregate(data, list(lv), mean)
@@ -359,9 +353,7 @@ getbiotechrep <- function(xset, method = "medret", intensity = "into", file = NU
 #' @export
 getgrouprep <- function(xset, file = NULL, method = "medret", intensity = "into", rsdcf = 30, inscf = 1000) {
         data0 <- xcms::groupval(xset, method, intensity)
-        if (intensity == "intb") {
-                data0[is.na(data0)] = 0
-        }
+        data0[is.na(data0)] = 0
         data <- t(data0)
         lv <- xset@phenoData[, 1]
         lv2 <- xset@phenoData[, 2]
@@ -413,9 +405,7 @@ getgrouprep <- function(xset, file = NULL, method = "medret", intensity = "into"
 #' @export
 gettimegrouprep <- function(xset, file = NULL, method = "medret", intensity = "into", rsdcf = 30, inscf = 1000) {
         data0 <- xcms::groupval(xset, method, intensity)
-        if (intensity == "intb") {
-                data0[is.na(data0)] = 0
-        }
+        data0[is.na(data0)] = 0
         data <- t(data0)
         lv <- xset@phenoData[, 1]
         lv2 <- xset@phenoData[, 2]
