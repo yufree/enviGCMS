@@ -169,7 +169,7 @@ getdata2 <- function(path,index = F,
                 if (class(pdata) != "NAnnotatedDataFrame")
                         stop("phenoData has to be a data.frame or NAnnotatedDataFrame!")
         }
-        raw_data <- xcms::readMSData2(files, pdata = pdata)
+        raw_data <- MSnbase::readMSData2(files, pdata = pdata)
         xod <- xcms::findChromPeaks(raw_data, param = ppp, BPPARAM = BPPARAM)
         xod <- xcms::adjustRtime(xod, param = rtp)
         xod <- xcms::groupChromPeaks(xod, param = gpp)
