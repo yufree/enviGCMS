@@ -132,6 +132,7 @@ getdata <- function(path, index = F, BPPARAM = BiocParallel::SnowParam(workers =
 #' @param fpp parameters for peaks filling, e.g. xcms::FillChromPeaksParam()
 #' @details This is a wrap function for metabolomics data process for xcms 3.
 #' @return a XCMSnExp object with processed data
+#' @export
 getdata2 <- function(path,index = F,
                      snames = NULL, sclass = NULL, phenoData = NULL,
                      BPPARAM = BiocParallel::SnowParam(workers = 4),
