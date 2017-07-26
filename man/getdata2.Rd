@@ -2,7 +2,7 @@
 % Please edit documentation in R/xcmsplus.R
 \name{getdata2}
 \alias{getdata2}
-\title{Get OnDiskMSnExp object in one step with optimized methods.}
+\title{Get XCMSnExp object in one step from structured folder path for xcms 3.}
 \usage{
 getdata2(path, index = F, snames = NULL, sclass = NULL,
   phenoData = NULL, BPPARAM = BiocParallel::SnowParam(workers = 4),
@@ -36,11 +36,8 @@ getdata2(path, index = F, snames = NULL, sclass = NULL,
 a XCMSnExp object with processed data
 }
 \description{
-Get OnDiskMSnExp object in one step with optimized methods.
+Get XCMSnExp object in one step from structured folder path for xcms 3.
 }
 \details{
-This is a wrap function for metabolomics data process based on MSnbase objects.
-}
-\references{
-Patti, G. J.; Tautenhahn, R.; Siuzdak, G. Nat. Protocols 2012, 7 (3), 508–516.
+This is a wrap function for metabolomics data process for xcms 3.
 }
