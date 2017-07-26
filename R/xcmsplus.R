@@ -171,9 +171,6 @@ getdata2 <- function(path,index = F,
         }
         raw_data <- MSnbase::readMSData2(files, pdata = pdata)
         xod <- xcms::findChromPeaks(raw_data, param = ppp, BPPARAM = BPPARAM)
-        xod <- xcms::adjustRtime(xod, param = rtp)
-        xod <- xcms::groupChromPeaks(xod, param = gpp)
-        xod <- xcms::fillChromPeaks(xod, param = fpp, BPPARAM = BPPARAM)
         xod <- xcms::groupChromPeaks(xod, param = gpp)
         xod <- xcms::adjustRtime(xod, param = rtp)
         xod <- xcms::groupChromPeaks(xod, param = gpp)
