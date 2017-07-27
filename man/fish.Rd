@@ -3,7 +3,7 @@
 \docType{data}
 \name{fish}
 \alias{fish}
-\title{Fish experimental with technique and biological replicates}
+\title{Two factor fish experimental with technique and biological replicates}
 \format{Large XCMSnExp with 996 peaks among 189 samples}
 \usage{
 fish
