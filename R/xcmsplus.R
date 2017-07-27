@@ -162,7 +162,7 @@ getdata2 <- function(path,index = F,
         if (is.null(pdata)) {
                 pdata <- sclass
                 if (is.null(pdata))
-                        pdata <- new("NAnnotatedDataFrame", fromPaths)
+                        pdata <- methods::new("NAnnotatedDataFrame", fromPaths)
         }else{
                 if (class(pdata) == "data.frame")
                         pdata <- new("NAnnotatedDataFrame", fromPaths)
