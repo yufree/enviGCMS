@@ -16,7 +16,8 @@ Suggests: knitr,
     faahKO,
     testthat
 VignetteBuilder: knitr
-biocViews: 
+biocViews:
+Depends: R (>= 2.10)
 Imports: xcms,
     MSnbase (>= 2.3.8),
     rcdk,
@@ -30,5 +31,6 @@ Imports: xcms,
     grDevices, 
     graphics, 
     stats, 
-    utils
+    utils,
+    methods
 RoxygenNote: 6.0.1
