@@ -276,7 +276,7 @@ getdata2 <- function(path,
                 files <- files[index]
         }
 
-        fromPaths <- xcms:::phenoDataFromPaths(files)
+        fromPaths <- xcms::phenoDataFromPaths(files)
         if (is.null(snames)) {
                 snames <- rownames(fromPaths)
         } else {

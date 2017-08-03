@@ -46,7 +46,7 @@ plotmr <- function(xset,
                                 pch = 19
                         )
                 }
-                legend(
+                graphics::legend(
                         'bottom',
                         legend = dataname,
                         col = col,
@@ -54,7 +54,7 @@ plotmr <- function(xset,
                         horiz = T,
                         bty = 'n'
                 )
-                legend(
+                graphics::legend(
                         'top',
                         legend = cexlab,
                         title = 'Intensity in Log scale',
@@ -209,7 +209,7 @@ plotrsd <- function(xset,
                                 pch = 19,
                                 ...
                         )
-                        legend(
+                        graphics::legend(
                                 'top',
                                 legend = cexlab,
                                 pt.cex = c(1,2,3,4,5)/2,
@@ -248,7 +248,7 @@ plotrsd <- function(xset,
                                 pch = 19,
                                 ...
                         )
-                        legend(
+                        graphics::legend(
                                 'top',
                                 legend = cexlab,
                                 pt.cex = c(1,2,3,4,5)/2,
@@ -302,7 +302,7 @@ plotrsd <- function(xset,
                                 pch = 19
                         )
                 }
-                legend(
+                graphics::legend(
                         'bottom',
                         legend = dataname,
                         col = col,
@@ -310,7 +310,7 @@ plotrsd <- function(xset,
                         pch = 19,
                         bty = 'n'
                 )
-                legend(
+                graphics::legend(
                         'top',
                         legend = cexlab,
                         pt.cex = c(1,2,3,4,5)/2,
@@ -348,7 +348,7 @@ plotpca <- function(xset,
                     scale = T,
                     ...) {
         data <- xcms::groupval(xset, 'medret', 'into')
-        data <- data[complete.cases(data),]
+        data <- data[stats::complete.cases(data),]
         if (is.null(lv)) {
                 pch = colnames(data)
         } else {
@@ -404,7 +404,6 @@ plote <- function(xset,
 
 #' plot scatter plot for rt-mz profile and output gif file for mutiple groups
 #' @param xset xcmsset object with mutiple groups
-#' @param ms the mass range to plot the data
 #' @param file file name for further annotation, default NULL
 #' @param inscf log intensity cutoff for peaks, default 5
 #' @param rsdcf the rsd cutoff of all peaks
@@ -434,7 +433,7 @@ gifmr <- function(xset,
                 ylab = "m/z",
                 pch = 19,
                 cex = log10(mean + 1) - 4,
-                col = rgb(0, 0, 1, 0.2),
+                col = grDevices::rgb(0, 0, 1, 0.2),
                 main = 'All peaks'
         )
         filename = paste0(file, '.gif')

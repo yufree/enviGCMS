@@ -15,8 +15,6 @@ gifmr(xset, rsdcf = 30, inscf = 5, file = "test")
 
 \item{file}{file name for further annotation, default NULL}
 
-\item{ms}{the mass range to plot the data}
-
 \item{...}{parameters for `plot` function}
 }
 \value{
