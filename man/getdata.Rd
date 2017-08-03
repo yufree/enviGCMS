@@ -4,7 +4,7 @@
 \alias{getdata}
 \title{Get xcmsset object in one step with optimized methods.}
 \usage{
-getdata(path, index = F, BPPARAM = BiocParallel::SnowParam(workers = 12),
+getdata(path, index = F, BPPARAM = BiocParallel::SnowParam(),
   pmethod = "hplcorbitrap", minfrac = 0.67, ...)
 }
 \arguments{

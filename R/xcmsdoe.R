@@ -34,7 +34,6 @@ getbgremove <-
                         t(rsd[, -1]) < rsdcf & t(mean[, -1]) > 10 ^ (inscf)
 
                 diff <- result[, 2] - result[, 1]
-                datap <- xcms::groups(xset)
                 report <-
                         cbind.data.frame(xset@groups[, 1], xset@groups[, 4], diff)
                 colnames(report) <- c("mz", "time", "diff")

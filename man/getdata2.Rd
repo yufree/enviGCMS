@@ -5,7 +5,7 @@
 \title{Get XCMSnExp object in one step from structured folder path for xcms 3.}
 \usage{
 getdata2(path, index = F, snames = NULL, sclass = NULL,
-  phenoData = NULL, BPPARAM = BiocParallel::SnowParam(workers = 4),
+  phenoData = NULL, BPPARAM = BiocParallel::SnowParam(),
   ppp = xcms::CentWaveParam(ppm = 5, peakwidth = c(5, 25), prefilter = c(3,
   5000)), rtp = xcms::PeakGroupsParam(minFraction = 0.67),
   gpp = xcms::PeakDensityParam(minFraction = 0.67, bw = 2, binSize = 0.025),

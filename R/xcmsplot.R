@@ -256,7 +256,7 @@ plotrsd <- function(xset,
                                 pch = 19,
                                 bty = 'n',
                                 horiz = T,
-                                col = grDevices::rgb(0,0,0,0.318),
+                                col = grDevices::rgb(0,0,0,0.318)
 
                         )
                 } else{
