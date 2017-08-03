@@ -22,9 +22,8 @@
 svacor <- function(xset, lv = NULL, method = "medret",
     intensity = "into") {
     data <- xcms::groupval(xset, method, intensity)
-    if (intensity == "intb") {
-        data[is.na(data)] = 0
-    }
+    data[is.na(data)] = 0
+
     if (is.null(lv)) {
         lv <- xset@phenoData[, 1]
     }

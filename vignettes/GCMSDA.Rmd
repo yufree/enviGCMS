@@ -86,6 +86,57 @@ Some functions could be used to caculate the molecular isotope ratio. EIC data c
 
 In environmetnal non-target analysis, some specific functions such as comparision, batch correction and visulization could be useful to handle data pre-processed by `xcms` as shown below. Besides, isotope extraction for single group of samples with certain mass diff could also be done by `getmassdiff` function.
 
+### workflow for xcms
+
+```{r, echo = F}
+DiagrammeR::grViz("digraph workflow {
+node [shape = box]
+A [label = '@@1']
+B [label = '@@2']
+C [label = '@@3']
+D [label = '@@4']
+E [label = '@@5']
+F [label = '@@6']
+G [label = '@@7']
+H [label = '@@8']
+I [label = '@@9']
+J [label = '@@10']
+K [label = '@@11']
+L [label = '@@12']
+M [label = '@@13']
+N [label = '@@14']
+O [label = '@@15']
+
+A -> B -> C -> D -> E -> F -> G -> H
+H -> I
+I -> J
+H -> J -> K -> L
+L -> M -> N
+L -> O
+                  }
+
+[1]: 'Raw data'
+[2]: 'mzxml or CDF'
+[3]: 'DoE folder'
+[4]: 'peaks list'
+[5]: 'retention time correction'
+[6]: 'peaks grouping'
+[7]: 'peaks filling'
+[8]: 'raw peaks'
+[9]: 'data visulization'
+[10]: 'batch effects correction'
+[11]: 'corrected peaks'
+[12]: 'annotation'
+[13]: 'metabolomics pathway analysis'
+[14]: 'omics analysis'
+[15]: 'biomarkers discovery/diagnoise'
+
+                  ")
+```
+
+
+
+
 - `getdata` could be used to get the `xcmsSet` object in one step with optimized methods 
 
 - `getbgremove` could subtract the background group from `xcmsSet` object with two groups (the first group is background group)

@@ -32,5 +32,6 @@ Imports: xcms,
     graphics, 
     stats, 
     utils,
-    methods
+    methods,
+    animation (>= 2.2.3)
 RoxygenNote: 6.0.1
