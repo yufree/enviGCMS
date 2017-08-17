@@ -33,7 +33,7 @@ getmd <- function(data,
         rownames(pf) <- mz <- xcms::profMz(data)
         colnames(pf) <- rt <- data@scantime
         if (mzrange[1]) {
-                pf <- pf[mz > mzrange[1] & mz < mzrange[2],]
+                pf <- pf[mz > mzrange[1] & mz < mzrange[2], ]
         }
         if (rtrange[1]) {
                 pf <- pf[, rt > rtrange[1] & rt < rtrange[2]]
@@ -117,10 +117,22 @@ submd <- function(data1,
 
         graphics::par(mfrow = c(2, 2))
 
-        plotmz(z10,main = 'data 1',xlim = xlim,ylim = ylim)
-        plotmz(z20,main = 'data 2',xlim = xlim,ylim = ylim)
-        plotmz(z, main = 'data1 - data2',xlim = xlim,ylim = ylim)
-        plotmz(z0, main = 'data2 - data1',xlim = xlim,ylim = ylim)
+        plotmz(z10,
+               main = 'data 1',
+               xlim = xlim,
+               ylim = ylim)
+        plotmz(z20,
+               main = 'data 2',
+               xlim = xlim,
+               ylim = ylim)
+        plotmz(z,
+               main = 'data1 - data2',
+               xlim = xlim,
+               ylim = ylim)
+        plotmz(z0,
+               main = 'data2 - data1',
+               xlim = xlim,
+               ylim = ylim)
 
         li <-
                 list(
@@ -156,7 +168,7 @@ plotms <- function(data, log = F) {
         indrt <- as.numeric(colnames(data))
         col <-
                 (grDevices::colorRampPalette(rev(
-                        RColorBrewer::brewer.pal(11,"RdYlBu")
+                        RColorBrewer::brewer.pal(11, "RdYlBu")
                 )))(100)
         if (log) {
                 z <- log10(t(data) + 1)
@@ -167,7 +179,8 @@ plotms <- function(data, log = F) {
         graphics::par(mar = c(2, 5, 1, 4), fig = c(0, 1,
                                                    0.9, 1))
         zlim <- range(z, na.rm = T)
-        breaks <- seq(zlim[1], zlim[2], round((zlim[2] - zlim[1]) / 10))
+        breaks <-
+                seq(zlim[1], zlim[2], round((zlim[2] - zlim[1]) / 10))
         poly <- vector(mode = "list", length(col))
         graphics::plot(
                 1,
@@ -271,7 +284,7 @@ plotms <- function(data, log = F) {
 #' plot GC/LC-MS data as scatter plot
 #'
 #' @param data imported data matrix of GC-MS
-#' @param threshold the threshold of the response (log based 10)
+#' @param inscf Log intensity cutoff for peaks, default 5
 #' @param ... parameters for `plot` function
 #' @return scatter plot
 #' @examples
@@ -285,22 +298,49 @@ plotms <- function(data, log = F) {
 #' dev.off()
 #' }
 #' @export
-plotmz <- function(data, threshold = 5,...){
+plotmz <- function(data, inscf = 5, ...) {
         mz <- as.numeric(rownames(data))
         rt <- as.numeric(colnames(data))
-        z <- log10(data+1)
-        z[z<threshold] <- NA
+        z <- log10(data + 1)
+        cex = as.numeric(cut(z - inscf, breaks = c(0, 1, 2, 3, 4, Inf) /
+                                 2)) / 2
+        cexlab = c(
+                paste0(inscf, '-', inscf + 0.5),
+                paste0(inscf + 0.5, '-', inscf + 1),
+                paste0(inscf + 1, '-', inscf + 1.5),
+                paste0(inscf + 1.5, '-', inscf + 2),
+                paste0('>', inscf + 2)
+        )
+
+        z[z < inscf] <- NA
         corr <- which(!is.na(z), arr.ind = TRUE)
-        mz0 <- mz[corr[,1]]
-        rt0 <- rt[corr[,2]]
+        mz0 <- mz[corr[, 1]]
+        rt0 <- rt[corr[, 2]]
         int <- z[which(!is.na(z))]
 
-        graphics::plot(mz0~rt0,
-             pch = 19,
-             cex = int - threshold + 1,
-             col = grDevices::rgb(0,0, 0, 0.1),
-             xlab = "retention time(s)",
-             ylab = "m/z",...)
+        par(mar=c(5, 4.2, 6.1, 2.1), xpd=TRUE)
+        graphics::plot(
+                mz0 ~ rt0,
+                pch = 19,
+                cex = cex,
+                col = grDevices::rgb(0, 0, 1, 0.1),
+                xlab = "retention time(s)",
+                ylab = "m/z",
+                ...
+        )
+        graphics::legend(
+                'top',
+                legend = cexlab,
+                title = 'Intensity in Log scale',
+                pt.cex = c(1,2,3,4,5)/2,
+                pch = 19,
+                bty = 'n',
+                horiz = T,
+                cex = 0.7,
+                col = grDevices::rgb(0, 0, 1, 0.1),
+                inset = c(0, -0.25)
+
+        )
 }
 
 #' plot GC-MS data as a heatmap for constant speed of temperature rising
@@ -321,7 +361,7 @@ plott <- function(data,
         indrt <- as.numeric(colnames(data))
         col <-
                 (grDevices::colorRampPalette(rev(
-                        RColorBrewer::brewer.pal(11,"RdYlBu")
+                        RColorBrewer::brewer.pal(11, "RdYlBu")
                 )))(100)
         if (log) {
                 z <- log10(t(data) + 1)
@@ -330,12 +370,13 @@ plott <- function(data,
         }
         graphics::par(
                 mar = c(2, 5, 1, 4),
-                fig = c(0, 1,0.9, 1),
+                fig = c(0, 1, 0.9, 1),
                 new = F
         )
         # get the mz and rt range and rotate the matrix to
         zlim <- range(z, na.rm = T)
-        breaks <- seq(zlim[1], zlim[2], round((zlim[2] - zlim[1]) / 10))
+        breaks <-
+                seq(zlim[1], zlim[2], round((zlim[2] - zlim[1]) / 10))
         poly <- vector(mode = "list", length(col))
         graphics::plot(
                 1,
@@ -477,7 +518,7 @@ plotmsrt <- function(data,
                      ms,
                      rt,
                      n = F) {
-        data <- getmd(data, rt, c(ms, ms + 1))[1,]
+        data <- getmd(data, rt, c(ms, ms + 1))[1, ]
         if (n) {
                 data <- ma(data, n)
         }
@@ -667,7 +708,7 @@ findline <- function(data,
         y <- y0[difftemp]
         data <- data.frame(y, x)
         # remove the meaningless bottom
-        data <- data[data$y > min(y0) + 1,]
+        data <- data[data$y > min(y0) + 1, ]
         rangemz <- range(y0)
         rangert <- range(x)
         graphics::plot(
@@ -732,7 +773,7 @@ findline <- function(data,
                 "topright",
                 c("OLS", "lowess"),
                 box.lty = 0,
-                pch = c(-1,-1),
+                pch = c(-1, -1),
                 lty = c(1, 1),
                 lwd = c(2, 2),
                 col = c("red", "blue")
@@ -913,7 +954,7 @@ plothist <- function(data) {
                 c("noise", "signal",
                   "density"),
                 box.lty = 0,
-                pch = c(-1,-1,-1),
+                pch = c(-1, -1, -1),
                 lty = c(1, 1, 2),
                 lwd = c(2, 2, 2),
                 col = c("red",

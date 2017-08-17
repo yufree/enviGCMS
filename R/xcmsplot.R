@@ -18,6 +18,7 @@ plotmr <- function(xset,
                    inscf = 5,
                    rsdcf = 30,
                    ...) {
+        par(mar=c(5, 4.2, 6.1, 2.1), xpd=TRUE)
         data <- getbiorep(xset, rsdcf = rsdcf, inscf = inscf)
         suppressWarnings(if (!is.na(data)) {
                 datamean <- data[, grepl('*mean', colnames(data))]
@@ -29,7 +30,6 @@ plotmr <- function(xset,
                         data$mzmed ~ data$rtmed,
                         xlab = "Retention Time(s)",
                         ylab = "m/z",
-                        ylim = ms,
                         type = 'n',
                         pch = 19,
                         ...
@@ -43,27 +43,30 @@ plotmr <- function(xset,
                                 y = data$mzmed,
                                 cex = cex,
                                 col = col[i],
-                                pch = 19
+                                pch = 19,
+                                ylim = ms,
+                                xlim = rt
                         )
                 }
                 graphics::legend(
-                        'bottom',
+                        'topright',
                         legend = dataname,
                         col = col,
                         pch = 19,
                         horiz = T,
-                        bty = 'n'
+                        bty = 'n',
+                        inset = c(0,-0.25)
                 )
                 graphics::legend(
-                        'top',
+                        'topleft',
                         legend = cexlab,
                         title = 'Intensity in Log scale',
                         pt.cex = c(1,2,3,4,5)/2,
                         pch = 19,
                         bty = 'n',
                         horiz = T,
-                        cex = 0.8,
-                        col = grDevices::rgb(0,0,0,0.318)
+                        cex = 0.7,
+                        col = grDevices::rgb(0,0,0,0.318),inset = c(0,-0.25)
                 )
         } else{
                 graphics::plot(
