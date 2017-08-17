@@ -44,8 +44,7 @@ plotmr <- function(xset,
                                 cex = cex,
                                 col = col[i],
                                 pch = 19,
-                                ylim = ms,
-                                xlim = rt
+                                ylim = ms
                         )
                 }
                 graphics::legend(

@@ -318,7 +318,7 @@ plotmz <- function(data, inscf = 5, ...) {
         rt0 <- rt[corr[, 2]]
         int <- z[which(!is.na(z))]
 
-        par(mar=c(5, 4.2, 6.1, 2.1), xpd=TRUE)
+        graphics::par(mar=c(5, 4.2, 6.1, 2.1), xpd=TRUE)
         graphics::plot(
                 mz0 ~ rt0,
                 pch = 19,
