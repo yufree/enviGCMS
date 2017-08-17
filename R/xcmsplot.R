@@ -18,7 +18,7 @@ plotmr <- function(xset,
                    inscf = 5,
                    rsdcf = 30,
                    ...) {
-        par(mar=c(5, 4.2, 6.1, 2.1), xpd=TRUE)
+        graphics::par(mar=c(5, 4.2, 6.1, 2.1), xpd=TRUE)
         data <- getbiorep(xset, rsdcf = rsdcf, inscf = inscf)
         suppressWarnings(if (!is.na(data)) {
                 datamean <- data[, grepl('*mean', colnames(data))]
