@@ -1,0 +1,629 @@
+#' Get the features from t test, with p value, q value, rsd and power restriction
+#' @param list list with data as mzrt profile, mz, rt and group information (two groups)
+#' @param power defined power
+#' @param pt p value threshold
+#' @param qt q value threshold, BH adjust
+#' @param n sample numbers in one group
+#' @param rsdt rsd threshold to filter the data
+#' @return dataframe with peaks fit the setting above
+#' @examples
+#' \dontrun{
+#' library(faahKO)
+#' cdfpath <- system.file("cdf", package = "faahKO")
+#' xset <- getdata(cdfpath, pmethod = ' ')
+#' list <- getmzrt(xset)
+#' getfeaturest(list)
+#' }
+#' @export
+
+getfeaturest <- function(list,
+                         power = 0.8,
+                         pt = 0.05,
+                         qt = 0.05,
+                         n = 3,
+                         rsdt = 30) {
+        data <- list$data
+        lv <- list$group
+        sd <- genefilter::rowSds(data[, 1:n])
+        mean <- stats::aggregate(t(data), list(lv), mean)
+        mean <- t(mean[,-1])
+        rsd <- sd / mean[, 1] * 100
+        sd <- sd[rsd < rsdt]
+        mz <- list$mz[rsd < rsdt]
+        rt <- list$rt[rsd < rsdt]
+        data <- data[rsd < rsdt,]
+        ar <- genefilter::rowttests(data, fac = lv)
+        dm <- ar$dm
+        p <- ar$p.value
+        q <- stats::p.adjust(p, method = "BH")
+        m <- nrow(data)
+        df <- cbind.data.frame(sd, dm, p, q, mz, rt, data)
+        df <- df[order(df$p),]
+        df$alpha <- c(1:m) * pt / m
+        rp <- vector()
+        for (i in c(1:nrow(df))) {
+                r <- stats::power.t.test(
+                        delta = df$dm[i],
+                        sd = df$sd[i],
+                        sig.level = df$alpha[i],
+                        n = n
+                )
+                rp[i] <- r$power
+        }
+        df <- cbind(power = rp, df)
+        df <- df[df$power > power,]
+        return(df)
+}
+
+#' Get the features from anova, with p value, q value, rsd and power restriction
+#' @param xod xcmsSet objects
+#' @param power defined power
+#' @param pt p value threshold
+#' @param qt q value threshold, BH adjust
+#' @param n sample numbers in one group
+#' @param ng group numbers
+#' @param rsdt rsd threshold to filter the data
+#' @return dataframe with peaks fit the setting above
+#' @export
+
+getfeaturesanova <- function(xod,
+                             power = 0.8,
+                             pt = 0.05,
+                             qt = 0.05,
+                             n = 3,
+                             ng = 3,
+                             rsdt = 30) {
+        data <- xcms::groupval(xod, value = "into")
+        idx <- stats::complete.cases(data)
+        data1 <- as.data.frame(xcms::groups(xod))
+        lv <- xod@phenoData[, 1]
+        data0 <- data[idx,]
+
+        sd <- genefilter::rowSds(data0[, 1:n])
+        mean <- stats::aggregate(t(data0), list(lv), mean)
+        mean <- t(mean[,-1])
+        sd2 <- genefilter::rowSds(mean)
+        rsd <- sd / mean[, 1] * 100
+        sd2 <- sd2[rsd < rsdt]
+        sd <- sd[rsd < rsdt]
+        mz <- data1$mzmed[idx & rsd < rsdt]
+        rt <- data1$rtmed[idx & rsd < rsdt]
+        data0 <- data0[rsd < rsdt,]
+        ar <- genefilter::rowFtests(data0, lv)
+        p <- ar$p.value
+        q <- stats::p.adjust(p, method = "BH")
+        m <- nrow(data0)
+        df <- cbind.data.frame(sd, sd2, p, q, mz, rt, data0)
+        df <- df[order(df$p),]
+        df$alpha <- c(1:m) * pt / m
+        rp <- vector()
+        for (i in c(1:nrow(df))) {
+                r <- stats::power.anova.test(
+                        groups = ng,
+                        between.var = df$sd2[i],
+                        within.var = df$sd[i],
+                        sig.level = df$alpha[i],
+                        n = n
+                )
+                rp[i] <- r$power
+        }
+        df <- cbind(power = rp, df)
+        df <- df[df$power > power,]
+        return(df)
+}
+#' plot the scatter plot for xcmsset objects with threshold
+#' @param xset the xcmsset object
+#' @param ms the mass range to plot the data
+#' @param inscf Log intensity cutoff for peaks, default 5
+#' @param rsdcf the rsd cutoff of all peaks
+#' @param ... parameters for `plot` function
+#' @return data fit the cutoff
+#' @examples
+#' \dontrun{
+#' library(faahKO)
+#' cdfpath <- system.file("cdf", package = "faahKO")
+#' xset <- getdata(cdfpath, pmethod = ' ')
+#' plotmr(xset)
+#' }
+#' @export
+plotmr <- function(xset,
+                   ms = c(100, 800),
+                   inscf = 5,
+                   rsdcf = 30,
+                   ...) {
+        graphics::par(mar=c(5, 4.2, 6.1, 2.1), xpd=TRUE)
+        data <- getbiorep(xset, rsdcf = rsdcf, inscf = inscf)
+        suppressWarnings(if (!is.na(data)) {
+                datamean <- data[, grepl('*mean', colnames(data))]
+                dataname <- unique(xcms::sampclass(xset))
+                n <- dim(datamean)[2]
+                col <- grDevices::rainbow(n, alpha = 0.318)
+
+                graphics::plot(
+                        data$mzmed ~ data$rtmed,
+                        xlab = "Retention Time(s)",
+                        ylab = "m/z",
+                        type = 'n',
+                        pch = 19,
+                        ...
+                )
+
+                for (i in 1:n) {
+                        cex = as.numeric(cut((log10(datamean[, i] + 1)-inscf), breaks=c(0,1,2,3,4,Inf)/2))/2
+                        cexlab = c(paste0(inscf,'-',inscf+0.5),paste0(inscf+0.5,'-',inscf+1),paste0(inscf+1,'-',inscf+1.5),paste0(inscf+1.5,'-',inscf+2),paste0('>',inscf+2))
+                        graphics::points(
+                                x = data$rtmed,
+                                y = data$mzmed,
+                                cex = cex,
+                                col = col[i],
+                                pch = 19,
+                                ylim = ms
+                        )
+                }
+                graphics::legend(
+                        'topright',
+                        legend = dataname,
+                        col = col,
+                        pch = 19,
+                        horiz = T,
+                        bty = 'n',
+                        inset = c(0,-0.25)
+                )
+                graphics::legend(
+                        'topleft',
+                        legend = cexlab,
+                        title = 'Intensity in Log scale',
+                        pt.cex = c(1,2,3,4,5)/2,
+                        pch = 19,
+                        bty = 'n',
+                        horiz = T,
+                        cex = 0.7,
+                        col = grDevices::rgb(0,0,0,0.318),inset = c(0,-0.25)
+                )
+        } else{
+                graphics::plot(
+                        1,
+                        xlab = "Retention Time(s)",
+                        ylab = "m/z",
+                        main = "No peaks found",
+                        ylim = ms,
+                        type = 'n',
+                        pch = 19,
+                        ...
+                )
+        })
+}
+
+#' plot the diff scatter plot for one xcmsset objects with threshold and two groups
+#' @param xset xcmsset object with two groups
+#' @param ms the mass range to plot the data
+#' @param inscf Log intensity cutoff for peaks, default 5
+#' @param rsdcf the rsd cutoff of all peaks
+#' @param ... parameters for `plot` function
+#' @return NULL
+#' @examples
+#' \dontrun{
+#' library(faahKO)
+#' cdfpath <- system.file("cdf", package = "faahKO")
+#' xset <- getdata(cdfpath, pmethod = ' ')
+#' plotmrc(xset)
+#' }
+#' @export
+plotmrc <- function(xset,
+                    ms = c(100, 800),
+                    inscf = 5,
+                    rsdcf = 30,
+                    ...)  {
+        data <- getbiorep(xset, rsdcf = rsdcf, inscf = inscf)
+        suppressWarnings(if (!is.na(data)) {
+                datamean <- data[, grepl('*mean', colnames(data))]
+                dataname <- unique(xcms::sampclass(xset))
+
+                diff1 <- datamean[, 1] - datamean[, 2]
+                diff2 <- datamean[, 2] - datamean[, 1]
+                diff1[diff1 < 0] <- 0
+                diff2[diff2 < 0] <- 0
+                name1 <- paste0(dataname[1], "-", dataname[2])
+                name2 <- paste0(dataname[2], "-", dataname[1])
+
+                cex1 = as.numeric(cut((log10(diff1 + 1)-inscf), breaks=c(0,1,2,3,4,Inf)/2))/2
+                cex2 = as.numeric(cut((log10(diff2 + 1)-inscf), breaks=c(0,1,2,3,4,Inf)/2))/2
+                cexlab = c(paste0(inscf,'-',inscf+0.5),paste0(inscf+0.5,'-',inscf+1),paste0(inscf+1,'-',inscf+1.5),paste0(inscf+1.5,'-',inscf+2),paste0('>',inscf+2))
+
+                graphics::plot(
+                        data$mzmed ~ data$rtmed,
+                        xlab = "Retention Time(s)",
+                        ylab = "m/z",
+                        ylim = ms,
+                        cex = cex1,
+                        col = grDevices::rgb(0, 0, 1, 0.618),
+                        pch = 19,
+                        ...
+                )
+
+                graphics::points(
+                        data$mzmed ~ data$rtmed,
+                        cex = cex2,
+                        col = grDevices::rgb(1, 0, 0, 0.618),
+                        pch = 19
+                )
+
+                graphics::legend(
+                        'top',
+                        legend = cexlab,
+                        title = 'Intensity in Log scale',
+                        pt.cex = c(1,2,3,4,5)/2,
+                        pch = 19,
+                        col = grDevices::rgb(0, 0, 0, 0.618),
+                        bty = 'n',
+                        horiz = T
+                )
+                graphics::legend(
+                        'bottom',
+                        legend = c(name1, name2),
+                        pch = 19,
+                        col = c(
+                                grDevices::rgb(0, 0, 1, 0.618),
+                                grDevices::rgb(1, 0, 0, 0.618)
+                        ),
+                        bty = 'n',
+                        horiz = T
+                )
+        } else{
+                graphics::plot(
+                        1,
+                        xlab = "Retention Time(s)",
+                        ylab = "m/z",
+                        main = "No peaks found",
+                        ylim = ms,
+                        type = 'n',
+                        pch = 19,
+                        ...
+                )
+        })
+
+}
+
+#' plot the rsd influnces of data
+#' @param xset xcmsset data
+#' @param ms the mass range to plot the data
+#' @param inscf Log intensity cutoff for peaks, default 5
+#' @param rsdcf the rsd cutoff of all peaks
+#' @param type 't' means biological samples with technique replicates; 'b' means biological samples without technique replicates in one group; 'g' means biological samples without technique replicates in mutiple groups. default 'g'
+#' @param ... other parameters for `plot` function
+#' @return NULL
+#' @examples
+#' \dontrun{
+#' library(faahKO)
+#' cdfpath <- system.file("cdf", package = "faahKO")
+#' xset <- getdata(cdfpath[1:6], pmethod = ' ')
+#' plotrsd(xset)
+#' }
+#' @export
+plotrsd <- function(xset,
+                    ms = c(0, 800),
+                    type = 'g',
+                    inscf = 5,
+                    rsdcf = 30,
+                    ...) {
+        cexlab = c('<20%','20-40%','40-60%','60-80%','>80%')
+        if (type == 't') {
+                df <- gettechrep(xset, inscf = inscf, rsdcf = rsdcf)
+                suppressWarnings(if (!is.na(df)) {
+                        mz <- df$mzmed
+                        rt <- df$rtmin
+                        cex = as.numeric(cut(df$rsd, breaks=c(0,20,40,60,80,Inf)))/2
+                        graphics::plot(
+                                mz ~ rt,
+                                cex = cex,
+                                ylim = ms,
+                                xlab = 'retention time',
+                                ylab = 'm/z',
+                                main = 'RSD(%) distribution',
+                                col = grDevices::rgb(0,0,0,0.318),
+                                pch = 19,
+                                ...
+                        )
+                        graphics::legend(
+                                'top',
+                                legend = cexlab,
+                                pt.cex = c(1,2,3,4,5)/2,
+                                pch = 19,
+                                bty = 'n',
+                                horiz = T,
+                                cex = 0.8,
+                                col = grDevices::rgb(0,0,0,0.318)
+                        )
+                } else{
+                        graphics::plot(
+                                1,
+                                xlab = "Retention Time(s)",
+                                ylab = "m/z",
+                                main = "No peaks found",
+                                ylim = ms,
+                                type = 'n',
+                                pch = 19,
+                                ...
+                        )
+                })
+        } else if (type == 'b') {
+                df <- getbiotechrep(xset, inscf = inscf, rsdcf = rsdcf)
+                suppressWarnings(if (!is.na(df)) {
+                        mz <- df$mzmed
+                        rt <- df$rtmin
+                        cex = as.numeric(cut(df$rsdB, breaks=c(0,20,40,60,80,Inf)))/2
+                        graphics::plot(
+                                mz ~ rt,
+                                ylim = ms,
+                                xlab = 'retention time',
+                                ylab = 'm/z',
+                                main = 'RSD(%) distribution',
+                                cex = cex,
+                                col = grDevices::rgb(0,0,0,0.318),
+                                pch = 19,
+                                ...
+                        )
+                        graphics::legend(
+                                'top',
+                                legend = cexlab,
+                                pt.cex = c(1,2,3,4,5)/2,
+                                cex = 0.8,
+                                pch = 19,
+                                bty = 'n',
+                                horiz = T,
+                                col = grDevices::rgb(0,0,0,0.318)
+
+                        )
+                } else{
+                        graphics::plot(
+                                1,
+                                xlab = "Retention Time(s)",
+                                ylab = "m/z",
+                                main = "No peaks found",
+                                ylim = ms,
+                                type = 'n',
+                                pch = 19,
+                                ...
+                        )
+                })
+        } else{
+                df <- getbiorep(xset, inscf = inscf, rsdcf = rsdcf)
+                mz <- df$mzmed
+                rt <- df$rtmin
+                datarsd <- df[, grepl('*rsd%', colnames(df))]
+                dataname <- unique(xcms::sampclass(xset))
+                n <- dim(datarsd)[2]
+                col <- grDevices::rainbow(n, alpha = 0.318)
+
+                graphics::plot(
+                        mz ~ rt,
+                        xlab = "Retention Time(s)",
+                        ylab = "m/z",
+                        main = "RSD(%) distribution",
+                        ylim = ms,
+                        type = 'n',
+                        pch = 19,
+                        ...
+                )
+
+                for (i in 1:n) {
+                        cex = as.numeric(cut(datarsd[, i], breaks=c(0,20,40,60,80,Inf)))/2
+                        graphics::points(
+                                x = rt,
+                                y = mz,
+                                ylim = ms,
+                                cex = cex,
+                                col = col[i],
+                                pch = 19
+                        )
+                }
+                graphics::legend(
+                        'bottom',
+                        legend = dataname,
+                        col = col,
+                        horiz = T,
+                        pch = 19,
+                        bty = 'n'
+                )
+                graphics::legend(
+                        'top',
+                        legend = cexlab,
+                        pt.cex = c(1,2,3,4,5)/2,
+                        pch = 19,
+                        bty = 'n',
+                        horiz = T,
+                        cex = 0.8,
+                        col = grDevices::rgb(0,0,0,0.318)
+                )
+
+        }
+
+
+}
+
+#' plot the PCA of xcmsset
+#' @param xset xcmsset data
+#' @param lv group information
+#' @param center parameters for PCA
+#' @param scale parameters for scale
+#' @param ... other parameters for `plot` function
+#' @return NULL
+#' @examples
+#' \dontrun{
+#' library(faahKO)
+#' cdfpath <- system.file("cdf", package = "faahKO")
+#' xset <- getdata(cdfpath, pmethod = ' ')
+#' plotpca(xset)
+#' }
+#' @export
+
+plotpca <- function(xset,
+                    lv = NULL,
+                    center = T,
+                    scale = T,
+                    ...) {
+        data <- xcms::groupval(xset, 'medret', 'into')
+        data <- data[stats::complete.cases(data),]
+        if (is.null(lv)) {
+                pch = colnames(data)
+        } else {
+                pch = lv
+        }
+        pcao <- stats::prcomp(t(data), center = center,
+                              scale = scale)
+        pcaoVars = signif(((pcao$sdev) ^ 2) / (sum((pcao$sdev) ^ 2)),
+                          3) * 100
+        graphics::plot(
+                pcao$x[, 1],
+                pcao$x[, 2],
+                xlab = paste("PC1:",
+                             pcaoVars[1], "% of Variance Explained"),
+                ylab = paste("PC2:",
+                             pcaoVars[2], "% of Variance Explained"),
+                pch = pch,
+                cex = 2,
+                ...
+        )
+}
+#' plot EIC and boxplot for all peaks and return diffreport
+#' @param xset xcmsset object
+#' @param name filebase of the sub dir
+#' @param test 't' means two-sample welch t-test, 't.equalvar' means two-sample welch t-test with equal variance, 'wilcoxon' means rank sum wilcoxon test, 'f' means F-test, 'pairt' means paired t test, 'blockf' means Two-way analysis of variance, default 't'
+#' @param nonpara 'y' means using nonparametric ranked data, 'n' means original data
+#' @param ... other parameters for `diffreport`
+#' @return diffreport and pdf figure for EIC and boxplot
+#' @examples
+#' \dontrun{
+#' library(faahKO)
+#' cdfpath <- system.file("cdf", package = "faahKO")
+#' xset <- getdata(cdfpath, pmethod = ' ')
+#' plote(xset)
+#' }
+#' @export
+plote <- function(xset,
+                  name = "test",
+                  test = "t",
+                  nonpara = "n",
+                  ...) {
+        gt <- xcms::groups(xset)
+        a <-
+                xcms::diffreport(
+                        xset,
+                        filebase = name,
+                        eicmax = nrow(gt),
+                        nonpara = nonpara,
+                        ...
+                )
+        return(a)
+}
+
+#' plot scatter plot for rt-mz profile and output gif file for mutiple groups
+#' @param xset xcmsset object with mutiple groups
+#' @param file file name for further annotation, default NULL
+#' @param inscf log intensity cutoff for peaks, default 5
+#' @param rsdcf the rsd cutoff of all peaks
+#' @param ... parameters for `plot` function
+#' @return gif file and csv file
+#' @examples
+#' \dontrun{
+#' library(faahKO)
+#' cdfpath <- system.file("cdf", package = "faahKO")
+#' xset <- getdata(cdfpath, pmethod = ' ')
+#' gifmr(xset)
+#' }
+#' @export
+gifmr <- function(xset,
+                  rsdcf = 30,
+                  inscf = 5,
+                  file = 'test') {
+        data <- getbiorep(xset,
+                          rsdcf = rsdcf,
+                          inscf = inscf,
+                          file = file)
+        dmx <- data[,-c(1, 2)]
+        mean <- apply(dmx, 1, mean)
+        graphics::plot(
+                data$mz ~ data$time,
+                xlab = "Retention Time(s)",
+                ylab = "m/z",
+                pch = 19,
+                cex = log10(mean + 1) - 4,
+                col = grDevices::rgb(0, 0, 1, 0.2),
+                main = 'All peaks'
+        )
+        filename = paste0(file, '.gif')
+        col <- grDevices::rainbow(dim(dmx)[2], alpha = 0.318)
+        animation::saveGIF({
+                for (i in 1:dim(dmx)[2]) {
+                        name <- colnames(dmx)[i]
+                        value <- as.numeric(t(dmx)[i,])
+                        graphics::plot(
+                                data$mz ~ data$time,
+                                xlab = "Retention Time(s)",
+                                ylab = "m/z",
+                                pch = 19,
+                                cex = log10(value + 1) - 4,
+                                col = col[i],
+                                main = name
+                        )
+                }
+        }, movie.name = filename, ani.width = 800, ani.height = 500)
+}
+#' output the similarity of two dataset
+#' @param xset1 the first dataset
+#' @param xset2 the second dateset
+#' @return similarity on retention time and rsd %
+#' @export
+getsim <- function(xset1, xset2) {
+        data1 <- gettechrep(xset1)[, c("mzmed", "rtmed",
+                                       "rsd")]
+        data2 <- gettechrep(xset2)[, c("mzmed", "rtmed",
+                                       "rsd")]
+
+        # data1$weight <- ifelse(data1$rsd > 100, 0, 0.2)
+        # data1$weight[data1$rsd < 80] <- 0.4
+        # data1$weight[data1$rsd < 60] <- 0.6
+        # data1$weight[data1$rsd < 40] <- 0.8
+        # data1$weight[data1$rsd < 20] <- 1 data1$rtorder
+        # <- order(data1$rtmed)
+        data1$mzmedn <- round(data1$mzmed, 0.1)
+
+        # data2$weight <- ifelse(data2$rsd > 100, 0, 0.2)
+        # data2$weight[data2$rsd < 80] <- 0.4
+        # data2$weight[data2$rsd < 60] <- 0.6
+        # data2$weight[data2$rsd < 40] <- 0.8
+        # data2$weight[data2$rsd < 20] <- 1 data2$rtorder
+        # <- order(data2$rtmed)
+        data2$mzmedn <- round(data2$mzmed, 0.1)
+
+        data <- merge(data1, data2, by = "mzmedn")
+        data <- data[stats::complete.cases(data),]
+        cor1 <- cor(data$rtmed.x, data$rtmed.y)
+        cor2 <- cor(data$rsd.x, data$rsd.y)
+        cor <- c(cor1, cor2)
+        return(cor)
+}
+
+#' get the data of QC compound for a group of data
+#' @param path data path for your QC samples
+#' @param mzrange mass of the QC compound
+#' @param rtrange retention time of the QC compound
+#' @param index index of the files contained QC compounds, default is all of the compounds
+#' @return number vector, each number indicate the peak area of that mass and retention time range
+#' @export
+getQCraw <- function(path, mzrange, rtrange, index = NULL) {
+        cdffiles <- list.files(path, recursive = TRUE,
+                               full.names = TRUE)
+        if (index) {
+                cdffiles <- cdffiles[index]
+        }
+        nsamples <- length(cdffiles)
+        area <- numeric()
+        for (i in 1:nsamples) {
+                RAW <- xcms::xcmsRaw(cdffiles[i])
+                peak <- xcms::rawEIC(RAW, mzrange, rtrange)
+                area[i] <- sum(peak$intensity)
+        }
+        return(area)
+}
+
