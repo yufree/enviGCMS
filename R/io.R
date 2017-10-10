@@ -14,6 +14,7 @@
 #' cdfpath <- system.file("cdf", package = "faahKO")
 #' xset <- getdata(cdfpath, pmethod = ' ')
 #' }
+#' @seealso \code{\link{getdata2}},\code{\link{getupload}}, \code{\link{getmzrt}}
 #' @export
 getdata <-
         function(path,
@@ -247,12 +248,14 @@ getdata <-
 #' @param sclass sample classes.
 #' @param phenoData data.frame or NAnnotatedDataFrame defining the sample names and classes and other sample related properties. If not provided, the argument sclass or the subdirectories in which the samples are stored will be used to specify sample grouping.
 #' @param BPPARAM used for BiocParallel package
+#' @param mode 'inMemory' or 'onDisk' see `?MSnbase::readMSData` for details, default 'onDisk'
 #' @param ppp parameters for peaks picking, e.g. xcms::CentWaveParam()
 #' @param rtp parameters for retention time correction, e.g. xcms::ObiwarpParam()
 #' @param gpp parameters for peaks grouping, e.g. xcms::PeakDensityParam()
 #' @param fpp parameters for peaks filling, e.g. xcms::FillChromPeaksParam(), PeakGroupsParam()
 #' @details This is a wrap function for metabolomics data process for xcms 3.
 #' @return a XCMSnExp object with processed data
+#' @seealso \code{\link{getdata}},\code{\link{getupload2}}, \code{\link{getmzrt2}}
 #' @export
 getdata2 <- function(path,
                      index = F,
@@ -260,6 +263,7 @@ getdata2 <- function(path,
                      sclass = NULL,
                      phenoData = NULL,
                      BPPARAM = BiocParallel::SnowParam(),
+                     mode = 'onDisk',
                      ppp = xcms::CentWaveParam(
                              ppm = 5,
                              peakwidth = c(5, 25),
@@ -301,7 +305,7 @@ getdata2 <- function(path,
                 if (class(pdata) != "NAnnotatedDataFrame")
                         stop("phenoData has to be a data.frame or NAnnotatedDataFrame!")
         }
-        raw_data <- MSnbase::readMSData2(files, pdata = pdata)
+        raw_data <- MSnbase::readMSData(files, pdata = pdata, mode = mode)
         xod <-
                 xcms::findChromPeaks(raw_data, param = ppp, BPPARAM = BPPARAM)
         xod <- xcms::groupChromPeaks(xod, param = gpp)
@@ -315,7 +319,7 @@ getdata2 <- function(path,
 #' Get the csv files to be submitted to Metaboanalyst
 #' @param xset the xcmsset object which you want to submitted to Metaboanalyst
 #' @param method parameter for groupval function
-#' @param intensity parameter for groupval function
+#' @param value parameter for groupval function
 #' @param name file name
 #' @return dataframe with data needed for Metaboanalyst if your want to perform local analysis.
 #' @examples
@@ -325,18 +329,45 @@ getdata2 <- function(path,
 #' xset <- getdata(cdfpath, pmethod = ' ')
 #' getupload(xset)
 #' }
+#' @seealso \code{\link{getdata}},\code{\link{getupload2}}, \code{\link{getmzrt}}
 #' @export
 getupload <- function(xset,
                       method = "medret",
-                      intensity = "into",
+                      value = "into",
                       name = "Peaklist") {
-        peakIntensities <- xcms::groupval(xset, method,
-                                          intensity)
-        peakIntensities[is.na(peakIntensities)] = 0
+        peakIntensities <- xcms::groupval(xset, method = method,
+                                          value = value)
 
         data <-
                 rbind(group = as.character(xcms::phenoData(xset)$class),
                       peakIntensities)
+        data <- data[!duplicated(rownames(data)),]
+        filename <- paste0(name, ".csv")
+        utils::write.csv(data, file = filename)
+        return(data)
+}
+
+#' Get the csv files to be submitted to Metaboanalyst
+#' @param xset a XCMSnExp object with processed data which you want to submitted to Metaboanalyst
+#' @param value value for `xcms::featureValues`
+#' @param name file name
+#' @return dataframe with data needed for Metaboanalyst if your want to perform local analysis.
+#' @examples
+#' \dontrun{
+#' library(faahKO)
+#' cdfpath <- system.file("cdf", package = "faahKO")
+#' xset <- getdata2(cdfpath, ppp = xcms::MatchedFilterParam(), rtp = xcms::ObiwarpParam(), gpp = xcms::PeakDensityParam())
+#' getupload2(xset)
+#' }
+#' @seealso \code{\link{getdata2}},\code{\link{getupload}}, \code{\link{getmzrt2}}
+#' @export
+getupload2 <- function(xset,
+                       value= "into",
+                      name = "Peaklist") {
+        data <- xcms::featureValues(xset, value = value)
+        data <-
+                rbind(group = as.character(xset@phenoData@data),
+                      group)
         data <- data[!duplicated(rownames(data)),]
         filename <- paste0(name, ".csv")
         utils::write.csv(data, file = filename)
@@ -353,19 +384,43 @@ getupload <- function(xset,
 #' xset <- getdata(cdfpath, pmethod = ' ')
 #' getmzrt(xset)
 #' }
-
+#' @seealso \code{\link{getdata}},\code{\link{getupload}}, \code{\link{getmzrt2}}, \code{\link{getdoe}}
+#' @export
 getmzrt <- function(xset){
         data <- xcms::groupval(xset, value = "into")
-        idx <- stats::complete.cases(data)
-        data0 <- data[idx,]
         # group info
         group <- xcms::phenoData(xset)
         # peaks info
         peaks <- as.data.frame(xcms::groups(xset))
-        mz <- peaks$mzmed[idx]
-        rt <- peaks$rtmed[idx]
+        mz <- peaks$mzmed
+        rt <- peaks$rtmed
         # return as list
-        result <- list(data = data0, group = group, mz = mz, rt = rt)
+        result <- list(data = data, group = group, mz = mz, rt = rt)
+        return(result)
+}
+
+#' Get the mzrt profile and group information for batch correction and plot as a list for xcms 3 object
+#' @param xset a XCMSnExp object with processed data
+#' @return list with rtmz profile and group infomation
+#' @examples
+#' \dontrun{
+#' library(faahKO)
+#' cdfpath <- system.file("cdf", package = "faahKO")
+#' xset <- getdata2(cdfpath, ppp = xcms::MatchedFilterParam(), rtp = xcms::ObiwarpParam(), gpp = xcms::PeakDensityParam())
+#' getmzrt2(xset)
+#' }
+#' @seealso \code{\link{getdata2}},\code{\link{getupload2}}, \code{\link{getmzrt}}, \code{\link{getdoe}}
+#' @export
+getmzrt2 <- function(xset){
+        data <- xcms::featureValues(xset, value = "into")
+        # group info
+        group <- xset@phenoData@data
+        # peaks info
+        peaks <- xcms::featureDefinitions(xset)
+        mz <- peaks$mzmed
+        rt <- peaks$rtmed
+        # return as list
+        result <- list(data = data, group = group, mz = mz, rt = rt)
         return(result)
 }
 

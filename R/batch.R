@@ -125,7 +125,7 @@ isvacor <- function(xset, lv = NULL, method = "medret",
         mod <- stats::model.matrix(~lv)
         mod0 <- as.matrix(c(rep(1, ncol(data))))
 
-        svafit <- DoISVA(data,lv)
+        svafit <- isva::DoISVA(data,lv)
         if (svafit$nsv == 0) {
                 svaX <- stats::model.matrix(~lv)
                 lmfit <- limma::lmFit(data, svaX)

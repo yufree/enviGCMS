@@ -1,10 +1,36 @@
+#' Filter the data based on DoE, rsd, intensity and NA
+#' @param list list with data as mzrt profile, mz, rt and group information
+#' @param inscf Log intensity cutoff for peaks, default 5
+#' @param rsdcf the rsd cutoff of all peaks
+#' @param NAtrim FALSE means no NA trim, TRUE means remove the peaks with NA, '1' means impute the NA peaks with 1, '0' means impute the NA with 0.
+#' @param tr logical. TRUE means dataset with technical replicates at the base level folder
+#' @return dataframe with filtered peaks
+
+getdoe <- function(list,
+                   inscf = 5,
+                   rsdcf = 30,
+                   NAtrim = '1',
+                   tr = F){
+        data <- list$data
+        idx <- stats::complete.cases(data)
+
+        if(tr){
+                lv <- list$group
+        }else{
+                lv <- list$group
+        }
+        sd <- stats::aggregate(t(data),list(lv),sd)
+        mean <- stats::aggregate(t(data), list(lv), mean)
+}
+
 #' Get the features from t test, with p value, q value, rsd and power restriction
 #' @param list list with data as mzrt profile, mz, rt and group information (two groups)
 #' @param power defined power
 #' @param pt p value threshold
 #' @param qt q value threshold, BH adjust
 #' @param n sample numbers in one group
-#' @param rsdt rsd threshold to filter the data
+#' @param inscf Log intensity cutoff for peaks, default 5
+#' @param rsdcf the rsd cutoff of all peaks
 #' @return dataframe with peaks fit the setting above
 #' @examples
 #' \dontrun{
@@ -16,28 +42,40 @@
 #' }
 #' @export
 
+# rsd每个组都有，不能只算一个
 getfeaturest <- function(list,
                          power = 0.8,
                          pt = 0.05,
                          qt = 0.05,
                          n = 3,
-                         rsdt = 30) {
+                         inscf = 5,
+                         rsdcf = 30) {
         data <- list$data
-        lv <- list$group
-        sd <- genefilter::rowSds(data[, 1:n])
+        lv <- list$group$class
+
+        sdn <- genefilter::rowSds(data[, 1:n])
+        sd <- stats::aggregate(t(data),list(lv),sd)
         mean <- stats::aggregate(t(data), list(lv), mean)
         mean <- t(mean[,-1])
-        rsd <- sd / mean[, 1] * 100
-        sd <- sd[rsd < rsdt]
-        mz <- list$mz[rsd < rsdt]
-        rt <- list$rt[rsd < rsdt]
-        data <- data[rsd < rsdt,]
+        sd <- t(sd[,-1])
+        rsd <- sd / mean * 100
+        # filter data based on intensity and rsd
+        index <- as.vector(apply(rsd, 1, function(x)
+                any(x < rsdcf))) &
+                as.vector(apply(mean, 1, function(x)
+                        any(x > 10 ^ (inscf))))
+
+        mz <- list$mz[index]
+        rt <- list$rt[index]
+        data <- data[index,]
+        sdn <- sdn[index]
+
         ar <- genefilter::rowttests(data, fac = lv)
         dm <- ar$dm
         p <- ar$p.value
         q <- stats::p.adjust(p, method = "BH")
         m <- nrow(data)
-        df <- cbind.data.frame(sd, dm, p, q, mz, rt, data)
+        df <- cbind.data.frame(sdn, dm, p, q, mz, rt, data)
         df <- df[order(df$p),]
         df$alpha <- c(1:m) * pt / m
         rp <- vector()
@@ -56,44 +94,52 @@ getfeaturest <- function(list,
 }
 
 #' Get the features from anova, with p value, q value, rsd and power restriction
-#' @param xod xcmsSet objects
+#' @param list list with data as mzrt profile, mz, rt and group information (more than two groups)
 #' @param power defined power
 #' @param pt p value threshold
 #' @param qt q value threshold, BH adjust
 #' @param n sample numbers in one group
 #' @param ng group numbers
-#' @param rsdt rsd threshold to filter the data
+#' @param inscf Log intensity cutoff for peaks, default 5
+#' @param rsdcf the rsd cutoff of all peaks
 #' @return dataframe with peaks fit the setting above
 #' @export
 
-getfeaturesanova <- function(xod,
+getfeaturesanova <- function(list,
                              power = 0.8,
                              pt = 0.05,
                              qt = 0.05,
                              n = 3,
                              ng = 3,
-                             rsdt = 30) {
-        data <- xcms::groupval(xod, value = "into")
-        idx <- stats::complete.cases(data)
-        data1 <- as.data.frame(xcms::groups(xod))
-        lv <- xod@phenoData[, 1]
-        data0 <- data[idx,]
+                             rsdcf = 30,
+                             inscf = 5) {
+        data <- list$data
+        lv <- list$group$class
 
-        sd <- genefilter::rowSds(data0[, 1:n])
-        mean <- stats::aggregate(t(data0), list(lv), mean)
-        mean <- t(mean[,-1])
+        sdn <- genefilter::rowSds(data[, 1:n])
+        sd <- stats::aggregate(t(data),list(lv),sd)
         sd2 <- genefilter::rowSds(mean)
-        rsd <- sd / mean[, 1] * 100
-        sd2 <- sd2[rsd < rsdt]
-        sd <- sd[rsd < rsdt]
-        mz <- data1$mzmed[idx & rsd < rsdt]
-        rt <- data1$rtmed[idx & rsd < rsdt]
-        data0 <- data0[rsd < rsdt,]
-        ar <- genefilter::rowFtests(data0, lv)
+        mean <- stats::aggregate(t(data), list(lv), mean)
+        mean <- t(mean[,-1])
+        sd <- t(sd[,-1])
+        rsd <- sd / mean * 100
+        # filter data based on intensity and rsd
+        index <- as.vector(apply(rsd, 1, function(x)
+                any(x < rsdcf))) &
+                as.vector(apply(mean, 1, function(x)
+                        any(x > 10 ^ (inscf))))
+
+        sdn <- sdn[index]
+        sd2 <- sd2[index]
+        mz <- list$mz[index]
+        rt <- list$rt[index]
+        data <- data[index,]
+
+        ar <- genefilter::rowFtests(data, lv)
         p <- ar$p.value
         q <- stats::p.adjust(p, method = "BH")
-        m <- nrow(data0)
-        df <- cbind.data.frame(sd, sd2, p, q, mz, rt, data0)
+        m <- nrow(data)
+        df <- cbind.data.frame(sdn, sd2, p, q, mz, rt, data)
         df <- df[order(df$p),]
         df$alpha <- c(1:m) * pt / m
         rp <- vector()
@@ -111,8 +157,9 @@ getfeaturesanova <- function(xod,
         df <- df[df$power > power,]
         return(df)
 }
+
 #' plot the scatter plot for xcmsset objects with threshold
-#' @param xset the xcmsset object
+#' @param list list with data as mzrt profile, mz, rt and group information
 #' @param ms the mass range to plot the data
 #' @param inscf Log intensity cutoff for peaks, default 5
 #' @param rsdcf the rsd cutoff of all peaks
@@ -126,13 +173,13 @@ getfeaturesanova <- function(xod,
 #' plotmr(xset)
 #' }
 #' @export
-plotmr <- function(xset,
+plotmr <- function(list,
                    ms = c(100, 800),
                    inscf = 5,
                    rsdcf = 30,
                    ...) {
         graphics::par(mar=c(5, 4.2, 6.1, 2.1), xpd=TRUE)
-        data <- getbiorep(xset, rsdcf = rsdcf, inscf = inscf)
+        data <- getbiorep(list, rsdcf = rsdcf, inscf = inscf)
         suppressWarnings(if (!is.na(data)) {
                 datamean <- data[, grepl('*mean', colnames(data))]
                 dataname <- unique(xcms::sampclass(xset))

@@ -4,11 +4,11 @@
 \alias{getfeaturesanova}
 \title{Get the features from anova, with p value, q value, rsd and power restriction}
 \usage{
-getfeaturesanova(xod, power = 0.8, pt = 0.05, qt = 0.05, n = 3,
-  ng = 3, rsdt = 30)
+getfeaturesanova(list, power = 0.8, pt = 0.05, qt = 0.05, n = 3,
+  ng = 3, rsdcf = 30, inscf = 5)
 }
 \arguments{
-\item{xod}{xcmsSet objects}
+\item{list}{list with data as mzrt profile, mz, rt and group information (more than two groups)}
 
 \item{power}{defined power}
 
@@ -20,7 +20,9 @@ getfeaturesanova(xod, power = 0.8, pt = 0.05, qt = 0.05, n = 3,
 
 \item{ng}{group numbers}
 
-\item{rsdt}{rsd threshold to filter the data}
+\item{rsdcf}{the rsd cutoff of all peaks}
+
+\item{inscf}{Log intensity cutoff for peaks, default 5}
 }
 \value{
 dataframe with peaks fit the setting above

@@ -4,10 +4,10 @@
 \alias{plotmr}
 \title{plot the scatter plot for xcmsset objects with threshold}
 \usage{
-plotmr(xset, ms = c(100, 800), inscf = 5, rsdcf = 30, ...)
+plotmr(list, ms = c(100, 800), inscf = 5, rsdcf = 30, ...)
 }
 \arguments{
-\item{xset}{the xcmsset object}
+\item{list}{list with data as mzrt profile, mz, rt and group information}
 
 \item{ms}{the mass range to plot the data}
 

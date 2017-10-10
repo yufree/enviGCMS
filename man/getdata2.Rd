@@ -5,7 +5,7 @@
 \title{Get XCMSnExp object in one step from structured folder path for xcms 3.}
 \usage{
 getdata2(path, index = F, snames = NULL, sclass = NULL,
-  phenoData = NULL, BPPARAM = BiocParallel::SnowParam(),
+  phenoData = NULL, BPPARAM = BiocParallel::SnowParam(), mode = "onDisk",
   ppp = xcms::CentWaveParam(ppm = 5, peakwidth = c(5, 25), prefilter = c(3,
   5000)), rtp = xcms::PeakGroupsParam(minFraction = 0.67),
   gpp = xcms::PeakDensityParam(minFraction = 0.67, bw = 2, binSize = 0.025),
@@ -24,6 +24,8 @@ getdata2(path, index = F, snames = NULL, sclass = NULL,
 
 \item{BPPARAM}{used for BiocParallel package}
 
+\item{mode}{'inMemory' or 'onDisk' see `?MSnbase::readMSData` for details, default 'onDisk'}
+
 \item{ppp}{parameters for peaks picking, e.g. xcms::CentWaveParam()}
 
 \item{rtp}{parameters for retention time correction, e.g. xcms::ObiwarpParam()}
@@ -40,4 +42,7 @@ Get XCMSnExp object in one step from structured folder path for xcms 3.
 }
 \details{
 This is a wrap function for metabolomics data process for xcms 3.
+}
+\seealso{
+\code{\link{getdata}},\code{\link{getupload2}}, \code{\link{getmzrt2}}
 }
