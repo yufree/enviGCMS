@@ -1,24 +1,66 @@
-#' Filter the data based on DoE, rsd, intensity and NA
+#' Impute the mzrt profile data
+#' @param list list with data as mzrt profile, mz, rt and group information
+#' @param method 'r' means remove, 'l' means use half the minimum of the values across the mzrt profile, 'mean' means mean of the values across the samples, 'median' means median of the values across the samples, '0' means 0, '1' means 1. Default 'l'.
+#' @return list with imputed peaks
+#' @export
+getimputation <- function(list, method = 'l'){
+        data <- list$data
+        mz <- list$mz
+        rt <- list$rt
+
+        if(method == 'r'){
+                idx <- stats::complete.cases(data)
+                data <- data[idx,]
+                mz <- mz[idx]
+                rt <- rt[idx]
+        }else if(method == 'l'){
+                impute <- min(data,na.rm = T)/2
+                data[is.na(data)] <- impute
+        }else if(method == 'mean'){
+                for(i in 1:ncol(data)){
+                        data[is.na(data[,i]), i] <- mean(data[,i], na.rm = TRUE)
+                }
+        }else if(method == 'median'){
+                for(i in 1:ncol(data)){
+                        data[is.na(data[,i]), i] <- median(data[,i], na.rm = TRUE)
+                }
+        }else if(method == '1'){
+                data[is.na(data)] <- 1
+        }else if(method == '0'){
+                data[is.na(data)] <- 0
+        }else {
+                data <- data
+        }
+        list$data <- data
+        list$mz <- mz
+        list$rt <- rt
+        return(list)
+}
+
+#' Filter the data based on DoE, rsd, intensity
 #' @param list list with data as mzrt profile, mz, rt and group information
 #' @param inscf Log intensity cutoff for peaks, default 5
-#' @param rsdcf the rsd cutoff of all peaks
-#' @param NAtrim FALSE means no NA trim, TRUE means remove the peaks with NA, '1' means impute the NA peaks with 1, '0' means impute the NA with 0.
+#' @param rsdcf the rsd cutoff of all peaks in any group
+#' @param imputation parameters for `getimputation` function method
 #' @param tr logical. TRUE means dataset with technical replicates at the base level folder
 #' @return dataframe with filtered peaks
+#' @export
 
 getdoe <- function(list,
                    inscf = 5,
                    rsdcf = 30,
-                   NAtrim = '1',
+                   imputation = 'l',
                    tr = F){
+        list <- getimputation(list,method = imputation)
         data <- list$data
-        idx <- stats::complete.cases(data)
+        lv <- list$group
+
 
         if(tr){
-                lv <- list$group
-        }else{
-                lv <- list$group
+                lv <- lv[,1:(ncol(lv)-1)]
         }
+
+
         sd <- stats::aggregate(t(data),list(lv),sd)
         mean <- stats::aggregate(t(data), list(lv), mean)
 }
