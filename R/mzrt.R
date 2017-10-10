@@ -3,6 +3,7 @@
 #' @param method 'r' means remove, 'l' means use half the minimum of the values across the mzrt profile, 'mean' means mean of the values across the samples, 'median' means median of the values across the samples, '0' means 0, '1' means 1. Default 'l'.
 #' @return list with imputed peaks
 #' @export
+#' @seealso \code{\link{getdata2}},\code{\link{getdata}}, \code{\link{getmzrt}},\code{\link{getmzrt2}}, \code{\link{getdoe}}
 getimputation <- function(list, method = 'l'){
         data <- list$data
         mz <- list$mz
@@ -44,8 +45,9 @@ getimputation <- function(list, method = 'l'){
 #' @param imputation parameters for `getimputation` function method
 #' @param tr logical. TRUE means dataset with technical replicates at the base level folder
 #' @param rsdcft the rsd cutoff of all peaks in technical replicates
-#' @return dataframe with filtered peaks
+#' @return list with group infomation, filtered peaks and index
 #' @export
+#' @seealso \code{\link{getdata2}},\code{\link{getdata}}, \code{\link{getmzrt}},\code{\link{getmzrt2}}, \code{\link{getimputation}}
 getdoe <- function(list,
                    inscf = 5,
                    rsdcf = 100,

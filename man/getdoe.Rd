@@ -21,8 +21,11 @@ getdoe(list, inscf = 5, rsdcf = 100, rsdcft = 30, imputation = "l",
 \item{tr}{logical. TRUE means dataset with technical replicates at the base level folder}
 }
 \value{
-dataframe with filtered peaks
+list with group infomation, filtered peaks and index
 }
 \description{
 Filter the data based on DoE, rsd, intensity
+}
+\seealso{
+\code{\link{getdata2}},\code{\link{getdata}}, \code{\link{getmzrt}},\code{\link{getmzrt2}}, \code{\link{getimputation}}
 }
