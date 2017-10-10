@@ -35,7 +35,7 @@ mzrtsim <- function(npeaks = 1000,
         colnames(matrix) <- bc
 
         for (i in 1:ncol) {
-                sampleio <- exp(rweibull(npeaks, shape = shape, scale = scale))
+                sampleio <- exp(stats::rweibull(npeaks, shape = shape, scale = scale))
                 samplei <- sampleio[order(sampleio)]
                 matrix[, i] <- samplei
         }
@@ -51,10 +51,10 @@ mzrtsim <- function(npeaks = 1000,
                 if (i != 1) {
                         colindex <- condition == i
                         flips <-
-                                rbinom(ncpeaks,
+                                stats::rbinom(ncpeaks,
                                        size = 1,
                                        prob = upc)
-                        change <- runif(ncpeaks, 1, 10)
+                        change <- stats::runif(ncpeaks, 1, 10)
                         flipschange <-
                                 ifelse(flips == 0, change, 1 / change)
                         matrixc[, colindex] <-
@@ -69,10 +69,10 @@ mzrtsim <- function(npeaks = 1000,
         for (i in 1:nbatch) {
                 if (i != 1) {
                         colindex <- batch == i
-                        flips <- rbinom(nbpeaks,
+                        flips <- stats::rbinom(nbpeaks,
                                         size = 1,
                                         prob = upb)
-                        change <- runif(nbpeaks, 1, 10)
+                        change <- stats::runif(nbpeaks, 1, 10)
                         flipschange <-
                                 ifelse(flips == 0, change, 1 / change)
                         matrixb[, colindex] <-
