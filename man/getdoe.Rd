@@ -2,18 +2,21 @@
 % Please edit documentation in R/mzrt.R
 \name{getdoe}
 \alias{getdoe}
-\title{Filter the data based on DoE, rsd, intensity and NA}
+\title{Filter the data based on DoE, rsd, intensity}
 \usage{
-getdoe(list, inscf = 5, rsdcf = 30, NAtrim = "1", tr = F)
+getdoe(list, inscf = 5, rsdcf = 100, rsdcft = 30, imputation = "l",
+  tr = F)
 }
 \arguments{
 \item{list}{list with data as mzrt profile, mz, rt and group information}
 
-\item{inscf}{Log intensity cutoff for peaks, default 5}
+\item{inscf}{Log intensity cutoff for peaks across samples. If any peaks show a intensity higher than the cutoff in any samples, this peaks would not be filtered. default 5}
 
-\item{rsdcf}{the rsd cutoff of all peaks}
+\item{rsdcf}{the rsd cutoff of all peaks in all group}
 
-\item{NAtrim}{FALSE means no NA trim, TRUE means remove the peaks with NA, '1' means impute the NA peaks with 1, '0' means impute the NA with 0.}
+\item{rsdcft}{the rsd cutoff of all peaks in technical replicates}
+
+\item{imputation}{parameters for `getimputation` function method}
 
 \item{tr}{logical. TRUE means dataset with technical replicates at the base level folder}
 }
@@ -21,5 +24,5 @@ getdoe(list, inscf = 5, rsdcf = 30, NAtrim = "1", tr = F)
 dataframe with filtered peaks
 }
 \description{
-Filter the data based on DoE, rsd, intensity and NA
+Filter the data based on DoE, rsd, intensity
 }

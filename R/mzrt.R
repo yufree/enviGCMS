@@ -39,30 +39,91 @@ getimputation <- function(list, method = 'l'){
 
 #' Filter the data based on DoE, rsd, intensity
 #' @param list list with data as mzrt profile, mz, rt and group information
-#' @param inscf Log intensity cutoff for peaks, default 5
-#' @param rsdcf the rsd cutoff of all peaks in any group
+#' @param inscf Log intensity cutoff for peaks across samples. If any peaks show a intensity higher than the cutoff in any samples, this peaks would not be filtered. default 5
+#' @param rsdcf the rsd cutoff of all peaks in all group
 #' @param imputation parameters for `getimputation` function method
 #' @param tr logical. TRUE means dataset with technical replicates at the base level folder
+#' @param rsdcft the rsd cutoff of all peaks in technical replicates
 #' @return dataframe with filtered peaks
 #' @export
-
 getdoe <- function(list,
                    inscf = 5,
-                   rsdcf = 30,
+                   rsdcf = 100,
+                   rsdcft = 30,
                    imputation = 'l',
                    tr = F){
         list <- getimputation(list,method = imputation)
-        data <- list$data
-        lv <- list$group
-
-
+        # remove the technical replicates and use biological replicates instead
         if(tr){
-                lv <- lv[,1:(ncol(lv)-1)]
+                data <- list$data
+                lv <- list$group
+                # group base on levels
+                cols <- colnames(lv)
+                mlv <- do.call(paste, c(lv[cols]))
+                # get the rsd of the technical replicates
+                meant <- stats::aggregate(t(data),list(mlv),mean)
+                sdt <- stats::aggregate(t(data),list(mlv),sd)
+                suppressWarnings(rsd <- sdt[,-1] / meant [,-1] * 100)
+                data <- t(meant[,-1])
+                colnames(data) <- unique(mlv)
+                rsd <- t(rsd)
+                # filter the data based on rsd of the technical replicates
+                indext <- as.vector(apply(rsd, 1, function(x) all(x < rsdcft)))
+                data <- data[indext,]
+                # data with mean of the technical replicates
+                list$data <- data
+                # get new group infomation
+                ng <- NULL
+                if(ncol(lv)>1){
+                        for(i in 1:(ncol(lv)-1)){
+                                lvi <- sapply(strsplit(unique(mlv), split=' ', fixed=TRUE), `[`, i)
+                                ng <- cbind(ng,lvi)
+                        }
+                        list$group <- data.frame(ng)
+                }else{
+                        list$group <- data.frame(unique(mlv))
+                }
+                # save the index
+                list$indext <- indext
         }
 
-
-        sd <- stats::aggregate(t(data),list(lv),sd)
-        mean <- stats::aggregate(t(data), list(lv), mean)
+        # filter the data based on rsd/intensity
+        data <- list$data
+        lv <- list$group
+        cols <- colnames(lv)
+        # one peak for metabolomics is hard to happen
+        if(nrow(lv)>1){
+                if(ncol(lv)>1){
+                        mlv <- do.call(paste0, c(lv[cols], sep=""))
+                }else{
+                        mlv <- unlist(lv)
+                }
+                mean <- stats::aggregate(t(data),list(mlv),mean)
+                sd <- stats::aggregate(t(data),list(mlv),sd)
+                suppressWarnings(rsd <- sd[,-1] / mean[,-1]* 100)
+                mean <- t(mean[,-1])
+                colnames(mean) <- unique(mlv)
+                rsd <- t(rsd)
+                index <- as.vector(apply(rsd, 1, function(x) all(x < rsdcf))) &
+                        as.vector(apply(mean, 1, function(x) any(x > 10 ^ (inscf))))
+                list$groupmean <- mean
+                list$grouprsd <- rsd
+                list$datafiltered <- data[index,]
+                list$mzfiltered <- list$mz[index]
+                list$rtfiltered <- list$rt[index]
+                list$groupmeanfiltered <- mean[index,]
+                list$grouprsdfiltered <- rsd[index,]
+                list$index <- index
+                return(list)
+        }else{
+                index <- data > 10 ^ (inscf)
+                list$datafiltered <- data[index]
+                list$mzfiltered <- list$mz[index]
+                list$rtfiltered <- list$rt[index]
+                list$index <- index
+                message('Only technical replicates were shown for ONE sample !!!')
+                return(list)
+        }
 }
 
 #' Get the features from t test, with p value, q value, rsd and power restriction
