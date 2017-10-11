@@ -5,7 +5,7 @@
 \title{Get the features from anova, with p value, q value, rsd and power restriction}
 \usage{
 getfeaturesanova(list, power = 0.8, pt = 0.05, qt = 0.05, n = 3,
-  ng = 3, rsdcf = 30, inscf = 5)
+  ng = 3, rsdcf = 100, inscf = 5, imputation = "l")
 }
 \arguments{
 \item{list}{list with data as mzrt profile, mz, rt and group information (more than two groups)}

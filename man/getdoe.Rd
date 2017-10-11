@@ -26,6 +26,15 @@ list with group infomation, filtered peaks and index
 \description{
 Filter the data based on DoE, rsd, intensity
 }
+\examples{
+\dontrun{
+library(faahKO)
+cdfpath <- system.file("cdf", package = "faahKO")
+xset <- getdata(cdfpath, pmethod = ' ')
+list <- getmzrt(xset)
+getdoe(list)
+}
+}
 \seealso{
 \code{\link{getdata2}},\code{\link{getdata}}, \code{\link{getmzrt}},\code{\link{getmzrt2}}, \code{\link{getimputation}}
 }

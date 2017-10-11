@@ -2,6 +2,14 @@
 #' @param list list with data as mzrt profile, mz, rt and group information
 #' @param method 'r' means remove, 'l' means use half the minimum of the values across the mzrt profile, 'mean' means mean of the values across the samples, 'median' means median of the values across the samples, '0' means 0, '1' means 1. Default 'l'.
 #' @return list with imputed peaks
+#' @examples
+#' \dontrun{
+#' library(faahKO)
+#' cdfpath <- system.file("cdf", package = "faahKO")
+#' xset <- getdata(cdfpath, pmethod = ' ')
+#' list <- getmzrt(xset)
+#' getimputation(list)
+#' }
 #' @export
 #' @seealso \code{\link{getdata2}},\code{\link{getdata}}, \code{\link{getmzrt}},\code{\link{getmzrt2}}, \code{\link{getdoe}}
 getimputation <- function(list, method = 'l'){
@@ -46,6 +54,14 @@ getimputation <- function(list, method = 'l'){
 #' @param tr logical. TRUE means dataset with technical replicates at the base level folder
 #' @param rsdcft the rsd cutoff of all peaks in technical replicates
 #' @return list with group infomation, filtered peaks and index
+#' @examples
+#' \dontrun{
+#' library(faahKO)
+#' cdfpath <- system.file("cdf", package = "faahKO")
+#' xset <- getdata(cdfpath, pmethod = ' ')
+#' list <- getmzrt(xset)
+#' getdoe(list)
+#' }
 #' @export
 #' @seealso \code{\link{getdata2}},\code{\link{getdata}}, \code{\link{getmzrt}},\code{\link{getmzrt2}}, \code{\link{getimputation}}
 getdoe <- function(list,
@@ -104,16 +120,19 @@ getdoe <- function(list,
                 sd <- stats::aggregate(t(data),list(mlv),sd)
                 suppressWarnings(rsd <- sd[,-1] / mean[,-1]* 100)
                 mean <- t(mean[,-1])
-                colnames(mean) <- unique(mlv)
+                sd <- t(sd[,-1])
                 rsd <- t(rsd)
+                colnames(rsd) <- colnames(sd) <- colnames(mean) <- unique(mlv)
                 index <- as.vector(apply(rsd, 1, function(x) all(x < rsdcf))) &
                         as.vector(apply(mean, 1, function(x) any(x > 10 ^ (inscf))))
                 list$groupmean <- mean
+                list$groupsd <- sd
                 list$grouprsd <- rsd
                 list$datafiltered <- data[index,]
                 list$mzfiltered <- list$mz[index]
                 list$rtfiltered <- list$rt[index]
                 list$groupmeanfiltered <- mean[index,]
+                list$groupsdfiltered <- sd[index,]
                 list$grouprsdfiltered <- rsd[index,]
                 list$index <- index
                 return(list)
@@ -134,8 +153,9 @@ getdoe <- function(list,
 #' @param pt p value threshold
 #' @param qt q value threshold, BH adjust
 #' @param n sample numbers in one group
-#' @param inscf Log intensity cutoff for peaks, default 5
-#' @param rsdcf the rsd cutoff of all peaks
+#' @param inscf Log intensity cutoff for peaks across samples. If any peaks show a intensity higher than the cutoff in any samples, this peaks would not be filtered. default 5
+#' @param rsdcf the rsd cutoff of all peaks in all group
+#' @param imputation parameters for `getimputation` function method
 #' @return dataframe with peaks fit the setting above
 #' @examples
 #' \dontrun{
@@ -147,33 +167,20 @@ getdoe <- function(list,
 #' }
 #' @export
 
-# rsd每个组都有，不能只算一个
 getfeaturest <- function(list,
                          power = 0.8,
                          pt = 0.05,
                          qt = 0.05,
                          n = 3,
                          inscf = 5,
-                         rsdcf = 30) {
-        data <- list$data
+                         rsdcf = 30,
+                         imputation = 'l') {
+        list <- getdoe(list,inscf = inscf,rsdcf = rsdcf, imputation = imputation)
+        data <- list$datafiltered
         lv <- list$group$class
-
-        sdn <- genefilter::rowSds(data[, 1:n])
-        sd <- stats::aggregate(t(data),list(lv),sd)
-        mean <- stats::aggregate(t(data), list(lv), mean)
-        mean <- t(mean[,-1])
-        sd <- t(sd[,-1])
-        rsd <- sd / mean * 100
-        # filter data based on intensity and rsd
-        index <- as.vector(apply(rsd, 1, function(x)
-                any(x < rsdcf))) &
-                as.vector(apply(mean, 1, function(x)
-                        any(x > 10 ^ (inscf))))
-
-        mz <- list$mz[index]
-        rt <- list$rt[index]
-        data <- data[index,]
-        sdn <- sdn[index]
+        sdn <- list$groupsdfiltered[,1]
+        mz <- list$mzfiltered
+        rt <- list$rtfiltered
 
         ar <- genefilter::rowttests(data, fac = lv)
         dm <- ar$dm
@@ -216,43 +223,33 @@ getfeaturesanova <- function(list,
                              qt = 0.05,
                              n = 3,
                              ng = 3,
-                             rsdcf = 30,
-                             inscf = 5) {
-        data <- list$data
+                             rsdcf = 100,
+                             inscf = 5,
+                             imputation = 'l') {
+        list <- getdoe(list,inscf = inscf,rsdcf = rsdcf, imputation = imputation)
+        data <- list$datafiltered
         lv <- list$group$class
+        sdn <- list$groupsdfiltered[,1]
+        mz <- list$mzfiltered
+        rt <- list$rtfiltered
+        rsd <- list$grouprsdfiltered
 
         sdn <- genefilter::rowSds(data[, 1:n])
-        sd <- stats::aggregate(t(data),list(lv),sd)
-        sd2 <- genefilter::rowSds(mean)
-        mean <- stats::aggregate(t(data), list(lv), mean)
-        mean <- t(mean[,-1])
-        sd <- t(sd[,-1])
-        rsd <- sd / mean * 100
-        # filter data based on intensity and rsd
-        index <- as.vector(apply(rsd, 1, function(x)
-                any(x < rsdcf))) &
-                as.vector(apply(mean, 1, function(x)
-                        any(x > 10 ^ (inscf))))
-
-        sdn <- sdn[index]
-        sd2 <- sd2[index]
-        mz <- list$mz[index]
-        rt <- list$rt[index]
-        data <- data[index,]
+        sdg <- genefilter::rowSds(list$groupmeanfiltered)
 
         ar <- genefilter::rowFtests(data, lv)
         p <- ar$p.value
         q <- stats::p.adjust(p, method = "BH")
         m <- nrow(data)
-        df <- cbind.data.frame(sdn, sd2, p, q, mz, rt, data)
+        df <- cbind.data.frame(sdn, sdg, rsd, p, q, mz, rt, data)
         df <- df[order(df$p),]
         df$alpha <- c(1:m) * pt / m
         rp <- vector()
         for (i in c(1:nrow(df))) {
                 r <- stats::power.anova.test(
                         groups = ng,
-                        between.var = df$sd2[i],
-                        within.var = df$sd[i],
+                        between.var = df$sdg[i],
+                        within.var = df$sdn[i],
                         sig.level = df$alpha[i],
                         n = n
                 )
@@ -721,61 +718,3 @@ gifmr <- function(xset,
                 }
         }, movie.name = filename, ani.width = 800, ani.height = 500)
 }
-#' output the similarity of two dataset
-#' @param xset1 the first dataset
-#' @param xset2 the second dateset
-#' @return similarity on retention time and rsd %
-#' @export
-getsim <- function(xset1, xset2) {
-        data1 <- gettechrep(xset1)[, c("mzmed", "rtmed",
-                                       "rsd")]
-        data2 <- gettechrep(xset2)[, c("mzmed", "rtmed",
-                                       "rsd")]
-
-        # data1$weight <- ifelse(data1$rsd > 100, 0, 0.2)
-        # data1$weight[data1$rsd < 80] <- 0.4
-        # data1$weight[data1$rsd < 60] <- 0.6
-        # data1$weight[data1$rsd < 40] <- 0.8
-        # data1$weight[data1$rsd < 20] <- 1 data1$rtorder
-        # <- order(data1$rtmed)
-        data1$mzmedn <- round(data1$mzmed, 0.1)
-
-        # data2$weight <- ifelse(data2$rsd > 100, 0, 0.2)
-        # data2$weight[data2$rsd < 80] <- 0.4
-        # data2$weight[data2$rsd < 60] <- 0.6
-        # data2$weight[data2$rsd < 40] <- 0.8
-        # data2$weight[data2$rsd < 20] <- 1 data2$rtorder
-        # <- order(data2$rtmed)
-        data2$mzmedn <- round(data2$mzmed, 0.1)
-
-        data <- merge(data1, data2, by = "mzmedn")
-        data <- data[stats::complete.cases(data),]
-        cor1 <- cor(data$rtmed.x, data$rtmed.y)
-        cor2 <- cor(data$rsd.x, data$rsd.y)
-        cor <- c(cor1, cor2)
-        return(cor)
-}
-
-#' get the data of QC compound for a group of data
-#' @param path data path for your QC samples
-#' @param mzrange mass of the QC compound
-#' @param rtrange retention time of the QC compound
-#' @param index index of the files contained QC compounds, default is all of the compounds
-#' @return number vector, each number indicate the peak area of that mass and retention time range
-#' @export
-getQCraw <- function(path, mzrange, rtrange, index = NULL) {
-        cdffiles <- list.files(path, recursive = TRUE,
-                               full.names = TRUE)
-        if (index) {
-                cdffiles <- cdffiles[index]
-        }
-        nsamples <- length(cdffiles)
-        area <- numeric()
-        for (i in 1:nsamples) {
-                RAW <- xcms::xcmsRaw(cdffiles[i])
-                peak <- xcms::rawEIC(RAW, mzrange, rtrange)
-                area[i] <- sum(peak$intensity)
-        }
-        return(area)
-}
-

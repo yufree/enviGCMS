@@ -17,6 +17,15 @@ list with imputed peaks
 \description{
 Impute the mzrt profile data
 }
+\examples{
+\dontrun{
+library(faahKO)
+cdfpath <- system.file("cdf", package = "faahKO")
+xset <- getdata(cdfpath, pmethod = ' ')
+list <- getmzrt(xset)
+getimputation(list)
+}
+}
 \seealso{
 \code{\link{getdata2}},\code{\link{getdata}}, \code{\link{getmzrt}},\code{\link{getmzrt2}}, \code{\link{getdoe}}
 }

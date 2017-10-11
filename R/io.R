@@ -456,3 +456,26 @@ writeMSP <- function(mz, outfilename = "unknown") {
     print(paste("A data file", outfilename, ".MSP has been generated in the folder:",
         "MSP", cat("\n")))
 }
+
+#' get the data of QC compound for a group of data
+#' @param path data path for your QC samples
+#' @param mzrange mass of the QC compound
+#' @param rtrange retention time of the QC compound
+#' @param index index of the files contained QC compounds, default is all of the compounds
+#' @return number vector, each number indicate the peak area of that mass and retention time range
+#' @export
+getQCraw <- function(path, mzrange, rtrange, index = NULL) {
+        cdffiles <- list.files(path, recursive = TRUE,
+                               full.names = TRUE)
+        if (index) {
+                cdffiles <- cdffiles[index]
+        }
+        nsamples <- length(cdffiles)
+        area <- numeric()
+        for (i in 1:nsamples) {
+                RAW <- xcms::xcmsRaw(cdffiles[i])
+                peak <- xcms::rawEIC(RAW, mzrange, rtrange)
+                area[i] <- sum(peak$intensity)
+        }
+        return(area)
+}
