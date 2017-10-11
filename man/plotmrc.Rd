@@ -2,29 +2,32 @@
 % Please edit documentation in R/mzrt.R
 \name{plotmrc}
 \alias{plotmrc}
-\title{plot the diff scatter plot for one xcmsset objects with threshold and two groups}
+\title{plot the diff scatter plot for one xcmsset objects with threshold between two groups}
 \usage{
-plotmrc(xset, ms = c(100, 800), inscf = 5, rsdcf = 30, ...)
+plotmrc(list, ms = c(100, 800), inscf = 5, rsdcf = 30, imputation = "l",
+  ...)
 }
 \arguments{
-\item{xset}{xcmsset object with two groups}
+\item{list}{list with data as mzrt profile, mz, rt and group information}
 
 \item{ms}{the mass range to plot the data}
 
-\item{inscf}{Log intensity cutoff for peaks, default 5}
+\item{inscf}{Log intensity cutoff for peaks across samples. If any peaks show a intensity higher than the cutoff in any samples, this peaks would not be filtered. default 5}
 
-\item{rsdcf}{the rsd cutoff of all peaks}
+\item{rsdcf}{the rsd cutoff of all peaks in all group}
+
+\item{imputation}{parameters for `getimputation` function method}
 
 \item{...}{parameters for `plot` function}
 }
 \description{
-plot the diff scatter plot for one xcmsset objects with threshold and two groups
+plot the diff scatter plot for one xcmsset objects with threshold between two groups
 }
 \examples{
 \dontrun{
 library(faahKO)
 cdfpath <- system.file("cdf", package = "faahKO")
-xset <- getdata(cdfpath, pmethod = ' ')
-plotmrc(xset)
+list <- getmr(cdfpath, pmethod = ' ')
+plotmrc(list)
 }
 }

@@ -961,3 +961,48 @@ plothist <- function(data) {
                         "green", "black")
         )
 }
+
+#' plot the PCA of list
+#' @param data mzrt profile with row peaks and column samples
+#' @param lv group information
+#' @param center parameters for PCA
+#' @param scale parameters for scale
+#' @param ... other parameters for `plot` function
+#' @return NULL
+#' @examples
+#' \dontrun{
+#' library(faahKO)
+#' cdfpath <- system.file("cdf", package = "faahKO")
+#' list <- getmr(cdfpath, pmethod = ' ')
+#' data <- list$data
+#' lv <- as.character(list$group$class)
+#' plotpca(data, lv)
+#' }
+#' @export
+
+plotpca <- function(data, lv = NULL,
+                    center = T,
+                    scale = T,
+                    ...) {
+
+        if (is.null(lv)) {
+                pch = colnames(data)
+        } else {
+                pch = lv
+        }
+        pcao <- stats::prcomp(t(data), center = center,
+                              scale = scale)
+        pcaoVars = signif(((pcao$sdev) ^ 2) / (sum((pcao$sdev) ^ 2)),
+                          3) * 100
+        graphics::plot(
+                pcao$x[, 1],
+                pcao$x[, 2],
+                xlab = paste("PC1:",
+                             pcaoVars[1], "% of Variance Explained"),
+                ylab = paste("PC2:",
+                             pcaoVars[2], "% of Variance Explained"),
+                cex = 2,
+                pch = pch,
+                ...
+        )
+}

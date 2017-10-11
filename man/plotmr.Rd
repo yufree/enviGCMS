@@ -4,16 +4,19 @@
 \alias{plotmr}
 \title{plot the scatter plot for xcmsset objects with threshold}
 \usage{
-plotmr(list, ms = c(100, 800), inscf = 5, rsdcf = 30, ...)
+plotmr(list, ms = c(100, 800), inscf = 5, rsdcf = 30, imputation = "l",
+  ...)
 }
 \arguments{
 \item{list}{list with data as mzrt profile, mz, rt and group information}
 
 \item{ms}{the mass range to plot the data}
 
-\item{inscf}{Log intensity cutoff for peaks, default 5}
+\item{inscf}{Log intensity cutoff for peaks across samples. If any peaks show a intensity higher than the cutoff in any samples, this peaks would not be filtered. default 5}
 
-\item{rsdcf}{the rsd cutoff of all peaks}
+\item{rsdcf}{the rsd cutoff of all peaks in all group}
+
+\item{imputation}{parameters for `getimputation` function method}
 
 \item{...}{parameters for `plot` function}
 }
@@ -27,7 +30,7 @@ plot the scatter plot for xcmsset objects with threshold
 \dontrun{
 library(faahKO)
 cdfpath <- system.file("cdf", package = "faahKO")
-xset <- getdata(cdfpath, pmethod = ' ')
-plotmr(xset)
+list <- getmr(cdfpath, pmethod = ' ')
+plotmr(list)
 }
 }

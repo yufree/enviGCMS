@@ -4,21 +4,26 @@
 \alias{gifmr}
 \title{plot scatter plot for rt-mz profile and output gif file for mutiple groups}
 \usage{
-gifmr(xset, rsdcf = 30, inscf = 5, file = "test")
+gifmr(list, ms = c(100, 500), rsdcf = 30, inscf = 5, imputation = "i",
+  file = "test")
 }
 \arguments{
-\item{xset}{xcmsset object with mutiple groups}
+\item{list}{list with data as mzrt profile, mz, rt and group information}
 
-\item{rsdcf}{the rsd cutoff of all peaks}
+\item{ms}{the mass range to plot the data}
 
-\item{inscf}{log intensity cutoff for peaks, default 5}
+\item{rsdcf}{the rsd cutoff of all peaks in all group}
 
-\item{file}{file name for further annotation, default NULL}
+\item{inscf}{Log intensity cutoff for peaks across samples. If any peaks show a intensity higher than the cutoff in any samples, this peaks would not be filtered. default 5}
+
+\item{imputation}{parameters for `getimputation` function method}
+
+\item{file}{file name for gif file, default NULL}
 
 \item{...}{parameters for `plot` function}
 }
 \value{
-gif file and csv file
+gif file
 }
 \description{
 plot scatter plot for rt-mz profile and output gif file for mutiple groups
@@ -27,7 +32,7 @@ plot scatter plot for rt-mz profile and output gif file for mutiple groups
 \dontrun{
 library(faahKO)
 cdfpath <- system.file("cdf", package = "faahKO")
-xset <- getdata(cdfpath, pmethod = ' ')
-gifmr(xset)
+list <- getmr(cdfpath, pmethod = ' ')
+gifmr(list)
 }
 }

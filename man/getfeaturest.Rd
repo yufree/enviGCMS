@@ -34,8 +34,7 @@ Get the features from t test, with p value, q value, rsd and power restriction
 \dontrun{
 library(faahKO)
 cdfpath <- system.file("cdf", package = "faahKO")
-xset <- getdata(cdfpath, pmethod = ' ')
-list <- getmzrt(xset)
+list <- getmr(cdfpath, pmethod = ' ')
 getfeaturest(list)
 }
 }

@@ -21,11 +21,10 @@ Impute the mzrt profile data
 \dontrun{
 library(faahKO)
 cdfpath <- system.file("cdf", package = "faahKO")
-xset <- getdata(cdfpath, pmethod = ' ')
-list <- getmzrt(xset)
+list <- getmr(cdfpath, pmethod = ' ')
 getimputation(list)
 }
 }
 \seealso{
-\code{\link{getdata2}},\code{\link{getdata}}, \code{\link{getmzrt}},\code{\link{getmzrt2}}, \code{\link{getdoe}}
+\code{\link{getdata2}},\code{\link{getdata}}, \code{\link{getmzrt}},\code{\link{getmzrt2}}, \code{\link{getdoe}}, \code{\link{getmr}}
 }

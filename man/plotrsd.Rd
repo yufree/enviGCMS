@@ -2,31 +2,32 @@
 % Please edit documentation in R/mzrt.R
 \name{plotrsd}
 \alias{plotrsd}
-\title{plot the rsd influnces of data}
+\title{plot the rsd influnces of data in different groups}
 \usage{
-plotrsd(xset, ms = c(0, 800), type = "g", inscf = 5, rsdcf = 30, ...)
+plotrsd(list, ms = c(100, 800), inscf = 5, rsdcf = 100,
+  imputation = "l", ...)
 }
 \arguments{
-\item{xset}{xcmsset data}
+\item{list}{list with data as mzrt profile, mz, rt and group information}
 
 \item{ms}{the mass range to plot the data}
 
-\item{type}{'t' means biological samples with technique replicates; 'b' means biological samples without technique replicates in one group; 'g' means biological samples without technique replicates in mutiple groups. default 'g'}
+\item{inscf}{Log intensity cutoff for peaks across samples. If any peaks show a intensity higher than the cutoff in any samples, this peaks would not be filtered. default 5}
 
-\item{inscf}{Log intensity cutoff for peaks, default 5}
+\item{rsdcf}{the rsd cutoff of all peaks in all group}
 
-\item{rsdcf}{the rsd cutoff of all peaks}
+\item{imputation}{parameters for `getimputation` function method}
 
 \item{...}{other parameters for `plot` function}
 }
 \description{
-plot the rsd influnces of data
+plot the rsd influnces of data in different groups
 }
 \examples{
 \dontrun{
 library(faahKO)
 cdfpath <- system.file("cdf", package = "faahKO")
-xset <- getdata(cdfpath[1:6], pmethod = ' ')
-plotrsd(xset)
+list <- getmr(cdfpath, pmethod = ' ')
+plotrsd(list)
 }
 }
