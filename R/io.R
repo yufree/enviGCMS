@@ -367,7 +367,7 @@ getupload2 <- function(xset,
         data <- xcms::featureValues(xset, value = value)
         data <-
                 rbind(group = as.character(xset@phenoData@data),
-                      group)
+                      data)
         data <- data[!duplicated(rownames(data)),]
         filename <- paste0(name, ".csv")
         utils::write.csv(data, file = filename)
@@ -424,6 +424,33 @@ getmzrt2 <- function(xset){
         return(result)
 }
 
+#' Get the mzrt profile and group information for batch correction and plot as a list directly from path with default setting
+#' @param path the path to your data
+#' @param index the index of the files
+#' @param BPPARAM used for BiocParallel package
+#' @param pmethod parameters used for different instrumentals such as 'hplcorbitrap', 'uplcorbitrap', 'hplcqtof', 'hplchqtof', 'uplcqtof', 'uplchqtof'. The parameters were from the references
+#' @param minfrac minimum fraction of samples necessary in at least one of the sample groups for it to be a valid group, default 0.67
+#' @param ... arguments for xcmsSet function
+#' @return list with rtmz profile and group infomation
+#' @examples
+#' \dontrun{
+#' library(faahKO)
+#' cdfpath <- system.file("cdf", package = "faahKO")
+#' list <- getmr(cdfpath, pmethod = ' ')
+#' }
+#' @seealso \code{\link{getdata}},\code{\link{getupload}}, \code{\link{getmzrt}}, \code{\link{getdoe}}
+#' @export
+getmr <- function(path,
+                  index = F,
+                  BPPARAM = BiocParallel::SnowParam(),
+                  pmethod = "hplcorbitrap",
+                  minfrac = 0.67,
+                  ...){
+        xset <- getdata(path = path,index = index, BPPARAM = BPPARAM, pmethod = pmethod, minfrac = minfrac)
+        list <- getmzrt(xset)
+        return(list)
+        }
+
 #' Write MSP files for NIST search
 #' @param mz a intensity vector, who name is the mass in m/z
 #' @param outfilename the name of the MSP file, default is 'unknown'
@@ -478,4 +505,36 @@ getQCraw <- function(path, mzrange, rtrange, index = NULL) {
                 area[i] <- sum(peak$intensity)
         }
         return(area)
+}
+
+#' plot EIC and boxplot for all peaks and return diffreport
+#' @param xset xcmsset object
+#' @param name filebase of the sub dir
+#' @param test 't' means two-sample welch t-test, 't.equalvar' means two-sample welch t-test with equal variance, 'wilcoxon' means rank sum wilcoxon test, 'f' means F-test, 'pairt' means paired t test, 'blockf' means Two-way analysis of variance, default 't'
+#' @param nonpara 'y' means using nonparametric ranked data, 'n' means original data
+#' @param ... other parameters for `diffreport`
+#' @return diffreport and pdf figure for EIC and boxplot
+#' @examples
+#' \dontrun{
+#' library(faahKO)
+#' cdfpath <- system.file("cdf", package = "faahKO")
+#' xset <- getdata(cdfpath, pmethod = ' ')
+#' plote(xset)
+#' }
+#' @export
+plote <- function(xset,
+                  name = "test",
+                  test = "t",
+                  nonpara = "n",
+                  ...) {
+        gt <- xcms::groups(xset)
+        a <-
+                xcms::diffreport(
+                        xset,
+                        filebase = name,
+                        eicmax = nrow(gt),
+                        nonpara = nonpara,
+                        ...
+                )
+        return(a)
 }
