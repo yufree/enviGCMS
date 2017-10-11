@@ -212,8 +212,9 @@ getfeaturest <- function(list,
 #' @param qt q value threshold, BH adjust
 #' @param n sample numbers in one group
 #' @param ng group numbers
-#' @param inscf Log intensity cutoff for peaks, default 5
-#' @param rsdcf the rsd cutoff of all peaks
+#' @param inscf Log intensity cutoff for peaks across samples. If any peaks show a intensity higher than the cutoff in any samples, this peaks would not be filtered. default 5
+#' @param rsdcf the rsd cutoff of all peaks in all group
+#' @param imputation parameters for `getimputation` function method
 #' @return dataframe with peaks fit the setting above
 #' @export
 
