@@ -4,8 +4,8 @@
 \alias{mzrtsim}
 \title{Generate simulated count data with batch effects for npeaks}
 \usage{
-mzrtsim(npeaks = 1000, ncond = 2, ncpeaks = 0.05, upc = 0.5,
-  nbatch = 3, nbpeaks = 0.1, upb = 0.3, npercond = 10, shape = 8,
+mzrtsim(npeaks = 1000, ncond = 2, ncpeaks = 0.05, nbatch = 3,
+  nbpeaks = 0.1, npercond = 10, nperbatch = c(8, 5, 7), shape = 8,
   scale = 12, seed = 42)
 }
 \arguments{
@@ -15,15 +15,13 @@ mzrtsim(npeaks = 1000, ncond = 2, ncpeaks = 0.05, upc = 0.5,
 
 \item{ncpeaks}{percentage of peaks influenced by conditions}
 
-\item{upc}{up regulation proportion in peaks influenced by conditions}
-
 \item{nbatch}{Number of batches to simulate}
 
 \item{nbpeaks}{percentage of peaks influenced by batchs}
 
-\item{upb}{up regulation proportion in peaks influenced by batchs}
+\item{npercond}{Number of samples per condition to simulate}
 
-\item{npercond}{Number of samples per condition per batch to simulate}
+\item{nperbatch}{Number of samples per batch to simulate}
 
 \item{shape}{shape for Weibull distribution}
 
@@ -36,6 +34,9 @@ list with rtmz data matrix, row index of peaks influenced by conditions, row ind
 }
 \description{
 Generate simulated count data with batch effects for npeaks
+}
+\details{
+the numbers of batch columns should be the same with the condition columns.
 }
 \examples{
 sim <- mzrtsim()

@@ -1,7 +1,7 @@
 Package: enviGCMS
 Type: Package
 Title: GC/LC-MS Data Analysis for Environmental Science
-Version: 0.4.0
+Version: 0.4.1
 Date: 2017-07-05
 Authors@R: person(given = "Miao", family = "YU",
         role = c("aut", "cre"), 
@@ -28,6 +28,7 @@ Imports: xcms,
     qvalue,
     sva,
     isva,
+    FAMT,
     mixtools,
     BiocParallel,
     genefilter,

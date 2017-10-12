@@ -1,3 +1,9 @@
+# enviGCMS 0.4.1
+
+## Major changes
+
+- add batch correction methods with p-value and q-value: sva, isva, FAMT, RRmix
+
 # enviGCMS 0.4.0
 
 ## Major changes

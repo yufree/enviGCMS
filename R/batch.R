@@ -1,38 +1,24 @@
-#' Surrogate variable analysis(SVA) to correct the unknown batch effects
-#' @param xset xcmsset object
-#' @param lv group information
-#' @param method parameter for groupval function
-#' @param intensity parameter for groupval function
-#' @details this is used for reviesed version of SVA to correct the unknown batch effects
+#' Use Surrogate Variable Analysis(SVA) to correct the unknown batch effects
+#' @param data data as mzrt profile
+#' @param lv factor vector for the group infomation
+#' @details this is used for SVA to correct the unknown batch effects
 #' @return list object with various components such raw data, corrected data, signal part, random errors part, batch part, p-values, q-values, mass, rt, Posterior Probabilities of Surrogate variables and Posterior Probabilities of Mod. If no surrogate variable found, corresponding part would miss.
 #' @examples
 #' \dontrun{
 #' library(faahKO)
 #' cdfpath <- system.file("cdf", package = "faahKO")
 #' cdffiles <- list.files(cdfpath, recursive = TRUE, full.names = TRUE)
-#' xset <- xcmsSet(cdffiles)
-#' xset <- group(xset)
-#' xset2 <- retcor(xset, family = "symmetric", plottype = "mdevden")
-#' xset2 <- group(xset2, bw = 10)
-#' xset3 <- fillPeaks(xset2)
-#' df <- svacor(xset3)
+#' list <- getmr(cdfpath, pmethod = ' ')
+#' list <- svacor(list$data,list$group$class)
 #' }
 #' @seealso \code{\link{svapca}}, \code{\link{svaplot}}, \code{\link{svabatch}}
 #' @export
-svacor <- function(xset, lv = NULL, method = "medret",
-    intensity = "into") {
-    data <- xcms::groupval(xset, method, intensity)
-    data[is.na(data)] = 0
-
-    if (is.null(lv)) {
-        lv <- xset@phenoData[, 1]
-    }
-    mz <- xset@groups[, 1]
-    rt <- xset@groups[, 4]
+svacor <- function(data, lv) {
     mod <- stats::model.matrix(~lv)
     mod0 <- as.matrix(c(rep(1, ncol(data))))
     svafit <- sva::sva(data, mod)
     if (svafit$n.sv == 0) {
+            message("No surrogate variable found")
         svaX <- stats::model.matrix(~lv)
         lmfit <- limma::lmFit(data, svaX)
         signal <- lmfit$coef[, 1:nlevels(lv)] %*% t(svaX[,
@@ -40,19 +26,18 @@ svacor <- function(xset, lv = NULL, method = "medret",
         error <- data - signal
         rownames(signal) <- rownames(error) <- rownames(data)
         colnames(signal) <- colnames(error) <- colnames(data)
+        # find the peaks with significant differences by F test with BH correction for fdt control
         pValues = sva::f.pvalue(data, mod, mod0)
-        qValues = qvalue::qvalue(pValues)
-        qValues = qValues$qvalues
-
-        li <- list(data, signal, error, pValues, qValues,
-            mz, rt)
-        names(li) <- c("data", "signal", "error", "p-values",
-            "q-values", "mz", "rt")
+        qValues = stats::p.adjust(pValues, method = 'BH')
+        # get the results as list
+        li <- list(data, signal, error, pValues, qValues)
+        names(li) <- c("data", "signal", "error", "p-values","q-values")
 
     } else {
         message("Data is correcting ...")
         svaX <- stats::model.matrix(~lv + svafit$sv)
         lmfit <- limma::lmFit(data, svaX)
+        # data decomposition with sv
         batch <- lmfit$coef[, (nlevels(lv) + 1):(nlevels(lv) +
             svafit$n.sv)] %*% t(svaX[, (nlevels(lv) +
             1):(nlevels(lv) + svafit$n.sv)])
@@ -62,40 +47,38 @@ svacor <- function(xset, lv = NULL, method = "medret",
         datacor <- signal + error
         svaX2 <- stats::model.matrix(~lv)
         lmfit2 <- limma::lmFit(data, svaX2)
+        # data decomposition without sv
         signal2 <- lmfit2$coef[, 1:nlevels(lv)] %*%
             t(svaX2[, 1:nlevels(lv)])
         error2 <- data - signal2
         rownames(signal2) <- rownames(error2) <- rownames(datacor) <- rownames(signal) <- rownames(batch) <- rownames(error) <- rownames(data)
         colnames(signal2) <- colnames(error2) <- colnames(datacor) <- colnames(signal) <- colnames(batch) <- colnames(error) <- colnames(data)
 
+        # find the peaks with significant differences by F test with BH correction for fdt control with surrogate variables
         modSv = cbind(mod, svafit$sv)
         mod0Sv = cbind(mod0, svafit$sv)
         pValuesSv = sva::f.pvalue(data, modSv, mod0Sv)
-        qValuesSv = qvalue::qvalue(pValuesSv)
-        qValuesSv = qValuesSv$qvalues
-
+        qValuesSv = stats::p.adjust(pValuesSv, method = 'BH')
+        # find the peaks with significant differences by F test with BH correction for fdt control without surrogate variables
         pValues = sva::f.pvalue(data, mod, mod0)
-        qValues = qvalue::qvalue(pValues)
-        qValues = qValues$qvalues
+        qValues = stats::p.adjust(pValues, method = 'BH')
+        # get the results as list
         li <- list(data, datacor, signal, batch, error,
             signal2, error2, pValues, qValues, pValuesSv,
-            qValuesSv, svafit$pprob.gam, svafit$pprob.b,
-            mz, rt)
+            qValuesSv, svafit$pprob.gam, svafit$pprob.b)
         names(li) <- c("data", "dataCorrected", "signal",
             "batch", "error", "signal2", "error2",
             "p-values", "q-values", "p-valuesCorrected",
             "q-valuesCorrected", "PosteriorProbabilitiesSurrogate",
-            "PosteriorProbabilitiesMod", "mz", "rt")
+            "PosteriorProbabilitiesMod")
         message("Done!")
     }
     return(li)
 }
 
-#' Independent Surrogate variable analysis(ISVA) to correct the unknown batch effects
-#' @param xset xcmsset object
-#' @param lv group information
-#' @param method parameter for groupval function
-#' @param intensity parameter for groupval function
+#' Use Independent Surrogate Variable Analysis(ISVA) to correct the unknown batch effects
+#' @param data data as mzrt profile
+#' @param lv factor vector for the group infomation
 #' @details this is used for reviesed version of ISVA to correct the unknown batch effects
 #' @return list object with various components such raw data, corrected data, signal part, random errors part, batch part, p-values, q-values, mass, rt. If no surrogate variable found, corresponding part would miss.
 #' @examples
@@ -103,30 +86,18 @@ svacor <- function(xset, lv = NULL, method = "medret",
 #' library(faahKO)
 #' cdfpath <- system.file("cdf", package = "faahKO")
 #' cdffiles <- list.files(cdfpath, recursive = TRUE, full.names = TRUE)
-#' xset <- xcmsSet(cdffiles)
-#' xset <- group(xset)
-#' xset2 <- retcor(xset, family = "symmetric", plottype = "mdevden")
-#' xset2 <- group(xset2, bw = 10)
-#' xset3 <- fillPeaks(xset2)
-#' df <- svacor(xset3)
+#' list <- getmr(cdfpath, pmethod = ' ')
+#' list <- isvacor(list$data,list$group$class)
 #' }
 #' @seealso \code{\link{svacor}},\code{\link{svapca}}, \code{\link{svaplot}}, \code{\link{svabatch}}
 #' @export
-isvacor <- function(xset, lv = NULL, method = "medret",
-                   intensity = "into") {
-        data <- xcms::groupval(xset, method, intensity)
-        data[is.na(data)] = 0
-
-        if (is.null(lv)) {
-                lv <- xset@phenoData[, 1]
-        }
-        mz <- xset@groups[, 1]
-        rt <- xset@groups[, 4]
+isvacor <- function(data, lv) {
         mod <- stats::model.matrix(~lv)
         mod0 <- as.matrix(c(rep(1, ncol(data))))
 
-        svafit <- isva::DoISVA(data,lv)
-        if (svafit$nsv == 0) {
+        isvafit <- isva::DoISVA(data,lv,factor.log = T)
+        if (isvafit$nsv == 0) {
+                message("No surrogate variable found")
                 svaX <- stats::model.matrix(~lv)
                 lmfit <- limma::lmFit(data, svaX)
                 signal <- lmfit$coef[, 1:nlevels(lv)] %*% t(svaX[,
@@ -134,26 +105,26 @@ isvacor <- function(xset, lv = NULL, method = "medret",
                 error <- data - signal
                 rownames(signal) <- rownames(error) <- rownames(data)
                 colnames(signal) <- colnames(error) <- colnames(data)
+                # find the peaks with significant differences by F test with BH correction for fdt control
                 pValues = sva::f.pvalue(data, mod, mod0)
-                qValues = qvalue::qvalue(pValues)
-                qValues = qValues$qvalues
-
-                li <- list(data, signal, error, pValues, qValues,
-                           mz, rt)
-                names(li) <- c("data", "signal", "error", "p-values",
-                               "q-values", "mz", "rt")
+                qValues = stats::p.adjust(pValues, method = 'BH')
+                # get the results as list
+                li <- list(data, signal, error, pValues, qValues)
+                names(li) <- c("data", "signal", "error", "p-values","q-values")
 
         } else {
                 message("Data is correcting ...")
-                svaX <- stats::model.matrix(~lv + svafit$isv)
+                svaX <- stats::model.matrix(~lv + isvafit$isv)
                 lmfit <- limma::lmFit(data, svaX)
+                # data decomposition with sv
                 batch <- lmfit$coef[, (nlevels(lv) + 1):(nlevels(lv) +
-                                                                 svafit$nsv)] %*% t(svaX[, (nlevels(lv) +
-                                                                                                     1):(nlevels(lv) + svafit$nsv)])
+                                                                 isvafit$nsv)] %*% t(svaX[, (nlevels(lv) +
+                                                                                                     1):(nlevels(lv) + isvafit$nsv)])
                 signal <- lmfit$coef[, 1:nlevels(lv)] %*% t(svaX[,
                                                                  1:nlevels(lv)])
                 error <- data - signal - batch
                 datacor <- signal + error
+                # data decomposition without sv
                 svaX2 <- stats::model.matrix(~lv)
                 lmfit2 <- limma::lmFit(data, svaX2)
                 signal2 <- lmfit2$coef[, 1:nlevels(lv)] %*%
@@ -162,26 +133,25 @@ isvacor <- function(xset, lv = NULL, method = "medret",
                 rownames(signal2) <- rownames(error2) <- rownames(datacor) <- rownames(signal) <- rownames(batch) <- rownames(error) <- rownames(data)
                 colnames(signal2) <- colnames(error2) <- colnames(datacor) <- colnames(signal) <- colnames(batch) <- colnames(error) <- colnames(data)
 
-                modSv = cbind(mod, svafit$isv)
-                mod0Sv = cbind(mod0, svafit$isv)
+                modSv = cbind(mod, isvafit$isv)
+                mod0Sv = cbind(mod0, isvafit$isv)
                 pValuesSv = sva::f.pvalue(data, modSv, mod0Sv)
-                qValuesSv = qvalue::qvalue(pValuesSv)
-                qValuesSv = qValuesSv$qvalues
+                qValuesSv = stats::p.adjust(pValuesSv, method = 'BH')
 
                 pValues = sva::f.pvalue(data, mod, mod0)
-                qValues = qvalue::qvalue(pValues)
-                qValues = qValues$qvalues
+                qValues = stats::p.adjust(pValues, method = 'BH')
                 li <- list(data, datacor, signal, batch, error,
                            signal2, error2, pValues, qValues, pValuesSv,
-                           qValuesSv,mz, rt)
+                           qValuesSv)
                 names(li) <- c("data", "dataCorrected", "signal",
                                "batch", "error", "signal2", "error2",
                                "p-values", "q-values", "p-valuesCorrected",
-                               "q-valuesCorrected", "mz", "rt")
+                               "q-valuesCorrected")
                 message("Done!")
         }
         return(li)
 }
+
 #' Principal component analysis(PCA) for SVA corrected data and raw data
 #' @param list results from svacor function
 #' @param center parameters for PCA

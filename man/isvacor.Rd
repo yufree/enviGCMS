@@ -2,24 +2,20 @@
 % Please edit documentation in R/batch.R
 \name{isvacor}
 \alias{isvacor}
-\title{Independent Surrogate variable analysis(ISVA) to correct the unknown batch effects}
+\title{Use Independent Surrogate Variable Analysis(ISVA) to correct the unknown batch effects}
 \usage{
-isvacor(xset, lv = NULL, method = "medret", intensity = "into")
+isvacor(data, lv)
 }
 \arguments{
-\item{xset}{xcmsset object}
+\item{data}{data as mzrt profile}
 
-\item{lv}{group information}
-
-\item{method}{parameter for groupval function}
-
-\item{intensity}{parameter for groupval function}
+\item{lv}{factor vector for the group infomation}
 }
 \value{
 list object with various components such raw data, corrected data, signal part, random errors part, batch part, p-values, q-values, mass, rt. If no surrogate variable found, corresponding part would miss.
 }
 \description{
-Independent Surrogate variable analysis(ISVA) to correct the unknown batch effects
+Use Independent Surrogate Variable Analysis(ISVA) to correct the unknown batch effects
 }
 \details{
 this is used for reviesed version of ISVA to correct the unknown batch effects
@@ -29,12 +25,8 @@ this is used for reviesed version of ISVA to correct the unknown batch effects
 library(faahKO)
 cdfpath <- system.file("cdf", package = "faahKO")
 cdffiles <- list.files(cdfpath, recursive = TRUE, full.names = TRUE)
-xset <- xcmsSet(cdffiles)
-xset <- group(xset)
-xset2 <- retcor(xset, family = "symmetric", plottype = "mdevden")
-xset2 <- group(xset2, bw = 10)
-xset3 <- fillPeaks(xset2)
-df <- svacor(xset3)
+list <- getmr(cdfpath, pmethod = ' ')
+list <- isvacor(list$data,list$group$class)
 }
 }
 \seealso{
