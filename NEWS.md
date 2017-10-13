@@ -5,6 +5,7 @@
 - add batch correction methods with p-value and q-value: sva, isva
 - remove svadata and svaupload
 - update mzrtsim
+- add simmzrt to simulation input data
 
 # enviGCMS 0.4.0
 
