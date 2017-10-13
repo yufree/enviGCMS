@@ -168,15 +168,15 @@ simmzrt <- function(data,
         colnames(matrix) <- bc
         # get the mean, sd, and rsd from the data
         datamean <- apply(data,1,mean)
-        datasd <- apply(data,1,sd)
+        datasd <- apply(data,1,stats::sd)
         datarsd <- datasd/datamean
         if(type == 'e'){
                 # generate the distribution from mean and rsd
-                pdfmean <- ecdf(datamean)
-                pdfrsd <- ecdf(datarsd)
+                pdfmean <- stats::ecdf(datamean)
+                pdfrsd <- stats::ecdf(datarsd)
                 # simulate the sample mean and rsd from ecdf
-                simmean <- as.numeric(quantile(pdfmean, runif(ncomp)))
-                simrsd <- as.numeric(quantile(pdfrsd, runif(ncomp)))
+                simmean <- as.numeric(stats::quantile(pdfmean, stats::runif(ncomp)))
+                simrsd <- as.numeric(stats::quantile(pdfrsd, stats::runif(ncomp)))
         }else if(type == 'b'){
                 # simulate the sample mean and rsd from bootstrap
                 simmean <- sample(datamean,ncomp,replace = T)
