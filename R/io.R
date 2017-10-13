@@ -356,7 +356,10 @@ getupload <- function(xset,
 #' \dontrun{
 #' library(faahKO)
 #' cdfpath <- system.file("cdf", package = "faahKO")
-#' xset <- getdata2(cdfpath, ppp = xcms::MatchedFilterParam(), rtp = xcms::ObiwarpParam(), gpp = xcms::PeakDensityParam())
+#' xset <- getdata2(cdfpath,
+#' ppp = xcms::MatchedFilterParam(),
+#' rtp = xcms::ObiwarpParam(),
+#' gpp = xcms::PeakDensityParam())
 #' getupload2(xset)
 #' }
 #' @seealso \code{\link{getdata2}},\code{\link{getupload}}, \code{\link{getmzrt2}}
@@ -406,7 +409,10 @@ getmzrt <- function(xset){
 #' \dontrun{
 #' library(faahKO)
 #' cdfpath <- system.file("cdf", package = "faahKO")
-#' xset <- getdata2(cdfpath, ppp = xcms::MatchedFilterParam(), rtp = xcms::ObiwarpParam(), gpp = xcms::PeakDensityParam())
+#' xset <- getdata2(cdfpath,
+#' ppp = xcms::MatchedFilterParam(),
+#' rtp = xcms::ObiwarpParam(),
+#' gpp = xcms::PeakDensityParam())
 #' getmzrt2(xset)
 #' }
 #' @seealso \code{\link{getdata2}},\code{\link{getupload2}}, \code{\link{getmzrt}}, \code{\link{getdoe}}

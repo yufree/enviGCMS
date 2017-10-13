@@ -23,7 +23,10 @@ Get the csv files to be submitted to Metaboanalyst
 \dontrun{
 library(faahKO)
 cdfpath <- system.file("cdf", package = "faahKO")
-xset <- getdata2(cdfpath, ppp = xcms::MatchedFilterParam(), rtp = xcms::ObiwarpParam(), gpp = xcms::PeakDensityParam())
+xset <- getdata2(cdfpath,
+ppp = xcms::MatchedFilterParam(),
+rtp = xcms::ObiwarpParam(),
+gpp = xcms::PeakDensityParam())
 getupload2(xset)
 }
 }

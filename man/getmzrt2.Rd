@@ -19,7 +19,10 @@ Get the mzrt profile and group information for batch correction and plot as a li
 \dontrun{
 library(faahKO)
 cdfpath <- system.file("cdf", package = "faahKO")
-xset <- getdata2(cdfpath, ppp = xcms::MatchedFilterParam(), rtp = xcms::ObiwarpParam(), gpp = xcms::PeakDensityParam())
+xset <- getdata2(cdfpath,
+ppp = xcms::MatchedFilterParam(),
+rtp = xcms::ObiwarpParam(),
+gpp = xcms::PeakDensityParam())
 getmzrt2(xset)
 }
 }

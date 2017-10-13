@@ -31,7 +31,7 @@ library(faahKO)
 cdfpath <- system.file("cdf", package = "faahKO")
 list <- getmr(cdfpath, pmethod = ' ')
 li <- svacor(list$data,list$group$class)
-svaplot(li)
+svaplot(li,list$group$class)
 }
 }
 \seealso{
