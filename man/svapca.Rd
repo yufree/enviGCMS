@@ -2,7 +2,7 @@
 % Please edit documentation in R/batch.R
 \name{svapca}
 \alias{svapca}
-\title{Principal component analysis(PCA) for SVA corrected data and raw data}
+\title{Principal component analysis(PCA) for SVA/ISVA corrected data and raw data}
 \usage{
 svapca(list, center = T, scale = T, lv = NULL)
 }
@@ -13,26 +13,21 @@ svapca(list, center = T, scale = T, lv = NULL)
 
 \item{scale}{parameters for scale}
 
-\item{lv}{group information}
+\item{lv}{factor vector for the group infomation}
 }
 \value{
 plot
 }
 \description{
-Principal component analysis(PCA) for SVA corrected data and raw data
+Principal component analysis(PCA) for SVA/ISVA corrected data and raw data
 }
 \examples{
 \dontrun{
 library(faahKO)
 cdfpath <- system.file("cdf", package = "faahKO")
-cdffiles <- list.files(cdfpath, recursive = TRUE, full.names = TRUE)
-xset <- xcmsSet(cdffiles)
-xset <- group(xset)
-xset2 <- retcor(xset, family = "symmetric", plottype = "mdevden")
-xset2 <- group(xset2, bw = 10)
-xset3 <- fillPeaks(xset2)
-df <- svacor(xset3)
-svapca(df)
+list <- getmr(cdfpath, pmethod = ' ')
+li <- svacor(list$data,list$group$class)
+svapca(li)
 }
 }
 \seealso{

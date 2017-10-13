@@ -4,12 +4,14 @@
 \alias{mzrtsim}
 \title{Generate simulated count data with batch effects for npeaks}
 \usage{
-mzrtsim(npeaks = 1000, ncond = 2, ncpeaks = 0.05, nbatch = 3,
-  nbpeaks = 0.1, npercond = 10, nperbatch = c(8, 5, 7), shape = 8,
-  scale = 12, seed = 42)
+mzrtsim(npeaks = 1000, ncomp = 0.8, ncond = 2, ncpeaks = 0.05,
+  nbatch = 3, nbpeaks = 0.1, npercond = 10, nperbatch = c(8, 5, 7),
+  shape = 2, scale = 3, shapersd = 1, scalersd = 0.18, seed = 42)
 }
 \arguments{
 \item{npeaks}{Number of peaks to simulate}
+
+\item{ncomp}{percentage of compounds}
 
 \item{ncond}{Number of conditions to simulate}
 
@@ -23,9 +25,13 @@ mzrtsim(npeaks = 1000, ncond = 2, ncpeaks = 0.05, nbatch = 3,
 
 \item{nperbatch}{Number of samples per batch to simulate}
 
-\item{shape}{shape for Weibull distribution}
+\item{shape}{shape for Weibull distribution of sample mean}
 
-\item{scale}{scale for Weibull distribution}
+\item{scale}{scale for Weibull distribution of sample mean}
+
+\item{shapersd}{shape for Weibull distribution of sample rsd}
+
+\item{scalersd}{scale for Weibull distribution of sample rsd}
 
 \item{seed}{Random seed for reproducibility}
 }

@@ -2,7 +2,9 @@
 
 ## Major changes
 
-- add batch correction methods with p-value and q-value: sva, isva, FAMT, RRmix
+- add batch correction methods with p-value and q-value: sva, isva
+- remove svadata and svaupload
+- update mzrtsim
 
 # enviGCMS 0.4.0
 

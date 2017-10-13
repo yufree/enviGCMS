@@ -4,19 +4,18 @@
 \alias{svaplot}
 \title{Filter the data with p value and q value and show them}
 \usage{
-svaplot(list, pqvalues = "sv", pt = 0.05, qt = 0.05, lv = NULL,
-  index = NULL)
+svaplot(list, lv, pqvalues = "sv", pt = 0.05, qt = 0.05, index = NULL)
 }
 \arguments{
 \item{list}{results from svacor function}
+
+\item{lv}{factor vector for the group infomation}
 
 \item{pqvalues}{method for ANOVA or SVA}
 
 \item{pt}{threshold for p value, default is 0.05}
 
 \item{qt}{threshold for q value, default is 0.05}
-
-\item{lv}{group information}
 
 \item{index}{index for selected peaks}
 }
@@ -30,14 +29,9 @@ Filter the data with p value and q value and show them
 \dontrun{
 library(faahKO)
 cdfpath <- system.file("cdf", package = "faahKO")
-cdffiles <- list.files(cdfpath, recursive = TRUE, full.names = TRUE)
-xset <- xcmsSet(cdffiles)
-xset <- group(xset)
-xset2 <- retcor(xset, family = "symmetric", plottype = "mdevden")
-xset2 <- group(xset2, bw = 10)
-xset3 <- fillPeaks(xset2)
-df <- svacor(xset3)
-svaplot(df)
+list <- getmr(cdfpath, pmethod = ' ')
+li <- svacor(list$data,list$group$class)
+svaplot(li)
 }
 }
 \seealso{

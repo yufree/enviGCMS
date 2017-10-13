@@ -23,16 +23,11 @@ Plot the influnces of DoE and Batch effects on each peaks
 \dontrun{
 library(faahKO)
 cdfpath <- system.file("cdf", package = "faahKO")
-cdffiles <- list.files(cdfpath, recursive = TRUE, full.names = TRUE)
-xset <- xcmsSet(cdffiles)
-xset <- group(xset)
-xset2 <- retcor(xset, family = "symmetric", plottype = "mdevden")
-xset2 <- group(xset2, bw = 10)
-xset3 <- fillPeaks(xset2)
-df <- svacor(xset3)
-dfsv <- svaplot(xset3)
-dfanova <- svaplot(xset3, pqvalues = "anova")
-svabatch(df,dfsv,dfanova)
+list <- getmr(cdfpath, pmethod = ' ')
+li <- svacor(list$data,list$group$class)
+dfsv <- svaplot(li,list$group$class)
+dfanova <- svaplot(li, list$group$class, pqvalues = "anova")
+svabatch(li,dfsv,dfanova)
 }
 }
 \seealso{
