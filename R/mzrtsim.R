@@ -56,7 +56,7 @@ mzrtsim <- function(npeaks = 1000,
         samplersd <- stats::rweibull(ncomp,shape = shapersd,scale = scalersd)
 
         for (i in 1:ncomp) {
-                samplei <- abs(rnorm(ncol,mean = samplem[i], sd = samplem[i]*samplersd[i]))
+                samplei <- abs(stats::rnorm(ncol,mean = samplem[i], sd = samplem[i]*samplersd[i]))
                 matrix[i,] <- samplei
         }
 
