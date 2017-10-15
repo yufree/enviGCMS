@@ -14,7 +14,7 @@
 #' @param scalersd scale for Weibull distribution of sample rsd
 #' @param seed Random seed for reproducibility
 #' @details the numbers of batch columns should be the same with the condition columns.
-#' @return list with rtmz data matrix, row index of peaks influenced by conditions, row index of peaks influenced by batchs, column index of conditions, column of batchs, raw condition matrix, raw batch matrix
+#' @return list with rtmz data matrix, row index of peaks influenced by conditions, row index of peaks influenced by batchs, column index of conditions, column of batchs, raw condition matrix, raw batch matrix, peak mean across the samples, peak rsd across the samples
 #' @export
 #' @examples
 #' sim <- mzrtsim()
@@ -98,6 +98,11 @@ mzrtsim <- function(npeaks = 1000,
                 changeb <- cbind(changeb,change)
         }
         matrix[indexb, ] <- matrixb
+        # get peaks mean across the samples
+        means <- apply(matrix,1,mean)
+        # get peaks rsd across the samples
+        sds <- apply(matrix,1,sd)
+        rsds <- sds/means
         # add row names
         rownames(matrix) <- paste0('P', c(1:npeaks))
         return(list(
@@ -111,7 +116,9 @@ mzrtsim <- function(npeaks = 1000,
                 bmatrix = matrixb0,
                 changeb = changeb,
                 matrix = matrix0,
-                compmatrix = matrix[1:ncomp,]
+                compmatrix = matrix[1:ncomp,],
+                mean  = means,
+                rsd = rsds
         ))
 }
 
@@ -129,7 +136,7 @@ mzrtsim <- function(npeaks = 1000,
 #' @param nperbatch Number of samples per batch to simulate
 #' @param seed Random seed for reproducibility
 #' @details the numbers of batch columns should be the same with the condition columns.
-#' @return list with rtmz data matrix, row index of peaks influenced by conditions, row index of peaks influenced by batchs, column index of conditions, column of batchs, raw condition matrix, raw batch matrix
+#' @return list with rtmz data matrix, row index of peaks influenced by conditions, row index of peaks influenced by batchs, column index of conditions, column of batchs, raw condition matrix, raw batch matrix, peak mean across the samples, peak rsd across the samples
 #' @export
 #' @examples
 #' library(faahKO)
@@ -229,6 +236,11 @@ simmzrt <- function(data,
                 changeb <- cbind(changeb,change)
         }
         matrix[indexb, ] <- matrixb
+        # get peaks mean across the samples
+        means <- apply(matrix,1,mean)
+        # get peaks rsd across the samples
+        sds <- apply(matrix,1,sd)
+        rsds <- sds/means
         # add row names
         rownames(matrix) <- paste0('P', c(1:npeaks))
         return(list(
@@ -242,6 +254,8 @@ simmzrt <- function(data,
                 bmatrix = matrixb0,
                 changeb = changeb,
                 matrix = matrix0,
-                compmatrix = matrix[1:ncomp,]
+                compmatrix = matrix[1:ncomp,],
+                mean  = means,
+                rsd = rsds
         ))
 }

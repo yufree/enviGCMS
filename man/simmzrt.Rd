@@ -32,7 +32,7 @@ simmzrt(data, type = "e", npeaks = 1000, ncomp = 0.8, ncond = 2,
 \item{seed}{Random seed for reproducibility}
 }
 \value{
-list with rtmz data matrix, row index of peaks influenced by conditions, row index of peaks influenced by batchs, column index of conditions, column of batchs, raw condition matrix, raw batch matrix
+list with rtmz data matrix, row index of peaks influenced by conditions, row index of peaks influenced by batchs, column index of conditions, column of batchs, raw condition matrix, raw batch matrix, peak mean across the samples, peak rsd across the samples
 }
 \description{
 Simulation from data by sample mean and rsd from Empirical Cumulative Distribution or Bootstrap sampling

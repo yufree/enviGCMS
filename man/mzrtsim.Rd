@@ -36,7 +36,7 @@ mzrtsim(npeaks = 1000, ncomp = 0.8, ncond = 2, ncpeaks = 0.05,
 \item{seed}{Random seed for reproducibility}
 }
 \value{
-list with rtmz data matrix, row index of peaks influenced by conditions, row index of peaks influenced by batchs, column index of conditions, column of batchs, raw condition matrix, raw batch matrix
+list with rtmz data matrix, row index of peaks influenced by conditions, row index of peaks influenced by batchs, column index of conditions, column of batchs, raw condition matrix, raw batch matrix, peak mean across the samples, peak rsd across the samples
 }
 \description{
 Generate simulated count data with batch effects for npeaks
