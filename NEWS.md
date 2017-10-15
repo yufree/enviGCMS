@@ -7,6 +7,10 @@
 - add mzrtsim to simulate mzrt profile
 - add simmzrt to make simulation input data
 
+## Minor changes
+
+- revise citation keywords
+
 # enviGCMS 0.4.0
 
 ## Major changes
