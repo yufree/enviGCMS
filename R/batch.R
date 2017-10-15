@@ -9,7 +9,7 @@
 #' cdfpath <- system.file("cdf", package = "faahKO")
 #' cdffiles <- list.files(cdfpath, recursive = TRUE, full.names = TRUE)
 #' list <- getmr(cdfpath, pmethod = ' ')
-#' list <- svacor(list$data,list$group$class)
+#' li <- svacor(list$data,list$group$class)
 #' }
 #' @seealso \code{\link{svapca}}, \code{\link{svaplot}}, \code{\link{svabatch}}
 #' @export
@@ -153,7 +153,7 @@ isvacor <- function(data, lv) {
 }
 
 #' Principal component analysis(PCA) for SVA/ISVA corrected data and raw data
-#' @param list results from svacor function
+#' @param list results from `svacor` or `isvacor` function
 #' @param center parameters for PCA
 #' @param scale parameters for scale
 #' @param lv factor vector for the group infomation
@@ -166,7 +166,7 @@ isvacor <- function(data, lv) {
 #' li <- svacor(list$data,list$group$class)
 #' svapca(li)
 #' }
-#' @seealso \code{\link{svacor}}, \code{\link{svaplot}}, \code{\link{svabatch}}
+#' @seealso \code{\link{isvacor}},\code{\link{svacor}}, \code{\link{svaplot}}, \code{\link{svabatch}}
 #' @export
 svapca <- function(list, center = T, scale = T, lv = NULL) {
     data <- list$data
@@ -240,7 +240,7 @@ svapca <- function(list, center = T, scale = T, lv = NULL) {
 }
 
 #' Filter the data with p value and q value and show them
-#' @param list results from svacor function
+#' @param list results from `svacor` or `isvacor` function
 #' @param lv factor vector for the group infomation
 #' @param pqvalues method for ANOVA or SVA
 #' @param pt threshold for p value, default is 0.05
@@ -255,7 +255,7 @@ svapca <- function(list, center = T, scale = T, lv = NULL) {
 #' li <- svacor(list$data,list$group$class)
 #' svaplot(li,list$group$class)
 #' }
-#' @seealso \code{\link{svacor}}, \code{\link{svapca}}, \code{\link{svabatch}}
+#' @seealso \code{\link{isvacor}},\code{\link{svacor}}, \code{\link{svapca}}, \code{\link{svabatch}}
 #' @export
 svaplot <- function(list, lv, pqvalues = "sv", pt = 0.05,
     qt = 0.05, index = NULL) {
@@ -498,7 +498,7 @@ svaplot <- function(list, lv, pqvalues = "sv", pt = 0.05,
 
 
 #' Plot the influnces of DoE and Batch effects on each peaks
-#' @param df data output from `svacor` function
+#' @param df data output from `svacor` or `isvacor` function
 #' @param dfsv data output from `svaplot` function for corrected data
 #' @param dfanova data output from `svaplot` function for raw data
 #' @return influnces plot
@@ -512,7 +512,7 @@ svaplot <- function(list, lv, pqvalues = "sv", pt = 0.05,
 #' dfanova <- svaplot(li, list$group$class, pqvalues = "anova")
 #' svabatch(li,dfsv,dfanova)
 #' }
-#' @seealso \code{\link{svacor}}, \code{\link{svaplot}}, \code{\link{svapca}}
+#' @seealso \code{\link{isvacor}},\code{\link{svacor}}, \code{\link{svaplot}}, \code{\link{svapca}}
 #' @export
 svabatch <- function(df, dfsv, dfanova) {
     graphics::par(mfrow = c(1, 2))
@@ -557,4 +557,45 @@ svabatch <- function(df, dfsv, dfanova) {
         0 & dfsv$pqvalues & !dfanova$pqvalue], pch = 19,
         col = "blue")
 
+}
+#' Plot the influnces of DoE and Batch effects on each peaks
+#' @param df data output from `svacor` or `isvacor` function
+#' @param dfsv data output from `svaplot` function for corrected data
+#' @param dfanova data output from `svaplot` function for raw data
+#' @return influnces plot
+#' @examples
+rlaplot <- function(data, lv, type = 'g'){
+        mean <- stats::aggregate(t(data), list(lv), mean)
+        sd <- stats::aggregate(t(data), list(lv), sd)
+        suppressWarnings(rsd <- sd / mean * 100)
+        rsd0 <- as.matrix(rsd[,-1])
+        rsd0[is.nan(rsd0)] <- 0
+        indexrsd <-
+                apply(t(rsd0), 1, function(x)
+                        any(x < rsdcf))
+        indexmean <-
+                apply(t(mean[,-1]), 1, function(x)
+                        any(x > 10 ^ (inscf)))
+
+        index <- indexrsd & indexmean
+        data <- data[index,]
+        data <- log10(data)
+        data[is.nan(data)] <- 0
+        outmat = NULL
+
+        if(type == 'g'){
+                for (lvi in levels(lv)) {
+                        submat <- data[,lv == lvi]
+                        median <- apply(submat, 1, median)
+                        tempmat <- sweep(submat, 1, median, "-")
+                        outmat <- cbind(outmat,tempmat)
+                }
+        }else{
+                median <- apply(data, 1, median)
+                outmat <- sweep(data, 1, median, "-")
+
+        }
+
+        boxplot(outmat,col = as.numeric(lv))
+        abline(h=0)
 }
