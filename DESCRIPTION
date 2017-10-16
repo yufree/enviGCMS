@@ -36,6 +36,9 @@ Imports: xcms,
     stats, 
     utils,
     methods,
+    reshape2,
+    ggplot2,
+    ggridges,
     animation (>= 2.2.3),
     DiagrammeR
 RoxygenNote: 6.0.1

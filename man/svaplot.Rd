@@ -7,7 +7,7 @@
 svaplot(list, lv, pqvalues = "sv", pt = 0.05, qt = 0.05, index = NULL)
 }
 \arguments{
-\item{list}{results from svacor function}
+\item{list}{results from `svacor` or `isvacor` function}
 
 \item{lv}{factor vector for the group infomation}
 
@@ -35,5 +35,5 @@ svaplot(li,list$group$class)
 }
 }
 \seealso{
-\code{\link{svacor}}, \code{\link{svapca}}, \code{\link{svabatch}}
+\code{\link{isvacor}},\code{\link{svacor}}, \code{\link{svapca}}, \code{\link{svabatch}}
 }

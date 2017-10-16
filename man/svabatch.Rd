@@ -7,7 +7,7 @@
 svabatch(df, dfsv, dfanova)
 }
 \arguments{
-\item{df}{data output from `svacor` function}
+\item{df}{data output from `svacor` or `isvacor` function}
 
 \item{dfsv}{data output from `svaplot` function for corrected data}
 
@@ -31,5 +31,5 @@ svabatch(li,dfsv,dfanova)
 }
 }
 \seealso{
-\code{\link{svacor}}, \code{\link{svaplot}}, \code{\link{svapca}}
+\code{\link{isvacor}},\code{\link{svacor}}, \code{\link{svaplot}}, \code{\link{svapca}}
 }

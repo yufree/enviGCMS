@@ -26,7 +26,7 @@ library(faahKO)
 cdfpath <- system.file("cdf", package = "faahKO")
 cdffiles <- list.files(cdfpath, recursive = TRUE, full.names = TRUE)
 list <- getmr(cdfpath, pmethod = ' ')
-list <- svacor(list$data,list$group$class)
+li <- svacor(list$data,list$group$class)
 }
 }
 \seealso{

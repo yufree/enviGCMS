@@ -43,7 +43,7 @@ mzrtsim <- function(npeaks = 1000,
         batch <- batch[sample(ncol)]
         condition <- condition[sample(ncol)]
         # generate the colname
-        bc <- paste0('C', condition, 'B', batch)
+        bc <- paste0('C', condition, 'B', batch, '_', c(1:ncol))
         # get the compounds numbers
         ncomp <- npeaks*ncomp
         # get the matrix
@@ -101,7 +101,7 @@ mzrtsim <- function(npeaks = 1000,
         # get peaks mean across the samples
         means <- apply(matrix,1,mean)
         # get peaks rsd across the samples
-        sds <- apply(matrix,1,sd)
+        sds <- apply(matrix,1,stats::sd)
         rsds <- sds/means
         # add row names
         rownames(matrix) <- paste0('P', c(1:npeaks))
@@ -239,7 +239,7 @@ simmzrt <- function(data,
         # get peaks mean across the samples
         means <- apply(matrix,1,mean)
         # get peaks rsd across the samples
-        sds <- apply(matrix,1,sd)
+        sds <- apply(matrix,1,stats::sd)
         rsds <- sds/means
         # add row names
         rownames(matrix) <- paste0('P', c(1:npeaks))

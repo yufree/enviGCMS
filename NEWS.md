@@ -6,6 +6,7 @@
 - remove svadata and svaupload
 - add mzrtsim to simulate mzrt profile
 - add simmzrt to make simulation input data
+- add rlaplot and ridagesplot to show the distribution of the data
 
 ## Minor changes
 

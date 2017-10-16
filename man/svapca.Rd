@@ -7,7 +7,7 @@
 svapca(list, center = T, scale = T, lv = NULL)
 }
 \arguments{
-\item{list}{results from svacor function}
+\item{list}{results from `svacor` or `isvacor` function}
 
 \item{center}{parameters for PCA}
 
@@ -31,5 +31,5 @@ svapca(li)
 }
 }
 \seealso{
-\code{\link{svacor}}, \code{\link{svaplot}}, \code{\link{svabatch}}
+\code{\link{isvacor}},\code{\link{svacor}}, \code{\link{svaplot}}, \code{\link{svabatch}}
 }
