@@ -356,13 +356,10 @@ svapca <- function(list,
 #' @param index index for selected peaks
 #' @return heatmap for the data
 #' @examples
-#' \dontrun{
-#' library(faahKO)
-#' cdfpath <- system.file("cdf", package = "faahKO")
-#' list <- getmr(cdfpath, pmethod = ' ')
-#' li <- svacor(list$data,list$group$class)
-#' svaplot(li,list$group$class)
-#' }
+#' sim <- mzrtsim()
+#' li <- svacor(log(sim$data), as.factor(sim$con))
+#' svaplot(li,as.factor(sim$con))
+#'
 #' @seealso \code{\link{isvacor}},\code{\link{svacor}}, \code{\link{svapca}}, \code{\link{svabatch}}
 #' @export
 svaplot <- function(list,
