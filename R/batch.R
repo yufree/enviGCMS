@@ -883,7 +883,7 @@ svabatch <- function(df, dfsv, dfanova) {
 #' rlaplot(sim$data, as.factor(sim$con))
 #' @export
 rlaplot <- function(data, lv, type = 'g') {
-        data <- log10(data)
+        data <- log(data)
         data[is.nan(data)] <- 0
         outmat = NULL
 
@@ -914,7 +914,7 @@ rlaplot <- function(data, lv, type = 'g') {
 #' ridgesplot(sim$data, as.factor(sim$con))
 #' @export
 ridgesplot <- function(data, lv, type = 'g') {
-        data <- log10(data)
+        data <- log(data)
         data[is.nan(data)] <- 0
         outmat = NULL
 
@@ -945,3 +945,6 @@ ridgesplot <- function(data, lv, type = 'g') {
                 ggplot2::scale_fill_discrete(name = "Group") +
                 ggplot2::labs(x = "Relative Log Abundance", y = 'Samples')
 }
+
+
+
