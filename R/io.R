@@ -379,6 +379,7 @@ getupload2 <- function(xset,
 
 #' Get the mzrt profile and group information for batch correction and plot as a list
 #' @param xset xcmsSet objects
+#' @param name file name for csv file, default NULL
 #' @return list with rtmz profile and group infomation
 #' @examples
 #' \dontrun{
@@ -389,7 +390,8 @@ getupload2 <- function(xset,
 #' }
 #' @seealso \code{\link{getdata}},\code{\link{getupload}}, \code{\link{getmzrt2}}, \code{\link{getdoe}}
 #' @export
-getmzrt <- function(xset){
+getmzrt <- function(xset,
+                    name = NULL){
         data <- xcms::groupval(xset, value = "into")
         # group info
         group <- xcms::phenoData(xset)
@@ -399,11 +401,18 @@ getmzrt <- function(xset){
         rt <- peaks$rtmed
         # return as list
         result <- list(data = data, group = group, mz = mz, rt = rt)
+        if(!is.null(name)){
+                data <-
+                        rbind(group = t(group),data)
+                data <- cbind(mz=c(paste0('group',1:dim(group)[2]),mz),rt=c(paste0('group',1:dim(group)[2]),rt),data)
+                write.csv(data,file = paste0(name,'.csv'))
+        }
         return(result)
 }
 
 #' Get the mzrt profile and group information for batch correction and plot as a list for xcms 3 object
 #' @param xset a XCMSnExp object with processed data
+#' @param name file name for csv file, default NULL
 #' @return list with rtmz profile and group infomation
 #' @examples
 #' \dontrun{
@@ -417,7 +426,7 @@ getmzrt <- function(xset){
 #' }
 #' @seealso \code{\link{getdata2}},\code{\link{getupload2}}, \code{\link{getmzrt}}, \code{\link{getdoe}}
 #' @export
-getmzrt2 <- function(xset){
+getmzrt2 <- function(xset, name = NULL){
         data <- xcms::featureValues(xset, value = "into")
         # group info
         group <- xset@phenoData@data
@@ -427,6 +436,12 @@ getmzrt2 <- function(xset){
         rt <- peaks$rtmed
         # return as list
         result <- list(data = data, group = group, mz = mz, rt = rt)
+        if(!is.null(name)){
+                data <-
+                        rbind(group = t(group),data)
+                data <- cbind(mz=c(paste0('group',1:dim(group)[2]),mz),rt=c(paste0('group',1:dim(group)[2]),rt),data)
+                write.csv(data,file = paste0(name,'.csv'))
+        }
         return(result)
 }
 

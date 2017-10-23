@@ -4,10 +4,12 @@
 \alias{getmzrt}
 \title{Get the mzrt profile and group information for batch correction and plot as a list}
 \usage{
-getmzrt(xset)
+getmzrt(xset, name = NULL)
 }
 \arguments{
 \item{xset}{xcmsSet objects}
+
+\item{name}{file name for csv file, default NULL}
 }
 \value{
 list with rtmz profile and group infomation
