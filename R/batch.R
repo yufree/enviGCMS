@@ -938,7 +938,7 @@ ridgesplot <- function(data, lv, type = 'g') {
                 fill = ov2$group
         )) +
                 ggridges::geom_density_ridges(stat = "binline", bins = 100) +
-                ggplot2::xlim(-1, 1) +
+                ggplot2::xlim(-0.5, 0.5) +
                 ggplot2::scale_fill_discrete(name = "Group") +
                 ggplot2::labs(x = "Relative Log Abundance", y = 'Samples')
 }
