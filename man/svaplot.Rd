@@ -26,10 +26,11 @@ heatmap for the data
 Filter the data with p value and q value and show them
 }
 \examples{
+\dontrun{
 sim <- mzrtsim()
 li <- svacor(log(sim$data), as.factor(sim$con))
 svaplot(li,as.factor(sim$con))
-
+}
 }
 \seealso{
 \code{\link{isvacor}},\code{\link{svacor}}, \code{\link{svapca}}, \code{\link{svabatch}}
