@@ -8,7 +8,7 @@ getfeaturest(list, power = 0.8, pt = 0.05, qt = 0.05, n = 3,
   inscf = 5, rsdcf = 30, imputation = "l")
 }
 \arguments{
-\item{list}{list with data as mzrt profile, mz, rt and group information (two groups)}
+\item{list}{list with data as peaks list, mz, rt and group information (two groups)}
 
 \item{power}{defined power}
 

@@ -9,7 +9,7 @@ getmassdiff(list, massdiff, rtwindow, mzwindow, ppm)
 \arguments{
 \item{list}{a list with mzrt profile, mz and rt}
 
-\item{massdiff}{mass defection}
+\item{massdiff}{mass defect}
 
 \item{rtwindow}{retention time range}
 

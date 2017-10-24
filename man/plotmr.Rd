@@ -2,13 +2,13 @@
 % Please edit documentation in R/mzrt.R
 \name{plotmr}
 \alias{plotmr}
-\title{plot the scatter plot for xcmsset objects with threshold}
+\title{plot the scatter plot for peaks list with threshold}
 \usage{
 plotmr(list, ms = c(100, 800), inscf = 5, rsdcf = 30, imputation = "l",
   ...)
 }
 \arguments{
-\item{list}{list with data as mzrt profile, mz, rt and group information}
+\item{list}{list with data as peaks list, mz, rt and group information}
 
 \item{ms}{the mass range to plot the data}
 
@@ -24,7 +24,7 @@ plotmr(list, ms = c(100, 800), inscf = 5, rsdcf = 30, imputation = "l",
 data fit the cutoff
 }
 \description{
-plot the scatter plot for xcmsset objects with threshold
+plot the scatter plot for peaks list with threshold
 }
 \examples{
 \dontrun{

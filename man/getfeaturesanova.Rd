@@ -8,7 +8,7 @@ getfeaturesanova(list, power = 0.8, pt = 0.05, qt = 0.05, n = 3,
   ng = 3, rsdcf = 100, inscf = 5, imputation = "l")
 }
 \arguments{
-\item{list}{list with data as mzrt profile, mz, rt and group information (more than two groups)}
+\item{list}{list with data as peaks list, mz, rt and group information (more than two groups)}
 
 \item{power}{defined power}
 

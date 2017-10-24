@@ -2,20 +2,20 @@
 % Please edit documentation in R/mzrt.R
 \name{getimputation}
 \alias{getimputation}
-\title{Impute the mzrt profile data}
+\title{Impute the peaks list data}
 \usage{
 getimputation(list, method = "l")
 }
 \arguments{
-\item{list}{list with data as mzrt profile, mz, rt and group information}
+\item{list}{list with data as peaks list, mz, rt and group information}
 
-\item{method}{'r' means remove, 'l' means use half the minimum of the values across the mzrt profile, 'mean' means mean of the values across the samples, 'median' means median of the values across the samples, '0' means 0, '1' means 1. Default 'l'.}
+\item{method}{'r' means remove, 'l' means use half the minimum of the values across the peaks list, 'mean' means mean of the values across the samples, 'median' means median of the values across the samples, '0' means 0, '1' means 1. Default 'l'.}
 }
 \value{
 list with imputed peaks
 }
 \description{
-Impute the mzrt profile data
+Impute the peaks list data
 }
 \examples{
 \dontrun{

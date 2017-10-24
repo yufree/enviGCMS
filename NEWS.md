@@ -1,3 +1,9 @@
+# enviGCMS 0.4.2
+
+## Major changes
+
+- update Vignette
+
 # enviGCMS 0.4.1
 
 ## Major changes

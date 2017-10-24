@@ -8,7 +8,7 @@ gifmr(list, ms = c(100, 500), rsdcf = 30, inscf = 5, imputation = "i",
   file = "test")
 }
 \arguments{
-\item{list}{list with data as mzrt profile, mz, rt and group information}
+\item{list}{list with data as peaks list, mz, rt and group information}
 
 \item{ms}{the mass range to plot the data}
 

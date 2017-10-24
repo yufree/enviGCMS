@@ -9,19 +9,21 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-Qualitative and quantitative analysis of contaminants are the core of the Environmental Science. GC/LC-MS might be one of the most popular instruments for such analytical methonds. Previous works such as `xcms` were devoloped for GC-MS data. However, such packages have limited functions for environmental analysis. In this package. I added functions for various GC/LC-MS data analysis purposes used in environmental analysis. Such feature could not only reveal certain problems, but also help the user find out the unknown patterns in the dataset of GC-MS.
+Qualitative and quantitative analysis of contaminants are the core of the Environmental Science. GC/LC-MS might be one of the most popular instruments for such analytical methonds. Previous works such as `xcms` were devoloped for GC-MS data. However, such packages have limited functions for environmental analysis. In this package. I added functions for various GC/LC-MS data analysis purposes used in environmental analysis. Such feature could not only reveal certain problems, but also help the user find out the unknown patterns in the dataset of GC/LC-MS.
 
-## Data structure of GC/LC-MS full scan mode
+## Data analysis for single sample
+
+### Data structure of GC/LC-MS full scan mode
 
 GC/LC is used for separation and MS is used for detection in a GC/LC-MS system. The collected data are intensities of certain mass at different retention time. When we perform analysis on certain column in full scan mode, the counts of different mass were collected in each scan. The drwell time for each scan might only last for 500ms or less. Then the next scan begins with a different retention time. Here we could use a matrix to stand for those data. Each column stands for each mass and row stands for the retention time of that scan. Such matrix could be treated as time series data. In this package, we treat such data as `matrix` type. 
 
 For high-resolution MS, building such matrix is tricky. We might need to bin the RAW data to make alignment for different scans into a matrix. Such works could be done by `xcms`.
 
-## Data structure of GC-MS SIM mode
+### Data structure of GC-MS SIM mode
 
 When you perform a selected ions monitor(SIM) mode analysis, only few mass data were collected and each mass would have counts and retention time as a time seris data. In this package, we treat such data as `data.frame` type.
 
-## Data input
+### Data input
 
 You could use `getmd` to import the mass spectrum data as supported by `xcms` and get the profile of GC-MS data matrix. `mzstep` is the bin step for mass:
 
@@ -41,7 +43,7 @@ You could also combined the mass full-scan data with the same range of retention
 data <- cbmd(data1,data2,data3)
 ```
 
-## Basic visulation of mass spectrum data
+### Visulation of mass spectrum data
 
 You could plot the Total Ion Chromatogram(TIC) for certain RT and mass range.
 
@@ -74,95 +76,72 @@ You could change the retention time into the temprature if it is a constant spee
 plott(data,temp = c(100,320))
 ```
 
-## Data analysis for influnces from GC-MS
+### Data analysis for influnces from GC-MS
 
-`enviGCMS` supplied many function for decreasing the noisy during the analysis process. `findline` could be used for find line of the boundary regression model for noisy. `comparems` could be used to make a point-to-point data  subtraction of two full-scan mass spectrum data. `plotgroup` could be used convert the data matrix into a 0-1 heatmap according to threshold. `plotsub` could be used to show the self backgroud subtraction of full-scan data. `plotsms` shows the RSD of the intensity of full scan data. `plothist` could be used to find the data distribution of the histgram of the intensities of full scan data.
+`enviGCMS` supplied many functions for decreasing the noise during the analysis process. `findline` could be used for find line of the boundary regression model for noise. `comparems` could be used to make a point-to-point data  subtraction of two full-scan mass spectrum data. `plotgroup` could be used convert the data matrix into a 0-1 heatmap according to threshold. `plotsub` could be used to show the self backgroud subtraction of full-scan data. `plotsms` shows the RSD of the intensity of full scan data. `plothist` could be used to find the data distribution of the histgram of the intensities of full scan data.
 
-## Data analysis for molecular isotope ratio
+### Data analysis for molecular isotope ratio
 
 Some functions could be used to caculate the molecular isotope ratio. EIC data could be import into `GetIntergration` and return the infomation of found peaks. `Getisotoplogues` could be used to caculate the molecular isotope ratio of certain molecular. Some shortcut function such as `batch` and `qbatch` could be used to caculate molecular isotope ratio for mutiple and single molecular in EIC data. 
 
-## Additional functions for xcms package
+## Data analysis for multiple samples
 
-In environmetnal non-target analysis, some specific functions such as comparision, batch correction and visulization could be useful to handle data pre-processed by `xcms` as shown below. Besides, isotope extraction for single group of samples with certain mass diff could also be done by `getmassdiff` function.
+In environmetnal non-target analysis, when multiple samples are collected, problem will raise from the heterogeneity among samples. For example, retention time would shift due to the column. In those cases, `xcms` package could be used to get a peaks list across samples within certain retention time and m/z. `enviGCMS` package has some wrapped function to get the peaks list. Besides, some specific functions such as group comparision, batch correction and visulization are also included. 
 
-### workflow for xcms
-
-```{r, echo = F}
-DiagrammeR::grViz("digraph workflow {
-node [shape = box]
-A [label = '@@1']
-B [label = '@@2']
-C [label = '@@3']
-D [label = '@@4']
-E [label = '@@5']
-F [label = '@@6']
-G [label = '@@7']
-H [label = '@@8']
-I [label = '@@9']
-J [label = '@@10']
-K [label = '@@11']
-L [label = '@@12']
-M [label = '@@13']
-N [label = '@@14']
-O [label = '@@15']
-
-A -> B -> C -> D -> E -> F -> G -> H
-H -> I
-I -> J
-H -> J -> K -> L
-L -> M -> N
-L -> O
-                  }
-
-[1]: 'Raw data'
-[2]: 'mzxml or CDF'
-[3]: 'DoE folder'
-[4]: 'peaks list'
-[5]: 'retention time correction'
-[6]: 'peaks grouping'
-[7]: 'peaks filling'
-[8]: 'raw peaks'
-[9]: 'data visulization'
-[10]: 'batch effects correction'
-[11]: 'corrected peaks'
-[12]: 'annotation'
-[13]: 'metabolomics pathway analysis'
-[14]: 'omics analysis'
-[15]: 'biomarkers discovery/diagnoise'
-
-                  ")
-```
-
-
-
+### Wrap function for `xcms` package
 
 - `getdata` could be used to get the `xcmsSet` object in one step with optimized methods 
 
-- `getbgremove` could subtract the background group from `xcmsSet` object with two groups (the first group is background group)
+- `getdata2` could be used to get the `XCMSnExp` object in one step with optimized methods 
 
-- `getupload` could get the csv files to be submitted to Metaboanalyst 
+- `getupload` could get the csv files to be submitted to Metaboanalyst from `xcmsSet` object
 
-- `gettechrep` could get the report for technique replicates
+- `getupload2` could get the csv files to be submitted to Metaboanalyst from `XCMSnExp` object
 
-- `getbiotechrep` could get the report for all of your technique replicates for bio replicated sample in single group
+- `getmzrt` could get a list or csv files with peaks list, mz, retention time and class of samples from `xcmsSet` object
 
-- `getgrouprep` could get the report for samples with biological and technique replicates in different groups
+- `getmzrt2` could get a list or csv files with peaks list, mz, retention time and class of samples from `XCMSnExp` object
 
-- `gettimegrouprep` could get the report for the time series or two factor groups for samples with biological and technique replicates in different groups
+### Data imputation and filtering
 
-- `plotmr` could plot the scatter plot for xcmsset (or two) objects with threshold
+- `getimputation` could impute NA in the peaks list
 
-- `plote` could plot EIC and boxplot for all peaks and return diffreport
+- `getdoe` could filter the data based on DoE, rsd, intensity
 
 - `getfeaturest` could get the features from t test, with p value, q value, rsd and power restriction
 
 - `getfeaturesanova` could get the features from anova, with p value, q value, rsd and power restriction
 
+### Visulation of peaks list data
+
+- `plotmr` could plot the scatter plot for peaks list with threshold
+
+- `plotmrc` could plot the differences as scatter plot for peaks list with threshold between two group of data
+
+- `plote` could plot EIC and boxplot for all peaks and return diffreport
+
+- `plotrsd` could plot the rsd influnces of data in different groups
+
+- `gifmr` could plot scatter plot for peaks list and output gif file for mutiple groups
+
+### Peaks list simulation
+
+- `mzrtsim` could generate simulated count data with batch effects for npeaks
+
+- `simmzrt` could make simulation from data by sample mean and rsd from Empirical Cumulative Distribution or Bootstrap sampling
+
+### Batch correction
+
 - `svacor` could perform surrogate variable analysis(SVA) to correct the batch effects
 
-- `svapca`, `svaplot`, `svapca` could be used to visulize the batch effects and their influnces on each peaks
+- `isvacor` could perform independant surrogate variable analysis(ISVA) to correct the batch effects
+
+- `svapca`, `svaplot`, `rlaplot` and `ridgesplot` could be used to visulize the batch effects and their influnces on each peaks
+
+### Mass defect analysis
+
+- `getmassdiff` could make isotope extraction for single group of samples with certain mass defect.
 
 ## Summary
 
-In general, `enviGCMS` could be used to explore the data from GC/LC-MS and extract certain patterns in the data with various purposes.
+In general, `enviGCMS` could be used to explore single data or peaks list from GC/LC-MS and extract certain patterns in the data with various purposes.

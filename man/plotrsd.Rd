@@ -8,7 +8,7 @@ plotrsd(list, ms = c(100, 800), inscf = 5, rsdcf = 100,
   imputation = "l", ...)
 }
 \arguments{
-\item{list}{list with data as mzrt profile, mz, rt and group information}
+\item{list}{list with data as peaks list, mz, rt and group information}
 
 \item{ms}{the mass range to plot the data}
 

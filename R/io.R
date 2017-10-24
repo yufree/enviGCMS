@@ -405,7 +405,7 @@ getmzrt <- function(xset,
                 data <-
                         rbind(group = t(group),data)
                 data <- cbind(mz=c(paste0('group',1:dim(group)[2]),mz),rt=c(paste0('group',1:dim(group)[2]),rt),data)
-                write.csv(data,file = paste0(name,'.csv'))
+                utils::write.csv(data,file = paste0(name,'.csv'))
         }
         return(result)
 }
@@ -440,7 +440,7 @@ getmzrt2 <- function(xset, name = NULL){
                 data <-
                         rbind(group = t(group),data)
                 data <- cbind(mz=c(paste0('group',1:dim(group)[2]),mz),rt=c(paste0('group',1:dim(group)[2]),rt),data)
-                write.csv(data,file = paste0(name,'.csv'))
+                utils::write.csv(data,file = paste0(name,'.csv'))
         }
         return(result)
 }

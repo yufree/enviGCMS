@@ -1,6 +1,6 @@
-#' Impute the mzrt profile data
-#' @param list list with data as mzrt profile, mz, rt and group information
-#' @param method 'r' means remove, 'l' means use half the minimum of the values across the mzrt profile, 'mean' means mean of the values across the samples, 'median' means median of the values across the samples, '0' means 0, '1' means 1. Default 'l'.
+#' Impute the peaks list data
+#' @param list list with data as peaks list, mz, rt and group information
+#' @param method 'r' means remove, 'l' means use half the minimum of the values across the peaks list, 'mean' means mean of the values across the samples, 'median' means median of the values across the samples, '0' means 0, '1' means 1. Default 'l'.
 #' @return list with imputed peaks
 #' @examples
 #' \dontrun{
@@ -46,7 +46,7 @@ getimputation <- function(list, method = 'l'){
 }
 
 #' Filter the data based on DoE, rsd, intensity
-#' @param list list with data as mzrt profile, mz, rt and group information
+#' @param list list with data as peaks list, mz, rt and group information
 #' @param inscf Log intensity cutoff for peaks across samples. If any peaks show a intensity higher than the cutoff in any samples, this peaks would not be filtered. default 5
 #' @param rsdcf the rsd cutoff of all peaks in all group
 #' @param imputation parameters for `getimputation` function method
@@ -146,7 +146,7 @@ getdoe <- function(list,
 }
 
 #' Get the features from t test, with p value, q value, rsd and power restriction
-#' @param list list with data as mzrt profile, mz, rt and group information (two groups)
+#' @param list list with data as peaks list, mz, rt and group information (two groups)
 #' @param power defined power
 #' @param pt p value threshold
 #' @param qt q value threshold, BH adjust
@@ -203,7 +203,7 @@ getfeaturest <- function(list,
 }
 
 #' Get the features from anova, with p value, q value, rsd and power restriction
-#' @param list list with data as mzrt profile, mz, rt and group information (more than two groups)
+#' @param list list with data as peaks list, mz, rt and group information (more than two groups)
 #' @param power defined power
 #' @param pt p value threshold
 #' @param qt q value threshold, BH adjust
@@ -258,8 +258,8 @@ getfeaturesanova <- function(list,
         return(df)
 }
 
-#' plot the scatter plot for xcmsset objects with threshold
-#' @param list list with data as mzrt profile, mz, rt and group information
+#' plot the scatter plot for peaks list with threshold
+#' @param list list with data as peaks list, mz, rt and group information
 #' @param ms the mass range to plot the data
 #' @param inscf Log intensity cutoff for peaks across samples. If any peaks show a intensity higher than the cutoff in any samples, this peaks would not be filtered. default 5
 #' @param rsdcf the rsd cutoff of all peaks in all group
@@ -346,7 +346,7 @@ plotmr <- function(list,
 }
 
 #' plot the diff scatter plot for one xcmsset objects with threshold between two groups
-#' @param list list with data as mzrt profile, mz, rt and group information
+#' @param list list with data as peaks list, mz, rt and group information
 #' @param ms the mass range to plot the data
 #' @param inscf Log intensity cutoff for peaks across samples. If any peaks show a intensity higher than the cutoff in any samples, this peaks would not be filtered. default 5
 #' @param rsdcf the rsd cutoff of all peaks in all group
@@ -442,7 +442,7 @@ plotmrc <- function(list,
 }
 
 #' plot the rsd influnces of data in different groups
-#' @param list list with data as mzrt profile, mz, rt and group information
+#' @param list list with data as peaks list, mz, rt and group information
 #' @param ms the mass range to plot the data
 #' @param inscf Log intensity cutoff for peaks across samples. If any peaks show a intensity higher than the cutoff in any samples, this peaks would not be filtered. default 5
 #' @param rsdcf the rsd cutoff of all peaks in all group
@@ -518,7 +518,7 @@ plotrsd <- function(list,
         }
 
 #' plot scatter plot for rt-mz profile and output gif file for mutiple groups
-#' @param list list with data as mzrt profile, mz, rt and group information
+#' @param list list with data as peaks list, mz, rt and group information
 #' @param file file name for gif file, default NULL
 #' @param ms the mass range to plot the data
 #' @param inscf Log intensity cutoff for peaks across samples. If any peaks show a intensity higher than the cutoff in any samples, this peaks would not be filtered. default 5

@@ -1,6 +1,6 @@
 #' Isotope extraction for single group of samples with certain mass diff
 #' @param list  a list with mzrt profile, mz and rt
-#' @param massdiff mass defection
+#' @param massdiff mass defect
 #' @param rtwindow retention time range
 #' @param mzwindow mass charge ratio window
 #' @param ppm resolution of the mass spectrum

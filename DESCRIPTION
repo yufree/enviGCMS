@@ -1,8 +1,8 @@
 Package: enviGCMS
 Type: Package
 Title: GC/LC-MS Data Analysis for Environmental Science
-Version: 0.4.1
-Date: 2017-10-12
+Version: 0.4.2
+Date: 2017-10-24
 Authors@R: person(given = "Miao", family = "YU",
         role = c("aut", "cre"), 
         email = "yufreecas@gmail.com",
@@ -39,6 +39,5 @@ Imports: xcms,
     reshape2,
     ggplot2,
     ggridges,
-    animation (>= 2.2.3),
-    DiagrammeR
+    animation (>= 2.2.3)
 RoxygenNote: 6.0.1
