@@ -260,7 +260,8 @@ getfeaturesanova <- function(list,
 
 #' plot the scatter plot for peaks list with threshold
 #' @param list list with data as peaks list, mz, rt and group information
-#' @param ms the mass range to plot the data
+#' @param rt vector range of the retention time
+#' @param ms vector vector range of the m/z
 #' @param inscf Log intensity cutoff for peaks across samples. If any peaks show a intensity higher than the cutoff in any samples, this peaks would not be filtered. default 5
 #' @param rsdcf the rsd cutoff of all peaks in all group
 #' @param imputation parameters for `getimputation` function method
@@ -275,7 +276,8 @@ getfeaturesanova <- function(list,
 #' }
 #' @export
 plotmr <- function(list,
-                   ms = c(100, 800),
+                   rt = NULL,
+                   ms = NULL,
                    inscf = 5,
                    rsdcf = 30,
                    imputation = 'l',
@@ -285,13 +287,13 @@ plotmr <- function(list,
         data <- list$groupmeanfiltered
         dataname <- colnames(data)
         mz <- list$mzfiltered
-        rt <- list$rtfiltered
+        RT <- list$rtfiltered
         suppressWarnings(if (!is.na(data)) {
                 n <- dim(data)[2]
                 col <- grDevices::rainbow(n, alpha = 0.318)
 
                 graphics::plot(
-                        mz ~ rt,
+                        mz ~ RT,
                         xlab = "Retention Time(s)",
                         ylab = "m/z",
                         type = 'n',
@@ -303,12 +305,13 @@ plotmr <- function(list,
                         cex = as.numeric(cut((log10(data[, i] + 1)-inscf), breaks=c(0,1,2,3,4,Inf)/2))/2
                         cexlab = c(paste0(inscf,'-',inscf+0.5),paste0(inscf+0.5,'-',inscf+1),paste0(inscf+1,'-',inscf+1.5),paste0(inscf+1.5,'-',inscf+2),paste0('>',inscf+2))
                         graphics::points(
-                                x = rt,
+                                x = RT,
                                 y = mz,
                                 cex = cex,
                                 col = col[i],
                                 pch = 19,
-                                ylim = ms
+                                ylim = ms,
+                                xlim = rt
                         )
                 }
                 graphics::legend(
@@ -338,6 +341,7 @@ plotmr <- function(list,
                         ylab = "m/z",
                         main = "No peaks found",
                         ylim = ms,
+                        xlim = rt,
                         type = 'n',
                         pch = 19,
                         ...
