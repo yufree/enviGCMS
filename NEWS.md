@@ -7,7 +7,7 @@
 
 ## Minor changes
 
-- ass seealso
+- add seealso
 
 # enviGCMS 0.4.1
 
