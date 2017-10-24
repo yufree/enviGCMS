@@ -26,5 +26,5 @@ getmzrt(xset)
 }
 }
 \seealso{
-\code{\link{getdata}},\code{\link{getupload}}, \code{\link{getmzrt2}}, \code{\link{getdoe}}
+\code{\link{getdata}},\code{\link{getupload}}, \code{\link{getmzrt2}}, \code{\link{getdoe}},\code{\link{getmzrt}}
 }
