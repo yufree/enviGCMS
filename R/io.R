@@ -388,7 +388,7 @@ getupload2 <- function(xset,
 #' xset <- getdata(cdfpath, pmethod = ' ')
 #' getmzrt(xset)
 #' }
-#' @seealso \code{\link{getdata}},\code{\link{getupload}}, \code{\link{getmzrt2}}, \code{\link{getdoe}}
+#' @seealso \code{\link{getdata}},\code{\link{getupload}}, \code{\link{getmzrt2}}, \code{\link{getdoe}},\code{\link{getmzrt}}
 #' @export
 getmzrt <- function(xset,
                     name = NULL){
@@ -402,8 +402,10 @@ getmzrt <- function(xset,
         # return as list
         result <- list(data = data, group = group, mz = mz, rt = rt)
         if(!is.null(name)){
+                dataname <- colnames(data)
                 data <-
                         rbind(group = t(group),data)
+                colnames(data) <- dataname
                 data <- cbind(mz=c(paste0('group',1:dim(group)[2]),mz),rt=c(paste0('group',1:dim(group)[2]),rt),data)
                 utils::write.csv(data,file = paste0(name,'.csv'))
         }
@@ -424,7 +426,7 @@ getmzrt <- function(xset,
 #' gpp = xcms::PeakDensityParam())
 #' getmzrt2(xset)
 #' }
-#' @seealso \code{\link{getdata2}},\code{\link{getupload2}}, \code{\link{getmzrt}}, \code{\link{getdoe}}
+#' @seealso \code{\link{getdata2}},\code{\link{getupload2}}, \code{\link{getmzrt}}, \code{\link{getdoe}},\code{\link{getmzrtcsv}}
 #' @export
 getmzrt2 <- function(xset, name = NULL){
         data <- xcms::featureValues(xset, value = "into")
@@ -470,8 +472,24 @@ getmr <- function(path,
         xset <- getdata(path = path,index = index, BPPARAM = BPPARAM, pmethod = pmethod, minfrac = minfrac)
         list <- getmzrt(xset)
         return(list)
-        }
+}
 
+#' Covert the peaks list csv file into list
+#' @param path the path to your csv file
+#' @return list with rtmz profile and group infomation
+#' @seealso \code{\link{getmzrt}}, \code{\link{getmzrt2}}
+#' @export
+getmzrtcsv <- function(path){
+        dataraw <- read.csv(path,skip = 1)
+        mz <- dataraw[,2]
+        rt <- dataraw[,3]
+        data <- dataraw[,-c(1:3)]
+        group <- data.frame(t(read.csv(input$file$datapath,nrows = 1)[-(1:3)]))
+        colnames(group) <- c(1:ncol(group))
+        colnames(data) <- group
+        rownames(data) <- dataraw[,1]
+        return(list(data=data,mz=mz,group=group,rt=rt))
+}
 #' Write MSP files for NIST search
 #' @param mz a intensity vector, who name is the mass in m/z
 #' @param outfilename the name of the MSP file, default is 'unknown'
