@@ -402,10 +402,8 @@ getmzrt <- function(xset,
         # return as list
         result <- list(data = data, group = group, mz = mz, rt = rt)
         if(!is.null(name)){
-                dataname <- colnames(data)
                 data <-
                         rbind(group = t(group),data)
-                colnames(data) <- dataname
                 data <- cbind(mz=c(paste0('group',1:dim(group)[2]),mz),rt=c(paste0('group',1:dim(group)[2]),rt),data)
                 utils::write.csv(data,file = paste0(name,'.csv'))
         }
