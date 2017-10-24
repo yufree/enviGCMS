@@ -5,6 +5,10 @@
 - update Vignette
 - add function for SCCP analysis
 
+## Minor changes
+
+- ass seealso
+
 # enviGCMS 0.4.1
 
 ## Major changes
