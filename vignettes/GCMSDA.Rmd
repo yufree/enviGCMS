@@ -84,6 +84,10 @@ plott(data,temp = c(100,320))
 
 Some functions could be used to caculate the molecular isotope ratio. EIC data could be import into `GetIntergration` and return the infomation of found peaks. `Getisotoplogues` could be used to caculate the molecular isotope ratio of certain molecular. Some shortcut function such as `batch` and `qbatch` could be used to caculate molecular isotope ratio for mutiple and single molecular in EIC data. 
 
+### Quantitative analysis for short-chain chlorinated paraffins(SCCPs)
+
+`enviGCMS` supply function to perform Quantitative analysis for short-chain chlorinated paraffins(SCCPs) with Q-tof data. Use `getsccp` to make Quantitative analysis for SCCPs.
+
 ## Data analysis for multiple samples
 
 In environmetnal non-target analysis, when multiple samples are collected, problem will raise from the heterogeneity among samples. For example, retention time would shift due to the column. In those cases, `xcms` package could be used to get a peaks list across samples within certain retention time and m/z. `enviGCMS` package has some wrapped function to get the peaks list. Besides, some specific functions such as group comparision, batch correction and visulization are also included. 
