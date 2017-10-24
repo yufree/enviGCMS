@@ -47,3 +47,6 @@ the numbers of batch columns should be the same with the condition columns.
 \examples{
 sim <- mzrtsim()
 }
+\seealso{
+\code{\link{simmzrt}}
+}

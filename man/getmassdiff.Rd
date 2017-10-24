@@ -23,3 +23,6 @@ dataframe with mass, retention time, scaled mass and scaled mass defect
 \description{
 Isotope extraction for single group of samples with certain mass diff
 }
+\seealso{
+\code{\link{getmassdefect}},\code{\link{plotkms}}
+}

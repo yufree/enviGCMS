@@ -30,3 +30,6 @@ list with peak information
 \description{
 Quantitative analysis for short-chain chlorinated paraffins(SCCPs)
 }
+\seealso{
+\code{\link{getareastd}},\code{\link{getarea}}
+}

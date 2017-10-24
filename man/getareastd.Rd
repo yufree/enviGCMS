@@ -26,3 +26,6 @@ list with peak information
 \description{
 Get the peak information from SCCPs standards
 }
+\seealso{
+\code{\link{getarea}},\code{\link{getsccp}}
+}

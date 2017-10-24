@@ -15,6 +15,7 @@
 #' @param seed Random seed for reproducibility
 #' @details the numbers of batch columns should be the same with the condition columns.
 #' @return list with rtmz data matrix, row index of peaks influenced by conditions, row index of peaks influenced by batchs, column index of conditions, column of batchs, raw condition matrix, raw batch matrix, peak mean across the samples, peak rsd across the samples
+#' @seealso \code{\link{simmzrt}}
 #' @export
 #' @examples
 #' sim <- mzrtsim()
@@ -137,6 +138,7 @@ mzrtsim <- function(npeaks = 1000,
 #' @param seed Random seed for reproducibility
 #' @details the numbers of batch columns should be the same with the condition columns.
 #' @return list with rtmz data matrix, row index of peaks influenced by conditions, row index of peaks influenced by batchs, column index of conditions, column of batchs, raw condition matrix, raw batch matrix, peak mean across the samples, peak rsd across the samples
+#' @seealso \code{\link{mzrtsim}}
 #' @export
 #' @examples
 #' library(faahKO)

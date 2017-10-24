@@ -46,3 +46,6 @@ cdfpath <- system.file("cdf", package = "faahKO")
 list <- getmr(cdfpath, pmethod = ' ')
 sim <- simmzrt(list$data)
 }
+\seealso{
+\code{\link{mzrtsim}}
+}

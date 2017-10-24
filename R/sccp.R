@@ -24,6 +24,7 @@
 #' @param rt retention time range of sccps
 #' @param rts retention time range of internal standards
 #' @return list with peak information
+#' @seealso \code{\link{getarea}},\code{\link{getsccp}}
 #' @export
 
 getareastd <- function(data = NULL,ismz = 323, ppm = 5, con = 2000,rt = NULL, rts = NULL){
@@ -82,6 +83,7 @@ getareastd <- function(data = NULL,ismz = 323, ppm = 5, con = 2000,rt = NULL, rt
 #' @param rt retention time range of sccps
 #' @param rts retention time range of internal standards
 #' @return list with peak information
+#' @seealso \code{\link{getareastd}},\code{\link{getsccp}}
 #' @export
 getarea <- function(data,ismz = 323, ppm = 5,rt = NULL, rts = NULL){
         mz <- sccp$mz
@@ -142,6 +144,7 @@ getarea <- function(data,ismz = 323, ppm = 5,rt = NULL, rts = NULL){
 #' @param rts retention time range of internal standards
 #' @param log log transformation for response factor
 #' @return list with peak information
+#' @seealso \code{\link{getareastd}},\code{\link{getarea}}
 #' @export
 getsccp <- function(pathstds, pathsample, ismz = 323, ppm = 5, con = 2000, rt = NULL, rts = NULL, log = T){
         pathstd <- list.files(path = pathstds, full.names = T, recursive = T)

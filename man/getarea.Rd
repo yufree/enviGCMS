@@ -23,3 +23,6 @@ list with peak information
 \description{
 Get the peak information from sampels for SCCPs detection
 }
+\seealso{
+\code{\link{getareastd}},\code{\link{getsccp}}
+}
