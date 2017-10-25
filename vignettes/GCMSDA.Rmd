@@ -106,6 +106,8 @@ In environmetnal non-target analysis, when multiple samples are collected, probl
 
 - `getmzrt2` could get a list or csv files with peaks list, mz, retention time and class of samples from `XCMSnExp` object
 
+- `getmzrtcsv` could read in the csv files and return a list for peaks list
+
 ### Data imputation and filtering
 
 - `getimputation` could impute NA in the peaks list
