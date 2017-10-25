@@ -5,44 +5,46 @@
 #' @examples
 #' \dontrun{
 #' library(faahKO)
-#' cdfpath <- system.file("cdf", package = "faahKO")
+#' cdfpath <- system.file('cdf', package = 'faahKO')
 #' list <- getmr(cdfpath, pmethod = ' ')
 #' getimputation(list)
 #' }
 #' @export
 #' @seealso \code{\link{getdata2}},\code{\link{getdata}}, \code{\link{getmzrt}},\code{\link{getmzrt2}}, \code{\link{getdoe}}, \code{\link{getmr}}
-getimputation <- function(list, method = 'l'){
-        data <- list$data
-        mz <- list$mz
-        rt <- list$rt
-
-        if(method == 'r'){
-                idx <- stats::complete.cases(data)
-                data <- data[idx,]
-                mz <- mz[idx]
-                rt <- rt[idx]
-        }else if(method == 'l'){
-                impute <- min(data,na.rm = T)/2
-                data[is.na(data)] <- impute
-        }else if(method == 'mean'){
-                for(i in 1:ncol(data)){
-                        data[is.na(data[,i]), i] <- mean(data[,i], na.rm = TRUE)
-                }
-        }else if(method == 'median'){
-                for(i in 1:ncol(data)){
-                        data[is.na(data[,i]), i] <- stats::median(data[,i], na.rm = TRUE)
-                }
-        }else if(method == '1'){
-                data[is.na(data)] <- 1
-        }else if(method == '0'){
-                data[is.na(data)] <- 0
-        }else {
-                data <- data
+getimputation <- function(list, method = "l") {
+    data <- list$data
+    mz <- list$mz
+    rt <- list$rt
+    
+    if (method == "r") {
+        idx <- stats::complete.cases(data)
+        data <- data[idx, ]
+        mz <- mz[idx]
+        rt <- rt[idx]
+    } else if (method == "l") {
+        impute <- min(data, na.rm = T)/2
+        data[is.na(data)] <- impute
+    } else if (method == "mean") {
+        for (i in 1:ncol(data)) {
+            data[is.na(data[, i]), i] <- mean(data[, i], 
+                na.rm = TRUE)
         }
-        list$data <- data
-        list$mz <- mz
-        list$rt <- rt
-        return(list)
+    } else if (method == "median") {
+        for (i in 1:ncol(data)) {
+            data[is.na(data[, i]), i] <- stats::median(data[, 
+                i], na.rm = TRUE)
+        }
+    } else if (method == "1") {
+        data[is.na(data)] <- 1
+    } else if (method == "0") {
+        data[is.na(data)] <- 0
+    } else {
+        data <- data
+    }
+    list$data <- data
+    list$mz <- mz
+    list$rt <- rt
+    return(list)
 }
 
 #' Filter the data based on DoE, rsd, intensity
@@ -56,93 +58,94 @@ getimputation <- function(list, method = 'l'){
 #' @examples
 #' \dontrun{
 #' library(faahKO)
-#' cdfpath <- system.file("cdf", package = "faahKO")
+#' cdfpath <- system.file('cdf', package = 'faahKO')
 #' list <- getmr(cdfpath, pmethod = ' ')
 #' getdoe(list)
 #' }
 #' @export
 #' @seealso \code{\link{getdata2}},\code{\link{getdata}}, \code{\link{getmzrt}},\code{\link{getmzrt2}}, \code{\link{getimputation}}, \code{\link{getmr}}
-getdoe <- function(list,
-                   inscf = 5,
-                   rsdcf = 100,
-                   rsdcft = 30,
-                   imputation = 'l',
-                   tr = F){
-        list <- getimputation(list,method = imputation)
-        # remove the technical replicates and use biological replicates instead
-        if(tr){
-                data <- list$data
-                lv <- list$group
-                # group base on levels
-                cols <- colnames(lv)
-                mlv <- do.call(paste, c(lv[cols]))
-                # get the rsd of the technical replicates
-                meant <- stats::aggregate(t(data),list(mlv),mean)
-                sdt <- stats::aggregate(t(data),list(mlv),sd)
-                suppressWarnings(rsd <- sdt[,-1] / meant [,-1] * 100)
-                data <- t(meant[,-1])
-                colnames(data) <- unique(mlv)
-                rsd <- t(rsd)
-                # filter the data based on rsd of the technical replicates
-                indext <- as.vector(apply(rsd, 1, function(x) all(x < rsdcft)))
-                data <- data[indext,]
-                # data with mean of the technical replicates
-                list$data <- data
-                # get new group infomation
-                ng <- NULL
-                if(ncol(lv)>1){
-                        for(i in 1:(ncol(lv)-1)){
-                                lvi <- sapply(strsplit(unique(mlv), split=' ', fixed=TRUE), `[`, i)
-                                ng <- cbind(ng,lvi)
-                        }
-                        list$group <- data.frame(ng)
-                }else{
-                        list$group <- data.frame(unique(mlv))
-                }
-                # save the index
-                list$indext <- indext
-        }
-
-        # filter the data based on rsd/intensity
+getdoe <- function(list, inscf = 5, rsdcf = 100, rsdcft = 30, 
+    imputation = "l", tr = F) {
+    list <- getimputation(list, method = imputation)
+    # remove the technical replicates and use biological
+    # replicates instead
+    if (tr) {
         data <- list$data
         lv <- list$group
+        # group base on levels
         cols <- colnames(lv)
-        # one peak for metabolomics is hard to happen
-        if(nrow(lv)>1){
-                if(ncol(lv)>1){
-                        mlv <- do.call(paste0, c(lv[cols], sep=""))
-                }else{
-                        mlv <- unlist(lv)
-                }
-                mean <- stats::aggregate(t(data),list(mlv),mean)
-                sd <- stats::aggregate(t(data),list(mlv),sd)
-                suppressWarnings(rsd <- sd[,-1] / mean[,-1]* 100)
-                mean <- t(mean[,-1])
-                sd <- t(sd[,-1])
-                rsd <- t(rsd)
-                colnames(rsd) <- colnames(sd) <- colnames(mean) <- unique(mlv)
-                index <- as.vector(apply(rsd, 1, function(x) all(x < rsdcf))) &
-                        as.vector(apply(mean, 1, function(x) any(x > 10 ^ (inscf))))
-                list$groupmean <- mean
-                list$groupsd <- sd
-                list$grouprsd <- rsd
-                list$datafiltered <- data[index,]
-                list$mzfiltered <- list$mz[index]
-                list$rtfiltered <- list$rt[index]
-                list$groupmeanfiltered <- mean[index,]
-                list$groupsdfiltered <- sd[index,]
-                list$grouprsdfiltered <- rsd[index,]
-                list$index <- index
-                return(list)
-        }else{
-                index <- data > 10 ^ (inscf)
-                list$datafiltered <- data[index]
-                list$mzfiltered <- list$mz[index]
-                list$rtfiltered <- list$rt[index]
-                list$index <- index
-                message('Only technical replicates were shown for ONE sample !!!')
-                return(list)
+        mlv <- do.call(paste, c(lv[cols]))
+        # get the rsd of the technical replicates
+        meant <- stats::aggregate(t(data), list(mlv), mean)
+        sdt <- stats::aggregate(t(data), list(mlv), sd)
+        suppressWarnings(rsd <- sdt[, -1]/meant[, -1] * 100)
+        data <- t(meant[, -1])
+        colnames(data) <- unique(mlv)
+        rsd <- t(rsd)
+        # filter the data based on rsd of the technical
+        # replicates
+        indext <- as.vector(apply(rsd, 1, function(x) all(x < 
+            rsdcft)))
+        data <- data[indext, ]
+        # data with mean of the technical replicates
+        list$data <- data
+        # get new group infomation
+        ng <- NULL
+        if (ncol(lv) > 1) {
+            for (i in 1:(ncol(lv) - 1)) {
+                lvi <- sapply(strsplit(unique(mlv), split = " ", 
+                  fixed = TRUE), `[`, i)
+                ng <- cbind(ng, lvi)
+            }
+            list$group <- data.frame(ng)
+        } else {
+            list$group <- data.frame(unique(mlv))
         }
+        # save the index
+        list$indext <- indext
+    }
+    
+    # filter the data based on rsd/intensity
+    data <- list$data
+    lv <- list$group
+    cols <- colnames(lv)
+    # one peak for metabolomics is hard to happen
+    if (nrow(lv) > 1) {
+        if (ncol(lv) > 1) {
+            mlv <- do.call(paste0, c(lv[cols], sep = ""))
+        } else {
+            mlv <- unlist(lv)
+        }
+        mean <- stats::aggregate(t(data), list(mlv), mean)
+        sd <- stats::aggregate(t(data), list(mlv), sd)
+        suppressWarnings(rsd <- sd[, -1]/mean[, -1] * 100)
+        mean <- t(mean[, -1])
+        sd <- t(sd[, -1])
+        rsd <- t(rsd)
+        colnames(rsd) <- colnames(sd) <- colnames(mean) <- unique(mlv)
+        index <- as.vector(apply(rsd, 1, function(x) all(x < 
+            rsdcf))) & as.vector(apply(mean, 1, function(x) any(x > 
+            10^(inscf))))
+        list$groupmean <- mean
+        list$groupsd <- sd
+        list$grouprsd <- rsd
+        list$datafiltered <- data[index, ]
+        list$mzfiltered <- list$mz[index]
+        list$rtfiltered <- list$rt[index]
+        list$groupmeanfiltered <- mean[index, ]
+        list$groupsdfiltered <- sd[index, ]
+        list$grouprsdfiltered <- rsd[index, ]
+        list$index <- index
+        return(list)
+    } else {
+        index <- data > 10^(inscf)
+        list$datafiltered <- data[index]
+        list$mzfiltered <- list$mz[index]
+        list$rtfiltered <- list$rt[index]
+        list$index <- index
+        message("Only technical replicates were shown for ONE sample !!!")
+        return(list)
+    }
 }
 
 #' Get the features from t test, with p value, q value, rsd and power restriction
@@ -158,48 +161,38 @@ getdoe <- function(list,
 #' @examples
 #' \dontrun{
 #' library(faahKO)
-#' cdfpath <- system.file("cdf", package = "faahKO")
+#' cdfpath <- system.file('cdf', package = 'faahKO')
 #' list <- getmr(cdfpath, pmethod = ' ')
 #' getfeaturest(list)
 #' }
 #' @export
 
-getfeaturest <- function(list,
-                         power = 0.8,
-                         pt = 0.05,
-                         qt = 0.05,
-                         n = 3,
-                         inscf = 5,
-                         rsdcf = 30,
-                         imputation = 'l') {
-        list <- getdoe(list,inscf = inscf,rsdcf = rsdcf, imputation = imputation)
-        data <- list$datafiltered
-        lv <- list$group$class
-        sdn <- list$groupsdfiltered[,1]
-        mz <- list$mzfiltered
-        rt <- list$rtfiltered
-
-        ar <- genefilter::rowttests(data, fac = lv)
-        dm <- ar$dm
-        p <- ar$p.value
-        q <- stats::p.adjust(p, method = "BH")
-        m <- nrow(data)
-        df <- cbind.data.frame(sdn, dm, p, q, mz, rt, data)
-        df <- df[order(df$p),]
-        df$alpha <- c(1:m) * pt / m
-        rp <- vector()
-        for (i in c(1:nrow(df))) {
-                r <- stats::power.t.test(
-                        delta = df$dm[i],
-                        sd = df$sd[i],
-                        sig.level = df$alpha[i],
-                        n = n
-                )
-                rp[i] <- r$power
-        }
-        df <- cbind(power = rp, df)
-        df <- df[df$power > power,]
-        return(df)
+getfeaturest <- function(list, power = 0.8, pt = 0.05, qt = 0.05, 
+    n = 3, inscf = 5, rsdcf = 30, imputation = "l") {
+    list <- getdoe(list, inscf = inscf, rsdcf = rsdcf, imputation = imputation)
+    data <- list$datafiltered
+    lv <- list$group$class
+    sdn <- list$groupsdfiltered[, 1]
+    mz <- list$mzfiltered
+    rt <- list$rtfiltered
+    
+    ar <- genefilter::rowttests(data, fac = lv)
+    dm <- ar$dm
+    p <- ar$p.value
+    q <- stats::p.adjust(p, method = "BH")
+    m <- nrow(data)
+    df <- cbind.data.frame(sdn, dm, p, q, mz, rt, data)
+    df <- df[order(df$p), ]
+    df$alpha <- c(1:m) * pt/m
+    rp <- vector()
+    for (i in c(1:nrow(df))) {
+        r <- stats::power.t.test(delta = df$dm[i], sd = df$sd[i], 
+            sig.level = df$alpha[i], n = n)
+        rp[i] <- r$power
+    }
+    df <- cbind(power = rp, df)
+    df <- df[df$power > power, ]
+    return(df)
 }
 
 #' Get the features from anova, with p value, q value, rsd and power restriction
@@ -215,47 +208,36 @@ getfeaturest <- function(list,
 #' @return dataframe with peaks fit the setting above
 #' @export
 
-getfeaturesanova <- function(list,
-                             power = 0.8,
-                             pt = 0.05,
-                             qt = 0.05,
-                             n = 3,
-                             ng = 3,
-                             rsdcf = 100,
-                             inscf = 5,
-                             imputation = 'l') {
-        list <- getdoe(list,inscf = inscf,rsdcf = rsdcf, imputation = imputation)
-        data <- list$datafiltered
-        lv <- list$group$class
-        sdn <- list$groupsdfiltered[,1]
-        mz <- list$mzfiltered
-        rt <- list$rtfiltered
-        rsd <- list$grouprsdfiltered
-
-        sdn <- genefilter::rowSds(data[, 1:n])
-        sdg <- genefilter::rowSds(list$groupmeanfiltered)
-
-        ar <- genefilter::rowFtests(data, lv)
-        p <- ar$p.value
-        q <- stats::p.adjust(p, method = "BH")
-        m <- nrow(data)
-        df <- cbind.data.frame(sdn, sdg, rsd, p, q, mz, rt, data)
-        df <- df[order(df$p),]
-        df$alpha <- c(1:m) * pt / m
-        rp <- vector()
-        for (i in c(1:nrow(df))) {
-                r <- stats::power.anova.test(
-                        groups = ng,
-                        between.var = df$sdg[i],
-                        within.var = df$sdn[i],
-                        sig.level = df$alpha[i],
-                        n = n
-                )
-                rp[i] <- r$power
-        }
-        df <- cbind(power = rp, df)
-        df <- df[df$power > power,]
-        return(df)
+getfeaturesanova <- function(list, power = 0.8, pt = 0.05, 
+    qt = 0.05, n = 3, ng = 3, rsdcf = 100, inscf = 5, imputation = "l") {
+    list <- getdoe(list, inscf = inscf, rsdcf = rsdcf, imputation = imputation)
+    data <- list$datafiltered
+    lv <- list$group$class
+    sdn <- list$groupsdfiltered[, 1]
+    mz <- list$mzfiltered
+    rt <- list$rtfiltered
+    rsd <- list$grouprsdfiltered
+    
+    sdn <- genefilter::rowSds(data[, 1:n])
+    sdg <- genefilter::rowSds(list$groupmeanfiltered)
+    
+    ar <- genefilter::rowFtests(data, lv)
+    p <- ar$p.value
+    q <- stats::p.adjust(p, method = "BH")
+    m <- nrow(data)
+    df <- cbind.data.frame(sdn, sdg, rsd, p, q, mz, rt, data)
+    df <- df[order(df$p), ]
+    df$alpha <- c(1:m) * pt/m
+    rp <- vector()
+    for (i in c(1:nrow(df))) {
+        r <- stats::power.anova.test(groups = ng, between.var = df$sdg[i], 
+            within.var = df$sdn[i], sig.level = df$alpha[i], 
+            n = n)
+        rp[i] <- r$power
+    }
+    df <- cbind(power = rp, df)
+    df <- df[df$power > power, ]
+    return(df)
 }
 
 #' plot the scatter plot for peaks list with threshold
@@ -270,83 +252,57 @@ getfeaturesanova <- function(list,
 #' @examples
 #' \dontrun{
 #' library(faahKO)
-#' cdfpath <- system.file("cdf", package = "faahKO")
+#' cdfpath <- system.file('cdf', package = 'faahKO')
 #' list <- getmr(cdfpath, pmethod = ' ')
 #' plotmr(list)
 #' }
 #' @export
-plotmr <- function(list,
-                   rt = NULL,
-                   ms = NULL,
-                   inscf = 5,
-                   rsdcf = 30,
-                   imputation = 'l',
-                   ...) {
-        graphics::par(mar=c(5, 4.2, 6.1, 2.1), xpd=TRUE)
-        list <- getdoe(list, rsdcf = rsdcf, inscf = inscf, imputation = imputation)
-        data <- list$groupmeanfiltered
-        dataname <- colnames(data)
-        mz <- list$mzfiltered
-        RT <- list$rtfiltered
-        suppressWarnings(if (!is.na(data)) {
-                n <- dim(data)[2]
-                col <- grDevices::rainbow(n, alpha = 0.318)
-
-                graphics::plot(
-                        mz ~ RT,
-                        xlab = "Retention Time(s)",
-                        ylab = "m/z",
-                        type = 'n',
-                        pch = 19,
-                        ...
-                )
-
-                for (i in 1:n) {
-                        cex = as.numeric(cut((log10(data[, i] + 1)-inscf), breaks=c(0,1,2,3,4,Inf)/2))/2
-                        cexlab = c(paste0(inscf,'-',inscf+0.5),paste0(inscf+0.5,'-',inscf+1),paste0(inscf+1,'-',inscf+1.5),paste0(inscf+1.5,'-',inscf+2),paste0('>',inscf+2))
-                        graphics::points(
-                                x = RT,
-                                y = mz,
-                                cex = cex,
-                                col = col[i],
-                                pch = 19,
-                                ylim = ms,
-                                xlim = rt
-                        )
-                }
-                graphics::legend(
-                        'topright',
-                        legend = dataname,
-                        col = col,
-                        pch = 19,
-                        horiz = T,
-                        bty = 'n',
-                        inset = c(0,-0.25)
-                )
-                graphics::legend(
-                        'topleft',
-                        legend = cexlab,
-                        title = 'Intensity in Log scale',
-                        pt.cex = c(1,2,3,4,5)/2,
-                        pch = 19,
-                        bty = 'n',
-                        horiz = T,
-                        cex = 0.7,
-                        col = grDevices::rgb(0,0,0,0.318),inset = c(0,-0.25)
-                )
-        } else{
-                graphics::plot(
-                        1,
-                        xlab = "Retention Time(s)",
-                        ylab = "m/z",
-                        main = "No peaks found",
-                        ylim = ms,
-                        xlim = rt,
-                        type = 'n',
-                        pch = 19,
-                        ...
-                )
-        })
+plotmr <- function(list, rt = NULL, ms = NULL, inscf = 5, 
+    rsdcf = 30, imputation = "l", ...) {
+    graphics::par(mar = c(5, 4.2, 6.1, 2.1), xpd = TRUE)
+    list <- getdoe(list, rsdcf = rsdcf, inscf = inscf, imputation = imputation)
+    data <- list$groupmeanfiltered
+    dataname <- colnames(data)
+    mz <- list$mzfiltered
+    RT <- list$rtfiltered
+    suppressWarnings(if (!is.na(data)) {
+        n <- dim(data)[2]
+        col <- grDevices::rainbow(n, alpha = 0.318)
+        
+        graphics::plot(mz ~ RT, xlab = "Retention Time(s)", 
+            ylab = "m/z", type = "n", pch = 19, ylim = ms, 
+            xlim = rt, ...)
+        
+        for (i in 1:n) {
+            cex = as.numeric(cut((log10(data[, i] + 1) - 
+                inscf), breaks = c(0, 1, 2, 3, 4, Inf)/2))/2
+            cexlab = c(paste0(inscf, "-", inscf + 0.5), paste0(inscf + 
+                0.5, "-", inscf + 1), paste0(inscf + 1, "-", 
+                inscf + 1.5), paste0(inscf + 1.5, "-", inscf + 
+                2), paste0(">", inscf + 2))
+            if (!is.null(ms) & !is.null(rt)) {
+                graphics::points(x = RT[RT > rt[1] & RT < 
+                  rt[2] & mz > ms[1] & mz < ms[2]], y = mz[RT > 
+                  rt[1] & RT < rt[2] & mz > ms[1] & mz < 
+                  ms[2]], cex = cex, col = col[i], pch = 19)
+            } else {
+                graphics::points(x = RT, y = mz, cex = cex, 
+                  col = col[i], pch = 19)
+            }
+            
+        }
+        graphics::legend("topright", legend = dataname, col = col, 
+            pch = 19, horiz = T, bty = "n", inset = c(0, 
+                -0.25))
+        graphics::legend("topleft", legend = cexlab, title = "Intensity in Log scale", 
+            pt.cex = c(1, 2, 3, 4, 5)/2, pch = 19, bty = "n", 
+            horiz = T, cex = 0.7, col = grDevices::rgb(0, 
+                0, 0, 0.318), inset = c(0, -0.25))
+    } else {
+        graphics::plot(1, xlab = "Retention Time(s)", ylab = "m/z", 
+            main = "No peaks found", ylim = ms, xlim = rt, 
+            type = "n", pch = 19, ...)
+    })
 }
 
 #' plot the diff scatter plot for one xcmsset objects with threshold between two groups
@@ -360,89 +316,57 @@ plotmr <- function(list,
 #' @examples
 #' \dontrun{
 #' library(faahKO)
-#' cdfpath <- system.file("cdf", package = "faahKO")
+#' cdfpath <- system.file('cdf', package = 'faahKO')
 #' list <- getmr(cdfpath, pmethod = ' ')
 #' plotmrc(list)
 #' }
 #' @export
-plotmrc <- function(list,
-                   ms = c(100, 800),
-                   inscf = 5,
-                   rsdcf = 30,
-                   imputation = 'l',
-                   ...)  {
-        list <- getdoe(list, rsdcf = rsdcf, inscf = inscf, imputation = imputation)
-        data <- list$groupmeanfiltered
-        dataname <- colnames(data)
-        mz <- list$mzfiltered
-        rt <- list$rtfiltered
-        suppressWarnings(if (!is.na(data)) {
-
-                diff1 <- data[, 1] - data[, 2]
-                diff2 <- data[, 2] - data[, 1]
-                diff1[diff1 < 0] <- 0
-                diff2[diff2 < 0] <- 0
-                name1 <- paste0(dataname[1], "-", dataname[2])
-                name2 <- paste0(dataname[2], "-", dataname[1])
-
-                cex1 = as.numeric(cut((log10(diff1 + 1)-inscf), breaks=c(0,1,2,3,4,Inf)/2))/2
-                cex2 = as.numeric(cut((log10(diff2 + 1)-inscf), breaks=c(0,1,2,3,4,Inf)/2))/2
-                cexlab = c(paste0(inscf,'-',inscf+0.5),paste0(inscf+0.5,'-',inscf+1),paste0(inscf+1,'-',inscf+1.5),paste0(inscf+1.5,'-',inscf+2),paste0('>',inscf+2))
-
-                graphics::plot(
-                        mz ~ rt,
-                        xlab = "Retention Time(s)",
-                        ylab = "m/z",
-                        ylim = ms,
-                        cex = cex1,
-                        col = grDevices::rgb(0, 0, 1, 0.618),
-                        pch = 19,
-                        ...
-                )
-
-                graphics::points(
-                        mz ~ rt,
-                        cex = cex2,
-                        col = grDevices::rgb(1, 0, 0, 0.618),
-                        pch = 19
-                )
-
-                graphics::legend(
-                        'topleft',
-                        legend = cexlab,
-                        title = 'Intensity in Log scale',
-                        pt.cex = c(1,2,3,4,5)/2,
-                        pch = 19,
-                        col = grDevices::rgb(0, 0, 0, 0.618),
-                        bty = 'n',
-                        horiz = T,
-                        inset = c(0,-0.25)
-                )
-                graphics::legend(
-                        'topright',
-                        legend = c(name1, name2),
-                        pch = 19,
-                        col = c(
-                                grDevices::rgb(0, 0, 1, 0.618),
-                                grDevices::rgb(1, 0, 0, 0.618)
-                        ),
-                        bty = 'n',
-                        horiz = T,
-                        inset = c(0,-0.25)
-                )
-        } else{
-                graphics::plot(
-                        1,
-                        xlab = "Retention Time(s)",
-                        ylab = "m/z",
-                        main = "No peaks found",
-                        ylim = ms,
-                        type = 'n',
-                        pch = 19,
-                        ...
-                )
-        })
-
+plotmrc <- function(list, ms = c(100, 800), inscf = 5, rsdcf = 30, 
+    imputation = "l", ...) {
+    list <- getdoe(list, rsdcf = rsdcf, inscf = inscf, imputation = imputation)
+    data <- list$groupmeanfiltered
+    dataname <- colnames(data)
+    mz <- list$mzfiltered
+    rt <- list$rtfiltered
+    suppressWarnings(if (!is.na(data)) {
+        
+        diff1 <- data[, 1] - data[, 2]
+        diff2 <- data[, 2] - data[, 1]
+        diff1[diff1 < 0] <- 0
+        diff2[diff2 < 0] <- 0
+        name1 <- paste0(dataname[1], "-", dataname[2])
+        name2 <- paste0(dataname[2], "-", dataname[1])
+        
+        cex1 = as.numeric(cut((log10(diff1 + 1) - inscf), 
+            breaks = c(0, 1, 2, 3, 4, Inf)/2))/2
+        cex2 = as.numeric(cut((log10(diff2 + 1) - inscf), 
+            breaks = c(0, 1, 2, 3, 4, Inf)/2))/2
+        cexlab = c(paste0(inscf, "-", inscf + 0.5), paste0(inscf + 
+            0.5, "-", inscf + 1), paste0(inscf + 1, "-", 
+            inscf + 1.5), paste0(inscf + 1.5, "-", inscf + 
+            2), paste0(">", inscf + 2))
+        
+        graphics::plot(mz ~ rt, xlab = "Retention Time(s)", 
+            ylab = "m/z", ylim = ms, cex = cex1, col = grDevices::rgb(0, 
+                0, 1, 0.618), pch = 19, ...)
+        
+        graphics::points(mz ~ rt, cex = cex2, col = grDevices::rgb(1, 
+            0, 0, 0.618), pch = 19)
+        
+        graphics::legend("topleft", legend = cexlab, title = "Intensity in Log scale", 
+            pt.cex = c(1, 2, 3, 4, 5)/2, pch = 19, col = grDevices::rgb(0, 
+                0, 0, 0.618), bty = "n", horiz = T, inset = c(0, 
+                -0.25))
+        graphics::legend("topright", legend = c(name1, name2), 
+            pch = 19, col = c(grDevices::rgb(0, 0, 1, 0.618), 
+                grDevices::rgb(1, 0, 0, 0.618)), bty = "n", 
+            horiz = T, inset = c(0, -0.25))
+    } else {
+        graphics::plot(1, xlab = "Retention Time(s)", ylab = "m/z", 
+            main = "No peaks found", ylim = ms, type = "n", 
+            pch = 19, ...)
+    })
+    
 }
 
 #' plot the rsd influnces of data in different groups
@@ -456,70 +380,41 @@ plotmrc <- function(list,
 #' @examples
 #' \dontrun{
 #' library(faahKO)
-#' cdfpath <- system.file("cdf", package = "faahKO")
+#' cdfpath <- system.file('cdf', package = 'faahKO')
 #' list <- getmr(cdfpath, pmethod = ' ')
 #' plotrsd(list)
 #' }
 #' @export
-plotrsd <- function(list,
-                    ms = c(100, 800),
-                    inscf = 5,
-                    rsdcf = 100,
-                    imputation = 'l',
-                    ...) {
-        cexlab = c('<20%','20-40%','40-60%','60-80%','>80%')
-        list <- getdoe(list, rsdcf = rsdcf, inscf = inscf, imputation = imputation)
-        data <- list$groupmeanfiltered
-        dataname <- colnames(data)
-        mz <- list$mzfiltered
-        rt <- list$rtfiltered
-        rsd <- list$grouprsdfiltered
-
-        n <- dim(rsd)[2]
-        col <- grDevices::rainbow(n, alpha = 0.318)
-
-                graphics::plot(
-                        mz ~ rt,
-                        xlab = "Retention Time(s)",
-                        ylab = "m/z",
-                        main = "RSD(%) distribution",
-                        type = 'n',
-                        pch = 19,
-                        ...
-                )
-
-                for (i in 1:n) {
-                        cex = as.numeric(cut(rsd[, i], breaks=c(0,20,40,60,80,Inf)))/2
-                        graphics::points(
-                                x = rt,
-                                y = mz,
-                                ylim = ms,
-                                cex = cex,
-                                col = col[i],
-                                pch = 19
-                        )
-                }
-                graphics::legend(
-                        'topright',
-                        legend = dataname,
-                        col = col,
-                        horiz = T,
-                        pch = 19,
-                        bty = 'n',
-                        inset = c(0,-0.25)
-                )
-                graphics::legend(
-                        'topleft',
-                        legend = cexlab,
-                        pt.cex = c(1,2,3,4,5)/2,
-                        pch = 19,
-                        bty = 'n',
-                        horiz = T,
-                        cex = 0.8,
-                        col = grDevices::rgb(0,0,0,0.318),
-                        inset = c(0,-0.25)
-                )
-        }
+plotrsd <- function(list, ms = c(100, 800), inscf = 5, rsdcf = 100, 
+    imputation = "l", ...) {
+    cexlab = c("<20%", "20-40%", "40-60%", "60-80%", ">80%")
+    list <- getdoe(list, rsdcf = rsdcf, inscf = inscf, imputation = imputation)
+    data <- list$groupmeanfiltered
+    dataname <- colnames(data)
+    mz <- list$mzfiltered
+    rt <- list$rtfiltered
+    rsd <- list$grouprsdfiltered
+    
+    n <- dim(rsd)[2]
+    col <- grDevices::rainbow(n, alpha = 0.318)
+    
+    graphics::plot(mz ~ rt, xlab = "Retention Time(s)", ylab = "m/z", 
+        main = "RSD(%) distribution", type = "n", pch = 19, 
+        ...)
+    
+    for (i in 1:n) {
+        cex = as.numeric(cut(rsd[, i], breaks = c(0, 20, 
+            40, 60, 80, Inf)))/2
+        graphics::points(x = rt, y = mz, ylim = ms, cex = cex, 
+            col = col[i], pch = 19)
+    }
+    graphics::legend("topright", legend = dataname, col = col, 
+        horiz = T, pch = 19, bty = "n", inset = c(0, -0.25))
+    graphics::legend("topleft", legend = cexlab, pt.cex = c(1, 
+        2, 3, 4, 5)/2, pch = 19, bty = "n", horiz = T, cex = 0.8, 
+        col = grDevices::rgb(0, 0, 0, 0.318), inset = c(0, 
+            -0.25))
+}
 
 #' plot scatter plot for rt-mz profile and output gif file for mutiple groups
 #' @param list list with data as peaks list, mz, rt and group information
@@ -533,49 +428,67 @@ plotrsd <- function(list,
 #' @examples
 #' \dontrun{
 #' library(faahKO)
-#' cdfpath <- system.file("cdf", package = "faahKO")
+#' cdfpath <- system.file('cdf', package = 'faahKO')
 #' list <- getmr(cdfpath, pmethod = ' ')
 #' gifmr(list)
 #' }
 #' @export
-gifmr <- function(list,
-                  ms = c(100,500),
-                  rsdcf = 30,
-                  inscf = 5,
-                  imputation = 'i',
-                  file = 'test') {
-        list <- getdoe(list, rsdcf = rsdcf, inscf = inscf, imputation = imputation)
-        data <- list$groupmeanfiltered
-        mz <- list$mzfiltered
-        rt <- list$rtfiltered
-        filename = paste0(file, '.gif')
-        mean <- apply(data,1,mean)
+gifmr <- function(list, ms = c(100, 500), rsdcf = 30, inscf = 5, 
+    imputation = "i", file = "test") {
+    list <- getdoe(list, rsdcf = rsdcf, inscf = inscf, imputation = imputation)
+    data <- list$groupmeanfiltered
+    mz <- list$mzfiltered
+    rt <- list$rtfiltered
+    filename = paste0(file, ".gif")
+    mean <- apply(data, 1, mean)
+    
+    graphics::plot(mz ~ rt, xlab = "Retention Time(s)", ylab = "m/z", 
+        pch = 19, cex = log10(mean + 1) - 4, col = grDevices::rgb(0, 
+            0, 1, 0.2), main = "All peaks")
+    
+    col <- grDevices::rainbow(dim(data)[2], alpha = 0.318)
+    animation::saveGIF({
+        for (i in 1:dim(data)[2]) {
+            name <- colnames(data)[i]
+            value <- data[, i]
+            graphics::plot(mz ~ rt, xlab = "Retention Time(s)", 
+                ylab = "m/z", pch = 19, cex = log10(value + 
+                  1) - 4, col = col[i], ylim = ms, main = name)
+        }
+    }, movie.name = filename, ani.width = 800, ani.height = 500)
+}
 
-        graphics::plot(
-                mz ~ rt,
-                xlab = "Retention Time(s)",
-                ylab = "m/z",
-                pch = 19,
-                cex = log10(mean + 1) - 4,
-                col = grDevices::rgb(0, 0, 1, 0.2),
-                main = 'All peaks'
-        )
+#' plot the PCA of list
+#' @param data mzrt profile with row peaks and column samples
+#' @param lv group information
+#' @param center parameters for PCA
+#' @param scale parameters for scale
+#' @param ... other parameters for `plot` function
+#' @return NULL
+#' @examples
+#' \dontrun{
+#' library(faahKO)
+#' cdfpath <- system.file('cdf', package = 'faahKO')
+#' list <- getmr(cdfpath, pmethod = ' ')
+#' data <- list$data
+#' lv <- as.character(list$group$class)
+#' plotpca(data, lv)
+#' }
+#' @export
 
-        col <- grDevices::rainbow(dim(data)[2], alpha = 0.318)
-        animation::saveGIF({
-                for (i in 1:dim(data)[2]) {
-                        name <- colnames(data)[i]
-                        value <- data[,i]
-                        graphics::plot(
-                                mz ~ rt,
-                                xlab = "Retention Time(s)",
-                                ylab = "m/z",
-                                pch = 19,
-                                cex = log10(value + 1) - 4,
-                                col = col[i],
-                                ylim = ms,
-                                main = name
-                        )
-                }
-        }, movie.name = filename, ani.width = 800, ani.height = 500)
+plotpca <- function(data, lv = NULL, center = T, scale = T, 
+    ...) {
+    
+    if (is.null(lv)) {
+        pch = colnames(data)
+    } else {
+        pch = lv
+    }
+    pcao <- stats::prcomp(t(data), center = center, scale = scale)
+    pcaoVars = signif(((pcao$sdev)^2)/(sum((pcao$sdev)^2)), 
+        3) * 100
+    graphics::plot(pcao$x[, 1], pcao$x[, 2], xlab = paste("PC1:", 
+        pcaoVars[1], "% of Variance Explained"), ylab = paste("PC2:", 
+        pcaoVars[2], "% of Variance Explained"), cex = 2, 
+        pch = pch, ...)
 }
