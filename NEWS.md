@@ -4,6 +4,7 @@
 
 - update Vignette
 - add function for SCCP analysis
+- add peak list filter function based mass difference
 
 ## Minor changes
 

@@ -6,7 +6,7 @@
 #' mass <- c(100.1022,245.2122,267.3144,400.1222,707.2294)
 #' sf <- 0.9988
 #' mf <- getmassdefect(mass,sf)
-#' @seealso \code{\link{getmassdiff}},\code{\link{plotkms}}
+#' @seealso \code{\link{getpaired}},\code{\link{plotkms}}
 #' @export
 
 getmassdefect <- function(mass, sf) {
@@ -99,7 +99,7 @@ getpaired <- function(list, mds = 0.9988834, mdcutoff = 0.025, rtcutoff = 2, iso
 #' @param data vector with the name m/z
 #' @param cutoff remove the low intensity
 #' @return NULL
-#' @seealso \code{\link{getmassdefect}},\code{\link{getmassdiff}}
+#' @seealso \code{\link{getmassdefect}},\code{\link{getpaired}}
 #' @examples
 #' \dontrun{
 #' mz <- c(10000,5000,20000,100,40000)

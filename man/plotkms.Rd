@@ -22,5 +22,5 @@ plotkms(mz)
 }
 }
 \seealso{
-\code{\link{getmassdefect}},\code{\link{getmassdiff}}
+\code{\link{getmassdefect}},\code{\link{getpaired}}
 }
