@@ -144,10 +144,6 @@ In environmetnal non-target analysis, when multiple samples are collected, probl
 
 - `svapca`, `svaplot`, `rlaplot` and `ridgesplot` could be used to visulize the batch effects and their influnces on each peaks
 
-### Mass defect analysis
-
-- `getmassdiff` could make isotope extraction for single group of samples with certain mass defect.
-
 ## Summary
 
 In general, `enviGCMS` could be used to explore single data or peaks list from GC/LC-MS and extract certain patterns in the data with various purposes.
