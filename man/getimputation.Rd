@@ -20,7 +20,7 @@ Impute the peaks list data
 \examples{
 \dontrun{
 library(faahKO)
-cdfpath <- system.file("cdf", package = "faahKO")
+cdfpath <- system.file('cdf', package = 'faahKO')
 list <- getmr(cdfpath, pmethod = ' ')
 getimputation(list)
 }

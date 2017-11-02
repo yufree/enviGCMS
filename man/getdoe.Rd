@@ -29,7 +29,7 @@ Filter the data based on DoE, rsd, intensity
 \examples{
 \dontrun{
 library(faahKO)
-cdfpath <- system.file("cdf", package = "faahKO")
+cdfpath <- system.file('cdf', package = 'faahKO')
 list <- getmr(cdfpath, pmethod = ' ')
 getdoe(list)
 }

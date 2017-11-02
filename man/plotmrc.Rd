@@ -26,7 +26,7 @@ plot the diff scatter plot for one xcmsset objects with threshold between two gr
 \examples{
 \dontrun{
 library(faahKO)
-cdfpath <- system.file("cdf", package = "faahKO")
+cdfpath <- system.file('cdf', package = 'faahKO')
 list <- getmr(cdfpath, pmethod = ' ')
 plotmrc(list)
 }

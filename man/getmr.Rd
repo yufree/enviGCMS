@@ -29,7 +29,7 @@ Get the mzrt profile and group information for batch correction and plot as a li
 \examples{
 \dontrun{
 library(faahKO)
-cdfpath <- system.file("cdf", package = "faahKO")
+cdfpath <- system.file('cdf', package = 'faahKO')
 list <- getmr(cdfpath, pmethod = ' ')
 }
 }

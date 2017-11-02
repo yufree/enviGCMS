@@ -31,7 +31,7 @@ plot scatter plot for rt-mz profile and output gif file for mutiple groups
 \examples{
 \dontrun{
 library(faahKO)
-cdfpath <- system.file("cdf", package = "faahKO")
+cdfpath <- system.file('cdf', package = 'faahKO')
 list <- getmr(cdfpath, pmethod = ' ')
 gifmr(list)
 }

@@ -23,7 +23,7 @@ this is used for SVA to correct the unknown batch effects
 \examples{
 \dontrun{
 library(faahKO)
-cdfpath <- system.file("cdf", package = "faahKO")
+cdfpath <- system.file('cdf', package = 'faahKO')
 cdffiles <- list.files(cdfpath, recursive = TRUE, full.names = TRUE)
 list <- getmr(cdfpath, pmethod = ' ')
 li <- svacor(list$data,list$group$class)

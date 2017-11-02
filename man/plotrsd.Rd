@@ -26,7 +26,7 @@ plot the rsd influnces of data in different groups
 \examples{
 \dontrun{
 library(faahKO)
-cdfpath <- system.file("cdf", package = "faahKO")
+cdfpath <- system.file('cdf', package = 'faahKO')
 list <- getmr(cdfpath, pmethod = ' ')
 plotrsd(list)
 }

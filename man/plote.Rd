@@ -26,7 +26,7 @@ plot EIC and boxplot for all peaks and return diffreport
 \examples{
 \dontrun{
 library(faahKO)
-cdfpath <- system.file("cdf", package = "faahKO")
+cdfpath <- system.file('cdf', package = 'faahKO')
 xset <- getdata(cdfpath, pmethod = ' ')
 plote(xset)
 }

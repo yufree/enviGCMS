@@ -22,7 +22,7 @@ Get the csv files to be submitted to Metaboanalyst
 \examples{
 \dontrun{
 library(faahKO)
-cdfpath <- system.file("cdf", package = "faahKO")
+cdfpath <- system.file('cdf', package = 'faahKO')
 xset <- getdata2(cdfpath,
 ppp = xcms::MatchedFilterParam(),
 rtp = xcms::ObiwarpParam(),

@@ -24,7 +24,7 @@ Principal component analysis(PCA) for SVA/ISVA corrected data and raw data
 \examples{
 \dontrun{
 library(faahKO)
-cdfpath <- system.file("cdf", package = "faahKO")
+cdfpath <- system.file('cdf', package = 'faahKO')
 list <- getmr(cdfpath, pmethod = ' ')
 li <- svacor(list$data,list$group$class)
 svapca(li)

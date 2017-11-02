@@ -31,7 +31,7 @@ plot the scatter plot for peaks list with threshold
 \examples{
 \dontrun{
 library(faahKO)
-cdfpath <- system.file("cdf", package = "faahKO")
+cdfpath <- system.file('cdf', package = 'faahKO')
 list <- getmr(cdfpath, pmethod = ' ')
 plotmr(list)
 }

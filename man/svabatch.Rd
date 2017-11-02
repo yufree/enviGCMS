@@ -22,11 +22,11 @@ Plot the influnces of DoE and Batch effects on each peaks
 \examples{
 \dontrun{
 library(faahKO)
-cdfpath <- system.file("cdf", package = "faahKO")
+cdfpath <- system.file('cdf', package = 'faahKO')
 list <- getmr(cdfpath, pmethod = ' ')
 li <- svacor(list$data,list$group$class)
 dfsv <- svaplot(li,list$group$class)
-dfanova <- svaplot(li, list$group$class, pqvalues = "anova")
+dfanova <- svaplot(li, list$group$class, pqvalues = 'anova')
 svabatch(li,dfsv,dfanova)
 }
 }

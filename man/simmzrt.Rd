@@ -42,7 +42,7 @@ the numbers of batch columns should be the same with the condition columns.
 }
 \examples{
 library(faahKO)
-cdfpath <- system.file("cdf", package = "faahKO")
+cdfpath <- system.file('cdf', package = 'faahKO')
 list <- getmr(cdfpath, pmethod = ' ')
 sim <- simmzrt(list$data)
 }

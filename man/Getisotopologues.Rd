@@ -19,6 +19,6 @@ Get the selected isotopologues at certain MS data
 \examples{
 \dontrun{
 # show isotopologues for BDE-47
-ir <- Getisotopologues(formula = "C12OH6Br4")
+ir <- Getisotopologues(formula = 'C12OH6Br4')
 }
 }

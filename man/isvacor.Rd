@@ -23,7 +23,7 @@ this is used for reviesed version of ISVA to correct the unknown batch effects
 \examples{
 \dontrun{
 library(faahKO)
-cdfpath <- system.file("cdf", package = "faahKO")
+cdfpath <- system.file('cdf', package = 'faahKO')
 cdffiles <- list.files(cdfpath, recursive = TRUE, full.names = TRUE)
 list <- getmr(cdfpath, pmethod = ' ')
 list <- isvacor(list$data,list$group$class)

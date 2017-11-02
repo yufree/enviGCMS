@@ -24,7 +24,7 @@ Get the csv files to be submitted to Metaboanalyst
 \examples{
 \dontrun{
 library(faahKO)
-cdfpath <- system.file("cdf", package = "faahKO")
+cdfpath <- system.file('cdf', package = 'faahKO')
 xset <- getdata(cdfpath, pmethod = ' ')
 getupload(xset)
 }

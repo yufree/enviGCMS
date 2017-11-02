@@ -17,53 +17,83 @@ getmassdefect <- function(mass, sf) {
     return(df)
 }
 
-#' Isotope extraction for single group of samples with certain mass diff
-#' @param list  a list with mzrt profile, mz and rt
-#' @param massdiff mass defect
-#' @param rtwindow retention time range
-#' @param mzwindow mass charge ratio window
-#' @param ppm resolution of the mass spectrum
+#' Paired mass diff relationship and mass defect anlaysis among peak list based on cluster analysis
+#' @param list a list with mzrt profile
+#' @param mds mass defect scale factors
+#' @param mdcutoff mass defect cluster cutoff
+#' @param rtcutoff cutoff of the distances in cluster
+#' @param isocutoff cutoff to find the isotope relationship
+#' @param freqcutoff cutoff of the mass differences frequency
+#' @return list with tentative isotope, adducts, and neutral loss peaks' index, retention time cluster, scalued mass defect and paired mass diff dataframe
 #' @seealso \code{\link{getmassdefect}},\code{\link{plotkms}}
-#' @return dataframe with mass, retention time, scaled mass and scaled mass defect
-getmassdiff <- function(list, massdiff, rtwindow, mzwindow, 
-    ppm) {
-    # get intensity infomation
-    peakIntensities = list$data
-    groups = cbind.data.frame(mz = list$mz, rt = list$rt)
-    # order peaks by rt
-    peakIntensities = peakIntensities[order(list$rt), ]
-    groups <- groups[order(list$rt), ]
-    groups$peakins <- apply(peakIntensities, 1, mean)
-    result <- NULL
-    # search:
-    for (i in 1:nrow(groups)) {
-        bin = groups[list$rt - list$rt[i] >= 0 & list$rt - 
-            list$rt[i] <= rtwindow, ]
-        if (nrow(bin) > 1) {
-            dis <- stats::dist(bin$mz, method = "manhattan")/massdiff
-            df <- data.frame(ms1 = bin$mz[which(lower.tri(dis), 
-                arr.ind = T)[, 1]], ms2 = bin$mz[which(lower.tri(dis), 
-                arr.ind = T)[, 2]], diff = as.numeric(dis))
-            df$rdiff <- round(df$diff)
-            dfn <- df[df$diff <= df$rdiff * (1 + ppm/1e+06) + 
-                (df$ms1 * ppm/1e+06)/(massdiff * (1 - ppm/1e+06)) && 
-                df$diff >= df$rdiff * (1 - ppm/1e+06) - (df$ms1 * 
-                  ppm/1e+06)/(massdiff * (1 + ppm/1e+06)), 
-                ]
-            dfn$msdiff <- abs(dfn$ms1 - dfn$ms2)
-            dfn <- dfn[dfn$msdiff < mzwindow, ]
-            # candidate number of labeled atoms
-            result <- rbind(result, bin[bin$mz %in% dfn$ms1 | 
-                bin$mz %in% dfn$ms2, ])
-            result <- result[rownames(unique(result[, c("mz", 
-                "rt")])), ]
-        }
-    }
-    result$sm <- result$mz * massdiff
-    result$smd <- ceiling(result$sm) - result$sm
-    return(result)
-}
+#' @export
+getpaired <- function(list, mds = 0.9988834, mdcutoff = 0.025, rtcutoff = 2, isocutoff = 2, freqcutoff = 20){
 
+        # paired mass diff analysis
+        groups <- cbind.data.frame(mz = list$mz, rt = list$rt)
+        resultsolo <- resultiso <- result <- NULL
+
+        dis <- stats::dist(list$rt, method = "manhattan")
+        fit <- stats::hclust(dis)
+        rtcluster <- stats::cutree(fit, h=rtcutoff)
+        n <- length(unique(rtcluster))
+        message(paste(n, 'retention time cluster found.'))
+        # search:
+        for (i in 1:length(unique(rtcluster))) {
+                # find the mass within RT
+                rtxi <- list$rt[rtcluster == i]
+                bin = groups[groups$rt %in% rtxi, ]
+                if (nrow(bin) > 1) {
+                        # get mz diff
+                        dis <- stats::dist(bin$mz, method = "manhattan")
+                        df <- data.frame(ms1 = bin$mz[which(lower.tri(dis),
+                                                            arr.ind = T)[, 1]], ms2 = bin$mz[which(lower.tri(dis),
+                                                                                                   arr.ind = T)[, 2]], diff = as.numeric(dis))
+
+                                dfiso <- df[df$diff<isocutoff,]
+                                if(nrow(dfiso)>0){
+                                        resultiso <- rbind(resultiso,dfiso)
+                        }
+                        result <- rbind(result,df)
+                }else{
+                        resultsolo <- rbind(bin,resultsolo)
+
+                }
+        }
+
+        if(nrow(result)>0){
+                # get the high freq ions pair
+                diff2 <- round(result$diff,2)
+                freq <- table(diff2)[order(table(diff2),decreasing = T)]
+                resultdiff <- result[diff2 %in% as.numeric(names(freq[freq>freqcutoff])),]
+        }
+
+        # filter the list
+
+        list$soloindex <- list$mz %in% resultsolo$mz
+
+        list$diffindex <- list$mz %in% c(result$ms1,result$ms2)
+        list$diff <- result
+
+        list$paired <- resultdiff
+
+        list$isoindex <- (list$mz %in% c(resultiso$ms1,resultiso$ms2))
+        list$iso <- resultiso
+
+        list$rtcluster <- rtcluster
+
+        # mass defect analysis
+        list$smd <- smd <- ceiling(list$mz) - list$mz * mds
+
+        dis <- stats::dist(smd, method = "manhattan")
+        fit <- stats::hclust(dis)
+        mdcluster <- stats::cutree(fit, h=mdcutoff)
+        n <- length(unique(mdcluster))
+        message(paste(n, 'mass defect cluster found.'))
+
+        list$mdcluster <- mdcluster
+        return(list)
+}
 
 #' plot the kendrick mass defect diagram
 #' @param data vector with the name m/z
@@ -82,6 +112,6 @@ plotkms <- function(data, cutoff = 1000) {
     mz <- as.numeric(names(data))
     km <- mz * 14/14.01565
     kmd <- round(km) - km
-    graphics::smoothScatter(kmd ~ round(km), xlab = "Kendrick nominal mass", 
+    graphics::smoothScatter(kmd ~ round(km), xlab = "Kendrick nominal mass",
         ylab = "Kendrick mass defect")
 }

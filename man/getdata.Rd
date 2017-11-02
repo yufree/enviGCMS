@@ -32,7 +32,7 @@ the parameters are extracted from the papers. If you use name other than the nam
 \examples{
 \dontrun{
 library(faahKO)
-cdfpath <- system.file("cdf", package = "faahKO")
+cdfpath <- system.file('cdf', package = 'faahKO')
 xset <- getdata(cdfpath, pmethod = ' ')
 }
 }
