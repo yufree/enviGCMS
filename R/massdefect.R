@@ -27,7 +27,7 @@ getmassdefect <- function(mass, sf) {
 #' @return list with tentative isotope, adducts, and neutral loss peaks' index, retention time cluster, scalued mass defect and paired mass diff dataframe
 #' @seealso \code{\link{getmassdefect}},\code{\link{plotkms}}
 #' @export
-getpaired <- function(list, mds = 0.9988834, mdcutoff = 0.025, rtcutoff = 2, isocutoff = 2, freqcutoff = 20){
+getpaired <- function(list, mds = 0.9988834, mdcutoff = 0.025, rtcutoff = 9, isocutoff = 2, freqcutoff = 20){
 
         # paired mass diff analysis
         groups <- cbind.data.frame(mz = list$mz, rt = list$rt)
@@ -43,12 +43,11 @@ getpaired <- function(list, mds = 0.9988834, mdcutoff = 0.025, rtcutoff = 2, iso
                 # find the mass within RT
                 rtxi <- list$rt[rtcluster == i]
                 bin = groups[groups$rt %in% rtxi, ]
+                medianrtxi <- stats::median(rtxi)
                 if (nrow(bin) > 1) {
                         # get mz diff
                         dis <- stats::dist(bin$mz, method = "manhattan")
-                        df <- data.frame(ms1 = bin$mz[which(lower.tri(dis),
-                                                            arr.ind = T)[, 1]], ms2 = bin$mz[which(lower.tri(dis),
-                                                                                                   arr.ind = T)[, 2]], diff = as.numeric(dis))
+                        df <- data.frame(ms1 = bin$mz[which(lower.tri(dis),arr.ind = T)[, 1]], ms2 = bin$mz[which(lower.tri(dis),arr.ind = T)[, 2]], diff = as.numeric(dis), rt = medianrtxi, rtg = i)
 
                                 dfiso <- df[df$diff<isocutoff,]
                                 if(nrow(dfiso)>0){

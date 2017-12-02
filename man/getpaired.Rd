@@ -4,7 +4,7 @@
 \alias{getpaired}
 \title{Paired mass diff relationship and mass defect anlaysis among peak list based on cluster analysis}
 \usage{
-getpaired(list, mds = 0.9988834, mdcutoff = 0.025, rtcutoff = 2,
+getpaired(list, mds = 0.9988834, mdcutoff = 0.025, rtcutoff = 9,
   isocutoff = 2, freqcutoff = 20)
 }
 \arguments{
