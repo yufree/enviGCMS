@@ -17,21 +17,21 @@ getmassdefect <- function(mass, sf) {
     return(df)
 }
 
-#' Paired mass diff relationship and mass defect anlaysis among peak list based on cluster analysis
+#' Paired mass diff relationship among peak list based on cluster analysis
 #' @param list a list with mzrt profile
-#' @param mds mass defect scale factors
-#' @param mdcutoff mass defect cluster cutoff
 #' @param rtcutoff cutoff of the distances in cluster
 #' @param isocutoff cutoff to find the isotope relationship
 #' @param freqcutoff cutoff of the mass differences frequency
-#' @return list with tentative isotope, adducts, and neutral loss peaks' index, retention time cluster, scalued mass defect and paired mass diff dataframe
+#' @param submass mass vector of sub structure of homologous series
+#' @param mdcutoff mass defect cluster cutoff
+#' @return list with tentative isotope, adducts, and neutral loss peaks' index, retention time cluster, std mass defect analysis dataframe
 #' @seealso \code{\link{getmassdefect}},\code{\link{plotkms}}
 #' @export
-getpaired <- function(list, mds = 0.9988834, mdcutoff = 0.025, rtcutoff = 9, isocutoff = 2, freqcutoff = 20){
+getpaired <- function(list, rtcutoff = 9, isocutoff = 3, freqcutoff = 20, submass = 14.01565, mdcutoff = 0.02){
 
         # paired mass diff analysis
         groups <- cbind.data.frame(mz = list$mz, rt = list$rt)
-        resultsolo <- resultiso <- result <- NULL
+        resultstd <- resultdiffstd <- resultsolo <- resultiso <- result <- NULL
 
         dis <- stats::dist(list$rt, method = "manhattan")
         fit <- stats::hclust(dis)
@@ -44,6 +44,7 @@ getpaired <- function(list, mds = 0.9988834, mdcutoff = 0.025, rtcutoff = 9, iso
                 rtxi <- list$rt[rtcluster == i]
                 bin = groups[groups$rt %in% rtxi, ]
                 medianrtxi <- stats::median(rtxi)
+
                 if (nrow(bin) > 1) {
                         # get mz diff
                         dis <- stats::dist(bin$mz, method = "manhattan")
@@ -52,24 +53,66 @@ getpaired <- function(list, mds = 0.9988834, mdcutoff = 0.025, rtcutoff = 9, iso
                                 dfiso <- df[df$diff<isocutoff,]
                                 if(nrow(dfiso)>0){
                                         resultiso <- rbind(resultiso,dfiso)
-                        }
-                        result <- rbind(result,df)
+                                }
+                                dfdiff <- df[df$diff>=isocutoff,]
+                                result <- rbind(result,dfdiff)
                 }else{
-                        resultsolo <- rbind(bin,resultsolo)
-
+                        solo <- cbind(bin,rtg = i)
+                        resultsolo <- rbind(solo,resultsolo)
                 }
         }
 
+
+        result$diff2 <- round(result$diff,2)
         if(nrow(result)>0){
                 # get the high freq ions pair
-                diff2 <- round(result$diff,2)
-                freq <- table(diff2)[order(table(diff2),decreasing = T)]
-                resultdiff <- result[diff2 %in% as.numeric(names(freq[freq>freqcutoff])),]
+                freq <- table(result$diff2)[order(table(result$diff2),decreasing = T)]
+                resultdiff <- result[result$diff2 %in% as.numeric(names(freq[freq>freqcutoff])),]
         }
+        # filter high freq ions and find std mass
+        n <- unique(resultdiff$rtg)
+        for(i in 1:length(n)){
+                df <- resultdiff[resultdiff$rtg == n[i],]
+                Mode = function(x){
+                        ta = table(x)
+                        tam = max(ta)
+                        if (all(ta == tam))
+                                mod = x
+                        else
+                                if(is.numeric(x))
+                                        mod = as.numeric(names(ta)[ta == tam])
+                        else
+                                mod = names(ta)[ta == tam]
+                        return(mod)
+                }
+
+                massstd <- Mode(c(df$ms1,df$ms2))
+                suppressWarnings(resultdiffstdtemp <- cbind(mz = massstd, rt = df$rt, rtg = df$rtg))
+                resultdiffstd <- rbind(resultdiffstd,resultdiffstdtemp)
+        }
+
+        resultstd <- rbind(resultdiffstd,resultsolo)
+        resultstd <- unique(resultstd)
+
+        # perform mass defect analysis for std mass
+        for(i in 1:length(submass)){
+                mdst <- round(submass[i])/submass[i]
+                msdefect <- round(resultstd$mz*mdst) - resultstd$mz*mdst
+                dis <- stats::dist(msdefect, method = "manhattan")
+                fit <- stats::hclust(dis)
+                mdcluster <- stats::cutree(fit, h=mdcutoff)
+                n <- length(unique(mdcluster))
+                message(paste(n, 'mass defect clusters found for mass', submass[i], 'substructures' ))
+                name <- c(colnames(resultstd),submass[i],paste0(submass[i],'g'))
+                resultstd <- cbind.data.frame(resultstd,msdefect,mdcluster)
+                colnames(resultstd) <- name
+        }
+
 
         # filter the list
 
         list$soloindex <- list$mz %in% resultsolo$mz
+        list$solo <- resultsolo
 
         list$diffindex <- list$mz %in% c(result$ms1,result$ms2)
         list$diff <- result
@@ -81,16 +124,8 @@ getpaired <- function(list, mds = 0.9988834, mdcutoff = 0.025, rtcutoff = 9, iso
 
         list$rtcluster <- rtcluster
 
-        # mass defect analysis
-        list$smd <- smd <- ceiling(list$mz) - list$mz * mds
-
-        dis <- stats::dist(smd, method = "manhattan")
-        fit <- stats::hclust(dis)
-        mdcluster <- stats::cutree(fit, h=mdcutoff)
-        n <- length(unique(mdcluster))
-        message(paste(n, 'mass defect cluster found.'))
-
-        list$mdcluster <- mdcluster
+        list$stdmassindex <- (round(list$mz,4) %in% round(resultstd$mz,4))
+        list$stdmass <- resultstd
         return(list)
 }
 

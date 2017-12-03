@@ -1,3 +1,10 @@
+# enviGCMS 0.4.3
+
+## Major changes
+
+- RT cluster analysis for tentative isotope, adducts, and neutral loss peaks detection
+- Mass defect(cluster) analysis for homologous series detection
+
 # enviGCMS 0.4.2
 
 ## Major changes

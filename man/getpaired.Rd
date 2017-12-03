@@ -2,29 +2,29 @@
 % Please edit documentation in R/massdefect.R
 \name{getpaired}
 \alias{getpaired}
-\title{Paired mass diff relationship and mass defect anlaysis among peak list based on cluster analysis}
+\title{Paired mass diff relationship among peak list based on cluster analysis}
 \usage{
-getpaired(list, mds = 0.9988834, mdcutoff = 0.025, rtcutoff = 9,
-  isocutoff = 2, freqcutoff = 20)
+getpaired(list, rtcutoff = 9, isocutoff = 3, freqcutoff = 20,
+  submass = 14.01565, mdcutoff = 0.02)
 }
 \arguments{
 \item{list}{a list with mzrt profile}
-
-\item{mds}{mass defect scale factors}
-
-\item{mdcutoff}{mass defect cluster cutoff}
 
 \item{rtcutoff}{cutoff of the distances in cluster}
 
 \item{isocutoff}{cutoff to find the isotope relationship}
 
 \item{freqcutoff}{cutoff of the mass differences frequency}
+
+\item{submass}{mass vector of sub structure of homologous series}
+
+\item{mdcutoff}{mass defect cluster cutoff}
 }
 \value{
-list with tentative isotope, adducts, and neutral loss peaks' index, retention time cluster, scalued mass defect and paired mass diff dataframe
+list with tentative isotope, adducts, and neutral loss peaks' index, retention time cluster, std mass defect analysis dataframe
 }
 \description{
-Paired mass diff relationship and mass defect anlaysis among peak list based on cluster analysis
+Paired mass diff relationship among peak list based on cluster analysis
 }
 \seealso{
 \code{\link{getmassdefect}},\code{\link{plotkms}}
