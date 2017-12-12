@@ -27,7 +27,7 @@ getmassdefect <- function(mass, sf) {
 #' @return list with tentative isotope, adducts, and neutral loss peaks' index, retention time cluster, std mass defect analysis dataframe
 #' @seealso \code{\link{getmassdefect}},\code{\link{plotkms}}
 #' @export
-getpaired <- function(list, rtcutoff = 9, isocutoff = 3, freqcutoff = 20, submass = 14.01565, mdcutoff = 0.02){
+getpaired <- function(list, rtcutoff = 9, isocutoff = 3, freqcutoff = 20, submass = c(15.9949,14.01565,43.00581,30.01056,34.96885,78.91834), mdcutoff = 0.02){
 
         # paired mass diff analysis
         groups <- cbind.data.frame(mz = list$mz, rt = list$rt)
