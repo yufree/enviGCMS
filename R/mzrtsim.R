@@ -19,9 +19,9 @@
 #' @export
 #' @examples
 #' sim <- mzrtsim()
-mzrtsim <- function(npeaks = 1000, ncomp = 0.8, ncond = 2, 
-    ncpeaks = 0.05, nbatch = 3, nbpeaks = 0.1, npercond = 10, 
-    nperbatch = c(8, 5, 7), shape = 2, scale = 3, shapersd = 1, 
+mzrtsim <- function(npeaks = 1000, ncomp = 0.8, ncond = 2,
+    ncpeaks = 0.05, nbatch = 3, nbpeaks = 0.1, npercond = 10,
+    nperbatch = c(8, 5, 7), shape = 2, scale = 3, shapersd = 1,
     scalersd = 0.18, seed = 42) {
     set.seed(seed)
     batch <- rep(1:nbatch, nperbatch)
@@ -41,29 +41,29 @@ mzrtsim <- function(npeaks = 1000, ncomp = 0.8, ncond = 2,
     # get the matrix
     matrix <- matrix(0, nrow = ncomp, ncol = ncol)
     colnames(matrix) <- bc
-    
+
     # generate the base peaks
-    samplem <- 10^(stats::rweibull(ncomp, shape = shape, 
+    samplem <- 10^(stats::rweibull(ncomp, shape = shape,
         scale = scale))
     # generate the rsd for base peaks
-    samplersd <- stats::rweibull(ncomp, shape = shapersd, 
+    samplersd <- stats::rweibull(ncomp, shape = shapersd,
         scale = scalersd)
-    
+
     for (i in 1:ncomp) {
-        samplei <- abs(stats::rnorm(ncol, mean = samplem[i], 
+        samplei <- abs(stats::rnorm(ncol, mean = samplem[i],
             sd = samplem[i] * samplersd[i]))
         matrix[i, ] <- samplei
     }
-    
+
     # get the multi-peaks
     nmpeaks <- npeaks - ncomp
     indexm <- sample(1:ncomp, nmpeaks, replace = T)
     change <- exp(stats::rnorm(nmpeaks))
     mpeaks <- matrix[indexm, ] * change
-    
+
     # get the matrix
     matrix0 <- matrix <- rbind(matrix, mpeaks)
-    
+
     # get the numbers of signal and batch peaks
     ncpeaks <- npeaks * ncpeaks
     nbpeaks <- npeaks * nbpeaks
@@ -98,10 +98,13 @@ mzrtsim <- function(npeaks = 1000, ncomp = 0.8, ncond = 2,
     rsds <- sds/means
     # add row names
     rownames(matrix) <- paste0("P", c(1:npeaks))
-    return(list(data = matrix, conp = index, batchp = indexb, 
-        con = condition, batch = batch, cmatrix = matrixc, 
-        changec = changec, bmatrix = matrixb0, changeb = changeb, 
-        matrix = matrix0, compmatrix = matrix[1:ncomp, ], 
+    rownames(matrixc) <- paste0("P", index)
+    rownames(matrixb0) <- paste0("P", indexb)
+
+    return(list(data = matrix, conp = index, batchp = indexb,
+        con = condition, batch = batch, cmatrix = matrixc,
+        changec = changec, bmatrix = matrixb0, changeb = changeb,
+        matrix = matrix0, compmatrix = matrix[1:ncomp, ],
         mean = means, rsd = rsds))
 }
 
@@ -127,8 +130,8 @@ mzrtsim <- function(npeaks = 1000, ncomp = 0.8, ncond = 2,
 #' cdfpath <- system.file('cdf', package = 'faahKO')
 #' list <- getmr(cdfpath, pmethod = ' ')
 #' sim <- simmzrt(list$data)
-simmzrt <- function(data, type = "e", npeaks = 1000, ncomp = 0.8, 
-    ncond = 2, ncpeaks = 0.05, nbatch = 3, nbpeaks = 0.1, 
+simmzrt <- function(data, type = "e", npeaks = 1000, ncomp = 0.8,
+    ncond = 2, ncpeaks = 0.05, nbatch = 3, nbpeaks = 0.1,
     npercond = 10, nperbatch = c(8, 5, 7), seed = 42) {
     set.seed(seed)
     batch <- rep(1:nbatch, nperbatch)
@@ -137,7 +140,7 @@ simmzrt <- function(data, type = "e", npeaks = 1000, ncomp = 0.8,
     if (length(batch) != length(condition)) {
         stop("Try to use the same numbers for both batch and condition columns")
     }
-    
+
     ncol <- length(batch)
     # change the column order
     batch <- batch[sample(ncol)]
@@ -167,23 +170,23 @@ simmzrt <- function(data, type = "e", npeaks = 1000, ncomp = 0.8,
     } else {
         stop("type should be 'e' or 'b'")
     }
-    
+
     # simulate the data
     for (i in 1:ncomp) {
-        samplei <- abs(stats::rnorm(ncol, mean = simmean[i], 
+        samplei <- abs(stats::rnorm(ncol, mean = simmean[i],
             sd = simmean[i] * simrsd[i]))
         matrix[i, ] <- samplei
     }
-    
+
     # get the multi-peaks
     nmpeaks <- npeaks - ncomp
     indexm <- sample(1:ncomp, nmpeaks, replace = T)
     change <- exp(stats::rnorm(nmpeaks))
     mpeaks <- matrix[indexm, ] * change
-    
+
     # get the matrix
     matrix0 <- matrix <- rbind(matrix, mpeaks)
-    
+
     # get the numbers of signal and batch peaks
     ncpeaks <- npeaks * ncpeaks
     nbpeaks <- npeaks * nbpeaks
@@ -218,9 +221,48 @@ simmzrt <- function(data, type = "e", npeaks = 1000, ncomp = 0.8,
     rsds <- sds/means
     # add row names
     rownames(matrix) <- paste0("P", c(1:npeaks))
-    return(list(data = matrix, conp = index, batchp = indexb, 
-        con = condition, batch = batch, cmatrix = matrixc, 
-        changec = changec, bmatrix = matrixb0, changeb = changeb, 
-        matrix = matrix0, compmatrix = matrix[1:ncomp, ], 
+    rownames(matrixc) <- paste0("P", index)
+    rownames(matrixb0) <- paste0("P", indexb)
+    return(list(data = matrix, conp = index, batchp = indexb,
+        con = condition, batch = batch, cmatrix = matrixc,
+        changec = changec, bmatrix = matrixb0, changeb = changeb,
+        matrix = matrix0, compmatrix = matrix[1:ncomp, ],
         mean = means, rsd = rsds))
+}
+#' Save the simulated data as csv files
+#' @param sim list from `mzrtsim` or `simmzrt`
+#' @param name file name
+#' @seealso \code{\link{mzrtsim}},\code{\link{simmzrt}}
+#' @export
+simdata <- function(sim, name = 'sim'){
+        # for metaboanalyst
+        data <- rbind.data.frame(sim$con,sim$data)
+        filename1 <- paste0(name, "raw.csv")
+        utils::write.csv(data,file = filename1)
+        # for all
+        filename2 <- paste0(name, "raw2.csv")
+        data2 <- rbind.data.frame(sim$con,sim$batch,sim$data )
+        utils::write.csv(data2,file = filename2)
+        # for biological influnced peaks
+        filename3 <- paste0(name, "con.csv")
+        data3 <- rbind.data.frame(sim$con,sim$batch,sim$cmatrix)
+        utils::write.csv(data3,file = filename3)
+        # for batch influnced peaks
+        filename4 <- paste0(name, "bat.csv")
+        data4 <- rbind.data.frame(sim$con,sim$batch,sim$bmatrix)
+        utils::write.csv(data4,file = filename4)
+        # for batch matrix
+        filename5 <- paste0(name, "batchmatrix.csv")
+        data5 <- rbind.data.frame(sim$con,sim$matrix)
+        utils::write.csv(data5,file = filename5)
+        # for compounds
+        filename6 <- paste0(name, "comp.csv")
+        data6 <- rbind.data.frame(sim$con,sim$batch,sim$compmatrix)
+        utils::write.csv(data6,file = filename6)
+        # for compounds folds change
+        filename7 <- paste0(name, "compchange.csv")
+        utils::write.csv(sim$changec,file = filename7)
+        # for batch folds change
+        filename8 <- paste0(name, "batchange.csv")
+        utils::write.csv(sim$changeb,file = filename8)
 }
