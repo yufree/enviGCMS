@@ -4,12 +4,14 @@
 \alias{plotpca}
 \title{plot the PCA of list}
 \usage{
-plotpca(data, lv = NULL, center = T, scale = T, ...)
+plotpca(data, lv = NULL, index = NULL, center = T, scale = T, ...)
 }
 \arguments{
 \item{data}{mzrt profile with row peaks and column samples}
 
 \item{lv}{group information}
+
+\item{index}{index for selected peaks}
 
 \item{center}{parameters for PCA}
 

@@ -6,6 +6,7 @@
 - Mass defect(cluster) analysis for homologous series detection
 - Add csv file generation for simulation data
 - Add heatmap for mzrt profile
+- Add index to plotpca
 
 # enviGCMS 0.4.2
 

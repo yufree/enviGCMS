@@ -461,6 +461,7 @@ gifmr <- function(list, ms = c(100, 500), rsdcf = 30, inscf = 5,
 #' plot the PCA of list
 #' @param data mzrt profile with row peaks and column samples
 #' @param lv group information
+#' @param index index for selected peaks
 #' @param center parameters for PCA
 #' @param scale parameters for scale
 #' @param ... other parameters for `plot` function
@@ -476,8 +477,12 @@ gifmr <- function(list, ms = c(100, 500), rsdcf = 30, inscf = 5,
 #' }
 #' @export
 
-plotpca <- function(data, lv = NULL, center = T, scale = T,
+plotpca <- function(data, lv = NULL,index = NULL, center = T, scale = T,
     ...) {
+
+        if (!is.null(index)) {
+                data <- data[index,]
+        }
 
     if (is.null(lv)) {
         pch = colnames(data)
