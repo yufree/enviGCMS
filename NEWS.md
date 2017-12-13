@@ -5,6 +5,7 @@
 - RT cluster analysis for tentative isotope, adducts, and neutral loss peaks detection
 - Mass defect(cluster) analysis for homologous series detection
 - Add csv file generation for simulation data
+- Add heatmap for mzrt profile
 
 # enviGCMS 0.4.2
 

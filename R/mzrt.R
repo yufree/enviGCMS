@@ -492,3 +492,56 @@ plotpca <- function(data, lv = NULL, center = T, scale = T,
         pcaoVars[2], "% of Variance Explained"), cex = 2,
         pch = pch, ...)
 }
+
+#' Plot the heatmap of mzrt profiles
+#' @param data mzrt profile with row peaks and column samples
+#' @param lv group information
+#' @param index index for selected peaks
+#' @return NULL
+#' @export
+plothm <- function(data,lv,index = NULL){
+        icolors <- (grDevices::colorRampPalette(rev(RColorBrewer::brewer.pal(11,"RdYlBu"))))(100)
+        zlim <- range(data)
+        if (!is.null(index)) {
+                data <- data[index, order(lv)]
+        }else{
+                data <- data[, order(lv)]
+        }
+        plotchange <- function(zlim) {
+                breaks <- seq(zlim[1], zlim[2], round((zlim[2] -
+                                                               zlim[1])/10))
+                poly <- vector(mode = "list", length(icolors))
+                graphics::plot(1, 1, t = "n", xlim = c(0, 1), ylim = zlim,
+                               xaxt = "n", yaxt = "n", xaxs = "i", yaxs = "i",
+                               ylab = "", xlab = "", frame.plot = F)
+                graphics::axis(4, at = breaks, labels = round(breaks),
+                               las = 1, pos = 0.4, cex.axis = 0.8)
+                p <- graphics::par("usr")
+                graphics::text(p[2] + 2, mean(p[3:4]), labels = "intensity",
+                               xpd = NA, srt = -90)
+                bks <- seq(zlim[1], zlim[2], length.out = (length(icolors) +
+                                                                   1))
+                for (i in seq(poly)) {
+                        graphics::polygon(c(0.1, 0.1, 0.3, 0.3), c(bks[i],
+                                                                   bks[i + 1], bks[i + 1], bks[i]), col = icolors[i],
+                                          border = NA)
+                }
+        }
+        pos <- cumsum(as.numeric(table(lv)/sum(table(lv)))) -
+                as.numeric(table(lv)/sum(table(lv)))/2
+        posv <- cumsum(as.numeric(table(lv)/sum(table(lv))))[1:(nlevels(lv) -
+                                                                        1)]
+
+
+        graphics::layout(matrix(rep(c(1, 1, 1, 2), 10), 10, 4, byrow = TRUE))
+        graphics::par(mar = c(3, 6, 2, 1))
+        graphics::image(t(data), col = icolors, xlab = "samples",
+                        main = "peaks intensities on log scale", xaxt = "n", yaxt = "n", zlim = zlim)
+        graphics::axis(1, at = pos, labels = levels(lv),
+                       cex.axis = 0.8)
+        graphics::axis(2, at = seq(0, 1, 1/(nrow(data) -
+                                                    1)), labels = rownames(data), cex.axis = 1, las = 2)
+        graphics::abline(v = posv)
+        graphics::par(mar = c(3, 1, 2, 6))
+        plotchange(zlim)
+}
