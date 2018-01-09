@@ -3,6 +3,7 @@
 ## Major changes
 
 - RT cluster analysis for tentative isotope, adducts, and neutral loss peaks detection
+- Correlation analysis to select the feature peaks within rt groups
 - Mass defect(cluster) analysis for homologous series detection
 - Add csv file generation for simulation data
 - Add heatmap for mzrt profile
