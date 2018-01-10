@@ -9,6 +9,10 @@
 - Add heatmap for mzrt profile
 - Add index to plotpca
 
+## Minor changes
+
+- Fit xcms 3 new function in getdata2
+
 # enviGCMS 0.4.2
 
 ## Major changes
