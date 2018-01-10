@@ -8,7 +8,7 @@ Authors@R: person(given = "Miao", family = "YU",
         email = "yufreecas@gmail.com",
         comment = c(ORCID = "0000-0002-2804-6014"))
 Maintainer: Miao YU <yufreecas@gmail.com>
-Description: Gas/Liquid Chromatography-Mass Spectrometer(GC/LC-MS) Data Analysis for Environmental Science. This package covered topics such as raw data process, molecular isotope ratio, matrix effects, batch correction, mass defect filter, etc. in environmental analysis.
+Description: Gas/Liquid Chromatography-Mass Spectrometer(GC/LC-MS) Data Analysis for Environmental Science. This package covered topics such as raw data process, molecular isotope ratio, matrix effects, batch simulation and correction, mass defect filter, SCCPs analysis etc. in environmental analysis.
 URL: https://github.com/yufree/enviGCMS
 License: GPL-2
 Encoding: UTF-8
