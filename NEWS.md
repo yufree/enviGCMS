@@ -1,3 +1,7 @@
+# enviGCMS 0.5.0
+
+- CRAN
+
 # enviGCMS 0.4.3
 
 ## Major changes
