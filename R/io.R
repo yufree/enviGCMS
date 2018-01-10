@@ -144,7 +144,7 @@ getdata2 <- function(path, index = F, snames = NULL, sclass = NULL,
     phenoData = NULL, BPPARAM = BiocParallel::SnowParam(),
     mode = "onDisk", ppp = xcms::CentWaveParam(ppm = 5, peakwidth = c(5,
         25), prefilter = c(3, 5000)), rtp = xcms::PeakGroupsParam(minFraction = 0.67),
-    gpp = xcms::PeakDensityParam(minFraction = 0.67, bw = 2,
+    gpp = xcms::PeakDensityParam(sampleGroups = 1, minFraction = 0.67, bw = 2,
         binSize = 0.025), fpp = xcms::FillChromPeaksParam()) {
     files <- list.files(path, recursive = TRUE, full.names = TRUE)
     if (index) {
@@ -152,32 +152,40 @@ getdata2 <- function(path, index = F, snames = NULL, sclass = NULL,
     }
 
     fromPaths <- xcms::phenoDataFromPaths(files)
-    if (is.null(snames)) {
-        snames <- rownames(fromPaths)
-    } else {
-        rownames(fromPaths) <- snames
+    n <- dim(fromPaths)[2]
+    sample_group = NULL
+    if(n>1){
+            sample_group <- fromPaths[,1]
+            for(i in 2:n){
+                    sample_group <- paste(sample_group,fromPaths[,i],sep = "_")
+            }
+    }else{
+            sample_group = fromPaths[,1]
     }
+    sample_group = data.frame(sample_group)
 
     if (is.null(snames)) {
         snames <- rownames(fromPaths)
     } else {
-        rownames(fromPaths) <- snames
+        rownames(sample_group) <- snames
     }
+
     pdata <- phenoData
     if (is.null(pdata)) {
         pdata <- sclass
         if (is.null(pdata))
             pdata <- methods::new("NAnnotatedDataFrame",
-                fromPaths)
+                                  sample_group)
     } else {
         if (class(pdata) == "data.frame")
             pdata <- methods::new("NAnnotatedDataFrame",
-                fromPaths)
+                                  sample_group)
         if (class(pdata) != "NAnnotatedDataFrame")
             stop("phenoData has to be a data.frame or NAnnotatedDataFrame!")
     }
     raw_data <- MSnbase::readMSData(files, pdata = pdata,
         mode = mode)
+    gpp@sampleGroups <- pdata$sample_group
     xod <- xcms::findChromPeaks(raw_data, param = ppp, BPPARAM = BPPARAM)
     xod <- xcms::groupChromPeaks(xod, param = gpp)
     xod <- xcms::adjustRtime(xod, param = rtp)
