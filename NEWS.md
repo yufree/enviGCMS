@@ -16,6 +16,7 @@
 ## Minor changes
 
 - Fit xcms 3 new function in getdata2
+- Change the default name for metaboanalyst
 
 # enviGCMS 0.4.2
 

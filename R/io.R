@@ -216,7 +216,11 @@ getupload <- function(xset, method = "medret", value = "into",
 
     data <- rbind(group = as.character(xcms::phenoData(xset)$class),
         peakIntensities)
-    data <- data[!duplicated(rownames(data)), ]
+    # peaks info
+    peaks <- as.data.frame(xcms::groups(xset))
+    mz <- peaks$mzmed
+    rt <- peaks$rtmed
+    rownames(data) <- c('group',paste0(round(mz,4),'/',round(rt,4)))
     filename <- paste0(name, ".csv")
     utils::write.csv(data, file = filename)
     return(data)
@@ -243,7 +247,11 @@ getupload2 <- function(xset, value = "into", name = "Peaklist") {
     data <- xcms::featureValues(xset, value = value)
     data <- rbind(group = as.character(xset@phenoData@data),
         data)
-    data <- data[!duplicated(rownames(data)), ]
+    # peaks info
+    peaks <- xcms::featureDefinitions(xset)
+    mz <- peaks$mzmed
+    rt <- peaks$rtmed
+    rownames(data) <- c('group',paste0(round(mz,4),'/',round(rt,4)))
     filename <- paste0(name, ".csv")
     utils::write.csv(data, file = filename)
     return(data)
