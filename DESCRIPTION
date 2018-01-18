@@ -2,7 +2,7 @@ Package: enviGCMS
 Type: Package
 Title: GC/LC-MS Data Analysis for Environmental Science
 Version: 0.5.0
-Date: 2018-01-09
+Date: 2018-01-19
 Authors@R: person(given = "Miao", family = "YU",
         role = c("aut", "cre"), 
         email = "yufreecas@gmail.com",
