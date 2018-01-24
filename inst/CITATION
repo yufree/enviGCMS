@@ -15,7 +15,7 @@ citEntry(
 	textVersion = paste("Miao Yu, Xingwang Hou, Qian Liu, Yawei Wang, Jiyan Liu, Guibin Jiang:",
 	"2017",
 	"Evaluation and reduction of the analytical uncertainties in GC-MS analysis using a boundary regression model",
-	"Talanta, 164, 141–147."))
+	"Talanta, 164, 141-147."))
 
 citFooter(paste("Some functions (e.g. getmd use xcms",
                  "party algorithms, see manpages and related packages",
