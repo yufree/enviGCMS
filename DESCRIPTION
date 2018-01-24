@@ -15,13 +15,12 @@ Encoding: UTF-8
 LazyData: true
 Suggests: knitr,
     rmarkdown,
-    faahKO,
     testthat
 VignetteBuilder: knitr
 biocViews:
 Depends: R (>= 2.10)
 Imports: xcms,
-    MSnbase (>= 2.3.8),
+    MSnbase,
     rcdk,
     RColorBrewer,
     limma,

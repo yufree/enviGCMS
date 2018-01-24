@@ -126,10 +126,12 @@ mzrtsim <- function(npeaks = 1000, ncomp = 0.8, ncond = 2,
 #' @seealso \code{\link{mzrtsim}}
 #' @export
 #' @examples
+#' \dontrun{
 #' library(faahKO)
 #' cdfpath <- system.file('cdf', package = 'faahKO')
 #' list <- getmr(cdfpath, pmethod = ' ')
 #' sim <- simmzrt(list$data)
+#' }
 simmzrt <- function(data, type = "e", npeaks = 1000, ncomp = 0.8,
     ncond = 2, ncpeaks = 0.05, nbatch = 3, nbpeaks = 0.1,
     npercond = 10, nperbatch = c(8, 5, 7), seed = 42) {

@@ -41,10 +41,12 @@ Simulation from data by sample mean and rsd from Empirical Cumulative Distributi
 the numbers of batch columns should be the same with the condition columns.
 }
 \examples{
+\dontrun{
 library(faahKO)
 cdfpath <- system.file('cdf', package = 'faahKO')
 list <- getmr(cdfpath, pmethod = ' ')
 sim <- simmzrt(list$data)
+}
 }
 \seealso{
 \code{\link{mzrtsim}}
