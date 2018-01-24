@@ -17,6 +17,8 @@
 
 - Fit xcms 3 new function in getdata2
 - Change the default name for metaboanalyst
+- remove nonascll in CITATION
+- remove faahKO package and MSnbase version for cran check
 
 # enviGCMS 0.4.2
 
