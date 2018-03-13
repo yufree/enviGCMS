@@ -22,7 +22,7 @@ getpaired(list, rtcutoff = 9, isocutoff = 3, freqcutoff = 20,
 \item{mdcutoff}{mass defect cluster cutoff}
 }
 \value{
-list with tentative isotope, adducts, and neutral loss peaks' index, retention time cluster, std mass defect analysis dataframe
+list with tentative isotope, adducts, and neutral loss peaks' index, retention time cluster, std mass defect analysis dataframe. The isotope index might be less than the table and the mass pairs are the reason.
 }
 \description{
 Paired mass diff relationship among peak list based on cluster analysis

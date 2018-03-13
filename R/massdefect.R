@@ -24,7 +24,7 @@ getmassdefect <- function(mass, sf) {
 #' @param freqcutoff cutoff of the mass differences frequency
 #' @param submass mass vector of sub structure of homologous series
 #' @param mdcutoff mass defect cluster cutoff
-#' @return list with tentative isotope, adducts, and neutral loss peaks' index, retention time cluster, std mass defect analysis dataframe
+#' @return list with tentative isotope, adducts, and neutral loss peaks' index, retention time cluster, std mass defect analysis dataframe. The isotope index might be less than the table and the mass pairs are the reason.
 #' @seealso \code{\link{getmassdefect}},\code{\link{plotkms}},\code{\link{getcorstd}}
 #' @export
 getpaired <- function(list, rtcutoff = 9, isocutoff = 3, freqcutoff = 20, submass = c(15.9949,14.003074,26.01568,14.01565,43.00581,30.01056,34.96885,78.91834), mdcutoff = 0.02){
@@ -71,21 +71,21 @@ getpaired <- function(list, rtcutoff = 9, isocutoff = 3, freqcutoff = 20, submas
         }
         # filter high freq ions and find std mass
         n <- unique(resultdiff$rtg)
+        Mode = function(x){
+                ta = table(x)
+                tam = max(ta)
+                if (all(ta == tam))
+                        mod = x
+                else
+                        if(is.numeric(x))
+                                mod = as.numeric(names(ta)[ta == tam])
+                else
+                        mod = names(ta)[ta == tam]
+                return(mod)
+        }
+
         for(i in 1:length(n)){
                 df <- resultdiff[resultdiff$rtg == n[i],]
-                Mode = function(x){
-                        ta = table(x)
-                        tam = max(ta)
-                        if (all(ta == tam))
-                                mod = x
-                        else
-                                if(is.numeric(x))
-                                        mod = as.numeric(names(ta)[ta == tam])
-                        else
-                                mod = names(ta)[ta == tam]
-                        return(mod)
-                }
-
                 massstd <- Mode(c(df$ms1,df$ms2))
                 suppressWarnings(resultdiffstdtemp <- cbind(mz = massstd, rt = df$rt, rtg = df$rtg))
                 resultdiffstd <- rbind(resultdiffstd,resultdiffstdtemp)
@@ -108,10 +108,11 @@ getpaired <- function(list, rtcutoff = 9, isocutoff = 3, freqcutoff = 20, submas
                 colnames(resultstd) <- name
         }
 
-
         # filter the list
 
-        list$soloindex <- list$mz %in% resultsolo$mz
+        list$rtcluster <- rtcluster
+
+        list$soloindex <- paste(round(list$mz,4),list$rtcluster) %in% paste(round(resultsolo$mz,4), resultsolo$rtg)
         list$solo <- resultsolo
 
         list$diffindex <- list$mz %in% c(result$ms1,result$ms2)
@@ -119,12 +120,10 @@ getpaired <- function(list, rtcutoff = 9, isocutoff = 3, freqcutoff = 20, submas
 
         list$paired <- resultdiff
 
-        list$isoindex <- (list$mz %in% c(resultiso$ms1,resultiso$ms2))
+        list$isoindex <- paste(round(list$mz,4),list$rtcluster) %in% paste(c(round(resultiso$ms1,4),round(resultiso$ms2,4)), c(resultiso$rtg,resultiso$rtg))
         list$iso <- resultiso
 
-        list$rtcluster <- rtcluster
-
-        list$stdmassindex <- (round(list$mz,4) %in% round(resultstd$mz,4))
+        list$stdmassindex <- paste(round(list$mz,4),list$rtcluster) %in% paste(round(resultstd$mz,4), resultstd$rtg)
         list$stdmass <- resultstd
         return(list)
 }
