@@ -2,30 +2,29 @@
 % Please edit documentation in R/massdefect.R
 \name{getpaired}
 \alias{getpaired}
-\title{Paired mass diff relationship among peak list based on cluster analysis}
+\title{Filter ions/peaks based on retention time hierarchical clustering, paired mass differences(PMD), PMD frequency analysis and correlation coefficient.}
 \usage{
 getpaired(list, rtcutoff = 9, isocutoff = 3, freqcutoff = 20,
-  submass = c(15.9949, 14.003074, 26.01568, 14.01565, 43.00581, 30.01056,
-  34.96885, 78.91834), mdcutoff = 0.02)
+  corcutoff = 0.8, rtpeaks = 100)
 }
 \arguments{
 \item{list}{a list with mzrt profile}
 
-\item{rtcutoff}{cutoff of the distances in cluster}
+\item{rtcutoff}{cutoff of the distances in cluster, default 9}
 
-\item{isocutoff}{cutoff to find the isotope relationship}
+\item{isocutoff}{cutoff to find the isotope relationship, default 3}
 
-\item{freqcutoff}{cutoff of the mass differences frequency}
+\item{freqcutoff}{cutoff of the mass differences frequency, default 20}
 
-\item{submass}{mass vector of sub structure of homologous series}
+\item{corcutoff}{cutoff of the correlation coefficient, default 0.8}
 
-\item{mdcutoff}{mass defect cluster cutoff}
+\item{rtpeaks}{cutoff of the max peaks within each retention time cluster, default 100}
 }
 \value{
-list with tentative isotope, adducts, and neutral loss peaks' index, retention time cluster, std mass defect analysis dataframe. The isotope index might be less than the table and the mass pairs are the reason.
+list with tentative isotope, adducts, and neutral loss peaks' index, retention time cluster.
 }
 \description{
-Paired mass diff relationship among peak list based on cluster analysis
+Filter ions/peaks based on retention time hierarchical clustering, paired mass differences(PMD), PMD frequency analysis and correlation coefficient.
 }
 \seealso{
 \code{\link{getmassdefect}},\code{\link{plotkms}},\code{\link{getcorstd}}
