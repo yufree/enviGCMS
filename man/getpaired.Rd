@@ -2,29 +2,22 @@
 % Please edit documentation in R/massdefect.R
 \name{getpaired}
 \alias{getpaired}
-\title{Filter ions/peaks based on retention time hierarchical clustering, paired mass differences(PMD), PMD frequency analysis and correlation coefficient.}
+\title{Filter ions/peaks based on retention time hierarchical clustering, paired mass differences(PMD) and PMD frequency analysis.}
 \usage{
-getpaired(list, rtcutoff = 9, isocutoff = 3, freqcutoff = 20,
-  corcutoff = 0.8, rtpeaks = 100)
+getpaired(list, rtcutoff = 9, freqcutoff = 20)
 }
 \arguments{
 \item{list}{a list with mzrt profile}
 
 \item{rtcutoff}{cutoff of the distances in cluster, default 9}
 
-\item{isocutoff}{cutoff to find the isotope relationship, default 3}
-
 \item{freqcutoff}{cutoff of the mass differences frequency, default 20}
-
-\item{corcutoff}{cutoff of the correlation coefficient, default 0.8}
-
-\item{rtpeaks}{cutoff of the max peaks within each retention time cluster, default 100}
 }
 \value{
-list with tentative isotope, adducts, and neutral loss peaks' index, retention time cluster.
+list with tentative isotope, adducts, and neutral loss peaks' index, retention time clusters.
 }
 \description{
-Filter ions/peaks based on retention time hierarchical clustering, paired mass differences(PMD), PMD frequency analysis and correlation coefficient.
+Filter ions/peaks based on retention time hierarchical clustering, paired mass differences(PMD) and PMD frequency analysis.
 }
 \seealso{
 \code{\link{getmassdefect}},\code{\link{plotkms}},\code{\link{getcorstd}}

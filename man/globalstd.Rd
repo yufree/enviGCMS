@@ -4,27 +4,22 @@
 \alias{globalstd}
 \title{GlobalStd algorithm}
 \usage{
-globalstd(list, rtcutoff = 9, isocutoff = 3, freqcutoff = 20,
-  corcutoff = 0.8, submass = c(15.9949, 14.003074, 26.01568, 14.01565,
-  43.00581, 30.01056, 34.96885, 78.91834), mdcutoff = 0.02, mdgn = 50,
-  lv = NULL)
+globalstd(list, rtcutoff = 9, freqcutoff = 20, corcutoff = NULL,
+  submass = c(15.9949, 14.003074, 26.01568, 14.01565, 43.00581, 30.01056,
+  34.96885, 78.91834), mdgn = 20, lv = NULL)
 }
 \arguments{
 \item{list}{a peaks list with mass to charge}
 
 \item{rtcutoff}{cutoff of the distances in cluster}
 
-\item{isocutoff}{cutoff to find the isotope relationship}
-
 \item{freqcutoff}{cutoff of the mass differences frequency}
 
-\item{corcutoff}{cutoff of the correlation coefficient, default 0.8}
+\item{corcutoff}{cutoff of the correlation coefficient, default NULL}
 
 \item{submass}{mass vector of sub structure of homologous series}
 
-\item{mdcutoff}{mass defect cluster cutoff}
-
-\item{mdgn}{mass defect groups numbers for interval, 50 means 0.02 inteval on mass defect scale from -0.5 to 0.5}
+\item{mdgn}{mass defect groups numbers for interval, 20 means 0.05 inteval on mass defect scale from -0.5 to 0.5}
 
 \item{lv}{group info for the data}
 }

@@ -2,19 +2,17 @@
 % Please edit documentation in R/massdefect.R
 \name{getmdg}
 \alias{getmdg}
-\title{Group peaks by the mass defect hierarchical clustering group and interval group for different substructures}
+\title{Group peaks by the mass defect interval group for different substructures}
 \usage{
 getmdg(list, submass = c(15.9949, 14.003074, 26.01568, 14.01565, 43.00581,
-  30.01056, 34.96885, 78.91834), mdcutoff = 0.02, mdgn = 50, lv = NULL)
+  30.01056, 34.96885, 78.91834), mdgn = 20, lv = NULL)
 }
 \arguments{
 \item{list}{a peaks list with mass to charge}
 
 \item{submass}{mass vector of sub structure of homologous series}
 
-\item{mdcutoff}{mass defect cluster cutoff}
-
-\item{mdgn}{mass defect groups numbers for interval, 50 means 0.02 inteval on mass defect scale from -0.5 to 0.5}
+\item{mdgn}{mass defect groups numbers for interval, 20 means 0.05 inteval on mass defect scale from -0.5 to 0.5}
 
 \item{lv}{group info for the data}
 }
@@ -22,7 +20,7 @@ getmdg(list, submass = c(15.9949, 14.003074, 26.01568, 14.01565, 43.00581,
 list with mass defect analysis dataframe.
 }
 \description{
-Group peaks by the mass defect hierarchical clustering group and interval group for different substructures
+Group peaks by the mass defect interval group for different substructures
 }
 \seealso{
 \code{\link{getpaired}},\code{\link{getstd}}
