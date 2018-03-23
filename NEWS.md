@@ -7,7 +7,7 @@
 ## Major changes
 
 - New GlobalStd algorithm
-- New paired analysis based on retention time hierarchical clustering, paired mass differences(PMD), PMD frequency analysis and correlation coefficient.
+- New paired analysis based on retention time hierarchical clustering, paired mass differences(PMD), PMD frequency analysis
 - New function to find the standard mass for each retention time hierarchical clustering based on PMD relationship within each retention time cluster and isotope
 - Plot function for paired analysis
 - Plot function for GlobalStd result
