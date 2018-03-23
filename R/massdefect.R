@@ -78,16 +78,16 @@ getpaired <- function(list, rtcutoff = 9, freqcutoff = 20){
                 }
         }
 
+        # # mass defect filter
+        # mdst <- round(14.01565)/14.01565
+        # msdefect <- round(result$diff*mdst) - result$diff*mdst
+        # index <- abs(msdefect)<0.05
+        # result <- result[index,]
+        # get the high freq ions pairs
         result$diff2 <- round(result$diff,2)
         if(nrow(result)>0){
-                # get the high freq and high correlated ions pairs
                 freq <- table(result$diff2)[order(table(result$diff2),decreasing = T)]
                 resultdiff <- result[result$diff2 %in% as.numeric(names(freq[freq>freqcutoff])),]
-                # mass defect filter
-                mdst <- round(14.01565)/14.01565
-                msdefect <- round(resultdiff$diff*mdst) - resultdiff$diff*mdst
-                index <- abs(msdefect)<0.05
-                resultdiff <- resultdiff[index,]
         }
 
         # filter the list
@@ -139,7 +139,7 @@ getstd <- function(list, corcutoff = NULL){
                 mass <- list$mz[list$rtcluster == rtg2A[i]]
                 rt <- list$rt[list$rtcluster == rtg2A[i]]
                 mass <- max(mass)
-                suppressWarnings(resultstdtemp <- c(mass, median(rt), rtg2A[i]))
+                suppressWarnings(resultstdtemp <- c(mass, stats::median(rt), rtg2A[i]))
                 suppressWarnings(resultstd2A <- rbind(resultstd2A,resultstdtemp))
         }
         # group 2B: RT groups with multiple peaks with isotope/paired relationship
@@ -353,10 +353,10 @@ plotpaired <- function(list){
         paired <- list$paired
         diffgroup <- as.numeric(as.factor(paired$diff2))
         col <- (grDevices::colorRampPalette(rev(RColorBrewer::brewer.pal(11, "RdYlBu"))))(length(unique(paired$diff2)))
-        par(mfrow = c(1,2),mar = c(4,4,2,1)+0.1)
-        plot(range(paired$rt),range(paired$ms1,paired$ms2),type = 'n', xlab = 'retention time(s)', ylab = 'm/z')
-        segments(paired$rt,paired$ms1,paired$rt,paired$ms2,col = col[diffgroup],lwd = 1.5)
-        barplot(table(list$paired$diff2),col = col[unique(diffgroup)],ylab = 'Frequency', las=2, xlab = 'mass differences')
+        graphics::par(mfrow = c(2,1),mar = c(4,4,2,1)+0.1)
+        graphics::plot(range(paired$rt),range(paired$ms1,paired$ms2),type = 'n', xlab = 'retention time(s)', ylab = 'm/z')
+        graphics::segments(paired$rt,paired$ms1,paired$rt,paired$ms2,col = col[diffgroup],lwd = 1.5)
+        graphics::barplot(table(list$paired$diff2),col = col[unique(diffgroup)],ylab = 'Frequency', las=2, xlab = 'mass differences')
 }
 
 #' Plot the std mass from GlobalStd algorithm
@@ -367,10 +367,10 @@ plotpaired <- function(list){
 plotstd <- function(list){
         std <- list$stdmass
         col <- (grDevices::colorRampPalette(rev(RColorBrewer::brewer.pal(11, "RdYlBu"))))(length(unique(list$paired$diff2)))
-        par(mfrow = c(1,1),mar = c(4,4,2,1)+0.1)
+        graphics::par(mfrow = c(1,2),mar = c(4,4,2,1)+0.1)
         col <- grDevices::rgb(0,0,1, alpha = 0.318)
-        plot(list$rt,list$mz,xlab = 'retention time(s)', ylab = 'm/z', pch = 19, col =col,main = 'all peaks')
-        points(std$rt,std$mz,xlab = 'retention time(s)', ylab = 'm/z', pch = 19, col =grDevices::rgb(1,0,0, alpha = 0.318))
+        graphics::plot(list$rt,list$mz,xlab = 'retention time(s)', ylab = 'm/z', pch = 19, col =col,main = 'all peaks')
+        graphics::plot(std$rt,std$mz,xlab = 'retention time(s)', ylab = 'm/z', pch = 19, col = col, main = 'GlobalStd peaks')
 }
 
 #' Plot the std mass from GlobalStd algorithm in certain retention time groups
@@ -388,11 +388,11 @@ plotstdrt <- function(list,rtcluster){
                 msdata <- mean(data)
         }
         mz <- list$mz[list$rtcluster == rtcluster]
-        plot(mz,msdata,type = 'h',xlab = 'm/z', ylab = 'Intensity')
+        graphics::plot(mz,msdata,type = 'h',xlab = 'm/z', ylab = 'Intensity')
         stdmz <- list$stdmass$mz[list$stdmass$rtg == rtcluster]
         index <- round(mz,4) %in% round(stdmz,4)
 
-        points(mz[index],msdata[index],type = 'h',lwd = 2, col = 'red')
+        graphics::points(mz[index],msdata[index],type = 'h',lwd = 2, col = 'red')
 }
 
 #' Plot the std mass from GlobalStd algorithm in certain mass defect groups
@@ -404,7 +404,7 @@ plotstdrt <- function(list,rtcluster){
 #'
 plotstdmd <- function(list,mdindex){
         mda <- list$mda
-        plot(mda$rt[mdindex],mda$mz[mdindex],
+        graphics::plot(mda$rt[mdindex],mda$mz[mdindex],
              xlab = 'retention time(s)', ylab = 'm/z',
              pch = 19, col = 'blue',
              xlim = range(mda$rt),ylim = range(mda$mz))
