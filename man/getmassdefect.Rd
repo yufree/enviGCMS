@@ -23,5 +23,5 @@ sf <- 0.9988
 mf <- getmassdefect(mass,sf)
 }
 \seealso{
-\code{\link{getpaired}},\code{\link{plotkms}}
+\code{\link{globalstd}},\code{\link{plotkms}}
 }

@@ -30,5 +30,5 @@ list with GlobalStd algorithm processed data.
 GlobalStd algorithm
 }
 \seealso{
-\code{\link{getpaired}},\code{\link{getstd}},\code{\link{getmdg}}
+\code{\link{getpaired}},\code{\link{getstd}},\code{\link{getmdg}},\code{\link{plotstd}},\code{\link{plotstdmd}},\code{\link{plotstdrt}}
 }

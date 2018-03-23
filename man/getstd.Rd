@@ -18,5 +18,5 @@ list with std mass index
 Find the standard mass for each retention time hierarchical clustering based on PMD relationship within each retention time cluster and isotope and return the index of the std data for each retention time cluster.
 }
 \seealso{
-\code{\link{getpaired}},\code{\link{getmdg}}
+\code{\link{getpaired}},\code{\link{getmdg}},\code{\link{plotstd}}
 }

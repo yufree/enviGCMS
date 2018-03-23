@@ -6,7 +6,7 @@
 #' mass <- c(100.1022,245.2122,267.3144,400.1222,707.2294)
 #' sf <- 0.9988
 #' mf <- getmassdefect(mass,sf)
-#' @seealso \code{\link{getpaired}},\code{\link{plotkms}}
+#' @seealso \code{\link{globalstd}},\code{\link{plotkms}}
 #' @export
 
 getmassdefect <- function(mass, sf) {
@@ -37,7 +37,7 @@ Mode = function(x){
 #' @param rtcutoff cutoff of the distances in cluster, default 9
 #' @param freqcutoff cutoff of the mass differences frequency, default 20
 #' @return list with tentative isotope, adducts, and neutral loss peaks' index, retention time clusters.
-#' @seealso \code{\link{getmassdefect}},\code{\link{plotkms}},\code{\link{getcorstd}}
+#' @seealso \code{\link{getmassdefect}},\code{\link{getstd}},\code{\link{getstd}},\code{\link{getmdg}},\code{\link{plotpaired}}
 #' @export
 getpaired <- function(list, rtcutoff = 9, freqcutoff = 20){
         # paired mass diff analysis
@@ -119,7 +119,7 @@ getpaired <- function(list, rtcutoff = 9, freqcutoff = 20){
 #' @param list a list from getpaired function
 #' @param corcutoff cutoff of the correlation coefficient, default NULL
 #' @return list with std mass index
-#' @seealso \code{\link{getpaired}},\code{\link{getmdg}}
+#' @seealso \code{\link{getpaired}},\code{\link{getmdg}},\code{\link{plotstd}}
 #' @export
 getstd <- function(list, corcutoff = NULL){
         resultstd2A <- resultstd2B1 <- resultstd2B2 <- resultstd2B3 <- NULL
@@ -231,7 +231,7 @@ getstd <- function(list, corcutoff = NULL){
 #' @param mdgn mass defect groups numbers for interval, 20 means 0.05 inteval on mass defect scale from -0.5 to 0.5
 #' @param lv group info for the data
 #' @return list with mass defect analysis dataframe.
-#' @seealso \code{\link{getpaired}},\code{\link{getstd}}
+#' @seealso \code{\link{getpaired}},\code{\link{getstd}},\code{\link{plotstd}},\code{\link{plotstdmd}},\code{\link{plotstdrt}}
 #' @export
 getmdg <- function(list, submass = c(15.9949,14.003074,26.01568,14.01565,43.00581,30.01056,34.96885,78.91834), mdgn = 20, lv = NULL){
         if(is.null(list$stdmass)&is.null(list$paired)){
@@ -278,7 +278,7 @@ getmdg <- function(list, submass = c(15.9949,14.003074,26.01568,14.01565,43.0058
 #' @param mdgn mass defect groups numbers for interval, 20 means 0.05 inteval on mass defect scale from -0.5 to 0.5
 #' @param lv group info for the data
 #' @return list with GlobalStd algorithm processed data.
-#' @seealso \code{\link{getpaired}},\code{\link{getstd}},\code{\link{getmdg}}
+#' @seealso \code{\link{getpaired}},\code{\link{getstd}},\code{\link{getmdg}},\code{\link{plotstd}},\code{\link{plotstdmd}},\code{\link{plotstdrt}}
 #' @export
 globalstd <- function(list, rtcutoff = 9, freqcutoff = 20, corcutoff = NULL,submass = c(15.9949,14.003074,26.01568,14.01565,43.00581,30.01056,34.96885,78.91834),  mdgn = 20, lv = NULL){
         list <- getpaired(list, rtcutoff = rtcutoff, freqcutoff = freqcutoff)

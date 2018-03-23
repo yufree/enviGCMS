@@ -20,5 +20,5 @@ list with tentative isotope, adducts, and neutral loss peaks' index, retention t
 Filter ions/peaks based on retention time hierarchical clustering, paired mass differences(PMD) and PMD frequency analysis.
 }
 \seealso{
-\code{\link{getmassdefect}},\code{\link{plotkms}},\code{\link{getcorstd}}
+\code{\link{getmassdefect}},\code{\link{getstd}},\code{\link{getstd}},\code{\link{getmdg}},\code{\link{plotpaired}}
 }
