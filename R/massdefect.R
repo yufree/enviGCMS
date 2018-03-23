@@ -88,10 +88,7 @@ getpaired <- function(list, rtcutoff = 9, freqcutoff = 20){
                 msdefect <- round(resultdiff$diff*mdst) - resultdiff$diff*mdst
                 index <- abs(msdefect)<0.05
                 resultdiff <- resultdiff[index,]
-                # resultdiff <- resultdiff[resultdiff$cor > corcutoff,]
         }
-
-        # resultiso <- resultiso[resultiso$cor>corcutoff,]
 
         # filter the list
         # get the rt cluster
