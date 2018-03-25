@@ -366,7 +366,6 @@ plotpaired <- function(list){
 #' @export
 plotstd <- function(list){
         std <- list$stdmass
-        col <- (grDevices::colorRampPalette(rev(RColorBrewer::brewer.pal(11, "RdYlBu"))))(length(unique(list$paired$diff2)))
         graphics::par(mfrow = c(1,2),mar = c(4,4,2,1)+0.1)
         col <- grDevices::rgb(0,0,1, alpha = 0.318)
         graphics::plot(list$rt,list$mz,xlab = 'retention time(s)', ylab = 'm/z', pch = 19, col =col,main = 'all peaks')
