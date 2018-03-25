@@ -5,7 +5,7 @@
 \title{Get the features from anova, with p value, q value, rsd and power restriction}
 \usage{
 getfeaturesanova(list, power = 0.8, pt = 0.05, qt = 0.05, n = 3,
-  ng = 3, rsdcf = 100, inscf = 5, imputation = "l")
+  ng = 3, rsdcf = 100, inscf = 5, imputation = "l", index = NULL)
 }
 \arguments{
 \item{list}{list with data as peaks list, mz, rt and group information (more than two groups)}
@@ -25,6 +25,8 @@ getfeaturesanova(list, power = 0.8, pt = 0.05, qt = 0.05, n = 3,
 \item{inscf}{Log intensity cutoff for peaks across samples. If any peaks show a intensity higher than the cutoff in any samples, this peaks would not be filtered. default 5}
 
 \item{imputation}{parameters for `getimputation` function method}
+
+\item{index}{the index of peaks considered, default NULL}
 }
 \value{
 dataframe with peaks fit the setting above

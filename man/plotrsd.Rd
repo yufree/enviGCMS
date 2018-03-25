@@ -5,7 +5,7 @@
 \title{plot the rsd influnces of data in different groups}
 \usage{
 plotrsd(list, ms = c(100, 800), inscf = 5, rsdcf = 100,
-  imputation = "l", ...)
+  imputation = "l", index = NULL, ...)
 }
 \arguments{
 \item{list}{list with data as peaks list, mz, rt and group information}
@@ -17,6 +17,8 @@ plotrsd(list, ms = c(100, 800), inscf = 5, rsdcf = 100,
 \item{rsdcf}{the rsd cutoff of all peaks in all group}
 
 \item{imputation}{parameters for `getimputation` function method}
+
+\item{index}{the index of peaks considered, default NULL}
 
 \item{...}{other parameters for `plot` function}
 }

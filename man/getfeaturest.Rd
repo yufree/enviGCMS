@@ -5,7 +5,7 @@
 \title{Get the features from t test, with p value, q value, rsd and power restriction}
 \usage{
 getfeaturest(list, power = 0.8, pt = 0.05, qt = 0.05, n = 3,
-  inscf = 5, rsdcf = 30, imputation = "l")
+  inscf = 5, rsdcf = 30, imputation = "l", index = NULL)
 }
 \arguments{
 \item{list}{list with data as peaks list, mz, rt and group information (two groups)}
@@ -23,6 +23,8 @@ getfeaturest(list, power = 0.8, pt = 0.05, qt = 0.05, n = 3,
 \item{rsdcf}{the rsd cutoff of all peaks in all group}
 
 \item{imputation}{parameters for `getimputation` function method}
+
+\item{index}{the index of peaks considered, default NULL}
 }
 \value{
 dataframe with peaks fit the setting above

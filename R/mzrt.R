@@ -54,6 +54,7 @@ getimputation <- function(list, method = "l") {
 #' @param imputation parameters for `getimputation` function method
 #' @param tr logical. TRUE means dataset with technical replicates at the base level folder
 #' @param rsdcft the rsd cutoff of all peaks in technical replicates
+#' @param index the index of peaks considered, default NULL
 #' @return list with group infomation, filtered peaks and index
 #' @examples
 #' \dontrun{
@@ -65,8 +66,14 @@ getimputation <- function(list, method = "l") {
 #' @export
 #' @seealso \code{\link{getdata2}},\code{\link{getdata}}, \code{\link{getmzrt}},\code{\link{getmzrt2}}, \code{\link{getimputation}}, \code{\link{getmr}}
 getdoe <- function(list, inscf = 5, rsdcf = 100, rsdcft = 30,
-    imputation = "l", tr = F) {
+    imputation = "l", tr = F,index = NULL) {
     list <- getimputation(list, method = imputation)
+    # use index
+    if(!is.null(index)){
+           list$data <- list$data[index,]
+           list$mz <- list$mz[index]
+           list$rt <- list$rt[index]
+    }
     # remove the technical replicates and use biological
     # replicates instead
     if (tr) {
@@ -157,6 +164,7 @@ getdoe <- function(list, inscf = 5, rsdcf = 100, rsdcft = 30,
 #' @param inscf Log intensity cutoff for peaks across samples. If any peaks show a intensity higher than the cutoff in any samples, this peaks would not be filtered. default 5
 #' @param rsdcf the rsd cutoff of all peaks in all group
 #' @param imputation parameters for `getimputation` function method
+#' @param index the index of peaks considered, default NULL
 #' @return dataframe with peaks fit the setting above
 #' @examples
 #' \dontrun{
@@ -168,8 +176,8 @@ getdoe <- function(list, inscf = 5, rsdcf = 100, rsdcft = 30,
 #' @export
 
 getfeaturest <- function(list, power = 0.8, pt = 0.05, qt = 0.05,
-    n = 3, inscf = 5, rsdcf = 30, imputation = "l") {
-    list <- getdoe(list, inscf = inscf, rsdcf = rsdcf, imputation = imputation)
+    n = 3, inscf = 5, rsdcf = 30, imputation = "l",index = NULL) {
+    list <- getdoe(list, inscf = inscf, rsdcf = rsdcf, imputation = imputation, index = index)
     data <- list$datafiltered
     lv <- list$group$class
     sdn <- list$groupsdfiltered[, 1]
@@ -205,12 +213,13 @@ getfeaturest <- function(list, power = 0.8, pt = 0.05, qt = 0.05,
 #' @param inscf Log intensity cutoff for peaks across samples. If any peaks show a intensity higher than the cutoff in any samples, this peaks would not be filtered. default 5
 #' @param rsdcf the rsd cutoff of all peaks in all group
 #' @param imputation parameters for `getimputation` function method
+#' @param index the index of peaks considered, default NULL
 #' @return dataframe with peaks fit the setting above
 #' @export
 
 getfeaturesanova <- function(list, power = 0.8, pt = 0.05,
-    qt = 0.05, n = 3, ng = 3, rsdcf = 100, inscf = 5, imputation = "l") {
-    list <- getdoe(list, inscf = inscf, rsdcf = rsdcf, imputation = imputation)
+    qt = 0.05, n = 3, ng = 3, rsdcf = 100, inscf = 5, imputation = "l",index = NULL) {
+    list <- getdoe(list, inscf = inscf, rsdcf = rsdcf, imputation = imputation, index = index)
     data <- list$datafiltered
     lv <- list$group$class
     sdn <- list$groupsdfiltered[, 1]
@@ -247,6 +256,7 @@ getfeaturesanova <- function(list, power = 0.8, pt = 0.05,
 #' @param inscf Log intensity cutoff for peaks across samples. If any peaks show a intensity higher than the cutoff in any samples, this peaks would not be filtered. default 5
 #' @param rsdcf the rsd cutoff of all peaks in all group
 #' @param imputation parameters for `getimputation` function method
+#' @param index the index of peaks considered, default NULL
 #' @param ... parameters for `plot` function
 #' @return data fit the cutoff
 #' @examples
@@ -258,9 +268,9 @@ getfeaturesanova <- function(list, power = 0.8, pt = 0.05,
 #' }
 #' @export
 plotmr <- function(list, rt = NULL, ms = NULL, inscf = 5,
-    rsdcf = 30, imputation = "l", ...) {
+    rsdcf = 30, imputation = "l", index = NULL, ...) {
     graphics::par(mar = c(5, 4.2, 6.1, 2.1), xpd = TRUE)
-    list <- getdoe(list, rsdcf = rsdcf, inscf = inscf, imputation = imputation)
+    list <- getdoe(list, rsdcf = rsdcf, inscf = inscf, imputation = imputation, index = index)
     data <- list$groupmeanfiltered
     dataname <- colnames(data)
     mz <- list$mzfiltered
@@ -295,7 +305,7 @@ plotmr <- function(list, rt = NULL, ms = NULL, inscf = 5,
             pch = 19, horiz = T, bty = "n", inset = c(0,
                 -0.25))
         graphics::legend("topleft", legend = cexlab, title = "Intensity in Log scale",
-            pt.cex = c(1, 2, 3, 4, 5)/2, pch = 19, bty = "n",
+            pt.cex = c(1, 2, 3, 4, 5)/4, pch = 19, bty = "n",
             horiz = T, cex = 0.7, col = grDevices::rgb(0,
                 0, 0, 0.318), inset = c(0, -0.25))
     } else {
@@ -311,6 +321,7 @@ plotmr <- function(list, rt = NULL, ms = NULL, inscf = 5,
 #' @param inscf Log intensity cutoff for peaks across samples. If any peaks show a intensity higher than the cutoff in any samples, this peaks would not be filtered. default 5
 #' @param rsdcf the rsd cutoff of all peaks in all group
 #' @param imputation parameters for `getimputation` function method
+#' @param index the index of peaks considered, default NULL
 #' @param ... parameters for `plot` function
 #' @return NULL
 #' @examples
@@ -322,8 +333,8 @@ plotmr <- function(list, rt = NULL, ms = NULL, inscf = 5,
 #' }
 #' @export
 plotmrc <- function(list, ms = c(100, 800), inscf = 5, rsdcf = 30,
-    imputation = "l", ...) {
-    list <- getdoe(list, rsdcf = rsdcf, inscf = inscf, imputation = imputation)
+    imputation = "l", index = NULL,...) {
+    list <- getdoe(list, rsdcf = rsdcf, inscf = inscf, imputation = imputation,index = NULL)
     data <- list$groupmeanfiltered
     dataname <- colnames(data)
     mz <- list$mzfiltered
@@ -375,6 +386,7 @@ plotmrc <- function(list, ms = c(100, 800), inscf = 5, rsdcf = 30,
 #' @param inscf Log intensity cutoff for peaks across samples. If any peaks show a intensity higher than the cutoff in any samples, this peaks would not be filtered. default 5
 #' @param rsdcf the rsd cutoff of all peaks in all group
 #' @param imputation parameters for `getimputation` function method
+#' @param index the index of peaks considered, default NULL
 #' @param ... other parameters for `plot` function
 #' @return NULL
 #' @examples
@@ -386,9 +398,9 @@ plotmrc <- function(list, ms = c(100, 800), inscf = 5, rsdcf = 30,
 #' }
 #' @export
 plotrsd <- function(list, ms = c(100, 800), inscf = 5, rsdcf = 100,
-    imputation = "l", ...) {
+    imputation = "l", index = NULL,...) {
     cexlab = c("<20%", "20-40%", "40-60%", "60-80%", ">80%")
-    list <- getdoe(list, rsdcf = rsdcf, inscf = inscf, imputation = imputation)
+    list <- getdoe(list, rsdcf = rsdcf, inscf = inscf, imputation = imputation,index = NULL)
     data <- list$groupmeanfiltered
     dataname <- colnames(data)
     mz <- list$mzfiltered
@@ -423,6 +435,7 @@ plotrsd <- function(list, ms = c(100, 800), inscf = 5, rsdcf = 100,
 #' @param inscf Log intensity cutoff for peaks across samples. If any peaks show a intensity higher than the cutoff in any samples, this peaks would not be filtered. default 5
 #' @param rsdcf the rsd cutoff of all peaks in all group
 #' @param imputation parameters for `getimputation` function method
+#' @param index the index of peaks considered, default NULL
 #' @param ... parameters for `plot` function
 #' @return gif file
 #' @examples
@@ -434,8 +447,8 @@ plotrsd <- function(list, ms = c(100, 800), inscf = 5, rsdcf = 100,
 #' }
 #' @export
 gifmr <- function(list, ms = c(100, 500), rsdcf = 30, inscf = 5,
-    imputation = "i", file = "test") {
-    list <- getdoe(list, rsdcf = rsdcf, inscf = inscf, imputation = imputation)
+    imputation = "i", index = NULL, file = "test") {
+    list <- getdoe(list, rsdcf = rsdcf, inscf = inscf, imputation = imputation,index = NULL)
     data <- list$groupmeanfiltered
     mz <- list$mzfiltered
     rt <- list$rtfiltered
