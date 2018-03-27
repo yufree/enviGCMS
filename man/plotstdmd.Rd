@@ -4,12 +4,14 @@
 \alias{plotstdmd}
 \title{Plot the std mass from GlobalStd algorithm in certain mass defect groups}
 \usage{
-plotstdmd(list, mdindex)
+plotstdmd(list, mdindex, ...)
 }
 \arguments{
 \item{list}{a list from getmdg function}
 
 \item{mdindex}{mass defect index}
+
+\item{...}{other parameters for plot function}
 }
 \description{
 Plot the std mass from GlobalStd algorithm in certain mass defect groups

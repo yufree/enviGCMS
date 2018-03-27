@@ -4,12 +4,14 @@
 \alias{plotstdrt}
 \title{Plot the std mass from GlobalStd algorithm in certain retention time groups}
 \usage{
-plotstdrt(list, rtcluster)
+plotstdrt(list, rtcluster, ...)
 }
 \arguments{
 \item{list}{a list from getstd function}
 
 \item{rtcluster}{retention time group index}
+
+\item{...}{other parameters for plot function}
 }
 \description{
 Plot the std mass from GlobalStd algorithm in certain retention time groups

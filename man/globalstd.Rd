@@ -4,9 +4,9 @@
 \alias{globalstd}
 \title{GlobalStd algorithm}
 \usage{
-globalstd(list, rtcutoff = 9, freqcutoff = 20, corcutoff = NULL,
-  submass = c(15.9949, 14.003074, 26.01568, 14.01565, 43.00581, 30.01056,
-  34.96885, 78.91834), mdgn = 20, lv = NULL)
+globalstd(list, rtcutoff = 9, freqcutoff = 30, corcutoff = NULL,
+  pmdcutoff = 100, submass = c(15.9949, 14.003074, 26.01568, 14.01565,
+  43.00581, 30.01056, 34.96885, 78.91834), mdgn = 20, lv = NULL)
 }
 \arguments{
 \item{list}{a peaks list with mass to charge}
@@ -16,6 +16,8 @@ globalstd(list, rtcutoff = 9, freqcutoff = 20, corcutoff = NULL,
 \item{freqcutoff}{cutoff of the mass differences frequency}
 
 \item{corcutoff}{cutoff of the correlation coefficient, default NULL}
+
+\item{pmdcutoff}{cutoff of the largest mass differences, default 100}
 
 \item{submass}{mass vector of sub structure of homologous series}
 

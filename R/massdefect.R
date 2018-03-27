@@ -35,11 +35,12 @@ Mode = function(x){
 #' Filter ions/peaks based on retention time hierarchical clustering, paired mass differences(PMD) and PMD frequency analysis.
 #' @param list a list with mzrt profile
 #' @param rtcutoff cutoff of the distances in cluster, default 9
-#' @param freqcutoff cutoff of the mass differences frequency, default 20
+#' @param freqcutoff cutoff of the mass differences frequency, default 30
+#' @param pmdcutoff cutoff of the largest mass differences, default 100
 #' @return list with tentative isotope, adducts, and neutral loss peaks' index, retention time clusters.
 #' @seealso \code{\link{getmassdefect}},\code{\link{getstd}},\code{\link{getstd}},\code{\link{getmdg}},\code{\link{plotpaired}}
 #' @export
-getpaired <- function(list, rtcutoff = 9, freqcutoff = 20){
+getpaired <- function(list, rtcutoff = 9, freqcutoff = 30, pmdcutoff = 100){
         # paired mass diff analysis
         groups <- cbind.data.frame(mz = list$mz, rt = list$rt, list$data)
         resultstd <- resultdiffstd <- resultsolo <- resultiso <- result <- NULL
@@ -88,17 +89,22 @@ getpaired <- function(list, rtcutoff = 9, freqcutoff = 20){
         if(nrow(result)>0){
                 freq <- table(result$diff2)[order(table(result$diff2),decreasing = T)]
                 resultdiff <- result[result$diff2 %in% as.numeric(names(freq[freq>freqcutoff])),]
+                resultdiff <- resultdiff[resultdiff$diff2<pmdcutoff,]
         }
 
         # filter the list
         # get the rt cluster
         list$rtcluster <- rtcluster
         # get the data index by rt groups with single ions
-        list$soloindex <- paste(round(list$mz,4),list$rtcluster) %in% paste(round(resultsolo$mz,4), resultsolo$rtg)
-        list$solo <- resultsolo
+        if(!is.null(resultsolo)){
+                list$soloindex <- paste(round(list$mz,4),list$rtcluster) %in% paste(round(resultsolo$mz,4), resultsolo$rtg)
+                list$solo <- resultsolo
+        }
         # get the data index by rt groups with isotope ions
+        if(!is.null(resultiso)){
         list$isoindex <- paste(round(list$mz,4),list$rtcluster) %in% paste(c(round(resultiso$ms1,4),round(resultiso$ms2,4)), c(resultiso$rtg,resultiso$rtg))
         list$iso <- resultiso
+        }
         # get the data index by rt groups with high freqences PMD
         list$diffindex <- paste(round(list$mz,4),list$rtcluster) %in% paste(c(round(result$ms1,4),round(result$ms2,4)), c(result$rtg,result$rtg))
         list$diff <- result
@@ -130,7 +136,10 @@ getstd <- function(list, corcutoff = NULL){
         }
         # filter the mass from mass pairs within retention time group
         # group 1: RT groups with solo peak
+        resultstd1 <- NULL
+        if(!is.null(list$solo)){
         resultstd1 <- cbind(list$solo$mz,list$solo$rt,list$solo$rtg)
+        }
         # group 2: RT groups with multiple peaks
         # group 2A: RT groups with multiple peaks while no isotope/paired relationship
         index2A <- !(unique(list$rtcluster) %in% unique(resultdiff$rtg)|unique(list$rtcluster) %in% unique(resultiso$rtg))
@@ -149,11 +158,12 @@ getstd <- function(list, corcutoff = NULL){
         rtg2B1 <- unique(list$rtcluster)[index2B1]
         for(i in 1:length(rtg2B1)){
                 # filter the isotope peaks
-                df <- resultiso[resultiso$rtg == rtg2B1[i],]
-                if(nrow(df)>0){
-                mass <- apply(df,1,function(x) min(x[1],x[2]))
-                mass <- unique(mass)
-                suppressWarnings(resultstdtemp <- cbind(mz = c(mass), rt = df$rt, rtg = df$rtg))
+                dfiso <- resultiso[resultiso$rtg == rtg2B1[i],]
+                if(nrow(dfiso)>0){
+                        massstd <- apply(dfiso,1,function(x) min(x[1],x[2]))
+                        massstdmax <- apply(dfiso,1,function(x) max(x[1],x[2]))
+                        mass <- unique(massstd[!(massstd %in% massstdmax)])
+                suppressWarnings(resultstdtemp <- cbind(mz = c(mass), rt = dfiso$rt, rtg = dfiso$rtg))
                 resultstd2B1 <- rbind(resultstd2B1,resultstdtemp)
                 }
         }
@@ -179,24 +189,30 @@ getstd <- function(list, corcutoff = NULL){
                 dfiso <- resultiso[resultiso$rtg == rtg2B3[i],]
                 dfpaired <- resultdiff[resultdiff$rtg == rtg2B3[i],]
                 if(nrow(dfiso)>0&nrow(dfpaired)>0){
+                        # remove peaks with more than one isotopes
                         massstd <- apply(dfiso,1,function(x) min(x[1],x[2]))
-                        massstd <- unique(massstd)
+                        massstdmax <- apply(dfiso,1,function(x) max(x[1],x[2]))
+                        massstd <- unique(massstd[!(massstd %in% massstdmax)])
                         dis <- stats::dist(massstd, method = "manhattan")
                         df <- data.frame(ms1 = massstd[which(lower.tri(dis),arr.ind = T)[, 1]], ms2 = massstd[which(lower.tri(dis),arr.ind = T)[, 2]], diff = round(as.numeric(dis),2))
                         # remove the adducts
                         if(sum((df$diff %in% dfpaired$diff2))>0){
-                                mass <- unique(df$ms1[df$diff %in% dfpaired$diff2])
+                                massstd <- unique(apply(df[df$diff %in% dfpaired$diff2,],1,function(x) min(x[1],x[2])))
+                                massused <- unique(c(df$ms1,df$ms2))
+
                                 massadd <- unique(c(df$ms1[df$diff %in% dfpaired$diff2],df$ms2[df$diff %in% dfpaired$diff2]))
-                                massextra <- massstd[!(massstd %in% massadd)]
-                                mass <- c(massextra,mass)
+                                massextra <- massused[!(massused %in% massadd)]
+                                mass <- c(massextra,massstd)
                         }else{
                                 mass <- massstd
                         }
                         suppressWarnings(resultstdtemp <- cbind(mz = c(mass), rt = dfiso$rt, rtg = dfiso$rtg))
                         suppressWarnings(resultstd2B3 <- rbind(resultstd2B3,resultstdtemp))
                 }else if(nrow(dfiso)>0){
-                        mass <- apply(dfiso,1,function(x) min(x[1],x[2]))
-                        mass <- unique(mass)
+                        # remove peaks with more than one peaks
+                        massstd <- apply(dfiso,1,function(x) min(x[1],x[2]))
+                        massstdmax <- apply(dfiso,1,function(x) max(x[1],x[2]))
+                        mass <- unique(massstd[!(massstd %in% massstdmax)])
                         suppressWarnings(resultstdtemp <- cbind(mz = c(mass), rt = dfiso$rt, rtg = dfiso$rtg))
                         suppressWarnings(resultstd2B3 <- rbind(resultstd2B3,resultstdtemp))
                 }else{
@@ -271,14 +287,15 @@ getmdg <- function(list, submass = c(15.9949,14.003074,26.01568,14.01565,43.0058
 #' @param rtcutoff cutoff of the distances in cluster
 #' @param freqcutoff cutoff of the mass differences frequency
 #' @param corcutoff cutoff of the correlation coefficient, default NULL
+#' @param pmdcutoff cutoff of the largest mass differences, default 100
 #' @param submass mass vector of sub structure of homologous series
 #' @param mdgn mass defect groups numbers for interval, 20 means 0.05 inteval on mass defect scale from -0.5 to 0.5
 #' @param lv group info for the data
 #' @return list with GlobalStd algorithm processed data.
 #' @seealso \code{\link{getpaired}},\code{\link{getstd}},\code{\link{getmdg}},\code{\link{plotstd}},\code{\link{plotstdmd}},\code{\link{plotstdrt}}
 #' @export
-globalstd <- function(list, rtcutoff = 9, freqcutoff = 20, corcutoff = NULL,submass = c(15.9949,14.003074,26.01568,14.01565,43.00581,30.01056,34.96885,78.91834),  mdgn = 20, lv = NULL){
-        list <- getpaired(list, rtcutoff = rtcutoff, freqcutoff = freqcutoff)
+globalstd <- function(list, rtcutoff = 9, freqcutoff = 30, corcutoff = NULL,pmdcutoff = 100,submass = c(15.9949,14.003074,26.01568,14.01565,43.00581,30.01056,34.96885,78.91834),  mdgn = 20, lv = NULL){
+        list <- getpaired(list, rtcutoff = rtcutoff, freqcutoff = freqcutoff, pmdcutoff = pmdcutoff)
         list2 <- getstd(list,corcutoff = corcutoff)
         list3 <- getmdg(list2, submass = submass, mdgn = mdgn, lv = NULL)
         return(list3)
@@ -356,7 +373,7 @@ plotpaired <- function(list){
         graphics::par(mfrow = c(2,1),mar = c(4,4,2,1)+0.1)
         graphics::plot(range(paired$rt),range(paired$ms1,paired$ms2),type = 'n', xlab = 'retention time(s)', ylab = 'm/z')
         graphics::segments(paired$rt,paired$ms1,paired$rt,paired$ms2,col = col[diffgroup],lwd = 1.5)
-        graphics::barplot(table(list$paired$diff2),col = col[unique(diffgroup)],ylab = 'Frequency', las=2, xlab = 'mass differences')
+        graphics::barplot(table(list$paired$diff2),col = col[unique(diffgroup)],ylab = 'Frequency', las=2, xlab = 'paired mass differences',cex.names=0.618)
 }
 
 #' Plot the std mass from GlobalStd algorithm
@@ -375,11 +392,12 @@ plotstd <- function(list){
 #' Plot the std mass from GlobalStd algorithm in certain retention time groups
 #' @param list a list from getstd function
 #' @param rtcluster retention time group index
+#' @param ... other parameters for plot function
 #' @return NULL
 #' @seealso \code{\link{getstd}}, \code{\link{globalstd}},\code{\link{plotstd}},\code{\link{plotpaired}},\code{\link{plotstdmd}}
 #' @export
 #'
-plotstdrt <- function(list,rtcluster){
+plotstdrt <- function(list,rtcluster,...){
         data <- list$data[list$rtcluster == rtcluster,]
         if(length(data)>ncol(list$data)){
                 msdata <- apply(data,1,mean)
@@ -387,7 +405,8 @@ plotstdrt <- function(list,rtcluster){
                 msdata <- mean(data)
         }
         mz <- list$mz[list$rtcluster == rtcluster]
-        graphics::plot(mz,msdata,type = 'h',xlab = 'm/z', ylab = 'Intensity')
+        rt <- median(list$rt[list$rtcluster == rtcluster])
+        graphics::plot(mz,msdata,type = 'h',xlab = paste('m/z','@',rt,'s'), ylab = 'Intensity',...)
         stdmz <- list$stdmass$mz[list$stdmass$rtg == rtcluster]
         index <- round(mz,4) %in% round(stdmz,4)
 
@@ -397,16 +416,17 @@ plotstdrt <- function(list,rtcluster){
 #' Plot the std mass from GlobalStd algorithm in certain mass defect groups
 #' @param list a list from getmdg function
 #' @param mdindex mass defect index
+#' @param ... other parameters for plot function
 #' @return NULL
 #' @seealso \code{\link{getstd}}, \code{\link{globalstd}},\code{\link{plotstd}},\code{\link{plotpaired}},\code{\link{plotstdrt}}
 #' @export
 #'
-plotstdmd <- function(list,mdindex){
+plotstdmd <- function(list,mdindex,...){
         mda <- list$mda
         graphics::plot(mda$rt[mdindex],mda$mz[mdindex],
              xlab = 'retention time(s)', ylab = 'm/z',
              pch = 19, col = 'blue',
-             xlim = range(mda$rt),ylim = range(mda$mz))
+             xlim = range(mda$rt),ylim = range(mda$mz),...)
 }
 #' plot the kendrick mass defect diagram
 #' @param data vector with the name m/z
