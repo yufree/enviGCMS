@@ -11,10 +11,12 @@
 - Remove mass defect related analysis
 - Plot function for paired analysis
 - Plot function for GlobalStd result
+- Organize the codes
 
 ## Minor changes
 
 - Add Mode function
+- reformate code by formatR package
 
 # enviGCMS 0.4.3
 
