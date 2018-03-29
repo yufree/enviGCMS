@@ -4,10 +4,14 @@
 \alias{plotpaired}
 \title{Plot the mass pairs and high frequency mass differences}
 \usage{
-plotpaired(list)
+plotpaired(list, index = NULL, ...)
 }
 \arguments{
 \item{list}{a list from getpaired function}
+
+\item{index}{index for PMD value}
+
+\item{...}{other parameters for plot function}
 }
 \description{
 Plot the mass pairs and high frequency mass differences

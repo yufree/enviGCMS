@@ -263,17 +263,28 @@ globalstd <- function(list, rtcutoff = 9, freqcutoff = 30, corcutoff = NULL,pmdc
 
 #' Plot the mass pairs and high frequency mass differences
 #' @param list a list from getpaired function
+#' @param index index for PMD value
+#' @param ... other parameters for plot function
 #' @return NULL
 #' @seealso \code{\link{getpaired}}, \code{\link{globalstd}}
 #' @export
-plotpaired <- function(list){
+plotpaired <- function(list, index = NULL,...){
         paired <- list$paired
+        if(is.null(index)){
         diffgroup <- as.numeric(as.factor(paired$diff2))
         col <- (grDevices::colorRampPalette(rev(RColorBrewer::brewer.pal(11, "RdYlBu"))))(length(unique(paired$diff2)))
         graphics::par(mfrow = c(2,1),mar = c(4,4,2,1)+0.1)
-        graphics::plot(range(paired$rt),range(paired$ms1,paired$ms2),type = 'n', xlab = 'retention time(s)', ylab = 'm/z')
+        graphics::plot(range(paired$rt),range(paired$ms1,paired$ms2),type = 'n', xlab = 'retention time(s)', ylab = 'm/z',...)
         graphics::segments(paired$rt,paired$ms1,paired$rt,paired$ms2,col = col[diffgroup],lwd = 1.5)
         graphics::barplot(table(list$paired$diff2),col = col,ylab = 'Frequency', las=2, xlab = 'Paired mass difference',cex.names=0.618)
+        }else{
+                paired <- paired[index,]
+                graphics::plot(range(list$paired$rt),range(list$paired$ms1,list$paired$ms2),type = 'n', xlab = 'retention time(s)', ylab = 'm/z',main = paste(paired$diff2[1],'group'),...)
+                graphics::segments(paired$rt,paired$ms1,paired$rt,paired$ms2,lwd = 1.5,pch = 19)
+                graphics::points(paired$rt,paired$ms1,pch = 19, col = grDevices::rgb(0,0,1, alpha = 0.318))
+                graphics::points(paired$rt,paired$ms2,pch = 19, col = grDevices::rgb(0,0,1, alpha = 0.318))
+        }
+
 }
 
 #' Plot the std mass from GlobalStd algorithm
@@ -294,7 +305,7 @@ plotstd <- function(list){
 #' @param rtcluster retention time group index
 #' @param ... other parameters for plot function
 #' @return NULL
-#' @seealso \code{\link{getstd}}, \code{\link{globalstd}},\code{\link{plotstd}},\code{\link{plotpaired}},\code{\link{plotstdmd}}
+#' @seealso \code{\link{getstd}}, \code{\link{globalstd}},\code{\link{plotstd}},\code{\link{plotpaired}},\code{\link{plotstdsda}}
 #' @export
 #'
 plotstdrt <- function(list,rtcluster,...){
@@ -305,7 +316,7 @@ plotstdrt <- function(list,rtcluster,...){
                 msdata <- mean(data)
         }
         mz <- list$mz[list$rtcluster == rtcluster]
-        rt <- median(list$rt[list$rtcluster == rtcluster])
+        rt <- stats::median(list$rt[list$rtcluster == rtcluster])
         graphics::plot(mz,msdata,type = 'h',xlab = paste('m/z','@',rt,'s'), ylab = 'Intensity',...)
         stdmz <- list$stdmass$mz[list$stdmass$rtg == rtcluster]
         index <- round(mz,4) %in% round(stdmz,4)
@@ -328,16 +339,16 @@ plotstdsda <- function(list,index = NULL,...){
                 graphics::par(mfrow = c(2,1),mar = c(4,4,2,1)+0.1)
                 graphics::plot(range(sda$rt1,sda$rt2),range(sda$ms1,sda$ms2),type = 'n', xlab = 'retention time(s)', ylab = 'm/z',...)
                 graphics::segments(sda$rt1,sda$ms1,sda$rt2,sda$ms2,col = col[diffgroup],lwd = 1.5)
-                points(sda$rt1,sda$ms1,pch = 19, col = grDevices::rgb(0,0,1, alpha = 0.318))
-                points(sda$rt2,sda$ms2,pch = 19, col = grDevices::rgb(0,0,1, alpha = 0.318))
+                graphics::points(sda$rt1,sda$ms1,pch = 19, col = grDevices::rgb(0,0,1, alpha = 0.318))
+                graphics::points(sda$rt2,sda$ms2,pch = 19, col = grDevices::rgb(0,0,1, alpha = 0.318))
                 graphics::barplot(table(sda$diff2),col = col,ylab = 'Frequency', las=2, xlab = 'Paired mass differences',cex.names=0.618)
 
         }else{
                 sda <- list$sda[index,]
                 graphics::plot(range(list$sda$rt1,list$sda$rt2),range(list$sda$ms1,list$sda$ms2),type = 'n', xlab = 'retention time(s)', ylab = 'm/z',main = paste(sda$diff2[1],'group'),...)
                 graphics::segments(sda$rt1,sda$ms1,sda$rt2,sda$ms2,lwd = 1.5,pch = 19)
-                points(sda$rt1,sda$ms1,pch = 19, col = grDevices::rgb(0,0,1, alpha = 0.318))
-                points(sda$rt2,sda$ms2,pch = 19, col = grDevices::rgb(0,0,1, alpha = 0.318))
+                graphics::points(sda$rt1,sda$ms1,pch = 19, col = grDevices::rgb(0,0,1, alpha = 0.318))
+                graphics::points(sda$rt2,sda$ms2,pch = 19, col = grDevices::rgb(0,0,1, alpha = 0.318))
         }
 
 }
