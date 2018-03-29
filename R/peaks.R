@@ -56,9 +56,9 @@ Integration <- function(data, rt = c(8.3, 9), brt = c(8.3,
 #' list <- GetIntergration(data)
 #' }
 #' @export
-GetIntegration <- function(data, rt = c(8.3, 9), n = 5, m = 5, 
-    slope = c(2, 2), baseline = 10, noslope = T, smoothit = T, 
-    half = F) {
+GetIntegration <- function(data, rt = c(8.3, 9), n = 5, 
+    m = 5, slope = c(2, 2), baseline = 10, noslope = T, 
+    smoothit = T, half = F) {
     # subset the data
     subdata <- data[data[, 1] > rt[1] & data[, 1] < rt[2], 
         ]
@@ -102,8 +102,8 @@ GetIntegration <- function(data, rt = c(8.3, 9), n = 5, m = 5,
     sigstart <- mean(signal[(i - baseline + 1):i])  # baseline intensity found
     # search for peak top
     i <- which.max(slopedata)  # jump to slope max.
-    while ((slopedata[i] >= 0) & (i < (length(signal) - baseline))) i <- i + 
-        1
+    while ((slopedata[i] >= 0) & (i < (length(signal) - 
+        baseline))) i <- i + 1
     rtpeak <- RTrange[i]  # peak top found
     scanpeak <- i  # (slope = 0)
     sigpeak <- signal[i]
@@ -157,7 +157,8 @@ GetIntegration <- function(data, rt = c(8.3, 9), n = 5, m = 5,
     names(peakdata) <- c("baseline", "peak start RT", "peak end RT", 
         "peak RT", "baseline start RT ID", "baseline end RT ID", 
         "baseline peak RT ID", "start RT intensity", "end RT intensity", 
-        "peak RT intensity", "peak baseline", "points", "SNR")
+        "peak RT intensity", "peak baseline", "points", 
+        "SNR")
     # return the result as a list
     list <- list(area = area, height = height, peakdata = peakdata, 
         RTrange = RTrange, signal = signal, slopedata = slopedata)
@@ -187,8 +188,8 @@ batch <- function(file, mz1, mz2) {
     name2 <- paste("m/z:", mz2)
     xl <- GetIntegration(xa, name1)
     xh <- GetIntegration(xb, name2)
-    graphics::par(mfrow = c(2, 2), mar = c(2, 2, 2, 2), oma = c(0, 
-        0, 0, 0))
+    graphics::par(mfrow = c(2, 2), mar = c(2, 2, 2, 2), 
+        oma = c(0, 0, 0, 0))
     plotint(xl, name1)
     plotintslope(xl, name1)
     plotint(xh, name2)
@@ -216,8 +217,8 @@ batch <- function(file, mz1, mz2) {
 #' arearatio <- qbatch(datafile)
 #' }
 #' @export
-qbatch <- function(file, mz1, mz2, rt = c(8.65, 8.74), brt = c(8.74, 
-    8.85)) {
+qbatch <- function(file, mz1, mz2, rt = c(8.65, 8.74), 
+    brt = c(8.74, 8.85)) {
     data1 <- xcms::xcmsRaw(file)
     df <- data1@env$profile
     rt <- data1@scantime/60
@@ -244,12 +245,12 @@ qbatch <- function(file, mz1, mz2, rt = c(8.65, 8.74), brt = c(8.74,
 #' @export
 Getisotopologues <- function(formula = "C12OH6Br4", charge = "1", 
     width = 0.3) {
-    # input the forlmula and charge for your molecular, this
-    # demo was for BDE-47
+    # input the forlmula and charge for your molecular,
+    # this demo was for BDE-47
     formula <- rcdk::get.formula(formula, charge)
     # get the isotopes pattern of your molecular with high
-    # abandances. Here we suggest more than 10% abundance of
-    # your base peak would meet the SNR
+    # abandances. Here we suggest more than 10% abundance
+    # of your base peak would meet the SNR
     isotopes <- data.frame(rcdk::get.isotopes.pattern(formula, 
         minAbund = 0.1))
     # order the intensity by the abandance

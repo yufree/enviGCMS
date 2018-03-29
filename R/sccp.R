@@ -58,7 +58,8 @@ getareastd <- function(data = NULL, ismz = 323, ppm = 5,
         for (i in 1:length(mz)) {
             eici <- xcms::getEIC(data, mz = c(mzh[i], mzl[i]))
             df <- eici@eic$xcmsRaw[[1]]
-            df <- df[df[, 1] > rt[1] & df[, 1] < rt[2], ]
+            df <- df[df[, 1] > rt[1] & df[, 1] < rt[2], 
+                ]
             area[i] <- sum(diff(df[, 1]) * df[-1, 2])
         }
     }
@@ -77,8 +78,8 @@ getareastd <- function(data = NULL, ismz = 323, ppm = 5,
     clcomp <- stats::aggregate(rrares, by = list(sccp$Cln), 
         sum)
     colnames(clcomp) <- c("nCl", "Formula group abundance")
-    list <- list(sumpCl = sumpCl, sumrarea = sumrarea, ccomp = ccomp, 
-        clcomp = clcomp)
+    list <- list(sumpCl = sumpCl, sumrarea = sumrarea, 
+        ccomp = ccomp, clcomp = clcomp)
     return(list)
 }
 #' Get the peak information from sampels for SCCPs detection
@@ -121,7 +122,8 @@ getarea <- function(data, ismz = 323, ppm = 5, rt = NULL,
         for (i in 1:length(mz)) {
             eici <- xcms::getEIC(data, mz = c(mzh[i], mzl[i]))
             df <- eici@eic$xcmsRaw[[1]]
-            df <- df[df[, 1] > rt[1] & df[, 1] < rt[2], ]
+            df <- df[df[, 1] > rt[1] & df[, 1] < rt[2], 
+                ]
             area[i] <- sum(diff(df[, 1]) * df[-1, 2])
         }
     }
@@ -140,8 +142,8 @@ getarea <- function(data, ismz = 323, ppm = 5, rt = NULL,
     clcomp <- stats::aggregate(rrares, by = list(sccp$Cln), 
         sum)
     colnames(clcomp) <- c("nCl", "Formula group abundance")
-    list <- list(sumpCl = sumpCl, sumrarea = sumrarea, ccomp = ccomp, 
-        clcomp = clcomp)
+    list <- list(sumpCl = sumpCl, sumrarea = sumrarea, 
+        ccomp = ccomp, clcomp = clcomp)
     return(list)
 }
 #' Quantitative analysis for short-chain chlorinated paraffins(SCCPs)
