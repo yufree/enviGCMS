@@ -1,44 +1,10 @@
-#' Get mass defect with certain scaled factor
-#' @param mass vector of mass
-#' @param sf scaled factors
-#' @return dataframe with mass, scaled mass and scaled mass defect
-#' @examples
-#' mass <- c(100.1022,245.2122,267.3144,400.1222,707.2294)
-#' sf <- 0.9988
-#' mf <- getmassdefect(mass,sf)
-#' @seealso \code{\link{globalstd}},\code{\link{plotkms}}
-#' @export
-
-getmassdefect <- function(mass, sf) {
-    sm <- mass * sf
-    sd <- round(sm) - sm
-    df <- as.data.frame(cbind(mass, sm, sd))
-    graphics::plot(df$sd ~ df$sm, xlab = "m/z", ylab = "scaled MD")
-    return(df)
-}
-#' define the Mode function
-#' @param x vector
-#' @return Mode of the vector
-#' @export
-Mode = function(x){
-        ta = table(x)
-        tam = max(ta)
-        if (all(ta == tam))
-                mod = x
-        else
-                if(is.numeric(x))
-                        mod = as.numeric(names(ta)[ta == tam])
-        else
-                mod = names(ta)[ta == tam]
-        return(mod)
-}
 #' Filter ions/peaks based on retention time hierarchical clustering, paired mass differences(PMD) and PMD frequency analysis.
 #' @param list a list with mzrt profile
-#' @param rtcutoff cutoff of the distances in cluster, default 9
-#' @param freqcutoff cutoff of the mass differences frequency, default 30
-#' @param pmdcutoff cutoff of the largest mass differences, default 100
+#' @param rtcutoff cutoff of the distances in retention time hierarchical clustering analysis, default 9
+#' @param freqcutoff cutoff of the paired mass difference frequency, default 30
+#' @param pmdcutoff cutoff of the largest paired mass differences, default 100
 #' @return list with tentative isotope, adducts, and neutral loss peaks' index, retention time clusters.
-#' @seealso \code{\link{getmassdefect}},\code{\link{getstd}},\code{\link{getstd}},\code{\link{getmdg}},\code{\link{plotpaired}}
+#' @seealso \code{\link{getstd}},\code{\link{getsda}},\code{\link{plotpaired}}
 #' @export
 getpaired <- function(list, rtcutoff = 9, freqcutoff = 30, pmdcutoff = 100){
         # paired mass diff analysis
@@ -122,7 +88,7 @@ getpaired <- function(list, rtcutoff = 9, freqcutoff = 30, pmdcutoff = 100){
 #' @param list a list from getpaired function
 #' @param corcutoff cutoff of the correlation coefficient, default NULL
 #' @return list with std mass index
-#' @seealso \code{\link{getpaired}},\code{\link{getmdg}},\code{\link{plotstd}}
+#' @seealso \code{\link{getpaired}},\code{\link{getsda}},\code{\link{plotstd}}
 #' @export
 getstd <- function(list, corcutoff = NULL){
         resultstd2A <- resultstd2B1 <- resultstd2B2 <- resultstd2B3 <- NULL
@@ -238,129 +204,63 @@ getstd <- function(list, corcutoff = NULL){
         return(list)
 }
 
-#' Group peaks by the mass defect interval group for different substructures
-#' @param list a peaks list with mass to charge
-#' @param submass mass vector of sub structure of homologous series
-#' @param mdgn mass defect groups numbers for interval, 20 means 0.05 inteval on mass defect scale from -0.5 to 0.5
-#' @param lv group info for the data
-#' @return list with mass defect analysis dataframe.
-#' @seealso \code{\link{getpaired}},\code{\link{getstd}},\code{\link{plotstd}},\code{\link{plotstdmd}},\code{\link{plotstdrt}}
-#' @export
-getmdg <- function(list, submass = c(15.9949,14.003074,26.01568,14.01565,43.00581,30.01056,34.96885,78.91834), mdgn = 20, lv = NULL){
+#' Perform structure directed analysis for peaks list.
+#' @param list a list with mzrt profile
+#' @param rtcutoff cutoff of the retention time in secounds, default 3
+#' @param freqcutoff cutoff of the paired mass difference frequency, default 10
+#' @param pmdcutoff cutoff of the largest paired mass differences, default 500
+#' @return list with tentative isotope, adducts, and neutral loss peaks' index, retention time clusters.
+#' @seealso \code{\link{getpaired}},\code{\link{getstd}},\code{\link{plotpaired}}
+getsda <- function(list, rtcutoff = 3, freqcutoff = 10, pmdcutoff = 500){
         if(is.null(list$stdmass)&is.null(list$paired)){
                 mz <- list$mz
                 rt <- list$rt
                 data <- list$data
-                colnames(data) <- lv
         }else if(is.null(list$stdmass)){
                 mz <- list$mz[list$pairedindex]
                 rt <- list$rt[list$pairedindex]
                 data <- list$data[list$pairedindex,]
-                colnames(data) <- lv
         }else{
                 mz <- list$mz[list$stdmassindex]
                 rt <- list$rt[list$stdmassindex]
                 data <- list$data[list$stdmassindex,]
-                colnames(data) <- lv
         }
-        # perform mass defect analysis for std mass
-        mda <- cbind.data.frame(mz = mz, rt = rt, data)
-        for(i in 1:length(submass)){
-                mdst <- round(submass[i])/submass[i]
-                msdefect <- round(mz*mdst) - mz*mdst
+        # PMD analysis
+        dis <- stats::dist(mz, method = "manhattan")
+        disrt <- stats::dist(rt, method = "manhattan")
+        df <- data.frame(ms1 = mz[which(lower.tri(dis),arr.ind = T)[, 1]], ms2 = mz[which(lower.tri(dis),arr.ind = T)[, 2]], diff = as.numeric(dis), rt1 = rt[which(lower.tri(disrt),arr.ind = T)[, 1]],rt2 = rt[which(lower.tri(disrt),arr.ind = T)[, 2]],diffrt = as.numeric(disrt))
+        df$diff2 <- round(df$diff,2)
+        df <- df[df$diffrt>rtcutoff&df$diff2<pmdcutoff,]
+        freq <- table(df$diff2)[order(table(df$diff2),decreasing = T)]
+        list$sda <- df[(df$diff2 %in% as.numeric(names(freq[freq>=freqcutoff]))),]
 
-                mdg <- cut(msdefect, seq(from = -.5, to = .5, by = 1/mdgn),include.lowest = T)
-                mdg2 <- mdg[!is.na(mdg)]
-                index <- mdg %in% Mode(mdg2)
-
-                name <- c(submass[i],paste0(submass[i],'gi'), 'majormdg')
-                md <- cbind.data.frame(msdefect,mdg,index)
-                colnames(md) <- name
-                mda <- cbind.data.frame(mda,md)
-        }
-        # get the data
-        list$mda <- mda
+        # show message about std mass
+        sub <- names(table(list$sda$diff2))
+        n <- length(sub)
+        message(paste(n, 'groups were found as high frequency PMD group.','\n'))
+        message(paste(sub, 'were found as high frequency PMD.','\n'))
         return(list)
 }
+
 #' GlobalStd algorithm
 #' @param list a peaks list with mass to charge
 #' @param rtcutoff cutoff of the distances in cluster
 #' @param freqcutoff cutoff of the mass differences frequency
 #' @param corcutoff cutoff of the correlation coefficient, default NULL
 #' @param pmdcutoff cutoff of the largest mass differences, default 100
-#' @param submass mass vector of sub structure of homologous series
-#' @param mdgn mass defect groups numbers for interval, 20 means 0.05 inteval on mass defect scale from -0.5 to 0.5
-#' @param lv group info for the data
+#' @param rtcutoff2 cutoff of the retention time in secounds, default 3
+#' @param freqcutoff2 cutoff of the paired mass difference frequency, default 10
+#' @param pmdcutoff2 cutoff of the largest paired mass differences, default 500
 #' @return list with GlobalStd algorithm processed data.
-#' @seealso \code{\link{getpaired}},\code{\link{getstd}},\code{\link{getmdg}},\code{\link{plotstd}},\code{\link{plotstdmd}},\code{\link{plotstdrt}}
+#' @seealso \code{\link{getpaired}},\code{\link{getstd}},\code{\link{getsda}},\code{\link{plotstd}},\code{\link{plotstdsda}},\code{\link{plotstdrt}}
 #' @export
-globalstd <- function(list, rtcutoff = 9, freqcutoff = 30, corcutoff = NULL,pmdcutoff = 100,submass = c(15.9949,14.003074,26.01568,14.01565,43.00581,30.01056,34.96885,78.91834),  mdgn = 20, lv = NULL){
+globalstd <- function(list, rtcutoff = 9, freqcutoff = 30, corcutoff = NULL,pmdcutoff = 100, rtcutoff2 = 3, freqcutoff2 = 10, pmdcutoff2 = 500){
         list <- getpaired(list, rtcutoff = rtcutoff, freqcutoff = freqcutoff, pmdcutoff = pmdcutoff)
         list2 <- getstd(list,corcutoff = corcutoff)
-        list3 <- getmdg(list2, submass = submass, mdgn = mdgn, lv = NULL)
+        list3 <- getsda(list2, rtcutoff = rtcutoff2, freqcutoff = freqcutoff, pmdcutoff = pmdcutoff2)
         return(list3)
 }
-#' Paired correlationship among peak list based on cluster analysis
-#' @param list a list with mzrt profile
-#' @param rtcutoff cutoff of the distances in cluster
-#' @param submass mass vector of sub structure of homologous series
-#' @param mdcutoff mass defect cluster cutoff
-#' @return list with retention time cluster, std mass defect analysis dataframe based on max average correlation
-#' @seealso \code{\link{getmassdefect}},\code{\link{plotkms}},\code{\link{getpaired}}
-getcorstd <- function(list, rtcutoff = 9, submass = c(15.9949,14.003074,26.01568,14.01565,43.00581,30.01056,34.96885,78.91834), mdcutoff = 0.02){
 
-        # paired mass diff analysis
-        groups <- cbind.data.frame(mz = list$mz, rt = list$rt, list$data)
-        resultstd <- resultsolo <- resultiso <- result <- NULL
-
-        dis <- stats::dist(list$rt, method = "manhattan")
-        fit <- stats::hclust(dis)
-        rtcluster <- stats::cutree(fit, h=rtcutoff)
-        n <- length(unique(rtcluster))
-        message(paste(n, 'retention time cluster found.'))
-        # search:
-        for (i in 1:length(unique(rtcluster))) {
-                # find the mass within RT
-                rtxi <- list$rt[rtcluster == i]
-                bin = groups[groups$rt %in% rtxi, ]
-                medianrtxi <- stats::median(rtxi)
-
-                if (nrow(bin) > 1) {
-                        # get mz diff
-                        cor <- stats::cor(t(bin[,-c(1,2)]))
-                        cormean <- apply(cor,1,mean)
-                        corindex <- which.max(cormean)
-                        df <- cbind(bin[corindex,],rtg = i)
-                        result <- rbind(result,df)
-                }else{
-                        solo <- cbind(bin,rtg = i)
-                        resultsolo <- rbind(solo,resultsolo)
-                }
-        }
-
-        resultstd <- rbind(result,resultsolo)
-        resultstd <- unique(resultstd)
-
-        # perform mass defect analysis for std mass
-        for(i in 1:length(submass)){
-                mdst <- round(submass[i])/submass[i]
-                msdefect <- round(resultstd$mz*mdst) - resultstd$mz*mdst
-                dis <- stats::dist(msdefect, method = "manhattan")
-                fit <- stats::hclust(dis)
-                mdcluster <- stats::cutree(fit, h=mdcutoff)
-                n <- length(unique(mdcluster))
-                message(paste(n, 'mass defect clusters found for mass', submass[i], 'substructures' ))
-                name <- c(colnames(resultstd),submass[i],paste0(submass[i],'g'))
-                resultstd <- cbind.data.frame(resultstd,msdefect,mdcluster)
-                colnames(resultstd) <- name
-        }
-
-        # filter the list
-        list$rtcluster <- rtcluster
-        list$stdmassindex <- (round(list$mz,4) %in% round(resultstd$mz,4))
-        list$stdmass <- resultstd
-        return(list)
-}
 #' Plot the mass pairs and high frequency mass differences
 #' @param list a list from getpaired function
 #' @return NULL
@@ -373,7 +273,7 @@ plotpaired <- function(list){
         graphics::par(mfrow = c(2,1),mar = c(4,4,2,1)+0.1)
         graphics::plot(range(paired$rt),range(paired$ms1,paired$ms2),type = 'n', xlab = 'retention time(s)', ylab = 'm/z')
         graphics::segments(paired$rt,paired$ms1,paired$rt,paired$ms2,col = col[diffgroup],lwd = 1.5)
-        graphics::barplot(table(list$paired$diff2),col = col[unique(diffgroup)],ylab = 'Frequency', las=2, xlab = 'paired mass differences',cex.names=0.618)
+        graphics::barplot(table(list$paired$diff2),col = col,ylab = 'Frequency', las=2, xlab = 'Paired mass difference',cex.names=0.618)
 }
 
 #' Plot the std mass from GlobalStd algorithm
@@ -413,38 +313,31 @@ plotstdrt <- function(list,rtcluster,...){
         graphics::points(mz[index],msdata[index],type = 'h',lwd = 2, col = 'red')
 }
 
-#' Plot the std mass from GlobalStd algorithm in certain mass defect groups
-#' @param list a list from getmdg function
-#' @param mdindex mass defect index
+#' Plot the std mass from GlobalStd algorithm in structure directed analysis(SDA) groups
+#' @param list a list from getsda function
+#' @param index index for PMD value
 #' @param ... other parameters for plot function
 #' @return NULL
 #' @seealso \code{\link{getstd}}, \code{\link{globalstd}},\code{\link{plotstd}},\code{\link{plotpaired}},\code{\link{plotstdrt}}
 #' @export
-#'
-plotstdmd <- function(list,mdindex,...){
-        mda <- list$mda
-        graphics::plot(mda$rt[mdindex],mda$mz[mdindex],
-             xlab = 'retention time(s)', ylab = 'm/z',
-             pch = 19, col = 'blue',
-             xlim = range(mda$rt),ylim = range(mda$mz),...)
-}
-#' plot the kendrick mass defect diagram
-#' @param data vector with the name m/z
-#' @param cutoff remove the low intensity
-#' @return NULL
-#' @seealso \code{\link{getmassdefect}},\code{\link{getpaired}}
-#' @examples
-#' \dontrun{
-#' mz <- c(10000,5000,20000,100,40000)
-#' names(mz) <- c(100.1022,245.2122,267.3144,400.1222,707.2294)
-#' plotkms(mz)
-#' }
-#' @export
-plotkms <- function(data, cutoff = 1000) {
-    data <- data[data > cutoff]
-    mz <- as.numeric(names(data))
-    km <- mz * 14/14.01565
-    kmd <- round(km) - km
-    graphics::smoothScatter(kmd ~ round(km), xlab = "Kendrick nominal mass",
-        ylab = "Kendrick mass defect")
+plotstdsda <- function(list,index = NULL,...){
+        sda <- list$sda
+        diffgroup <- as.numeric(as.factor(sda$diff2))
+        if(is.null(index)){
+                col <- (grDevices::colorRampPalette(rev(RColorBrewer::brewer.pal(11, "RdYlBu"))))(length(unique(diffgroup)))
+                graphics::par(mfrow = c(2,1),mar = c(4,4,2,1)+0.1)
+                graphics::plot(range(sda$rt1,sda$rt2),range(sda$ms1,sda$ms2),type = 'n', xlab = 'retention time(s)', ylab = 'm/z',...)
+                graphics::segments(sda$rt1,sda$ms1,sda$rt2,sda$ms2,col = col[diffgroup],lwd = 1.5)
+                points(sda$rt1,sda$ms1,pch = 19, col = grDevices::rgb(0,0,1, alpha = 0.318))
+                points(sda$rt2,sda$ms2,pch = 19, col = grDevices::rgb(0,0,1, alpha = 0.318))
+                graphics::barplot(table(sda$diff2),col = col,ylab = 'Frequency', las=2, xlab = 'Paired mass differences',cex.names=0.618)
+
+        }else{
+                sda <- list$sda[index,]
+                graphics::plot(range(list$sda$rt1,list$sda$rt2),range(list$sda$ms1,list$sda$ms2),type = 'n', xlab = 'retention time(s)', ylab = 'm/z',main = paste(sda$diff2[1],'group'),...)
+                graphics::segments(sda$rt1,sda$ms1,sda$rt2,sda$ms2,lwd = 1.5,pch = 19)
+                points(sda$rt1,sda$ms1,pch = 19, col = grDevices::rgb(0,0,1, alpha = 0.318))
+                points(sda$rt2,sda$ms2,pch = 19, col = grDevices::rgb(0,0,1, alpha = 0.318))
+        }
+
 }

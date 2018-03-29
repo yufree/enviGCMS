@@ -1,3 +1,19 @@
+#' define the Mode function
+#' @param x vector
+#' @return Mode of the vector
+#' @export
+Mode = function(x){
+        ta = table(x)
+        tam = max(ta)
+        if (all(ta == tam))
+                mod = x
+        else
+                if(is.numeric(x))
+                        mod = as.numeric(names(ta)[ta == tam])
+        else
+                mod = names(ta)[ta == tam]
+        return(mod)
+}
 #' filter data by average moving box
 #'
 #' @param x a vector
@@ -8,6 +24,44 @@
 #' @export
 ma <- function(x, n) {
         stats::filter(x, rep(1 / n, n), circular = T)
+}
+#' Get mass defect with certain scaled factor
+#' @param mass vector of mass
+#' @param sf scaled factors
+#' @return dataframe with mass, scaled mass and scaled mass defect
+#' @examples
+#' mass <- c(100.1022,245.2122,267.3144,400.1222,707.2294)
+#' sf <- 0.9988
+#' mf <- getmassdefect(mass,sf)
+#' @seealso \code{\link{plotkms}}
+#' @export
+
+getmassdefect <- function(mass, sf) {
+        sm <- mass * sf
+        sd <- round(sm) - sm
+        df <- as.data.frame(cbind(mass, sm, sd))
+        graphics::plot(df$sd ~ df$sm, xlab = "m/z", ylab = "scaled MD")
+        return(df)
+}
+#' plot the kendrick mass defect diagram
+#' @param data vector with the name m/z
+#' @param cutoff remove the low intensity
+#' @return NULL
+#' @seealso \code{\link{getmassdefect}}
+#' @examples
+#' \dontrun{
+#' mz <- c(10000,5000,20000,100,40000)
+#' names(mz) <- c(100.1022,245.2122,267.3144,400.1222,707.2294)
+#' plotkms(mz)
+#' }
+#' @export
+plotkms <- function(data, cutoff = 1000) {
+        data <- data[data > cutoff]
+        mz <- as.numeric(names(data))
+        km <- mz * 14/14.01565
+        kmd <- round(km) - km
+        graphics::smoothScatter(kmd ~ round(km), xlab = "Kendrick nominal mass",
+                                ylab = "Kendrick mass defect")
 }
 
 #' Import data and return the annotated matrix for GC/LC-MS by m/z range and retention time
