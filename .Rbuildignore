@@ -4,3 +4,4 @@
 ^\.Rproj\.user$
 ^.travis.yml
 ^docs$
+test.csv

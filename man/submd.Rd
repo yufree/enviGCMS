@@ -24,7 +24,7 @@ Get the differences of two GC/LC-MS data
 \examples{
 \dontrun{
 library(faahKO)
-cdfpath <- system.file("cdf", package = "faahKO")
+cdfpath <- system.file('cdf', package = 'faahKO')
 cdffiles <- list.files(cdfpath, recursive = TRUE, full.names = TRUE)
 matrix <- submd(cdffiles[1],cdffiles[7])
 }
