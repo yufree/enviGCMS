@@ -6,6 +6,7 @@
 
 ## Major changes
 
+- Shiny application for GlobalStd
 - New GlobalStd algorithm
 - New paired analysis based on retention time hierarchical clustering, paired mass differences(PMD), PMD frequency analysis
 - Remove mass defect related analysis
