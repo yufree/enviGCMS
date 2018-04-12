@@ -2,6 +2,14 @@
 
 - CRAN
 
+# enviGCMS 0.4.5
+
+## Major changes
+
+- remove GlobalStd function and shiny application into pmd package
+- remove batch correction and simulation function into mzrtsim package
+- add shiny application for sccp analysis
+
 # enviGCMS 0.4.4
 
 ## Major changes
