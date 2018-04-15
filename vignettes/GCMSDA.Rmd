@@ -88,6 +88,8 @@ Some functions could be used to caculate the molecular isotope ratio. EIC data c
 
 `enviGCMS` supply function to perform Quantitative analysis for short-chain chlorinated paraffins(SCCPs) with Q-tof data. Use `getsccp` to make Quantitative analysis for SCCPs.
 
+If you want a graphical user interface for SCCPs analysis, a shiny application is developed in this package. You could use `runsccp()` to power on the application in a browser.
+
 ## Data analysis for multiple samples
 
 In environmetnal non-target analysis, when multiple samples are collected, problem will raise from the heterogeneity among samples. For example, retention time would shift due to the column. In those cases, `xcms` package could be used to get a peaks list across samples within certain retention time and m/z. `enviGCMS` package has some wrapped function to get the peaks list. Besides, some specific functions such as group comparision, batch correction and visulization are also included. 
@@ -129,20 +131,6 @@ In environmetnal non-target analysis, when multiple samples are collected, probl
 - `plotrsd` could plot the rsd influnces of data in different groups
 
 - `gifmr` could plot scatter plot for peaks list and output gif file for mutiple groups
-
-### Peaks list simulation
-
-- `mzrtsim` could generate simulated count data with batch effects for npeaks
-
-- `simmzrt` could make simulation from data by sample mean and rsd from Empirical Cumulative Distribution or Bootstrap sampling
-
-### Batch correction
-
-- `svacor` could perform surrogate variable analysis(SVA) to correct the batch effects
-
-- `isvacor` could perform independant surrogate variable analysis(ISVA) to correct the batch effects
-
-- `svapca`, `svaplot`, `rlaplot` and `ridgesplot` could be used to visulize the batch effects and their influnces on each peaks
 
 ## Summary
 

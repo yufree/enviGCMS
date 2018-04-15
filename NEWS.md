@@ -2,6 +2,14 @@
 
 - CRAN
 
+## Major changes with version 0.3.4
+
+- use list to communicate results between function instead of xcms objects
+- getdoe function to handle data for various experimental design
+- add functions and shiny application for Short-Chain Chlorinated Paraffins analysis
+- update the visulization function
+- support xcms 3 new objects
+
 # enviGCMS 0.4.5
 
 ## Major changes
@@ -9,6 +17,8 @@
 - remove GlobalStd function and shiny application into pmd package
 - remove batch correction and simulation function into mzrtsim package
 - add shiny application for sccp analysis
+- add deprecated function
+- update vignettes
 
 # enviGCMS 0.4.4
 
