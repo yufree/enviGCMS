@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>plot the scatter plot for peaks list with threshold — plotmr • enviGCMS</title>
+<title>Shiny application for Short-Chain Chlorinated Paraffins analysis — runsccp • enviGCMS</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -95,75 +95,21 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>plot the scatter plot for peaks list with threshold</h1>
+    <h1>Shiny application for Short-Chain Chlorinated Paraffins analysis</h1>
     </div>
 
     
-    <p>plot the scatter plot for peaks list with threshold</p>
+    <p>Shiny application for Short-Chain Chlorinated Paraffins analysis</p>
     
 
-    <pre class="usage"><span class='fu'>plotmr</span>(<span class='no'>list</span>, <span class='kw'>rt</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>ms</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>inscf</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>rsdcf</span> <span class='kw'>=</span> <span class='fl'>30</span>,
-  <span class='kw'>imputation</span> <span class='kw'>=</span> <span class='st'>"l"</span>, <span class='kw'>index</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>list</th>
-      <td><p>list with data as peaks list, mz, rt and group information</p></td>
-    </tr>
-    <tr>
-      <th>rt</th>
-      <td><p>vector range of the retention time</p></td>
-    </tr>
-    <tr>
-      <th>ms</th>
-      <td><p>vector vector range of the m/z</p></td>
-    </tr>
-    <tr>
-      <th>inscf</th>
-      <td><p>Log intensity cutoff for peaks across samples. If any peaks show a intensity higher than the cutoff in any samples, this peaks would not be filtered. default 5</p></td>
-    </tr>
-    <tr>
-      <th>rsdcf</th>
-      <td><p>the rsd cutoff of all peaks in all group</p></td>
-    </tr>
-    <tr>
-      <th>imputation</th>
-      <td><p>parameters for `getimputation` function method</p></td>
-    </tr>
-    <tr>
-      <th>index</th>
-      <td><p>the index of peaks considered, default NULL</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>parameters for `plot` function</p></td>
-    </tr>
-    </table>
-    
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    <pre class="usage"><span class='fu'>runsccp</span>()</pre>
+        
 
-    <p>data fit the cutoff</p>
-    
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='fu'>library</span>(<span class='no'>faahKO</span>)
-<span class='no'>cdfpath</span> <span class='kw'>&lt;-</span> <span class='fu'>system.file</span>(<span class='st'>'cdf'</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>'faahKO'</span>)
-<span class='no'>list</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='getmr.html'>getmr</a></span>(<span class='no'>cdfpath</span>, <span class='kw'>pmethod</span> <span class='kw'>=</span> <span class='st'>' '</span>)
-<span class='fu'>plotmr</span>(<span class='no'>list</span>)
-<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+                </ul>
 
   </div>
 </div>

@@ -109,7 +109,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>df</th>
-      <td><p>data output from `svacor` or `isvacor` function</p></td>
+      <td><p>data output from `svacor` function</p></td>
     </tr>
     <tr>
       <th>dfsv</th>
@@ -127,18 +127,23 @@
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p><code><a href='isvacor.html'>isvacor</a></code>,<code><a href='svacor.html'>svacor</a></code>, <code><a href='svaplot.html'>svaplot</a></code>, <code><a href='svapca.html'>svapca</a></code></p>
+    <p><code><a href='svacor.html'>svacor</a></code>, <code><a href='svaplot.html'>svaplot</a></code>, <code><a href='svapca.html'>svapca</a></code></p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
 <span class='fu'>library</span>(<span class='no'>faahKO</span>)
-<span class='no'>cdfpath</span> <span class='kw'>&lt;-</span> <span class='fu'>system.file</span>(<span class='st'>'cdf'</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>'faahKO'</span>)
-<span class='no'>list</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='getmr.html'>getmr</a></span>(<span class='no'>cdfpath</span>, <span class='kw'>pmethod</span> <span class='kw'>=</span> <span class='st'>' '</span>)
-<span class='no'>li</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='svacor.html'>svacor</a></span>(<span class='no'>list</span>$<span class='no'>data</span>,<span class='no'>list</span>$<span class='no'>group</span>$<span class='no'>class</span>)
-<span class='no'>dfsv</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='svaplot.html'>svaplot</a></span>(<span class='no'>li</span>,<span class='no'>list</span>$<span class='no'>group</span>$<span class='no'>class</span>)
-<span class='no'>dfanova</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='svaplot.html'>svaplot</a></span>(<span class='no'>li</span>, <span class='no'>list</span>$<span class='no'>group</span>$<span class='no'>class</span>, <span class='kw'>pqvalues</span> <span class='kw'>=</span> <span class='st'>'anova'</span>)
-<span class='fu'>svabatch</span>(<span class='no'>li</span>,<span class='no'>dfsv</span>,<span class='no'>dfanova</span>)
+<span class='no'>cdfpath</span> <span class='kw'>&lt;-</span> <span class='fu'>system.file</span>(<span class='st'>"cdf"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"faahKO"</span>)
+<span class='no'>cdffiles</span> <span class='kw'>&lt;-</span> <span class='fu'>list.files</span>(<span class='no'>cdfpath</span>, <span class='kw'>recursive</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>full.names</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='no'>xset</span> <span class='kw'>&lt;-</span> <span class='fu'>xcmsSet</span>(<span class='no'>cdffiles</span>)
+<span class='no'>xset</span> <span class='kw'>&lt;-</span> <span class='fu'>group</span>(<span class='no'>xset</span>)
+<span class='no'>xset2</span> <span class='kw'>&lt;-</span> <span class='fu'>retcor</span>(<span class='no'>xset</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='st'>"symmetric"</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='st'>"mdevden"</span>)
+<span class='no'>xset2</span> <span class='kw'>&lt;-</span> <span class='fu'>group</span>(<span class='no'>xset2</span>, <span class='kw'>bw</span> <span class='kw'>=</span> <span class='fl'>10</span>)
+<span class='no'>xset3</span> <span class='kw'>&lt;-</span> <span class='fu'>fillPeaks</span>(<span class='no'>xset2</span>)
+<span class='no'>df</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='svacor.html'>svacor</a></span>(<span class='no'>xset3</span>)
+<span class='no'>dfsv</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='svaplot.html'>svaplot</a></span>(<span class='no'>xset3</span>)
+<span class='no'>dfanova</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='svaplot.html'>svaplot</a></span>(<span class='no'>xset3</span>, <span class='kw'>pqvalues</span> <span class='kw'>=</span> <span class='st'>"anova"</span>)
+<span class='fu'>svabatch</span>(<span class='no'>df</span>,<span class='no'>dfsv</span>,<span class='no'>dfanova</span>)
 <span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

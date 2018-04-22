@@ -149,9 +149,15 @@
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="getcorstd.html">getcorstd</a></code> </p>
+            <p><code><a href="getbgremove.html">getbgremove</a></code> </p>
           </td>
-          <td><p>Paired correlationship among peak list based on cluster analysis</p></td>
+          <td><p>Get the peak list with blank samples' peaks removed</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="getbiotechrep.html">getbiotechrep</a></code> </p>
+          </td>
+          <td><p>Get the report for biological replicates.</p></td>
         </tr><tr>
           <!--  -->
           <td>
@@ -182,6 +188,12 @@
             <p><code><a href="getfeaturest.html">getfeaturest</a></code> </p>
           </td>
           <td><p>Get the features from t test, with p value, q value, rsd and power restriction</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="getgrouprep.html">getgrouprep</a></code> </p>
+          </td>
+          <td><p>Get the report for samples with biological and technique replicates in different groups</p></td>
         </tr><tr>
           <!--  -->
           <td>
@@ -239,12 +251,6 @@
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="getpaired.html">getpaired</a></code> </p>
-          </td>
-          <td><p>Paired mass diff relationship among peak list based on cluster analysis</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
             <p><code><a href="getQCraw.html">getQCraw</a></code> </p>
           </td>
           <td><p>get the data of QC compound for a group of data</p></td>
@@ -254,6 +260,24 @@
             <p><code><a href="getsccp.html">getsccp</a></code> </p>
           </td>
           <td><p>Quantitative analysis for short-chain chlorinated paraffins(SCCPs)</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="getsim.html">getsim</a></code> </p>
+          </td>
+          <td><p>output the similarity of two dataset</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="gettechrep.html">gettechrep</a></code> </p>
+          </td>
+          <td><p>Get the report for technique replicates.</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="gettimegrouprep.html">gettimegrouprep</a></code> </p>
+          </td>
+          <td><p>Get the time series or two factor DoE report for samples with biological and technique replicates in different groups</p></td>
         </tr><tr>
           <!--  -->
           <td>
@@ -281,21 +305,15 @@
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="isvacor.html">isvacor</a></code> </p>
-          </td>
-          <td><p>Use Independent Surrogate Variable Analysis(ISVA) to correct the unknown batch effects</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
             <p><code><a href="ma.html">ma</a></code> </p>
           </td>
           <td><p>filter data by average moving box</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="mzrtsim.html">mzrtsim</a></code> </p>
+            <p><code><a href="Mode.html">Mode</a></code> </p>
           </td>
-          <td><p>Generate simulated count data with batch effects for npeaks</p></td>
+          <td><p>define the Mode function</p></td>
         </tr><tr>
           <!--  -->
           <td>
@@ -419,33 +437,15 @@
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="ridgesplot.html">ridgesplot</a></code> </p>
+            <p><code><a href="runsccp.html">runsccp</a></code> </p>
           </td>
-          <td><p>Relative Log Abundance Ridge(RLAR) plots</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="rlaplot.html">rlaplot</a></code> </p>
-          </td>
-          <td><p>Relative Log Abundance (RLA) plots</p></td>
+          <td><p>Shiny application for Short-Chain Chlorinated Paraffins analysis</p></td>
         </tr><tr>
           <!--  -->
           <td>
             <p><code><a href="sccp.html">data</a></code> </p>
           </td>
           <td><p>Short-Chain Chlorinated Paraffins(SCCPs) peaks infomation for quantitative analysis</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="simdata.html">simdata</a></code> </p>
-          </td>
-          <td><p>Save the simulated data as csv files</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="simmzrt.html">simmzrt</a></code> </p>
-          </td>
-          <td><p>Simulation from data by sample mean and rsd from Empirical Cumulative Distribution or Bootstrap sampling</p></td>
         </tr><tr>
           <!--  -->
           <td>
@@ -463,19 +463,31 @@
           <td>
             <p><code><a href="svacor.html">svacor</a></code> </p>
           </td>
-          <td><p>Use Surrogate Variable Analysis(SVA) to correct the unknown batch effects</p></td>
+          <td><p>Surrogate variable analysis(SVA) to correct the unknown batch effects</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="svadata.html">svadata</a></code> </p>
+          </td>
+          <td><p>Filter the data with p value and q value</p></td>
         </tr><tr>
           <!--  -->
           <td>
             <p><code><a href="svapca.html">svapca</a></code> </p>
           </td>
-          <td><p>Principal component analysis(PCA) for SVA/ISVA corrected data and raw data</p></td>
+          <td><p>Principal component analysis(PCA) for SVA corrected data and raw data</p></td>
         </tr><tr>
           <!--  -->
           <td>
             <p><code><a href="svaplot.html">svaplot</a></code> </p>
           </td>
           <td><p>Filter the data with p value and q value and show them</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="svaupload.html">svaupload</a></code> </p>
+          </td>
+          <td><p>Get the corrected data after SVA for metabolanalyst</p></td>
         </tr><tr>
           <!--  -->
           <td>

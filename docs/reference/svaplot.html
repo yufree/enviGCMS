@@ -102,18 +102,15 @@
     <p>Filter the data with p value and q value and show them</p>
     
 
-    <pre class="usage"><span class='fu'>svaplot</span>(<span class='no'>list</span>, <span class='no'>lv</span>, <span class='kw'>pqvalues</span> <span class='kw'>=</span> <span class='st'>"sv"</span>, <span class='kw'>pt</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='kw'>qt</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='kw'>index</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>svaplot</span>(<span class='no'>list</span>, <span class='kw'>pqvalues</span> <span class='kw'>=</span> <span class='st'>"sv"</span>, <span class='kw'>pt</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='kw'>qt</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='kw'>lv</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>index</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>list</th>
-      <td><p>results from `svacor` or `isvacor` function</p></td>
-    </tr>
-    <tr>
-      <th>lv</th>
-      <td><p>factor vector for the group infomation</p></td>
+      <td><p>results from svacor function</p></td>
     </tr>
     <tr>
       <th>pqvalues</th>
@@ -128,6 +125,10 @@
       <td><p>threshold for q value, default is 0.05</p></td>
     </tr>
     <tr>
+      <th>lv</th>
+      <td><p>group information</p></td>
+    </tr>
+    <tr>
       <th>index</th>
       <td><p>index for selected peaks</p></td>
     </tr>
@@ -139,14 +140,21 @@
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p><code><a href='isvacor.html'>isvacor</a></code>,<code><a href='svacor.html'>svacor</a></code>, <code><a href='svapca.html'>svapca</a></code>, <code><a href='svabatch.html'>svabatch</a></code></p>
+    <p><code><a href='svacor.html'>svacor</a></code>, <code><a href='svapca.html'>svapca</a></code>, <code><a href='svabatch.html'>svabatch</a></code></p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='no'>sim</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mzrtsim.html'>mzrtsim</a></span>()
-<span class='no'>li</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='svacor.html'>svacor</a></span>(<span class='fu'>log</span>(<span class='no'>sim</span>$<span class='no'>data</span>), <span class='fu'>as.factor</span>(<span class='no'>sim</span>$<span class='no'>con</span>))
-<span class='fu'>svaplot</span>(<span class='no'>li</span>,<span class='fu'>as.factor</span>(<span class='no'>sim</span>$<span class='no'>con</span>))
+<span class='fu'>library</span>(<span class='no'>faahKO</span>)
+<span class='no'>cdfpath</span> <span class='kw'>&lt;-</span> <span class='fu'>system.file</span>(<span class='st'>"cdf"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"faahKO"</span>)
+<span class='no'>cdffiles</span> <span class='kw'>&lt;-</span> <span class='fu'>list.files</span>(<span class='no'>cdfpath</span>, <span class='kw'>recursive</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>full.names</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='no'>xset</span> <span class='kw'>&lt;-</span> <span class='fu'>xcmsSet</span>(<span class='no'>cdffiles</span>)
+<span class='no'>xset</span> <span class='kw'>&lt;-</span> <span class='fu'>group</span>(<span class='no'>xset</span>)
+<span class='no'>xset2</span> <span class='kw'>&lt;-</span> <span class='fu'>retcor</span>(<span class='no'>xset</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='st'>"symmetric"</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='st'>"mdevden"</span>)
+<span class='no'>xset2</span> <span class='kw'>&lt;-</span> <span class='fu'>group</span>(<span class='no'>xset2</span>, <span class='kw'>bw</span> <span class='kw'>=</span> <span class='fl'>10</span>)
+<span class='no'>xset3</span> <span class='kw'>&lt;-</span> <span class='fu'>fillPeaks</span>(<span class='no'>xset2</span>)
+<span class='no'>df</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='svacor.html'>svacor</a></span>(<span class='no'>xset3</span>)
+<span class='fu'>svaplot</span>(<span class='no'>df</span>)
 <span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

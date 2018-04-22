@@ -75,7 +75,7 @@
       <h1>Data analysis of GC-MS and LC-MS in Envrionmental Science</h1>
                         <h4 class="author">Miao Yu</h4>
             
-            <h4 class="date">2018-01-24</h4>
+            <h4 class="date">2018-04-22</h4>
           </div>
 
     
@@ -135,6 +135,7 @@ plotmz(data)</a></code></pre>
 <h3 class="hasAnchor">
 <a href="#quantitative-analysis-for-short-chain-chlorinated-paraffinssccps" class="anchor"></a>Quantitative analysis for short-chain chlorinated paraffins(SCCPs)</h3>
 <p><code>enviGCMS</code> supply function to perform Quantitative analysis for short-chain chlorinated paraffins(SCCPs) with Q-tof data. Use <code>getsccp</code> to make Quantitative analysis for SCCPs.</p>
+<p>If you want a graphical user interface for SCCPs analysis, a shiny application is developed in this package. You could use <code><a href="../reference/runsccp.html">runsccp()</a></code> to power on the application in a browser.</p>
 </div>
 </div>
 <div id="data-analysis-for-multiple-samples" class="section level2">
@@ -173,23 +174,6 @@ plotmz(data)</a></code></pre>
 <li><p><code>plote</code> could plot EIC and boxplot for all peaks and return diffreport</p></li>
 <li><p><code>plotrsd</code> could plot the rsd influnces of data in different groups</p></li>
 <li><p><code>gifmr</code> could plot scatter plot for peaks list and output gif file for mutiple groups</p></li>
-</ul>
-</div>
-<div id="peaks-list-simulation" class="section level3">
-<h3 class="hasAnchor">
-<a href="#peaks-list-simulation" class="anchor"></a>Peaks list simulation</h3>
-<ul>
-<li><p><code>mzrtsim</code> could generate simulated count data with batch effects for npeaks</p></li>
-<li><p><code>simmzrt</code> could make simulation from data by sample mean and rsd from Empirical Cumulative Distribution or Bootstrap sampling</p></li>
-</ul>
-</div>
-<div id="batch-correction" class="section level3">
-<h3 class="hasAnchor">
-<a href="#batch-correction" class="anchor"></a>Batch correction</h3>
-<ul>
-<li><p><code>svacor</code> could perform surrogate variable analysis(SVA) to correct the batch effects</p></li>
-<li><p><code>isvacor</code> could perform independant surrogate variable analysis(ISVA) to correct the batch effects</p></li>
-<li><p><code>svapca</code>, <code>svaplot</code>, <code>rlaplot</code> and <code>ridgesplot</code> could be used to visulize the batch effects and their influnces on each peaks</p></li>
 </ul>
 </div>
 </div>
