@@ -2,7 +2,7 @@
 
 - CRAN
 
-## Major changes with version 0.3.4
+## Major changes from last CRAN version 0.3.4
 
 - use list to communicate results between function instead of xcms objects
 - getdoe function to handle data for various experimental design
