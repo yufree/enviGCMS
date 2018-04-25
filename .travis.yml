@@ -5,6 +5,8 @@ r:
 sudo: required
 cran: https://cran.rstudio.com
 
+r_packages:
+  - devtools
 cache:
   packages: true
 apt_packages: libnetcdf-dev
