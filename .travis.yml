@@ -8,7 +8,6 @@ cran: https://cran.rstudio.com
 cache:
   packages: true
 apt_packages: libnetcdf-dev
-r_github_packages: lgatto/MSnbase
 
 env:
   global:
