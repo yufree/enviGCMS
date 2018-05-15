@@ -1,3 +1,9 @@
+# enviGCMS 0.5.1
+
+## Major changes
+
+- add support for single group plot
+
 # enviGCMS 0.5.0
 
 - CRAN
