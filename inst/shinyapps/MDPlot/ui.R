@@ -7,8 +7,6 @@ library(crosstalk)
 library(shinyjs)
 library(rcdk)
 
-# UI function -------------------------------------------------------------
-
 shinyUI(navbarPage(
         useShinyjs(),
         # Include shinyjs
