@@ -1,8 +1,9 @@
-# enviGCMS 0.5.1
+# enviGCMS 0.5.2
 
 ## Major changes
 
 - add support for single group plot
+- add shiny application for mass defect analysis
 
 # enviGCMS 0.5.0
 
