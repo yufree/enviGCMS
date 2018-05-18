@@ -3,12 +3,12 @@ Type: Package
 Title: GC/LC-MS Data Analysis for Environmental Science
 Version: 0.5.1
 Date: 2018-05-15
-Authors@R: person(given = "Miao", family = "YU",
+Authors@R: c(person(given = "Miao", family = "YU",
         role = c("aut", "cre"), 
         email = "yufreecas@gmail.com",
         comment = c(ORCID = "0000-0002-2804-6014")),
         person(given = "Thanh", family = "Wang",
-        role = c("ctr"), 
+        role = c("ctb"), 
         email = "Thanh.Wang@oru.se",
         comment = c(ORCID = "0000-0002-5729-1908"))
 Maintainer: Miao YU <yufreecas@gmail.com>
