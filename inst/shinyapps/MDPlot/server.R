@@ -31,7 +31,7 @@ shinyServer(function(input, output, session) {
                                 iso1 <-
                                         rcdk::get.isotopes.pattern(rcdk::get.formula(name[1]))
                                 iso2 <-
-                                        rcdk::get.isotopes.pattern(rcdk::get.formula(name[1]))
+                                        rcdk::get.isotopes.pattern(rcdk::get.formula(name[2]))
                                 cus <-
                                         as.numeric(iso1[max(iso1[, 2]), 1]) - as.numeric(iso2[max(iso2[, 2]), 1])
                         } else{
