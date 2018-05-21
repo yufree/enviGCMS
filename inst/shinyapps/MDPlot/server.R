@@ -4,7 +4,6 @@ library(shinythemes)
 library(DT)
 library(plotly)
 library(crosstalk)
-library(shinyjs)
 library(rcdk)
 
 shinyServer(function(input, output, session) {
@@ -485,8 +484,7 @@ shinyServer(function(input, output, session) {
                                         selectInput(
                                                 inputId = 'xvar1',
                                                 label = 'X variable for plot',
-                                                choices = names(MD_data()),
-                                                selected = names(MD_data())[1]
+                                                choices = names(MD_data())
                                         )
                                 ),
                                 column(
@@ -494,8 +492,7 @@ shinyServer(function(input, output, session) {
                                         selectInput(
                                                 inputId = 'yvar1',
                                                 label = 'Y variable for plot',
-                                                choices = names(MD_data()),
-                                                selected = names(MD_data())[4]
+                                                choices = names(MD_data())
                                         )
                                 )
                         )
