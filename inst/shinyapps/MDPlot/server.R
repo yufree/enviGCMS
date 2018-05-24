@@ -380,7 +380,7 @@ shinyServer(function(input, output, session) {
                                               digits = 6)
                                 md2_3 <- round(tsmd - ceiling(tsmd),
                                                digits = 6)
-                        } else if (input$mdr1 == 'floor') {
+                        } else if (input$mdr2 == 'floor') {
                                 df$MD2_2 <-
                                         round(smd - floor(smd),
                                               digits = 6)
@@ -398,7 +398,7 @@ shinyServer(function(input, output, session) {
                                 df$MD2_3 <-
                                         round(tmd - round(tmd),
                                               digits = 6)
-                        } else if (input$mdr1 == 'floor') {
+                        } else if (input$mdr2 == 'floor') {
                                 df$MD2_3 <-
                                         round(tmd - floor(tmd),
                                               digits = 6)
