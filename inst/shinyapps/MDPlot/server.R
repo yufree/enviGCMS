@@ -48,24 +48,29 @@ shinyServer(function(input, output, session) {
                 }
 
                 if (length(cus) == 2) {
-                        omd <- df$mz * round(cus[1]) / cus[1]
-                        sumd <- cus[2] * round(cus[1]) / cus[1]
+
                         if (input$mdr1 == 'round') {
+                                omd <- df$mz * round(cus[1]) / cus[1]
                                 df$MD1_1 <-
                                         round(omd - round(omd),
                                               digits = 6)
+                                sumd <- cus[2] * round(cus[1]) / cus[1]
                                 md1_2 <- round(sumd - round(sumd),
                                                digits = 6)
                         } else if (input$mdr1 == 'floor') {
+                                omd <- df$mz * floor(cus[1]) / cus[1]
                                 df$MD1_1 <-
                                         round(omd - floor(omd),
                                               digits = 6)
+                                sumd <- cus[2] * floor(cus[1]) / cus[1]
                                 md1_2 <- round(sumd - floor(sumd),
                                                digits = 6)
-                        } else{
+                        } else if (input$mdr1 == 'ceiling'){
+                                omd <- df$mz * ceiling(cus[1]) / cus[1]
                                 df$MD1_1 <-
                                         round(omd - ceiling(omd),
                                               digits = 6)
+                                sumd <- cus[2] * ceiling(cus[1]) / cus[1]
                                 md1_2 <- round(sumd - ceiling(sumd),
                                                digits = 6)
                         }
@@ -78,7 +83,7 @@ shinyServer(function(input, output, session) {
                                 df$MD1_2 <-
                                         round(smd - floor(smd),
                                               digits = 6)
-                        } else{
+                        } else if (input$mdr1 == 'ceiling'){
                                 df$MD1_2 <-
                                         round(smd - ceiling(smd),
                                               digits = 6)
@@ -234,26 +239,31 @@ shinyServer(function(input, output, session) {
                 }
 
                 temp <- getorder(input$cus2)
-                cus <- NULL
+                cus2 <- NULL
                 for (i in 1:length(temp)) {
-                        cus <- c(cus, getnum(temp[i]))
+                        cus2 <- c(cus2, getnum(temp[i]))
                 }
-                if (length(cus) == 2) {
-                        omd <- df$mz * round(cus[1]) / cus[1]
-                        sumd <- cus[2] * round(cus[1]) / cus[1]
+                if (length(cus2) == 2) {
+
                         if (input$mdr2 == 'round') {
+                                omd <- df$mz * round(cus2[1]) / cus2[1]
+                                sumd <- cus2[2] * round(cus2[1]) / cus2[1]
                                 df$MD2_1 <-
                                         round(omd - round(omd),
                                               digits = 6)
                                 md2_2 <- round(sumd - round(sumd),
                                                digits = 6)
                         } else if (input$mdr2 == 'floor') {
+                                omd <- df$mz * floor(cus2[1]) / cus2[1]
+                                sumd <- cus2[2] * floor(cus2[1]) / cus2[1]
                                 df$MD2_1 <-
                                         round(omd - floor(omd),
                                               digits = 6)
                                 md2_2 <- round(sumd - floor(sumd),
                                                digits = 6)
-                        } else{
+                        } else if (input$mdr2 == 'ceiling'){
+                                omd <- df$mz * ceiling(cus2[1]) / cus2[1]
+                                sumd <- cus2[2] * ceiling(cus2[1]) / cus2[1]
                                 df$MD2_1 <-
                                         round(omd - ceiling(omd),
                                               digits = 6)
@@ -274,10 +284,10 @@ shinyServer(function(input, output, session) {
                                         round(smd - ceiling(smd),
                                               digits = 6)
                         }
-                } else if (length(cus) == 3) {
-                        omd <- df$mz * round(cus[1]) / cus[1]
-                        sumd <- cus[2] * round(cus[1]) / cus[1]
-                        tumd <- cus[3] * round(cus[1]) / cus[1]
+                } else if (length(cus2) == 3) {
+                        omd <- df$mz * round(cus2[1]) / cus2[1]
+                        sumd <- cus2[2] * round(cus2[1]) / cus2[1]
+                        tumd <- cus2[3] * round(cus2[1]) / cus2[1]
 
                         if (input$mdr2 == 'round') {
                                 df$MD2_1 <-
@@ -293,15 +303,15 @@ shinyServer(function(input, output, session) {
                                               digits = 6)
                                 md2_2 <- round(sumd - floor(sumd),
                                                digits = 6)
-                                md2_3 <- round(tumd - round(tumd),
+                                md2_3 <- round(tumd - floor(tumd),
                                                digits = 6)
-                        } else{
+                        } else if (input$mdr2 == 'ceiling'){
                                 df$MD2_1 <-
                                         round(omd - ceiling(omd),
                                               digits = 6)
                                 md2_2 <- round(sumd - ceiling(sumd),
                                                digits = 6)
-                                md2_3 <- round(tumd - round(tumd),
+                                md2_3 <- round(tumd - ceiling(tumd),
                                                digits = 6)
                         }
                         smd <-  df$MD2_1 / md2_2
@@ -311,15 +321,15 @@ shinyServer(function(input, output, session) {
                                 df$MD2_2 <-
                                         round(smd - round(smd),
                                               digits = 6)
-                                md2_3 <- round(tsmd - ceiling(tsmd),
+                                md2_3 <- round(tsmd - round(tsmd),
                                                digits = 6)
                         } else if (input$mdr2 == 'floor') {
                                 df$MD2_2 <-
                                         round(smd - floor(smd),
                                               digits = 6)
-                                md2_3 <- round(tsmd - ceiling(tsmd),
+                                md2_3 <- round(tsmd - floor(tsmd),
                                                digits = 6)
-                        } else{
+                        } else if (input$mdr2 == 'ceiling'){
                                 df$MD2_2 <-
                                         round(smd - ceiling(smd),
                                               digits = 6)
@@ -335,16 +345,16 @@ shinyServer(function(input, output, session) {
                                 df$MD2_3 <-
                                         round(tmd - floor(tmd),
                                               digits = 6)
-                        } else{
+                        } else if (input$mdr2 == 'ceiling'){
                                 df$MD2_3 <-
                                         round(smd - ceiling(smd),
                                               digits = 6)
                         }
-                } else if (length(cus) > 3) {
+                } else if (length(cus2) > 3) {
                         message("Sorry, only the first three unit would be used.")
-                        omd <- df$mz * round(cus[1]) / cus[1]
-                        sumd <- cus[2] * round(cus[1]) / cus[1]
-                        tumd <- cus[3] * round(cus[1]) / cus[1]
+                        omd <- df$mz * round(cus2[1]) / cus2[1]
+                        sumd <- cus2[2] * round(cus2[1]) / cus2[1]
+                        tumd <- cus2[3] * round(cus2[1]) / cus2[1]
 
                         if (input$mdr2 == 'round') {
                                 df$MD2_1 <-
@@ -360,7 +370,7 @@ shinyServer(function(input, output, session) {
                                               digits = 6)
                                 md2_2 <- round(sumd - floor(sumd),
                                                digits = 6)
-                                md2_3 <- round(tumd - round(tumd),
+                                md2_3 <- round(tumd - floor(tumd),
                                                digits = 6)
                         } else{
                                 df$MD2_1 <-
@@ -368,7 +378,7 @@ shinyServer(function(input, output, session) {
                                               digits = 6)
                                 md2_2 <- round(sumd - ceiling(sumd),
                                                digits = 6)
-                                md2_3 <- round(tumd - round(tumd),
+                                md2_3 <- round(tumd - ceiling(tumd),
                                                digits = 6)
                         }
                         smd <-  df$MD2_1 / md2_2
@@ -378,13 +388,13 @@ shinyServer(function(input, output, session) {
                                 df$MD2_2 <-
                                         round(smd - round(smd),
                                               digits = 6)
-                                md2_3 <- round(tsmd - ceiling(tsmd),
+                                md2_3 <- round(tsmd - round(tsmd),
                                                digits = 6)
                         } else if (input$mdr2 == 'floor') {
                                 df$MD2_2 <-
                                         round(smd - floor(smd),
                                               digits = 6)
-                                md2_3 <- round(tsmd - ceiling(tsmd),
+                                md2_3 <- round(tsmd - floor(tsmd),
                                                digits = 6)
                         } else{
                                 df$MD2_2 <-
@@ -408,7 +418,7 @@ shinyServer(function(input, output, session) {
                                               digits = 6)
                         }
                 } else{
-                        omd <- df$mz * round(cus) / cus
+                        omd <- df$mz * round(cus2) / cus2
                         if (input$mdr2 == 'round') {
                                 df$MD2 <-
                                         round(omd - round(omd),
