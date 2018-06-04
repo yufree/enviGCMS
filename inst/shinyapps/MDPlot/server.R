@@ -48,44 +48,41 @@ shinyServer(function(input, output, session) {
                 }
 
                 if (length(cus) == 2) {
+                        omd <- df$mz * round(cus[1]) / cus[1]
+                        sumd <- cus[2] * round(cus[1]) / cus[1]
 
                         if (input$mdr1 == 'round') {
-                                omd <- df$mz * round(cus[1]) / cus[1]
+
                                 df$MD1_1 <-
-                                        round(omd - round(omd),
+                                        round(round(omd) - omd,
                                               digits = 6)
-                                sumd <- cus[2] * round(cus[1]) / cus[1]
-                                md1_2 <- round(sumd - round(sumd),
+                                md1_2 <- round(round(sumd) - sumd,
                                                digits = 6)
+                                smd <-  df$MD1_1 / md1_2
+                                df$MD1_2 <-
+                                        round(round(smd) - smd,
+                                              digits = 6)
+
                         } else if (input$mdr1 == 'floor') {
-                                omd <- df$mz * floor(cus[1]) / cus[1]
                                 df$MD1_1 <-
-                                        round(omd - floor(omd),
+                                        round(floor(omd) - omd,
                                               digits = 6)
-                                sumd <- cus[2] * floor(cus[1]) / cus[1]
-                                md1_2 <- round(sumd - floor(sumd),
+                                md1_2 <- round(floor(sumd) - sumd,
                                                digits = 6)
+                                smd <-  df$MD1_1 / md1_2
+                                df$MD1_2 <-
+                                        round(floor(smd) - smd,
+                                              digits = 6)
+
                         } else if (input$mdr1 == 'ceiling'){
-                                omd <- df$mz * ceiling(cus[1]) / cus[1]
                                 df$MD1_1 <-
-                                        round(omd - ceiling(omd),
+                                        round(ceiling(omd) - omd,
                                               digits = 6)
-                                sumd <- cus[2] * ceiling(cus[1]) / cus[1]
-                                md1_2 <- round(sumd - ceiling(sumd),
+                                md1_2 <- round(ceiling(sumd) - sumd,
                                                digits = 6)
-                        }
-                        smd <-  df$MD1_1 / md1_2
-                        if (input$mdr1 == 'round') {
+                                smd <-  df$MD1_1 / md1_2
                                 df$MD1_2 <-
-                                        round(smd - round(smd),
-                                              digits = 6)
-                        } else if (input$mdr1 == 'floor') {
-                                df$MD1_2 <-
-                                        round(smd - floor(smd),
-                                              digits = 6)
-                        } else if (input$mdr1 == 'ceiling'){
-                                df$MD1_2 <-
-                                        round(smd - ceiling(smd),
+                                        round(ceiling(smd) - smd,
                                               digits = 6)
                         }
                 } else if (length(cus) == 3) {
@@ -95,65 +92,63 @@ shinyServer(function(input, output, session) {
 
                         if (input$mdr1 == 'round') {
                                 df$MD1_1 <-
-                                        round(omd - round(omd),
+                                        round(round(omd) - omd,
                                               digits = 6)
-                                md1_2 <- round(sumd - round(sumd),
+                                md1_2 <- round(round(sumd) - sumd,
                                                digits = 6)
-                                md1_3 <- round(tumd - round(tumd),
+                                md1_3 <- round(round(tumd) - tumd,
                                                digits = 6)
+                                smd <-  df$MD1_1 / md1_2
+                                tsmd <- md1_3 / md1_2
+                                df$MD1_2 <-
+                                        round(round(smd) - smd,
+                                              digits = 6)
+                                md1_3 <- round(round(tsmd) - tsmd,
+                                               digits = 6)
+                                tmd <- df$MD1_2 / md1_3
+                                df$MD1_3 <-
+                                        round(round(tmd) - tmd,
+                                              digits = 6)
                         } else if (input$mdr1 == 'floor') {
                                 df$MD1_1 <-
-                                        round(omd - floor(omd),
+                                        round(floor(omd) - omd,
                                               digits = 6)
-                                md1_2 <- round(sumd - floor(sumd),
+                                md1_2 <- round(floor(sumd) - sumd,
                                                digits = 6)
-                                md1_3 <- round(tumd - round(tumd),
+                                md1_3 <- round(floor(tumd) - tumd,
                                                digits = 6)
+                                smd <-  df$MD1_1 / md1_2
+                                tsmd <- md1_3 / md1_2
+                                df$MD1_2 <-
+                                        round(floor(smd) - smd,
+                                              digits = 6)
+                                md1_3 <- round(floor(tsmd) - tsmd,
+                                               digits = 6)
+                                tmd <- df$MD1_2 / md1_3
+                                df$MD1_3 <-
+                                        round(floor(tmd) - tmd,
+                                              digits = 6)
                         } else{
                                 df$MD1_1 <-
-                                        round(omd - ceiling(omd),
+                                        round(ceiling(omd) - omd,
                                               digits = 6)
-                                md1_2 <- round(sumd - ceiling(sumd),
+                                md1_2 <- round(ceiling(sumd) - sumd,
                                                digits = 6)
-                                md1_3 <- round(tumd - round(tumd),
+                                md1_3 <- round(ceiling(tumd) - tumd,
                                                digits = 6)
+                                smd <-  df$MD1_1 / md1_2
+                                tsmd <- md1_3 / md1_2
+                                df$MD1_2 <-
+                                        round(ceiling(smd) - smd,
+                                              digits = 6)
+                                md1_3 <- round(ceiling(tsmd) - tsmd,
+                                               digits = 6)
+                                tmd <- df$MD1_2 / md1_3
+                                df$MD1_3 <-
+                                        round(ceiling(tmd) - tmd,
+                                              digits = 6)
                         }
-                        smd <-  df$MD1_1 / md1_2
-                        tsmd <- md1_3 / md1_2
 
-                        if (input$mdr1 == 'round') {
-                                df$MD1_2 <-
-                                        round(smd - round(smd),
-                                              digits = 6)
-                                md1_3 <- round(tsmd - ceiling(tsmd),
-                                               digits = 6)
-                        } else if (input$mdr1 == 'floor') {
-                                df$MD1_2 <-
-                                        round(smd - floor(smd),
-                                              digits = 6)
-                                md1_3 <- round(tsmd - ceiling(tsmd),
-                                               digits = 6)
-                        } else{
-                                df$MD1_2 <-
-                                        round(smd - ceiling(smd),
-                                              digits = 6)
-                                md1_3 <- round(tsmd - ceiling(tsmd),
-                                               digits = 6)
-                        }
-                        tmd <- df$MD1_2 / md1_3
-                        if (input$mdr1 == 'round') {
-                                df$MD1_3 <-
-                                        round(tmd - round(tmd),
-                                              digits = 6)
-                        } else if (input$mdr1 == 'floor') {
-                                df$MD1_3 <-
-                                        round(tmd - floor(tmd),
-                                              digits = 6)
-                        } else{
-                                df$MD1_3 <-
-                                        round(smd - ceiling(smd),
-                                              digits = 6)
-                        }
                 } else if (length(cus) > 3) {
                         message("Sorry, only the first three unit would be used.")
                         omd <- df$mz * round(cus[1]) / cus[1]
@@ -162,78 +157,78 @@ shinyServer(function(input, output, session) {
 
                         if (input$mdr1 == 'round') {
                                 df$MD1_1 <-
-                                        round(omd - round(omd),
+                                        round(round(omd) - omd,
                                               digits = 6)
-                                md1_2 <- round(sumd - round(sumd),
+                                md1_2 <- round(round(sumd) - sumd,
                                                digits = 6)
-                                md1_3 <- round(tumd - round(tumd),
+                                md1_3 <- round(round(tumd) - tumd,
                                                digits = 6)
+                                smd <-  df$MD1_1 / md1_2
+                                tsmd <- md1_3 / md1_2
+                                df$MD1_2 <-
+                                        round(round(smd) - smd,
+                                              digits = 6)
+                                md1_3 <- round(round(tsmd) - tsmd,
+                                               digits = 6)
+                                tmd <- df$MD1_2 / md1_3
+                                df$MD1_3 <-
+                                        round(round(tmd) - tmd,
+                                              digits = 6)
                         } else if (input$mdr1 == 'floor') {
                                 df$MD1_1 <-
-                                        round(omd - floor(omd),
+                                        round(floor(omd) - omd,
                                               digits = 6)
-                                md1_2 <- round(sumd - floor(sumd),
+                                md1_2 <- round(floor(sumd) - sumd,
                                                digits = 6)
-                                md1_3 <- round(tumd - round(tumd),
+                                md1_3 <- round(floor(tumd) - tumd,
                                                digits = 6)
+                                smd <-  df$MD1_1 / md1_2
+                                tsmd <- md1_3 / md1_2
+                                df$MD1_2 <-
+                                        round(floor(smd) - smd,
+                                              digits = 6)
+                                md1_3 <- round(floor(tsmd) - tsmd,
+                                               digits = 6)
+                                tmd <- df$MD1_2 / md1_3
+                                df$MD1_3 <-
+                                        round(floor(tmd) - tmd,
+                                              digits = 6)
                         } else{
                                 df$MD1_1 <-
-                                        round(omd - ceiling(omd),
+                                        round(ceiling(omd) - omd,
                                               digits = 6)
-                                md1_2 <- round(sumd - ceiling(sumd),
+                                md1_2 <- round(ceiling(sumd) - sumd,
                                                digits = 6)
-                                md1_3 <- round(tumd - round(tumd),
+                                md1_3 <- round(ceiling(tumd) - tumd,
                                                digits = 6)
-                        }
-                        smd <-  df$MD1_1 / md1_2
-                        tsmd <- md1_3 / md1_2
-
-                        if (input$mdr1 == 'round') {
+                                smd <-  df$MD1_1 / md1_2
+                                tsmd <- md1_3 / md1_2
                                 df$MD1_2 <-
-                                        round(smd - round(smd),
+                                        round(ceiling(smd) - smd,
                                               digits = 6)
-                                md1_3 <- round(tsmd - ceiling(tsmd),
+                                md1_3 <- round(ceiling(tsmd) - tsmd,
                                                digits = 6)
-                        } else if (input$mdr1 == 'floor') {
-                                df$MD1_2 <-
-                                        round(smd - floor(smd),
-                                              digits = 6)
-                                md1_3 <- round(tsmd - ceiling(tsmd),
-                                               digits = 6)
-                        } else{
-                                df$MD1_2 <-
-                                        round(smd - ceiling(smd),
-                                              digits = 6)
-                                md1_3 <- round(tsmd - ceiling(tsmd),
-                                               digits = 6)
-                        }
-                        tmd <- df$MD1_2 / md1_3
-                        if (input$mdr1 == 'round') {
+                                tmd <- df$MD1_2 / md1_3
                                 df$MD1_3 <-
-                                        round(tmd - round(tmd),
-                                              digits = 6)
-                        } else if (input$mdr1 == 'floor') {
-                                df$MD1_3 <-
-                                        round(tmd - floor(tmd),
-                                              digits = 6)
-                        } else{
-                                df$MD1_3 <-
-                                        round(smd - ceiling(smd),
+                                        round(ceiling(tmd) - tmd,
                                               digits = 6)
                         }
                 } else{
-                        omd <- df$mz * round(cus) / cus
+
                         if (input$mdr1 == 'round') {
+                                omd <- df$mz * round(cus) / cus
                                 df$MD1 <-
-                                        round(omd - round(omd),
+                                        round(round(omd) - omd,
                                               digits = 6)
                         } else if (input$mdr1 == 'floor') {
+                                omd <- df$mz * floor(cus) / cus
                                 df$MD1 <-
-                                        round(omd - floor(omd),
+                                        round(floor(omd) - omd,
                                               digits = 6)
                         } else{
+                                omd <- df$mz * ceiling(cus) / cus
                                 df$MD1 <-
-                                        round(omd - ceiling(omd),
+                                        round(ceiling(omd) - omd,
                                               digits = 6)
                         }
                 }
@@ -244,44 +239,41 @@ shinyServer(function(input, output, session) {
                         cus2 <- c(cus2, getnum(temp[i]))
                 }
                 if (length(cus2) == 2) {
+                        omd <- df$mz * round(cus2[1]) / cus2[1]
+                        sumd <- cus2[2] * round(cus2[1]) / cus2[1]
 
                         if (input$mdr2 == 'round') {
-                                omd <- df$mz * round(cus2[1]) / cus2[1]
-                                sumd <- cus2[2] * round(cus2[1]) / cus2[1]
+
                                 df$MD2_1 <-
-                                        round(omd - round(omd),
+                                        round(round(omd) - omd,
                                               digits = 6)
-                                md2_2 <- round(sumd - round(sumd),
+                                md2_2 <- round(round(sumd) - sumd,
                                                digits = 6)
+                                smd <-  df$MD2_1 / md2_2
+                                df$MD2_2 <-
+                                        round(round(smd) - smd,
+                                              digits = 6)
+
                         } else if (input$mdr2 == 'floor') {
-                                omd <- df$mz * floor(cus2[1]) / cus2[1]
-                                sumd <- cus2[2] * floor(cus2[1]) / cus2[1]
                                 df$MD2_1 <-
-                                        round(omd - floor(omd),
+                                        round(floor(omd) - omd,
                                               digits = 6)
-                                md2_2 <- round(sumd - floor(sumd),
+                                md2_2 <- round(floor(sumd) - sumd,
                                                digits = 6)
-                        } else if (input$mdr2 == 'ceiling'){
-                                omd <- df$mz * ceiling(cus2[1]) / cus2[1]
-                                sumd <- cus2[2] * ceiling(cus2[1]) / cus2[1]
+                                smd <-  df$MD2_1 / md2_2
+                                df$MD2_2 <-
+                                        round(floor(smd) - smd,
+                                              digits = 6)
+
+                        } else if (input$mdr1 == 'ceiling'){
                                 df$MD2_1 <-
-                                        round(omd - ceiling(omd),
+                                        round(ceiling(omd) - omd,
                                               digits = 6)
-                                md2_2 <- round(sumd - ceiling(sumd),
+                                md2_2 <- round(ceiling(sumd) - sumd,
                                                digits = 6)
-                        }
-                        smd <-  df$MD2_1 / md2_2
-                        if (input$mdr2 == 'round') {
+                                smd <-  df$MD2_1 / md2_2
                                 df$MD2_2 <-
-                                        round(smd - round(smd),
-                                              digits = 6)
-                        } else if (input$mdr2 == 'floor') {
-                                df$MD2_2 <-
-                                        round(smd - floor(smd),
-                                              digits = 6)
-                        } else{
-                                df$MD2_2 <-
-                                        round(smd - ceiling(smd),
+                                        round(ceiling(smd) - smd,
                                               digits = 6)
                         }
                 } else if (length(cus2) == 3) {
@@ -291,65 +283,63 @@ shinyServer(function(input, output, session) {
 
                         if (input$mdr2 == 'round') {
                                 df$MD2_1 <-
-                                        round(omd - round(omd),
+                                        round(round(omd) - omd,
                                               digits = 6)
-                                md2_2 <- round(sumd - round(sumd),
+                                md2_2 <- round(round(sumd) - sumd,
                                                digits = 6)
-                                md2_3 <- round(tumd - round(tumd),
+                                md2_3 <- round(round(tumd) - tumd,
                                                digits = 6)
+                                smd <-  df$MD2_1 / md2_2
+                                tsmd <- md2_3 / md2_2
+                                df$MD2_2 <-
+                                        round(round(smd) - smd,
+                                              digits = 6)
+                                md2_3 <- round(round(tsmd) - tsmd,
+                                               digits = 6)
+                                tmd <- df$MD2_2 / md2_3
+                                df$MD2_3 <-
+                                        round(round(tmd) - tmd,
+                                              digits = 6)
                         } else if (input$mdr2 == 'floor') {
                                 df$MD2_1 <-
-                                        round(omd - floor(omd),
+                                        round(floor(omd) - omd,
                                               digits = 6)
-                                md2_2 <- round(sumd - floor(sumd),
+                                md2_2 <- round(floor(sumd) - sumd,
                                                digits = 6)
-                                md2_3 <- round(tumd - floor(tumd),
+                                md2_3 <- round(floor(tumd) - tumd,
                                                digits = 6)
-                        } else if (input$mdr2 == 'ceiling'){
+                                smd <-  df$MD2_1 / md2_2
+                                tsmd <- md2_3 / md2_2
+                                df$MD2_2 <-
+                                        round(floor(smd) - smd,
+                                              digits = 6)
+                                md2_3 <- round(floor(tsmd) - tsmd,
+                                               digits = 6)
+                                tmd <- df$MD2_2 / md2_3
+                                df$MD2_3 <-
+                                        round(floor(tmd) - tmd,
+                                              digits = 6)
+                        } else{
                                 df$MD2_1 <-
-                                        round(omd - ceiling(omd),
+                                        round(ceiling(omd) - omd,
                                               digits = 6)
-                                md2_2 <- round(sumd - ceiling(sumd),
+                                md2_2 <- round(ceiling(sumd) - sumd,
                                                digits = 6)
-                                md2_3 <- round(tumd - ceiling(tumd),
+                                md2_3 <- round(ceiling(tumd) - tumd,
                                                digits = 6)
+                                smd <-  df$MD2_1 / md2_2
+                                tsmd <- md2_3 / md2_2
+                                df$MD2_2 <-
+                                        round(ceiling(smd) - smd,
+                                              digits = 6)
+                                md2_3 <- round(ceiling(tsmd) - tsmd,
+                                               digits = 6)
+                                tmd <- df$MD2_2 / md2_3
+                                df$MD2_3 <-
+                                        round(ceiling(tmd) - tmd,
+                                              digits = 6)
                         }
-                        smd <-  df$MD2_1 / md2_2
-                        tsmd <- md2_3 / md2_2
 
-                        if (input$mdr2 == 'round') {
-                                df$MD2_2 <-
-                                        round(smd - round(smd),
-                                              digits = 6)
-                                md2_3 <- round(tsmd - round(tsmd),
-                                               digits = 6)
-                        } else if (input$mdr2 == 'floor') {
-                                df$MD2_2 <-
-                                        round(smd - floor(smd),
-                                              digits = 6)
-                                md2_3 <- round(tsmd - floor(tsmd),
-                                               digits = 6)
-                        } else if (input$mdr2 == 'ceiling'){
-                                df$MD2_2 <-
-                                        round(smd - ceiling(smd),
-                                              digits = 6)
-                                md2_3 <- round(tsmd - ceiling(tsmd),
-                                               digits = 6)
-                        }
-                        tmd <- df$MD2_2 / md2_3
-                        if (input$mdr2 == 'round') {
-                                df$MD2_3 <-
-                                        round(tmd - round(tmd),
-                                              digits = 6)
-                        } else if (input$mdr2 == 'floor') {
-                                df$MD2_3 <-
-                                        round(tmd - floor(tmd),
-                                              digits = 6)
-                        } else if (input$mdr2 == 'ceiling'){
-                                df$MD2_3 <-
-                                        round(smd - ceiling(smd),
-                                              digits = 6)
-                        }
                 } else if (length(cus2) > 3) {
                         message("Sorry, only the first three unit would be used.")
                         omd <- df$mz * round(cus2[1]) / cus2[1]
@@ -358,78 +348,78 @@ shinyServer(function(input, output, session) {
 
                         if (input$mdr2 == 'round') {
                                 df$MD2_1 <-
-                                        round(omd - round(omd),
+                                        round(round(omd) - omd,
                                               digits = 6)
-                                md2_2 <- round(sumd - round(sumd),
+                                md2_2 <- round(round(sumd) - sumd,
                                                digits = 6)
-                                md2_3 <- round(tumd - round(tumd),
+                                md2_3 <- round(round(tumd) - tumd,
                                                digits = 6)
-                        } else if (input$mdr2 == 'floor') {
+                                smd <-  df$MD2_1 / md2_2
+                                tsmd <- md2_3 / md2_2
+                                df$MD2_2 <-
+                                        round(round(smd) - smd,
+                                              digits = 6)
+                                md2_3 <- round(round(tsmd) - tsmd,
+                                               digits = 6)
+                                tmd <- df$MD2_2 / md2_3
+                                df$MD2_3 <-
+                                        round(round(tmd) - tmd,
+                                              digits = 6)
+                        } else if (input$mdr1 == 'floor') {
                                 df$MD2_1 <-
-                                        round(omd - floor(omd),
+                                        round(floor(omd) - omd,
                                               digits = 6)
-                                md2_2 <- round(sumd - floor(sumd),
+                                md2_2 <- round(floor(sumd) - sumd,
                                                digits = 6)
-                                md2_3 <- round(tumd - floor(tumd),
+                                md2_3 <- round(floor(tumd) - tumd,
                                                digits = 6)
+                                smd <-  df$MD2_1 / md2_2
+                                tsmd <- md2_3 / md2_2
+                                df$MD2_2 <-
+                                        round(floor(smd) - smd,
+                                              digits = 6)
+                                md2_3 <- round(floor(tsmd) - tsmd,
+                                               digits = 6)
+                                tmd <- df$MD2_2 / md2_3
+                                df$MD2_3 <-
+                                        round(floor(tmd) - tmd,
+                                              digits = 6)
                         } else{
                                 df$MD2_1 <-
-                                        round(omd - ceiling(omd),
+                                        round(ceiling(omd) - omd,
                                               digits = 6)
-                                md2_2 <- round(sumd - ceiling(sumd),
+                                md2_2 <- round(ceiling(sumd) - sumd,
                                                digits = 6)
-                                md2_3 <- round(tumd - ceiling(tumd),
+                                md2_3 <- round(ceiling(tumd) - tumd,
                                                digits = 6)
-                        }
-                        smd <-  df$MD2_1 / md2_2
-                        tsmd <- md2_3 / md2_2
-
-                        if (input$mdr2 == 'round') {
+                                smd <-  df$MD2_1 / md2_2
+                                tsmd <- md2_3 / md2_2
                                 df$MD2_2 <-
-                                        round(smd - round(smd),
+                                        round(ceiling(smd) - smd,
                                               digits = 6)
-                                md2_3 <- round(tsmd - round(tsmd),
+                                md2_3 <- round(ceiling(tsmd) - tsmd,
                                                digits = 6)
-                        } else if (input$mdr2 == 'floor') {
-                                df$MD2_2 <-
-                                        round(smd - floor(smd),
-                                              digits = 6)
-                                md2_3 <- round(tsmd - floor(tsmd),
-                                               digits = 6)
-                        } else{
-                                df$MD2_2 <-
-                                        round(smd - ceiling(smd),
-                                              digits = 6)
-                                md2_3 <- round(tsmd - ceiling(tsmd),
-                                               digits = 6)
-                        }
-                        tmd <- df$MD2_2 / md2_3
-                        if (input$mdr2 == 'round') {
+                                tmd <- df$MD2_2 / md2_3
                                 df$MD2_3 <-
-                                        round(tmd - round(tmd),
-                                              digits = 6)
-                        } else if (input$mdr2 == 'floor') {
-                                df$MD2_3 <-
-                                        round(tmd - floor(tmd),
-                                              digits = 6)
-                        } else{
-                                df$MD2_3 <-
-                                        round(smd - ceiling(smd),
+                                        round(ceiling(tmd) - tmd,
                                               digits = 6)
                         }
                 } else{
-                        omd <- df$mz * round(cus2) / cus2
+
                         if (input$mdr2 == 'round') {
+                                omd <- df$mz * round(cus2) / cus2
                                 df$MD2 <-
-                                        round(omd - round(omd),
+                                        round(round(omd) - omd,
                                               digits = 6)
                         } else if (input$mdr2 == 'floor') {
+                                omd <- df$mz * floor(cus2) / cus2
                                 df$MD2 <-
-                                        round(omd - floor(omd),
+                                        round(floor(omd) - omd,
                                               digits = 6)
                         } else{
+                                omd <- df$mz * ceiling(cus2) / cus2
                                 df$MD2 <-
-                                        round(omd - ceiling(omd),
+                                        round(ceiling(omd) - omd,
                                               digits = 6)
                         }
                 }
