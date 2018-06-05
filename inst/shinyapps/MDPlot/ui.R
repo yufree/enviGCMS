@@ -20,31 +20,15 @@ shinyUI(navbarPage(
                                                    '.csv')
                                 ),
                                 fluidRow(column(
-                                        6,
+                                        12,
                                         textInput("cus1", "MD formula 1", value = 'CH2,O')
+                                )
+
                                 ),
-                                column(
-                                        6,
-                                        selectInput(
-                                                inputId = "mdr1",
-                                                label = "Rounding 1",
-                                                choices = c("round", "floor", "ceiling"),
-                                                selected = "round"
-                                        )
-                                )),
 
                                 fluidRow(column(
-                                        6,
+                                        12,
                                         textInput("cus2", "MD formula 2", value = 'Cl-H')
-                                ),
-                                column(
-                                        6,
-                                        selectInput(
-                                                inputId = "mdr2",
-                                                label = "Rounding 2",
-                                                choices = c("round", "floor", "ceiling"),
-                                                selected = "round"
-                                        )
                                 )),
                                 actionButton('go', 'Plot', width = '100%'),
                                 br(),

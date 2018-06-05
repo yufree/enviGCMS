@@ -5,6 +5,7 @@ library(DT)
 library(plotly)
 library(crosstalk)
 library(rcdk)
+library(enviGCMS)
 
 shinyServer(function(input, output, session) {
         MD_data <- reactive({
