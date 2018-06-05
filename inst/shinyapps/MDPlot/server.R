@@ -11,8 +11,8 @@ shinyServer(function(input, output, session) {
                 #  require that the input is available
                 req(input$file1)
                 df <- read.csv(input$file1$datapath)
-                df$RMD <- round((df$mz - round(df$mz)) / df$mz * 10 ^ 6)
-                df$MD <- round((df$mz - round(df$mz)) * 10 ^ 3)
+                df$RMD <- round((round(df$mz) - df$mz) / df$mz * 10 ^ 6)
+                df$MD <- round((round(df$mz) - df$mz) * 10 ^ 3)
                 # high order mass defect computation
 
                 getorder <- function(input) {

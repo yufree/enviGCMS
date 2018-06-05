@@ -18,29 +18,29 @@ When you make changes on the left panel, you need to click the Plot button to up
 
 - Mass defect:
 
-$$Mass\ defect = measured\ mass - round(measured\ mass)$$
+$$Mass\ defect = round(measured\ mass) - measured\ mass - $$
 
 - Relative Mass defect
 
-$$Relative\ Mass\ defect = (measured\ mass - round(measured\ mass))/measured\ mass * 10^6$$
+$$Relative\ Mass\ defect = (round(measured\ mass) - measured\ mass )/measured\ mass * 10^6$$
 
 - Unit based first order mass defect
 
 $$ Unit\ based\ first\ order\ mass = measured\ mass * round(first\ order\ unit\ exact\ mass)/first\ order\ unit\ exact\ mass $$
 
-$$ First\ order\ mass\ defect = Unit\ based\ first\ order\ mass - round/floor/ceiling(Unit\ based\ first\ order\ mass) $$
+$$ First\ order\ mass\ defect = round(Unit\ based\ first\ order\ mass) - Unit\ based\ first\ order\ mass$$
 
 - Unit based second order mass defect
 
-$$ Unit\ based\ second\ order\ mass = First\ order\ mass\ defect (unit 1)/First\ order\ mass\ defect (unit 2) $$
+$$ Unit\ based\ second\ order\ mass = First\ order\ mass\ defect (unit 1\ based\ peaks)/First\ order\ mass\ defect (unit 1\ based\ unit 2) $$
 
-$$ Second\ order\ mass\ defect = Unit\ based\ second\ order\ mass - round/floor/ceiling(Unit\ based\ second\ order\ mass) $$
+$$ Second\ order\ mass\ defect = round(Unit\ based\ second\ order\ mass) - Unit\ based\ second\ order\ mass $$
 
 - Unit based third order mass defect
 
-$$ Unit\ based\ third\ order\ mass = Unit\ based\ second\ order\ mass (unit 1, unit 2)/Unit\ based\ second\ order\ mass(unit 2,unit3) $$
+$$ Unit\ based\ third\ order\ mass = Unit\ based\ second\ order\ mass (unit 1, unit 2\ based\ peaks)/Unit\ based\ second\ order\ mass(unit 1, unit 2\ based\ unit3) $$
 
-$$ Third\ order\ mass\ defect = Unit\ based\ third\ order\ mass - round/floor/ceiling(Unit\ based\ third\ order\ mass) $$
+$$ Third\ order\ mass\ defect = round(Unit\ based\ third\ order\ mass) - Unit\ based\ third\ order\ mass$$
 
 Examples of chemical formula in the MD formula insert box:
 
