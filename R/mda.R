@@ -76,40 +76,40 @@ getmdh <- function(mz,cus = c('CH2,H2'), method = 'round'){
 
         if (method == 'round') {
 
-                MD1_1 <-
+                MD1 <-
                         round(round(omd) - omd,
                               digits = 6)
-                md1_2 <- round(round(sumd) - sumd,
+                md2 <- round(round(sumd) - sumd,
                                digits = 6)
-                smd <-  MD1_1 / md1_2
-                MD1_2 <-
+                smd <-  MD1 / md2
+                MD2 <-
                         round(round(smd) - smd,
                               digits = 6)
-                re <- cbind.data.frame(mz,omd,sumd,smd,MD1_1,md1_2,MD1_2)
+                re <- cbind.data.frame(mz,MD1,MD2)
 
         } else if (method == 'floor') {
-                MD1_1 <-
+                MD1 <-
                         round(floor(omd) - omd,
                               digits = 6)
-                md1_2 <- round(floor(sumd) - sumd,
+                md2 <- round(floor(sumd) - sumd,
                                digits = 6)
-                smd <-  MD1_1 / md1_2
-                MD1_2 <-
+                smd <-  MD1 / md2
+                MD2 <-
                         round(floor(smd) - smd,
                               digits = 6)
-                re <- cbind.data.frame(mz,omd,sumd,smd,MD1_1,md1_2,MD1_2)
+                re <- cbind.data.frame(mz,MD1,MD2)
 
         } else if (method == 'ceiling'){
-                MD1_1 <-
+                MD1 <-
                         round(ceiling(signif(omd)) - omd,
                               digits = 6)
-                md1_2 <- round(ceiling(signif(sumd))- sumd,
+                md2 <- round(ceiling(signif(sumd))- sumd,
                                digits = 6)
-                smd <-  MD1_1 / md1_2
-                MD1_2 <-
+                smd <-  MD1 / md2
+                MD2 <-
                         round(ceiling(signif(smd)) - smd,
                               digits = 6)
-                re <- cbind.data.frame(mz,omd,sumd,smd,MD1_1,md1_2,MD1_2)
+                re <- cbind.data.frame(mz,MD1,MD1)
         }
         } else if (length(cus) == 3) {
                 omd <- mz * round(cus[1]) / cus[1]
@@ -117,65 +117,65 @@ getmdh <- function(mz,cus = c('CH2,H2'), method = 'round'){
                 tumd <- cus[3] * round(cus[1]) / cus[1]
 
                 if (method == 'round') {
-                        MD1_1 <-
+                        MD1 <-
                                 round(round(omd) - omd,
                                       digits = 6)
-                        md1_2 <- round(round(sumd) - sumd,
+                        md2 <- round(round(sumd) - sumd,
                                        digits = 6)
-                        md1_3 <- round(round(tumd) - tumd,
+                        md3 <- round(round(tumd) - tumd,
                                        digits = 6)
-                        smd <-  MD1_1 / md1_2
-                        tsmd <- md1_3 / md1_2
-                        MD1_2 <-
+                        smd <-  MD1 / md2
+                        tsmd <- md3 / md2
+                        MD2 <-
                                 round(round(smd) - smd,
                                       digits = 6)
-                        md1_3 <- round(round(tsmd) - tsmd,
+                        md3 <- round(round(tsmd) - tsmd,
                                        digits = 6)
-                        tmd <- MD1_2 / md1_3
-                        MD1_3 <-
+                        tmd <- MD2 / md3
+                        MD3 <-
                                 round(round(tmd) - tmd,
                                       digits = 6)
-                        re <- cbind.data.frame(mz,omd,sumd,smd,MD1_1,md1_2,md1_3,tsmd,tmd,MD1_2,MD1_3)
+                        re <- cbind.data.frame(mz,MD1,MD2,MD3)
                 } else if (method == 'floor') {
-                        MD1_1 <-
+                        MD1 <-
                                 round(floor(omd) - omd,
                                       digits = 6)
-                        md1_2 <- round(floor(sumd) - sumd,
+                        md2 <- round(floor(sumd) - sumd,
                                        digits = 6)
-                        md1_3 <- round(floor(tumd) - tumd,
+                        md3 <- round(floor(tumd) - tumd,
                                        digits = 6)
-                        smd <-  MD1_1 / md1_2
-                        tsmd <- md1_3 / md1_2
-                        MD1_2 <-
+                        smd <-  MD1 / md2
+                        tsmd <- md3 / md2
+                        MD2 <-
                                 round(floor(smd) - smd,
                                       digits = 6)
-                        md1_3 <- round(floor(tsmd) - tsmd,
+                        md3 <- round(floor(tsmd) - tsmd,
                                        digits = 6)
-                        tmd <- MD1_2 / md1_3
-                        MD1_3 <-
+                        tmd <- MD2 / md3
+                        MD3 <-
                                 round(floor(tmd) - tmd,
                                       digits = 6)
-                        re <- cbind.data.frame(mz,omd,sumd,smd,MD1_1,md1_2,md1_3,tsmd,tmd,MD1_2,MD1_3)
+                        re <- cbind.data.frame(mz,MD1,MD2,MD3)
                 } else{
-                        MD1_1 <-
+                        MD1 <-
                                 round(ceiling(omd) - omd,
                                       digits = 6)
-                        md1_2 <- round(ceiling(sumd) - sumd,
+                        md2 <- round(ceiling(sumd) - sumd,
                                        digits = 6)
-                        md1_3 <- round(ceiling(tumd) - tumd,
+                        md3 <- round(ceiling(tumd) - tumd,
                                        digits = 6)
-                        smd <-  MD1_1 / md1_2
-                        tsmd <- md1_3 / md1_2
-                        MD1_2 <-
+                        smd <-  MD1 / md2
+                        tsmd <- md3 / md2
+                        MD2 <-
                                 round(ceiling(smd) - smd,
                                       digits = 6)
-                        md1_3 <- round(ceiling(tsmd) - tsmd,
+                        md3 <- round(ceiling(tsmd) - tsmd,
                                        digits = 6)
-                        tmd <- MD1_2 / md1_3
-                        MD1_3 <-
+                        tmd <- MD2 / md3
+                        MD3 <-
                                 round(ceiling(tmd) - tmd,
                                       digits = 6)
-                        re <- cbind.data.frame(mz,omd,sumd,smd,MD1_1,md1_2,md1_3,tsmd,tmd,MD1_2,MD1_3)
+                        re <- cbind.data.frame(mz,MD1,MD2,MD3)
                 }
 
         } else if (length(cus) > 3) {
@@ -185,65 +185,65 @@ getmdh <- function(mz,cus = c('CH2,H2'), method = 'round'){
                 tumd <- cus[3] * round(cus[1]) / cus[1]
 
                 if (method == 'round') {
-                        MD1_1 <-
+                        MD1 <-
                                 round(round(omd) - omd,
                                       digits = 6)
-                        md1_2 <- round(round(sumd) - sumd,
+                        md2 <- round(round(sumd) - sumd,
                                        digits = 6)
-                        md1_3 <- round(round(tumd) - tumd,
+                        md3 <- round(round(tumd) - tumd,
                                        digits = 6)
-                        smd <-  MD1_1 / md1_2
-                        tsmd <- md1_3 / md1_2
-                        MD1_2 <-
+                        smd <-  MD1 / md2
+                        tsmd <- md3 / md2
+                        MD2 <-
                                 round(round(smd) - smd,
                                       digits = 6)
-                        md1_3 <- round(round(tsmd) - tsmd,
+                        md3 <- round(round(tsmd) - tsmd,
                                        digits = 6)
-                        tmd <- MD1_2 / md1_3
-                        MD1_3 <-
+                        tmd <- MD2 / md3
+                        MD3 <-
                                 round(round(tmd) - tmd,
                                       digits = 6)
-                        re <- cbind.data.frame(mz,omd,sumd,smd,MD1_1,md1_2,md1_3,tsmd,tmd,MD1_2,MD1_3)
+                        re <- cbind.data.frame(mz,MD1,MD2,MD3)
                 } else if (method == 'floor') {
-                        MD1_1 <-
+                        MD1 <-
                                 round(floor(omd) - omd,
                                       digits = 6)
-                        md1_2 <- round(floor(sumd) - sumd,
+                        md2 <- round(floor(sumd) - sumd,
                                        digits = 6)
-                        md1_3 <- round(floor(tumd) - tumd,
+                        md3 <- round(floor(tumd) - tumd,
                                        digits = 6)
-                        smd <-  MD1_1 / md1_2
-                        tsmd <- md1_3 / md1_2
-                        MD1_2 <-
+                        smd <-  MD1 / md2
+                        tsmd <- md3 / md2
+                        MD2 <-
                                 round(floor(smd) - smd,
                                       digits = 6)
-                        md1_3 <- round(floor(tsmd) - tsmd,
+                        md3 <- round(floor(tsmd) - tsmd,
                                        digits = 6)
-                        tmd <- MD1_2 / md1_3
+                        tmd <- MD2 / md3
                         MD1_3 <-
                                 round(floor(tmd) - tmd,
                                       digits = 6)
-                        re <- cbind.data.frame(mz,omd,sumd,smd,MD1_1,md1_2,md1_3,tsmd,tmd,MD1_2,MD1_3)
+                        re <- cbind.data.frame(mz,MD1,MD2,MD3)
                 } else{
-                        MD1_1 <-
+                        MD1 <-
                                 round(ceiling(omd) - omd,
                                       digits = 6)
-                        md1_2 <- round(ceiling(sumd) - sumd,
+                        md2 <- round(ceiling(sumd) - sumd,
                                        digits = 6)
-                        md1_3 <- round(ceiling(tumd) - tumd,
+                        md3 <- round(ceiling(tumd) - tumd,
                                        digits = 6)
-                        smd <-  MD1_1 / md1_2
-                        tsmd <- md1_3 / md1_2
-                        MD1_2 <-
+                        smd <-  MD1 / md2
+                        tsmd <- md3 / md2
+                        MD2 <-
                                 round(ceiling(smd) - smd,
                                       digits = 6)
-                        md1_3 <- round(ceiling(tsmd) - tsmd,
+                        md3 <- round(ceiling(tsmd) - tsmd,
                                        digits = 6)
-                        tmd <- MD1_2 / md1_3
-                        MD1_3 <-
+                        tmd <- MD2 / md3
+                        MD3 <-
                                 round(ceiling(tmd) - tmd,
                                       digits = 6)
-                        re <- cbind.data.frame(mz,omd,sumd,smd,MD1_1,md1_2,md1_3,tsmd,tmd,MD1_2,MD1_3)
+                        re <- cbind.data.frame(mz,MD1,MD2,MD3)
                 }
         } else{
 
@@ -252,19 +252,19 @@ getmdh <- function(mz,cus = c('CH2,H2'), method = 'round'){
                         MD1 <-
                                 round(round(omd) - omd,
                                       digits = 6)
-                        re <- cbind.data.frame(mz,omd,MD1)
+                        re <- cbind.data.frame(mz,MD1)
                 } else if (method == 'floor') {
                         omd <- mz * floor(cus) / cus
                         MD1 <-
                                 round(floor(omd) - omd,
                                       digits = 6)
-                        re <- cbind.data.frame(mz,omd,MD1)
+                        re <- cbind.data.frame(mz,MD1)
                 } else{
                         omd <- mz * ceiling(cus) / cus
                         MD1 <-
                                 round(ceiling(omd) - omd,
                                       digits = 6)
-                        re <- cbind.data.frame(mz,omd,MD1)
+                        re <- cbind.data.frame(mz,MD1)
                 }
         }
         return(re)

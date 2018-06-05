@@ -21,7 +21,7 @@ shinyUI(navbarPage(
                                 ),
                                 fluidRow(column(
                                         6,
-                                        textInput("cus1", "MD formula 1", value = 'CH2,H2')
+                                        textInput("cus1", "MD formula 1", value = 'CH2,O')
                                 ),
                                 column(
                                         6,

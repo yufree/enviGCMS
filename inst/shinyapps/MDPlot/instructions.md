@@ -10,9 +10,13 @@ Examples could be chemical_formula for those features that have been assigned a 
 
 After uploading the csv data, input the mass defect (MD) base in the input box(es) and click plot to show the MD plots. You can input two different MD bases that will be calculated separately and shown as “MD1” and “MD2” in the variable selection and in the datatable. 
 
-To input a second order base, insert a comma directly after the first base without any space. Examples are given below. If you input a second order MD base, then the output variables will be “MD1_1” for the first order base and “MD1_2” for the second order base.
+To input a second order base, insert a comma directly after the first base without any space. Examples are given below. If you input a second order MD base, then the output variables will be “MD1” for the first order base and “MD2” for the second order base.
 
 When you make changes on the left panel, you need to click the Plot button to update the plots and datatable. You should now be able to freely explore your dataset interactively using the input MD bases together with the plots and datatable.
+
+## Issues
+
+A known issue is about selection. When you select points in the plot, you could get the filtered data table. However, if you go on to select the filtered data table. The points on the plot would not be right. In this case, we suggest to download the filtered data table and upload again to make further visualization.
 
 ## Equation
 
@@ -48,7 +52,7 @@ Examples of chemical formula in the MD formula insert box:
 
 - $Cl-H$: calculates the addition of one Cl atom and subtraction of one H atom, corresponding to the exact mass of 33.96103. Use the minus sign “-“ to separate the base units. This app only support two different unit.
 
-- $CH2,H2$: specifies that $CH_2$ is the first-order MD unit and $H_2$ is the second-order MD unit, use comma without blank space to separate them. This app only support at most three-order mass defect units.
+- $CH2,O$: specifies that $CH_2$ is the first-order MD unit and $O$ is the second-order MD unit, use comma without blank space to separate them. This app only support at most three-order mass defect units.
 
 - $CH2,Cl-H$:  specifies that $CH_2$ is the first-order MD unit and $Cl-H$ is the second-order MD unit. Use comma without blank space to separate the units.
 
