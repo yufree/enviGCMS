@@ -16,11 +16,11 @@ When you make changes on the left panel, you need to click the Plot button to up
 
 ## Equation
 
-- Mass defect:
+- Mass Defect:
 
-$$Mass\ defect = round(measured\ mass) - measured\ mass - $$
+$$Mass\ defect = round(measured\ mass) - measured\ mass$$
 
-- Relative Mass defect
+- Relative Mass Defect
 
 $$Relative\ Mass\ defect = (round(measured\ mass) - measured\ mass )/measured\ mass * 10^6$$
 
