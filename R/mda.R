@@ -2,7 +2,9 @@
 #' @param data a chemical formula or reaction e.g. 'Cl-H', 'C2H4'
 #' @return numerical vector
 #' @examples
-#' getmass('Cl-H'))
+#' \dontrun{
+#' getmass('CH2')
+#' }
 #' @export
 getmass <- function(data) {
         if (grepl('-', data)) {
@@ -24,7 +26,9 @@ getmass <- function(data) {
 #' @param mz numeric vector for exact mass
 #' @return Relative Mass Defect
 #' @examples
+#' \dontrun{
 #' getrmd(getmass('C2H4'))
+#' }
 #' @export
 getrmd <- function(mz){
         rmd <- round((round(mz) - mz) / mz * 10 ^ 6)
@@ -34,7 +38,9 @@ getrmd <- function(mz){
 #' @param mz numeric vector for exact mass
 #' @return raw Mass Defect
 #' @examples
+#' \dontrun{
 #' getmdr(getmass('C2H4'))
+#' }
 #' @export
 getmdr <- function(mz){
         md <- round((round(mz) - mz) * 10 ^ 3)
@@ -46,7 +52,9 @@ getmdr <- function(mz){
 #' @param method you could use `round`, `floor` or `ceiling`
 #' @return high order Mass Defect with details
 #' @examples
+#' \dontrun{
 #' getmdh(getmass('C2H4'))
+#' }
 #' @export
 getmdh <- function(mz,cus = c('CH2,H2'), method = 'round'){
         getorder <- function(input) {
@@ -196,7 +204,7 @@ getmdh <- function(mz,cus = c('CH2,H2'), method = 'round'){
                                 round(round(tmd) - tmd,
                                       digits = 6)
                         re <- cbind.data.frame(mz,omd,sumd,smd,MD1_1,md1_2,md1_3,tsmd,tmd,MD1_2,MD1_3)
-                } else if (input$mdr1 == 'floor') {
+                } else if (method == 'floor') {
                         MD1_1 <-
                                 round(floor(omd) - omd,
                                       digits = 6)

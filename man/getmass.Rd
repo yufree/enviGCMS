@@ -16,5 +16,7 @@ numerical vector
 Get the exact mass of the isotopologues from a chemical formula or reaction's isotope patterns with the highest abundances
 }
 \examples{
-getmass('Cl-H'))
+\dontrun{
+getmass('CH2')
+}
 }
