@@ -308,6 +308,54 @@ getfeaturesanova <- function(list,
         df <- df[df$power > power,]
         return(df)
 }
+#' Get the overlap peaks by mass and retention time range
+#' @param list1 list with data as peaks list, mz, rt, mzrange, rtrange and group information to be overlapped
+#' @param list2 list with data as peaks list, mz, rt, mzrange, rtrange and group information to overlap
+#' @return logical index for list 1's peaks
+#' @export
+getoverlappeak <- function(list1,list2){
+        mz1 <- data.table::as.data.table(list1$mzrange)
+        rt1 <- data.table::as.data.table(list1$rtrange)
+        mz2 <- data.table::as.data.table(list2$mzrange)
+        rt2 <- data.table::as.data.table(list2$rtrange)
+        colnames(mz1) <- colnames(mz2) <- colnames(rt1) <- colnames(rt2) <- c('min','max')
+        data.table::setkey(mz2, min, max)
+        data.table::setkey(rt2, min, max)
+        overlapms <- data.table::foverlaps(mz1,mz2, which=TRUE,mult = 'first')
+        overlaprt <- data.table::foverlaps(rt1, rt2, which=TRUE,mult = 'first')
+        index <- (!is.na(overlapms))&(!is.na(overlaprt))
+        return(index)
+}
+#' Get the overlap peaks by mass range
+#' @param mzrange1 mass range 1 to be overlapped
+#' @param mzrange2 mass range 2 to overlap
+#' @return logical index for mzrange1's peaks
+#' @export
+getoverlapmass <- function(mzrange1,mzrange2){
+        mz1 <- data.table::as.data.table(mzrange1)
+        mz2 <- data.table::as.data.table(mzrange2)
+        colnames(mz1) <- colnames(mz2) <- c('min','max')
+        data.table::setkey(mz2, min, max)
+        overlapms <- data.table::foverlaps(mz1,mz2, which=TRUE,mult = 'first')
+
+        index <- (!is.na(overlapms))
+        return(index)
+}
+#' Get the overlap peaks by retention time
+#' @param rtrange1 mass range 1 to be overlapped
+#' @param rtrange2 mass range 2 to overlap
+#' @return logical index for rtrange1's peaks
+#' @export
+getoverlaprt <- function(rtrange1,rtrange2){
+        rt1 <- data.table::as.data.table(rtrange1)
+        rt2 <- data.table::as.data.table(rtrange2)
+        colnames(rt1) <- colnames(rt2) <- c('min','max')
+        data.table::setkey(rt2, min, max)
+        overlapms <- data.table::foverlaps(rt1,rt2, which=TRUE,mult = 'first')
+
+        index <- (!is.na(overlapms))
+        return(index)
+}
 
 #' plot the scatter plot for peaks list with threshold
 #' @param list list with data as peaks list, mz, rt and group information

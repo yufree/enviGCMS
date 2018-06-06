@@ -5,6 +5,7 @@
 - add support for single group plot
 - add shiny application for mass defect analysis
 - add function to compute high order mass defect
+- add function to compare two peak list by overlap
 
 # enviGCMS 0.5.0
 

@@ -5,3 +5,5 @@
 ^.travis.yml
 ^docs$
 test.csv
+hmdb2.csv
+mix.csv

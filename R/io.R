@@ -289,9 +289,11 @@ getmzrt <- function(xset, name = NULL) {
     peaks <- as.data.frame(xcms::groups(xset))
     mz <- peaks$mzmed
     rt <- peaks$rtmed
+    mzrange <- peaks[,c("mzmin","mzmax")]
+    rtrange <- peaks[,c("rtmin","rtmax")]
     # return as list
     result <- list(data = data, group = group, mz = mz,
-        rt = rt)
+        rt = rt, mzrange = mzrange, rtrange = rtrange)
     if (!is.null(name)) {
             data <- cbind(mz = list$mz, rt = list$rt, list$data)
             data <- t(cbind(group = t(cbind(mz = 'mz',rt = 'rt',t(list$group))), t(data)))
@@ -324,9 +326,11 @@ getmzrt2 <- function(xset, name = NULL) {
     peaks <- xcms::featureDefinitions(xset)
     mz <- peaks$mzmed
     rt <- peaks$rtmed
+    mzrange <- peaks[,c("mzmin","mzmax")]
+    rtrange <- peaks[,c("rtmin","rtmax")]
     # return as list
     result <- list(data = data, group = group, mz = mz,
-        rt = rt)
+        rt = rt, mzrange = mzrange, rtrange = rtrange)
     if (!is.null(name)) {
             data <- cbind(mz = list$mz, rt = list$rt, list$data)
             data <- t(cbind(group = t(cbind(mz = 'mz',rt = 'rt',t(list$group))), t(data)))
