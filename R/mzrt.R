@@ -130,7 +130,7 @@ getdoe <- function(list,
         cols <- colnames(lv)
         # one peak for metabolomics is hard to happen
         if (sum(nrow(lv) > 1) != 0) {
-                if (ncol(lv) > 1) {
+                if (sum(NCOL(lv) > 1)) {
                         mlv <- do.call(paste0, c(lv[cols], sep = ""))
                 } else {
                         mlv <- unlist(lv)
