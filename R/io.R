@@ -268,6 +268,37 @@ getupload2 <- function(xset, value = "into", name = "Peaklist") {
     return(data)
 }
 
+#' Get the csv files to be submitted to Metaboanalyst
+#' @param list list with data as peaks list, mz, rt and group information
+#' @param name file name
+#' @return dataframe with data needed for Metaboanalyst if your want to perform local analysis.
+#' @examples
+#' \dontrun{
+#' library(faahKO)
+#' cdfpath <- system.file('cdf', package = 'faahKO')
+#' xset <- getdata2(cdfpath,
+#' ppp = xcms::MatchedFilterParam(),
+#' rtp = xcms::ObiwarpParam(),
+#' gpp = xcms::PeakDensityParam())
+#' xset <- enviGCMS::getmzrt2(xset)
+#' getupload3(xset)
+#' }
+#' @seealso \code{\link{getmzrt}}, \code{\link{getmzrt2}}
+#' @export
+getupload3 <- function(list, name = "Peaklist") {
+        data <- rbind(group = as.character(list$group),
+                      data)
+        # peaks info
+        mz <- list$mz
+        rt <- list$rt
+        rownames(data) <- c("group", paste0(round(mz, 4), "/",
+                                            round(rt, 4)))
+        filename <- paste0(name, ".csv")
+        utils::write.csv(data, file = filename)
+        return(data)
+}
+
+
 #' Get the mzrt profile and group information for batch correction and plot as a list
 #' @param xset xcmsSet objects
 #' @param name file name for csv file, default NULL
