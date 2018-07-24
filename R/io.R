@@ -287,7 +287,7 @@ getupload2 <- function(xset, value = "into", name = "Peaklist") {
 #' @export
 getupload3 <- function(list, name = "Peaklist") {
         data <- rbind(group = as.character(list$group),
-                      data)
+                      list$data)
         # peaks info
         mz <- list$mz
         rt <- list$rt
