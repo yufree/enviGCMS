@@ -327,8 +327,8 @@ getmzrt <- function(xset, name = NULL) {
         rt = rt, mzrange = mzrange, rtrange = rtrange)
     if (!is.null(name)) {
             data <- cbind(mz = result$mz, rt = result$rt, result$data)
-            rownames(data) <- c("group", paste0(round(mz, 4), "/",
-                                                round(rt, 4)))
+            rownames(data) <- paste0(round(mz, 4), "/",
+                                                round(rt, 4))
             data <- t(cbind(group = t(cbind(mz = 'mz',rt = 'rt',t(result$group))), t(data)))
         utils::write.csv(data, file = paste0(name, ".csv"))
     }
@@ -366,8 +366,8 @@ getmzrt2 <- function(xset, name = NULL) {
         rt = rt, mzrange = mzrange, rtrange = rtrange)
     if (!is.null(name)) {
             data <- cbind(mz = result$mz, rt = result$rt, result$data)
-            rownames(data) <- c("group", paste0(round(mz, 4), "/",
-                                                round(rt, 4)))
+            rownames(data) <- paste0(round(mz, 4), "/",
+                                                round(rt, 4))
             data <- t(cbind(group = t(cbind(mz = 'mz',rt = 'rt',t(result$group))), t(data)))
             utils::write.csv(data, file = paste0(name, ".csv"))
     }
