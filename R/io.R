@@ -298,6 +298,39 @@ getupload3 <- function(list, name = "Peaklist") {
         return(data)
 }
 
+#' Get the csv files to be submitted to pmd analysis
+#' @param list list with data as peaks list, mz, rt and group information
+#' @param name file name
+#' @return dataframe with data needed for pmd if your want to perform local analysis.
+#' @examples
+#' \dontrun{
+#' library(faahKO)
+#' cdfpath <- system.file('cdf', package = 'faahKO')
+#' xset <- getdata2(cdfpath,
+#' ppp = xcms::MatchedFilterParam(),
+#' rtp = xcms::ObiwarpParam(),
+#' gpp = xcms::PeakDensityParam())
+#' xset <- enviGCMS::getmzrt2(xset)
+#' getpmd(xset)
+#' }
+#' @seealso \code{\link{getmzrt}}, \code{\link{getmzrt2}}
+#' @export
+getpmd <- function(list, name = "pmdlist") {
+        data <- rbind(group = as.character(list$group),
+                      list$data)
+        # peaks info
+        mz <- list$mz
+        rt <- list$rt
+        rownames(data) <- c("group", paste0(round(mz, 4), "/",
+                                            round(rt, 4)))
+        data <- cbind(mz = mz, rt = rt, list$data)
+        rownames(data) <- paste0(round(mz, 4), "/",
+                                 round(rt, 4))
+        data <- t(cbind(group = t(cbind(mz = 'mz',rt = 'rt',t(list$group))), t(data)))
+        filename <- paste0(name, ".csv")
+        utils::write.csv(data, file = filename)
+        return(data)
+}
 
 #' Get the mzrt profile and group information for batch correction and plot as a list
 #' @param xset xcmsSet objects
