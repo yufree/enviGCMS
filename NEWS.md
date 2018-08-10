@@ -7,6 +7,7 @@
 - add function to compute high order mass defect
 - add function to compare two peak list by overlap
 - add function to output csv file from list object
+- add function to perform pmd analysis
 - fix wrong object name in getmzrt/getmzrt2
 
 # enviGCMS 0.5.0
