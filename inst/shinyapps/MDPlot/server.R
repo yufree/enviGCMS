@@ -95,6 +95,14 @@ shinyServer(function(input, output, session) {
                                                 label = 'Y variable for plot',
                                                 choices = names(MD_data())
                                         )
+                                ),
+                                column(
+                                        12,
+                                        selectInput(
+                                                inputId = 'zvar1',
+                                                label = 'Z variable for plot',
+                                                choices = names(MD_data())
+                                        )
                                 )
                         )
 
@@ -136,6 +144,22 @@ shinyServer(function(input, output, session) {
                                                 label = 'Y variable for Plot 2',
                                                 choices = names(MD_data()),
                                                 selected = names(MD_data())[4]
+                                        )
+                                ),
+                                column(
+                                        6,
+                                        selectInput(
+                                                inputId = 'zvar1',
+                                                label = 'Z variable for plot',
+                                                choices = names(MD_data())
+                                        )
+                                ),
+                                column(
+                                        6,
+                                        selectInput(
+                                                inputId = 'zvar2',
+                                                label = 'Z variable for plot 2',
+                                                choices = names(MD_data())
                                         )
                                 )
                         )
@@ -195,6 +219,9 @@ shinyServer(function(input, output, session) {
                 MDplot_x1 <-
                         m[, input$xvar1]
 
+                MDplot_z1 <-
+                        m[, input$zvar1]
+
                 # Checkbox option for size of markers by intensity
                 if (input$ins) {
                         intensity <- m$intensity
@@ -206,9 +233,11 @@ shinyServer(function(input, output, session) {
                         MDplot_x2 <-
                                 m[, input$xvar2]
 
-
                         MDplot_y2 <-
                                 m[, input$yvar2]
+
+                        MDplot_z2 <-
+                                m[, input$zvar2]
 
                 }
 
@@ -220,6 +249,7 @@ shinyServer(function(input, output, session) {
                                         plot_ly(
                                                 x = MDplot_x1,
                                                 y = MDplot_y1,
+                                                symbol = MDplot_z1,
                                                 type = "scatter",
                                                 size = intensity,
                                                 mode = "markers",
@@ -254,6 +284,7 @@ shinyServer(function(input, output, session) {
                                         add_trace(
                                                 x = MDplot_x1,
                                                 y = MDplot_y1,
+                                                symbol = MDplot_z1,
                                                 type = "scatter",
                                                 size = intensity,
                                                 mode = "markers",
@@ -311,6 +342,7 @@ shinyServer(function(input, output, session) {
                                                 plot_ly(
                                                         x = MDplot_x2,
                                                         y = MDplot_y2,
+                                                        symbol = MDplot_z2,
                                                         type = "scatter",
                                                         size = intensity,
                                                         mode = "markers",
@@ -345,6 +377,7 @@ shinyServer(function(input, output, session) {
                                                 add_trace(
                                                         x = MDplot_x2,
                                                         y = MDplot_y2,
+                                                        symbol = MDplot_z2,
                                                         type = "scatter",
                                                         size = intensity,
                                                         mode = "markers",
