@@ -100,8 +100,10 @@ shinyServer(function(input, output, session) {
                                         12,
                                         selectInput(
                                                 inputId = 'zvar1',
-                                                label = 'Z variable for plot',
-                                                choices = names(MD_data())
+                                                label = 'Symbol variable for plot',
+                                                choices = list(`NULL` = 'NA',`Variable` = names(MD_data()))
+                                                ,
+                                                selected = 'NULL'
                                         )
                                 )
                         )
@@ -150,16 +152,18 @@ shinyServer(function(input, output, session) {
                                         6,
                                         selectInput(
                                                 inputId = 'zvar1',
-                                                label = 'Z variable for plot',
-                                                choices = names(MD_data())
+                                                label = 'Symbol variable for plot',
+                                                choices = list(`NULL` = 'NA',`Variable` = names(MD_data())),
+                                                selected = 'NULL'
                                         )
                                 ),
                                 column(
                                         6,
                                         selectInput(
                                                 inputId = 'zvar2',
-                                                label = 'Z variable for plot 2',
-                                                choices = names(MD_data())
+                                                label = 'Symbol variable for plot 2',
+                                                choices = list(`NULL` = 'NA',`Variable` = names(MD_data())),
+                                                selected = 'NULL'
                                         )
                                 )
                         )
@@ -219,8 +223,11 @@ shinyServer(function(input, output, session) {
                 MDplot_x1 <-
                         m[, input$xvar1]
 
-                MDplot_z1 <-
-                        m[, input$zvar1]
+                if(input$zvar1 == 'NA'){
+                        MDplot_z1 <- 1
+                }else{
+                        MDplot_z1 <- m[, input$zvar1]
+                }
 
                 # Checkbox option for size of markers by intensity
                 if (input$ins) {
@@ -236,8 +243,11 @@ shinyServer(function(input, output, session) {
                         MDplot_y2 <-
                                 m[, input$yvar2]
 
-                        MDplot_z2 <-
-                                m[, input$zvar2]
+                        if(input$zvar2 == 'NA'){
+                                MDplot_z2 <- 1
+                        }else{
+                                MDplot_z2 <- m[, input$zvar2]
+                        }
 
                 }
 
