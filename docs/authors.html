@@ -18,13 +18,22 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
+
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="pkgdown.css" rel="stylesheet">
-<script src="jquery.sticky-kit.min.js"></script>
 <script src="pkgdown.js"></script>
-  
-  
+
+
+
+<meta property="og:title" content="Citation and Authors" />
+
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +56,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">enviGCMS</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="index.html">enviGCMS</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.5.1</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -73,7 +86,7 @@
   </ul>
 </li>
 <li>
-  <a href="news/index.html">News</a>
+  <a href="news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -85,6 +98,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -92,16 +106,15 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="contents col-md-9">
-
     <div class="page-header">
       <h1>Citation</h1>
     </div>
 
-    <p>Yu M, Hou X, Liu Q, Wang Y, Liu J and Jiang G (2017).
+    <p>Yu M, Hou X, Liu Q, Wang Y, Liu J, Jiang G (2017).
 &ldquo;Evaluation and reduction of the analytical uncertainties in GC-MS analysis using a boundary regression model.&rdquo;
-<em>Talanta</em>, <b>164</b>, pp. 141 - 147.
+<em>Talanta</em>, <b>164</b>, 141 - 147.
 ISSN 0039-9140, doi: <a href="http://doi.org/10.1016/j.talanta.2016.11.046">10.1016/j.talanta.2016.11.046</a>, <a href="http://www.sciencedirect.com/science/article/pii/S0039914016309298">http://www.sciencedirect.com/science/article/pii/S0039914016309298</a>. 
 </p>
     <pre>@Article{,
@@ -125,8 +138,12 @@ ISSN 0039-9140, doi: <a href="http://doi.org/10.1016/j.talanta.2016.11.046">10.1
 
     <ul class="list-unstyled">
       <li>
-        <p><strong>Miao YU</strong>. Author, maintainer.
-        <br /><small>0000-0002-2804-6014</small></p>
+        <p><strong>Miao YU</strong>. Author, maintainer. <a href='https://orcid.org/0000-0002-2804-6014' target='orcid.widget'><img src='https://members.orcid.org/sites/default/files/vector_iD_icon.svg' class='orcid' height='16'></a>
+        </p>
+      </li>
+      <li>
+        <p><strong>Thanh Wang</strong>. Contributor. <a href='https://orcid.org/0000-0002-5729-1908' target='orcid.widget'><img src='https://members.orcid.org/sites/default/files/vector_iD_icon.svg' class='orcid' height='16'></a>
+        </p>
       </li>
     </ul>
 
@@ -147,5 +164,8 @@ ISSN 0039-9140, doi: <a href="http://doi.org/10.1016/j.talanta.2016.11.046">10.1
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

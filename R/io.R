@@ -151,7 +151,7 @@ getdata2 <- function(path, index = F, snames = NULL, sclass = NULL,
     phenoData = NULL, BPPARAM = BiocParallel::SnowParam(),
     mode = "onDisk", ppp = xcms::CentWaveParam(ppm = 5,
         peakwidth = c(5, 25), prefilter = c(3, 5000)),
-    rtp = xcms::PeakGroupsParam(minFraction = 0.67), gpp = xcms::PeakDensityParam(sampleGroups = 1,
+    rtp = xcms::ObiwarpParam(binSize = 1), gpp = xcms::PeakDensityParam(sampleGroups = 1,
         minFraction = 0.67, bw = 2, binSize = 0.025), fpp = xcms::FillChromPeaksParam()) {
     files <- list.files(path, recursive = TRUE, full.names = TRUE)
     if (index) {
@@ -196,19 +196,19 @@ getdata2 <- function(path, index = F, snames = NULL, sclass = NULL,
     gpp@sampleGroups <- pdata$sample_group
     xod <- xcms::findChromPeaks(raw_data, param = ppp,
         BPPARAM = BPPARAM)
-    xod <- xcms::groupChromPeaks(xod, param = gpp)
     xod <- xcms::adjustRtime(xod, param = rtp)
     xod <- xcms::groupChromPeaks(xod, param = gpp)
     xod <- xcms::fillChromPeaks(xod, param = fpp, BPPARAM = BPPARAM)
     return(xod)
 }
 
-#' Get the csv files to be submitted to Metaboanalyst
-#' @param xset the xcmsset object which you want to submitted to Metaboanalyst
+#' Get the csv files from xcmsset/XCMSnExp/list object
+#' @param xset the xcmsset/XCMSnExp/list object which you want to submitted to Metaboanalyst
 #' @param method parameter for groupval function
 #' @param value parameter for groupval function
 #' @param name file name
-#' @return dataframe with data needed for Metaboanalyst if your want to perform local analysis.
+#' @param type m means  Metaboanalyst, a means xMSannotator, o means full infomation csv
+#' @return dataframe with data needed for Metaboanalyst/xMSannotator/pmd if your want to perform local analysis.
 #' @examples
 #' \dontrun{
 #' library(faahKO)
@@ -216,23 +216,57 @@ getdata2 <- function(path, index = F, snames = NULL, sclass = NULL,
 #' xset <- getdata(cdfpath, pmethod = ' ')
 #' getupload(xset)
 #' }
-#' @seealso \code{\link{getdata}},\code{\link{getupload2}}, \code{\link{getmzrt}}
+#' @seealso \code{\link{getdata}}, \code{\link{getmzrt}}
 #' @export
-getupload <- function(xset, method = "medret", value = "into",
-    name = "Peaklist") {
-    peakIntensities <- xcms::groupval(xset, method = method,
-        value = value)
+getupload <- function(xset, method = "medret", value = "into", name = "Peaklist", type = 'm') {
+        if(class(xset)=='xcmsSet'){
+                data <- xcms::groupval(xset, method = method,
+                                                  value = value)
+                # peaks info
+                peaks <- as.data.frame(xcms::groups(xset))
+                mz <- peaks$mzmed
+                rt <- peaks$rtmed
+                group <- as.character(xcms::phenoData(xset)$class)
 
-    data <- rbind(group = as.character(xcms::phenoData(xset)$class),
-        peakIntensities)
-    # peaks info
-    peaks <- as.data.frame(xcms::groups(xset))
-    mz <- peaks$mzmed
-    rt <- peaks$rtmed
-    rownames(data) <- c("group", paste0(round(mz, 4), "/",
-        round(rt, 4)))
-    filename <- paste0(name, ".csv")
-    utils::write.csv(data, file = filename)
+        }else if(class(xset)=='XCMSnExp'){
+                data <- xcms::featureValues(xset, value = value)
+                group <- as.character(xset@phenoData@data)
+
+                # peaks info
+                peaks <- xcms::featureDefinitions(xset)
+                mz <- peaks$mzmed
+                rt <- peaks$rtmed
+        }else if(class(xset) == 'list'){
+                data <- list$data
+                group <- as.character(list$group)
+                mz <- list$mz
+                rt <- list$rt
+
+        }else{
+                stop('The object should be xcmsset/XCMSnExp/list.')
+        }
+
+        if(type == 'm'){
+                data <- rbind(group,data)
+                rownames(data) <- c("group", paste0(round(mz, 4), "/",
+                                                    round(rt, 4)))
+                filename <- paste0(name, ".csv")
+                utils::write.csv(data, file = filename)
+        }else if(type == 'a'){
+                mz <- xcms::groups(xset)[, 1]
+                time <- xcms::groups(xset)[, 4]
+                data <- as.data.frame(cbind(mz, time, data))
+                data <- unique(data)
+                filename <- paste0(name, ".csv")
+                utils::write.csv(data, file = filename)
+        }else{
+                data <- cbind(mz = mz, rt = rt, data = data)
+                rownames(data) <- paste0(round(mz, 4), "/",
+                                         round(rt, 4))
+                data <- t(cbind(group = t(cbind(mz = 'mz',rt = 'rt',t(list$group))), t(data)))
+                filename <- paste0(name, ".csv")
+                utils::write.csv(data, file = filename)
+        }
     return(data)
 }
 
@@ -245,27 +279,16 @@ getupload <- function(xset, method = "medret", value = "into",
 #' \dontrun{
 #' library(faahKO)
 #' cdfpath <- system.file('cdf', package = 'faahKO')
-#' xset <- getdata2(cdfpath,
-#' ppp = xcms::MatchedFilterParam(),
-#' rtp = xcms::ObiwarpParam(),
-#' gpp = xcms::PeakDensityParam())
+#' xset <- getdata2(cdfpath)
 #' getupload2(xset)
 #' }
 #' @seealso \code{\link{getdata2}},\code{\link{getupload}}, \code{\link{getmzrt2}}
 #' @export
 getupload2 <- function(xset, value = "into", name = "Peaklist") {
-    data <- xcms::featureValues(xset, value = value)
-    data <- rbind(group = as.character(xset@phenoData@data),
-        data)
-    # peaks info
-    peaks <- xcms::featureDefinitions(xset)
-    mz <- peaks$mzmed
-    rt <- peaks$rtmed
-    rownames(data) <- c("group", paste0(round(mz, 4), "/",
-        round(rt, 4)))
-    filename <- paste0(name, ".csv")
-    utils::write.csv(data, file = filename)
-    return(data)
+        .Deprecated()
+        message(
+                "This function has been deprecated and you could use getupload to get csv file."
+        )
 }
 
 #' Get the csv files to be submitted to Metaboanalyst
@@ -286,54 +309,14 @@ getupload2 <- function(xset, value = "into", name = "Peaklist") {
 #' @seealso \code{\link{getmzrt}}, \code{\link{getmzrt2}}
 #' @export
 getupload3 <- function(list, name = "Peaklist") {
-        data <- rbind(group = as.character(list$group),
-                      list$data)
-        # peaks info
-        mz <- list$mz
-        rt <- list$rt
-        rownames(data) <- c("group", paste0(round(mz, 4), "/",
-                                            round(rt, 4)))
-        filename <- paste0(name, ".csv")
-        utils::write.csv(data, file = filename)
-        return(data)
-}
-
-#' Get the csv files to be submitted to pmd analysis
-#' @param list list with data as peaks list, mz, rt and group information
-#' @param name file name
-#' @return dataframe with data needed for pmd if your want to perform local analysis.
-#' @examples
-#' \dontrun{
-#' library(faahKO)
-#' cdfpath <- system.file('cdf', package = 'faahKO')
-#' xset <- getdata2(cdfpath,
-#' ppp = xcms::MatchedFilterParam(),
-#' rtp = xcms::ObiwarpParam(),
-#' gpp = xcms::PeakDensityParam())
-#' xset <- enviGCMS::getmzrt2(xset)
-#' getpmd(xset)
-#' }
-#' @seealso \code{\link{getmzrt}}, \code{\link{getmzrt2}}
-#' @export
-getpmd <- function(list, name = "pmdlist") {
-        data <- rbind(group = as.character(list$group),
-                      list$data)
-        # peaks info
-        mz <- list$mz
-        rt <- list$rt
-        rownames(data) <- c("group", paste0(round(mz, 4), "/",
-                                            round(rt, 4)))
-        data <- cbind(mz = mz, rt = rt, list$data)
-        rownames(data) <- paste0(round(mz, 4), "/",
-                                 round(rt, 4))
-        data <- t(cbind(group = t(cbind(mz = 'mz',rt = 'rt',t(list$group))), t(data)))
-        filename <- paste0(name, ".csv")
-        utils::write.csv(data, file = filename)
-        return(data)
+        .Deprecated()
+        message(
+                "This function has been deprecated and you could use getupload to get csv file."
+        )
 }
 
 #' Get the mzrt profile and group information for batch correction and plot as a list
-#' @param xset xcmsSet objects
+#' @param xset xcmsSet/XCMSnExp objects
 #' @param name file name for csv file, default NULL
 #' @return list with rtmz profile and group infomation
 #' @examples
@@ -343,14 +326,21 @@ getpmd <- function(list, name = "pmdlist") {
 #' xset <- getdata(cdfpath, pmethod = ' ')
 #' getmzrt(xset)
 #' }
-#' @seealso \code{\link{getdata}},\code{\link{getupload}}, \code{\link{getmzrt2}}, \code{\link{getdoe}},\code{\link{getmzrt}}
+#' @seealso \code{\link{getdata}},\code{\link{getupload}}, \code{\link{getdoe}},\code{\link{getmzrt}}
 #' @export
 getmzrt <- function(xset, name = NULL) {
+        if(class(xset)=='xcmsSet'){
     data <- xcms::groupval(xset, value = "into")
     # group info
     group <- xcms::phenoData(xset)
     # peaks info
-    peaks <- as.data.frame(xcms::groups(xset))
+    peaks <- as.data.frame(xcms::groups(xset))}else{
+            data <- xcms::featureValues(xset, value = "into")
+            # group info
+            group <- xset@phenoData@data
+            # peaks info
+            peaks <- xcms::featureDefinitions(xset)
+    }
     mz <- peaks$mzmed
     rt <- peaks$rtmed
     mzrange <- peaks[,c("mzmin","mzmax")]
@@ -385,26 +375,10 @@ getmzrt <- function(xset, name = NULL) {
 #' @seealso \code{\link{getdata2}},\code{\link{getupload2}}, \code{\link{getmzrt}}, \code{\link{getdoe}},\code{\link{getmzrtcsv}}
 #' @export
 getmzrt2 <- function(xset, name = NULL) {
-    data <- xcms::featureValues(xset, value = "into")
-    # group info
-    group <- xset@phenoData@data
-    # peaks info
-    peaks <- xcms::featureDefinitions(xset)
-    mz <- peaks$mzmed
-    rt <- peaks$rtmed
-    mzrange <- peaks[,c("mzmin","mzmax")]
-    rtrange <- peaks[,c("rtmin","rtmax")]
-    # return as list
-    result <- list(data = data, group = group, mz = mz,
-        rt = rt, mzrange = mzrange, rtrange = rtrange)
-    if (!is.null(name)) {
-            data <- cbind(mz = result$mz, rt = result$rt, result$data)
-            rownames(data) <- paste0(round(mz, 4), "/",
-                                                round(rt, 4))
-            data <- t(cbind(group = t(cbind(mz = 'mz',rt = 'rt',t(result$group))), t(data)))
-            utils::write.csv(data, file = paste0(name, ".csv"))
-    }
-    return(result)
+        .Deprecated()
+        message(
+                "This function has been deprecated and you could use getmzrt to get list object or csv file."
+        )
 }
 
 #' Get the mzrt profile and group information for batch correction and plot as a list directly from path with default setting
@@ -434,7 +408,7 @@ getmr <- function(path, index = F, BPPARAM = BiocParallel::SnowParam(),
 #' Covert the peaks list csv file into list
 #' @param path the path to your csv file
 #' @return list with rtmz profile and group infomation
-#' @seealso \code{\link{getmzrt}}, \code{\link{getmzrt2}}
+#' @seealso \code{\link{getmzrt}}
 #' @export
 getmzrtcsv <- function(path) {
     dataraw <- utils::read.csv(path, skip = 1)

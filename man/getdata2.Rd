@@ -5,11 +5,11 @@
 \title{Get XCMSnExp object in one step from structured folder path for xcms 3.}
 \usage{
 getdata2(path, index = F, snames = NULL, sclass = NULL,
-  phenoData = NULL, BPPARAM = BiocParallel::SnowParam(), mode = "onDisk",
-  ppp = xcms::CentWaveParam(ppm = 5, peakwidth = c(5, 25), prefilter = c(3,
-  5000)), rtp = xcms::PeakGroupsParam(minFraction = 0.67),
-  gpp = xcms::PeakDensityParam(sampleGroups = 1, minFraction = 0.67, bw = 2,
-  binSize = 0.025), fpp = xcms::FillChromPeaksParam())
+  phenoData = NULL, BPPARAM = BiocParallel::SnowParam(),
+  mode = "onDisk", ppp = xcms::CentWaveParam(ppm = 5, peakwidth = c(5,
+  25), prefilter = c(3, 5000)), rtp = xcms::ObiwarpParam(binSize = 1),
+  gpp = xcms::PeakDensityParam(sampleGroups = 1, minFraction = 0.67, bw =
+  2, binSize = 0.025), fpp = xcms::FillChromPeaksParam())
 }
 \arguments{
 \item{path}{the path to your data}

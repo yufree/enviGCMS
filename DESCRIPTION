@@ -45,4 +45,4 @@ Imports: xcms,
     dplyr,
     plotly,
     broom
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0

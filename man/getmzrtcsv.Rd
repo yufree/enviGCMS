@@ -16,5 +16,5 @@ list with rtmz profile and group infomation
 Covert the peaks list csv file into list
 }
 \seealso{
-\code{\link{getmzrt}}, \code{\link{getmzrt2}}
+\code{\link{getmzrt}}
 }

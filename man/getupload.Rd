@@ -2,24 +2,27 @@
 % Please edit documentation in R/io.R
 \name{getupload}
 \alias{getupload}
-\title{Get the csv files to be submitted to Metaboanalyst}
+\title{Get the csv files from xcmsset/XCMSnExp/list object}
 \usage{
-getupload(xset, method = "medret", value = "into", name = "Peaklist")
+getupload(xset, method = "medret", value = "into", name = "Peaklist",
+  type = "m")
 }
 \arguments{
-\item{xset}{the xcmsset object which you want to submitted to Metaboanalyst}
+\item{xset}{the xcmsset/XCMSnExp/list object which you want to submitted to Metaboanalyst}
 
 \item{method}{parameter for groupval function}
 
 \item{value}{parameter for groupval function}
 
 \item{name}{file name}
+
+\item{type}{m means  Metaboanalyst, a means xMSannotator, o means full infomation csv}
 }
 \value{
-dataframe with data needed for Metaboanalyst if your want to perform local analysis.
+dataframe with data needed for Metaboanalyst/xMSannotator/pmd if your want to perform local analysis.
 }
 \description{
-Get the csv files to be submitted to Metaboanalyst
+Get the csv files from xcmsset/XCMSnExp/list object
 }
 \examples{
 \dontrun{
@@ -30,5 +33,5 @@ getupload(xset)
 }
 }
 \seealso{
-\code{\link{getdata}},\code{\link{getupload2}}, \code{\link{getmzrt}}
+\code{\link{getdata}}, \code{\link{getmzrt}}
 }

@@ -100,13 +100,9 @@ In environmetnal non-target analysis, when multiple samples are collected, probl
 
 - `getdata2` could be used to get the `XCMSnExp` object in one step with optimized methods 
 
-- `getupload` could get the csv files to be submitted to Metaboanalyst from `xcmsSet` object
+- `getupload` could get the csv files to be submitted to Metaboanalyst from `xcmsSet`/`XCMSnExp`/`list` object
 
-- `getupload2` could get the csv files to be submitted to Metaboanalyst from `XCMSnExp` object
-
-- `getmzrt` could get a list or csv files with peaks list, mz, retention time and class of samples from `xcmsSet` object
-
-- `getmzrt2` could get a list or csv files with peaks list, mz, retention time and class of samples from `XCMSnExp` object
+- `getmzrt` could get a list or csv files with peaks list, mz, retention time and class of samples from `xcmsSet`/`XCMSnExp` object
 
 - `getmzrtcsv` could read in the csv files and return a list for peaks list
 

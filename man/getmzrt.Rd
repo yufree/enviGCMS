@@ -7,7 +7,7 @@
 getmzrt(xset, name = NULL)
 }
 \arguments{
-\item{xset}{xcmsSet objects}
+\item{xset}{xcmsSet/XCMSnExp objects}
 
 \item{name}{file name for csv file, default NULL}
 }
@@ -26,5 +26,5 @@ getmzrt(xset)
 }
 }
 \seealso{
-\code{\link{getdata}},\code{\link{getupload}}, \code{\link{getmzrt2}}, \code{\link{getdoe}},\code{\link{getmzrt}}
+\code{\link{getdata}},\code{\link{getupload}}, \code{\link{getdoe}},\code{\link{getmzrt}}
 }

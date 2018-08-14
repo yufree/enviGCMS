@@ -4,8 +4,8 @@
 \alias{plotmrc}
 \title{plot the diff scatter plot for one xcmsset objects with threshold between two groups}
 \usage{
-plotmrc(list, ms = c(100, 800), inscf = 5, rsdcf = 30, imputation = "l",
-  index = NULL, ...)
+plotmrc(list, ms = c(100, 800), inscf = 5, rsdcf = 30,
+  imputation = "l", index = NULL, ...)
 }
 \arguments{
 \item{list}{list with data as peaks list, mz, rt and group information}

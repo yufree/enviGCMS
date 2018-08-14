@@ -4,8 +4,8 @@
 \alias{gifmr}
 \title{plot scatter plot for rt-mz profile and output gif file for mutiple groups}
 \usage{
-gifmr(list, ms = c(100, 500), rsdcf = 30, inscf = 5, imputation = "i",
-  index = NULL, file = "test")
+gifmr(list, ms = c(100, 500), rsdcf = 30, inscf = 5,
+  imputation = "i", index = NULL, file = "test")
 }
 \arguments{
 \item{list}{list with data as peaks list, mz, rt and group information}

@@ -2,6 +2,7 @@
 
 ## Major changes
 
+- combine xcms and xcms 3 object function
 - add support for single group plot
 - add shiny application for mass defect analysis
 - add function to compute high order mass defect

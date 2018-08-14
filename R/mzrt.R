@@ -10,7 +10,7 @@
 #' getimputation(list)
 #' }
 #' @export
-#' @seealso \code{\link{getdata2}},\code{\link{getdata}}, \code{\link{getmzrt}},\code{\link{getmzrt2}}, \code{\link{getdoe}}, \code{\link{getmr}}
+#' @seealso \code{\link{getdata2}},\code{\link{getdata}}, \code{\link{getmzrt}},\code{\link{getdoe}}, \code{\link{getmr}}
 getimputation <- function(list, method = "l") {
         data <- list$data
         mz <- list$mz
@@ -64,7 +64,7 @@ getimputation <- function(list, method = "l") {
 #' getdoe(list)
 #' }
 #' @export
-#' @seealso \code{\link{getdata2}},\code{\link{getdata}}, \code{\link{getmzrt}},\code{\link{getmzrt2}}, \code{\link{getimputation}}, \code{\link{getmr}}
+#' @seealso \code{\link{getdata2}},\code{\link{getdata}}, \code{\link{getmzrt}}, \code{\link{getimputation}}, \code{\link{getmr}}
 getdoe <- function(list,
                    inscf = 5,
                    rsdcf = 100,
