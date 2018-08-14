@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get the mzrt profile and group information for batch correction and plot as a list — getmzrt • enviGCMS</title>
+<title>Get the raw Mass Defect — getmdr • enviGCMS</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Get the mzrt profile and group information for batch correction and plot as a list — getmzrt" />
+<meta property="og:title" content="Get the raw Mass Defect — getmdr" />
 
-<meta property="og:description" content="Get the mzrt profile and group information for batch correction and plot as a list" />
+<meta property="og:description" content="Get the raw Mass Defect" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -112,47 +112,36 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get the mzrt profile and group information for batch correction and plot as a list</h1>
-    <small class="dont-index">Source: <a href='https://github.com/yufree/enviGCMS/blob/master/R/io.R'><code>R/io.R</code></a></small>
-    <div class="hidden name"><code>getmzrt.Rd</code></div>
+    <h1>Get the raw Mass Defect</h1>
+    <small class="dont-index">Source: <a href='https://github.com/yufree/enviGCMS/blob/master/R/mda.R'><code>R/mda.R</code></a></small>
+    <div class="hidden name"><code>getmdr.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Get the mzrt profile and group information for batch correction and plot as a list</p>
+    <p>Get the raw Mass Defect</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>getmzrt</span>(<span class='no'>xset</span>, <span class='kw'>name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>getmdr</span>(<span class='no'>mz</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>xset</th>
-      <td><p>xcmsSet/XCMSnExp objects</p></td>
-    </tr>
-    <tr>
-      <th>name</th>
-      <td><p>file name for csv file, default NULL</p></td>
+      <th>mz</th>
+      <td><p>numeric vector for exact mass</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>list with rtmz profile and group infomation</p>
-    
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='getdata.html'>getdata</a></code>,<code><a href='getupload.html'>getupload</a></code>, <code><a href='getdoe.html'>getdoe</a></code>,<code>getmzrt</code></p></div>
+    <p>raw Mass Defect</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='fu'>library</span>(<span class='no'>faahKO</span>)
-<span class='no'>cdfpath</span> <span class='kw'>&lt;-</span> <span class='fu'>system.file</span>(<span class='st'>'cdf'</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>'faahKO'</span>)
-<span class='no'>xset</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='getdata.html'>getdata</a></span>(<span class='no'>cdfpath</span>, <span class='kw'>pmethod</span> <span class='kw'>=</span> <span class='st'>' '</span>)
-<span class='fu'>getmzrt</span>(<span class='no'>xset</span>)
+<span class='fu'>getmdr</span>(<span class='fu'><a href='getmass.html'>getmass</a></span>(<span class='st'>'C2H4'</span>))
 <span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -161,8 +150,6 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-
-      <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

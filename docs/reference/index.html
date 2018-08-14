@@ -18,13 +18,22 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
+
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+
+
+
+<meta property="og:title" content="Function reference" />
+
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +56,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">enviGCMS</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">enviGCMS</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.5.1</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -73,7 +86,7 @@
   </ul>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -85,6 +98,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -92,412 +106,462 @@
       
       </header>
 
-      <div class="row">
-  <div class="col-md-9">
+<div class="row">
+  <div class="contents col-md-9">
     <div class="page-header">
-      <h1>
-        Reference
-        <small>version&nbsp;0.5.0</small>
-      </h1>
+      <h1>Reference</h1>
     </div>
 
-    <div class="contents">
-      <table class="ref-index">
+    <table class="ref-index">
 
-      <colgroup>
-        <col class="alias" />
-        <col class="title" />
-      </colgroup>
+    <colgroup>
+      
+      <col class="alias" />
+      <col class="title" />
+    </colgroup>
 
-      <tbody>
-        <tr>
-          <th colspan="2">
-            <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-            <p class="section-desc"></p>
-          </th>
-        </tr>
-        <tr>
-          <!--  -->
-          <td>
-            <p><code><a href="batch.html">batch</a></code> </p>
-          </td>
-          <td><p>Get the MIR and related information from the files</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="cbmd.html">cbmd</a></code> </p>
-          </td>
-          <td><p>Combine two data with similar retention time while different mass range</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="findline.html">findline</a></code> </p>
-          </td>
-          <td><p>find line of the regression model for GC-MS</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="getarea.html">getarea</a></code> </p>
-          </td>
-          <td><p>Get the peak information from sampels for SCCPs detection</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="getareastd.html">getareastd</a></code> </p>
-          </td>
-          <td><p>Get the peak information from SCCPs standards</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="getbgremove.html">getbgremove</a></code> </p>
-          </td>
-          <td><p>Get the peak list with blank samples' peaks removed</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="getbiotechrep.html">getbiotechrep</a></code> </p>
-          </td>
-          <td><p>Get the report for biological replicates.</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="getdata.html">getdata</a></code> </p>
-          </td>
-          <td><p>Get xcmsset object in one step with optimized methods.</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="getdata2.html">getdata2</a></code> </p>
-          </td>
-          <td><p>Get XCMSnExp object in one step from structured folder path for xcms 3.</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="getdoe.html">getdoe</a></code> </p>
-          </td>
-          <td><p>Filter the data based on DoE, rsd, intensity</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="getfeaturesanova.html">getfeaturesanova</a></code> </p>
-          </td>
-          <td><p>Get the features from anova, with p value, q value, rsd and power restriction</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="getfeaturest.html">getfeaturest</a></code> </p>
-          </td>
-          <td><p>Get the features from t test, with p value, q value, rsd and power restriction</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="getgrouprep.html">getgrouprep</a></code> </p>
-          </td>
-          <td><p>Get the report for samples with biological and technique replicates in different groups</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="getimputation.html">getimputation</a></code> </p>
-          </td>
-          <td><p>Impute the peaks list data</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="GetIntegration.html">GetIntegration</a></code> </p>
-          </td>
-          <td><p>GetIntegration was mainly used for get the intergration of certain ion's chromatogram data and plot the data</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="Getisotopologues.html">Getisotopologues</a></code> </p>
-          </td>
-          <td><p>Get the selected isotopologues at certain MS data</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="getmassdefect.html">getmassdefect</a></code> </p>
-          </td>
-          <td><p>Get mass defect with certain scaled factor</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="getmd.html">getmd</a></code> </p>
-          </td>
-          <td><p>Import data and return the annotated matrix for GC/LC-MS by m/z range and retention time</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="getmr.html">getmr</a></code> </p>
-          </td>
-          <td><p>Get the mzrt profile and group information for batch correction and plot as a list directly from path with default setting</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="getmzrt.html">getmzrt</a></code> </p>
-          </td>
-          <td><p>Get the mzrt profile and group information for batch correction and plot as a list</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="getmzrt2.html">getmzrt2</a></code> </p>
-          </td>
-          <td><p>Get the mzrt profile and group information for batch correction and plot as a list for xcms 3 object</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="getmzrtcsv.html">getmzrtcsv</a></code> </p>
-          </td>
-          <td><p>Covert the peaks list csv file into list</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="getQCraw.html">getQCraw</a></code> </p>
-          </td>
-          <td><p>get the data of QC compound for a group of data</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="getsccp.html">getsccp</a></code> </p>
-          </td>
-          <td><p>Quantitative analysis for short-chain chlorinated paraffins(SCCPs)</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="getsim.html">getsim</a></code> </p>
-          </td>
-          <td><p>output the similarity of two dataset</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="gettechrep.html">gettechrep</a></code> </p>
-          </td>
-          <td><p>Get the report for technique replicates.</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="gettimegrouprep.html">gettimegrouprep</a></code> </p>
-          </td>
-          <td><p>Get the time series or two factor DoE report for samples with biological and technique replicates in different groups</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="getupload.html">getupload</a></code> </p>
-          </td>
-          <td><p>Get the csv files to be submitted to Metaboanalyst</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="getupload2.html">getupload2</a></code> </p>
-          </td>
-          <td><p>Get the csv files to be submitted to Metaboanalyst</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="gifmr.html">gifmr</a></code> </p>
-          </td>
-          <td><p>plot scatter plot for rt-mz profile and output gif file for mutiple groups</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="Integration.html">Integration</a></code> </p>
-          </td>
-          <td><p>Just intergrate data according to fixed rt and fixed noise area</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="ma.html">ma</a></code> </p>
-          </td>
-          <td><p>filter data by average moving box</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="Mode.html">Mode</a></code> </p>
-          </td>
-          <td><p>define the Mode function</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="plote.html">plote</a></code> </p>
-          </td>
-          <td><p>plot EIC and boxplot for all peaks and return diffreport</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="plotgroup.html">plotgroup</a></code> </p>
-          </td>
-          <td><p>Plot the response group of GC-MS</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="plothist.html">plothist</a></code> </p>
-          </td>
-          <td><p>plot the density of the GC-MS data with EM algorithm to seperate the data into two log normal distribution.</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="plothm.html">plothm</a></code> </p>
-          </td>
-          <td><p>Plot the heatmap of mzrt profiles</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="plotint.html">plotint</a></code> </p>
-          </td>
-          <td><p>plot the information of intergretion</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="plotintslope.html">plotintslope</a></code> </p>
-          </td>
-          <td><p>plot the slope information of intergretion</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="plotkms.html">plotkms</a></code> </p>
-          </td>
-          <td><p>plot the kendrick mass defect diagram</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="plotmr.html">plotmr</a></code> </p>
-          </td>
-          <td><p>plot the scatter plot for peaks list with threshold</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="plotmrc.html">plotmrc</a></code> </p>
-          </td>
-          <td><p>plot the diff scatter plot for one xcmsset objects with threshold between two groups</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="plotms.html">plotms</a></code> </p>
-          </td>
-          <td><p>plot GC/LC-MS data as a heatmap with TIC</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="plotmsrt.html">plotmsrt</a></code> </p>
-          </td>
-          <td><p>Plot EIC of certain m/z and return dataframe for intergration</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="plotmz.html">plotmz</a></code> </p>
-          </td>
-          <td><p>plot GC/LC-MS data as scatter plot</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="plotpca.html">plotpca</a></code> </p>
-          </td>
-          <td><p>plot the PCA of list</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="plotrsd.html">plotrsd</a></code> </p>
-          </td>
-          <td><p>plot the rsd influnces of data in different groups</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="plotrtms.html">plotrtms</a></code> </p>
-          </td>
-          <td><p>Plot mass spectrum of certain retention time and return mass spectrum vector (MSP file) for NIST search</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="plotsms.html">plotsms</a></code> </p>
-          </td>
-          <td><p>Plot the intensity distribution of GC-MS</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="plotsub.html">plotsub</a></code> </p>
-          </td>
-          <td><p>Plot the backgrond of data</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="plott.html">plott</a></code> </p>
-          </td>
-          <td><p>plot GC-MS data as a heatmap for constant speed of temperature rising</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="plottic.html">plottic</a></code> </p>
-          </td>
-          <td><p>Plot Total Ion Chromatogram (TIC)</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="qbatch.html">qbatch</a></code> </p>
-          </td>
-          <td><p>Get the MIR from the file</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="runsccp.html">runsccp</a></code> </p>
-          </td>
-          <td><p>Shiny application for Short-Chain Chlorinated Paraffins analysis</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="sccp.html">data</a></code> </p>
-          </td>
-          <td><p>Short-Chain Chlorinated Paraffins(SCCPs) peaks infomation for quantitative analysis</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="submd.html">submd</a></code> </p>
-          </td>
-          <td><p>Get the differences of two GC/LC-MS data</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="svabatch.html">svabatch</a></code> </p>
-          </td>
-          <td><p>Plot the influnces of DoE and Batch effects on each peaks</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="svacor.html">svacor</a></code> </p>
-          </td>
-          <td><p>Surrogate variable analysis(SVA) to correct the unknown batch effects</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="svadata.html">svadata</a></code> </p>
-          </td>
-          <td><p>Filter the data with p value and q value</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="svapca.html">svapca</a></code> </p>
-          </td>
-          <td><p>Principal component analysis(PCA) for SVA corrected data and raw data</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="svaplot.html">svaplot</a></code> </p>
-          </td>
-          <td><p>Filter the data with p value and q value and show them</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="svaupload.html">svaupload</a></code> </p>
-          </td>
-          <td><p>Get the corrected data after SVA for metabolanalyst</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="writeMSP.html">writeMSP</a></code> </p>
-          </td>
-          <td><p>Write MSP files for NIST search</p></td>
-        </tr>
-      </tbody>
-      </table>
-    </div>
+    <tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="GetIntegration.html">GetIntegration()</a></code> </p>
+        </td>
+        <td><p>GetIntegration was mainly used for get the intergration of certain ion's chromatogram data and plot the data</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="Getisotopologues.html">Getisotopologues()</a></code> </p>
+        </td>
+        <td><p>Get the selected isotopologues at certain MS data</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="Integration.html">Integration()</a></code> </p>
+        </td>
+        <td><p>Just intergrate data according to fixed rt and fixed noise area</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="Mode.html">Mode()</a></code> </p>
+        </td>
+        <td><p>define the Mode function</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="batch.html">batch()</a></code> </p>
+        </td>
+        <td><p>Get the MIR and related information from the files</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="cbmd.html">cbmd()</a></code> </p>
+        </td>
+        <td><p>Combine two data with similar retention time while different mass range</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="findline.html">findline()</a></code> </p>
+        </td>
+        <td><p>find line of the regression model for GC-MS</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="getQCraw.html">getQCraw()</a></code> </p>
+        </td>
+        <td><p>get the data of QC compound for a group of data</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="getarea.html">getarea()</a></code> </p>
+        </td>
+        <td><p>Get the peak information from sampels for SCCPs detection</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="getareastd.html">getareastd()</a></code> </p>
+        </td>
+        <td><p>Get the peak information from SCCPs standards</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="getbgremove.html">getbgremove()</a></code> </p>
+        </td>
+        <td><p>Get the peak list with blank samples' peaks removed</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="getbiotechrep.html">getbiotechrep()</a></code> </p>
+        </td>
+        <td><p>Get the report for biological replicates.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="getdata.html">getdata()</a></code> </p>
+        </td>
+        <td><p>Get xcmsset object in one step with optimized methods.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="getdata2.html">getdata2()</a></code> </p>
+        </td>
+        <td><p>Get XCMSnExp object in one step from structured folder path for xcms 3.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="getdoe.html">getdoe()</a></code> </p>
+        </td>
+        <td><p>Filter the data based on DoE, rsd, intensity</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="getfeaturesanova.html">getfeaturesanova()</a></code> </p>
+        </td>
+        <td><p>Get the features from anova, with p value, q value, rsd and power restriction</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="getfeaturest.html">getfeaturest()</a></code> </p>
+        </td>
+        <td><p>Get the features from t test, with p value, q value, rsd and power restriction</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="getgrouprep.html">getgrouprep()</a></code> </p>
+        </td>
+        <td><p>Get the report for samples with biological and technique replicates in different groups</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="getimputation.html">getimputation()</a></code> </p>
+        </td>
+        <td><p>Impute the peaks list data</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="getmass.html">getmass()</a></code> </p>
+        </td>
+        <td><p>Get the exact mass of the isotopologues from a chemical formula or reaction's isotope patterns with the highest abundances</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="getmassdefect.html">getmassdefect()</a></code> </p>
+        </td>
+        <td><p>Get mass defect with certain scaled factor</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="getmd.html">getmd()</a></code> </p>
+        </td>
+        <td><p>Import data and return the annotated matrix for GC/LC-MS by m/z range and retention time</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="getmdh.html">getmdh()</a></code> </p>
+        </td>
+        <td><p>Get the high order unit based Mass Defect</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="getmdr.html">getmdr()</a></code> </p>
+        </td>
+        <td><p>Get the raw Mass Defect</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="getmr.html">getmr()</a></code> </p>
+        </td>
+        <td><p>Get the mzrt profile and group information for batch correction and plot as a list directly from path with default setting</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="getmzrt.html">getmzrt()</a></code> </p>
+        </td>
+        <td><p>Get the mzrt profile and group information for batch correction and plot as a list</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="getmzrt2.html">getmzrt2()</a></code> </p>
+        </td>
+        <td><p>Get the mzrt profile and group information for batch correction and plot as a list for xcms 3 object</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="getmzrtcsv.html">getmzrtcsv()</a></code> </p>
+        </td>
+        <td><p>Covert the peaks list csv file into list</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="getoverlapmass.html">getoverlapmass()</a></code> </p>
+        </td>
+        <td><p>Get the overlap peaks by mass range</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="getoverlappeak.html">getoverlappeak()</a></code> </p>
+        </td>
+        <td><p>Get the overlap peaks by mass and retention time range</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="getoverlaprt.html">getoverlaprt()</a></code> </p>
+        </td>
+        <td><p>Get the overlap peaks by retention time</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="getrmd.html">getrmd()</a></code> </p>
+        </td>
+        <td><p>Get the Relative Mass Defect</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="getsccp.html">getsccp()</a></code> </p>
+        </td>
+        <td><p>Quantitative analysis for short-chain chlorinated paraffins(SCCPs)</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="getsim.html">getsim()</a></code> </p>
+        </td>
+        <td><p>output the similarity of two dataset</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gettechrep.html">gettechrep()</a></code> </p>
+        </td>
+        <td><p>Get the report for technique replicates.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gettimegrouprep.html">gettimegrouprep()</a></code> </p>
+        </td>
+        <td><p>Get the time series or two factor DoE report for samples with biological and technique replicates in different groups</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="getupload.html">getupload()</a></code> </p>
+        </td>
+        <td><p>Get the csv files from xcmsset/XCMSnExp/list object</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="getupload2.html">getupload2()</a></code> </p>
+        </td>
+        <td><p>Get the csv files to be submitted to Metaboanalyst</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="getupload3.html">getupload3()</a></code> </p>
+        </td>
+        <td><p>Get the csv files to be submitted to Metaboanalyst</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gifmr.html">gifmr()</a></code> </p>
+        </td>
+        <td><p>plot scatter plot for rt-mz profile and output gif file for mutiple groups</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="ma.html">ma()</a></code> </p>
+        </td>
+        <td><p>filter data by average moving box</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="plote.html">plote()</a></code> </p>
+        </td>
+        <td><p>plot EIC and boxplot for all peaks and return diffreport</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="plotgroup.html">plotgroup()</a></code> </p>
+        </td>
+        <td><p>Plot the response group of GC-MS</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="plothist.html">plothist()</a></code> </p>
+        </td>
+        <td><p>plot the density of the GC-MS data with EM algorithm to seperate the data into two log normal distribution.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="plothm.html">plothm()</a></code> </p>
+        </td>
+        <td><p>Plot the heatmap of mzrt profiles</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="plotint.html">plotint()</a></code> </p>
+        </td>
+        <td><p>plot the information of intergretion</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="plotintslope.html">plotintslope()</a></code> </p>
+        </td>
+        <td><p>plot the slope information of intergretion</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="plotkms.html">plotkms()</a></code> </p>
+        </td>
+        <td><p>plot the kendrick mass defect diagram</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="plotmr.html">plotmr()</a></code> </p>
+        </td>
+        <td><p>plot the scatter plot for peaks list with threshold</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="plotmrc.html">plotmrc()</a></code> </p>
+        </td>
+        <td><p>plot the diff scatter plot for one xcmsset objects with threshold between two groups</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="plotms.html">plotms()</a></code> </p>
+        </td>
+        <td><p>plot GC/LC-MS data as a heatmap with TIC</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="plotmsrt.html">plotmsrt()</a></code> </p>
+        </td>
+        <td><p>Plot EIC of certain m/z and return dataframe for intergration</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="plotmz.html">plotmz()</a></code> </p>
+        </td>
+        <td><p>plot GC/LC-MS data as scatter plot</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="plotpca.html">plotpca()</a></code> </p>
+        </td>
+        <td><p>plot the PCA of list</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="plotrsd.html">plotrsd()</a></code> </p>
+        </td>
+        <td><p>plot the rsd influnces of data in different groups</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="plotrtms.html">plotrtms()</a></code> </p>
+        </td>
+        <td><p>Plot mass spectrum of certain retention time and return mass spectrum vector (MSP file) for NIST search</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="plotsms.html">plotsms()</a></code> </p>
+        </td>
+        <td><p>Plot the intensity distribution of GC-MS</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="plotsub.html">plotsub()</a></code> </p>
+        </td>
+        <td><p>Plot the backgrond of data</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="plott.html">plott()</a></code> </p>
+        </td>
+        <td><p>plot GC-MS data as a heatmap for constant speed of temperature rising</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="plottic.html">plottic()</a></code> </p>
+        </td>
+        <td><p>Plot Total Ion Chromatogram (TIC)</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="qbatch.html">qbatch()</a></code> </p>
+        </td>
+        <td><p>Get the MIR from the file</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="runMDPlot.html">runMDPlot()</a></code> </p>
+        </td>
+        <td><p>Shiny application for interactive mass defect plots analysis</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="runsccp.html">runsccp()</a></code> </p>
+        </td>
+        <td><p>Shiny application for Short-Chain Chlorinated Paraffins analysis</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="sccp.html">sccp</a></code> </p>
+        </td>
+        <td><p>Short-Chain Chlorinated Paraffins(SCCPs) peaks infomation for quantitative analysis</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="submd.html">submd()</a></code> </p>
+        </td>
+        <td><p>Get the differences of two GC/LC-MS data</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="svabatch.html">svabatch()</a></code> </p>
+        </td>
+        <td><p>Plot the influnces of DoE and Batch effects on each peaks</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="svacor.html">svacor()</a></code> </p>
+        </td>
+        <td><p>Surrogate variable analysis(SVA) to correct the unknown batch effects</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="svadata.html">svadata()</a></code> </p>
+        </td>
+        <td><p>Filter the data with p value and q value</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="svapca.html">svapca()</a></code> </p>
+        </td>
+        <td><p>Principal component analysis(PCA) for SVA corrected data and raw data</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="svaplot.html">svaplot()</a></code> </p>
+        </td>
+        <td><p>Filter the data with p value and q value and show them</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="svaupload.html">svaupload()</a></code> </p>
+        </td>
+        <td><p>Get the corrected data after SVA for metabolanalyst</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="writeMSP.html">writeMSP()</a></code> </p>
+        </td>
+        <td><p>Write MSP files for NIST search</p></td>
+      </tr>
+    </tbody>
+    </table>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -520,5 +584,8 @@
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+
