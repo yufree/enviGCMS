@@ -40,6 +40,7 @@ shinyUI(navbarPage(
                                         inline = TRUE
                                 ),
                                 checkboxInput('ins', 'Show intensity as size', F),
+                                checkboxInput("show_leg", "Show plot legends", T),
                                 uiOutput("plotctr"),
                                 uiOutput("plotctr2"),
                                 uiOutput("slide1"),
