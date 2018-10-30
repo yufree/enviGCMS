@@ -417,7 +417,7 @@ getmzrtcsv <- function(path) {
     data <- dataraw[, -c(1:3)]
     group <- data.frame(t(utils::read.csv(path, nrows = 1)[-(1:3)]))
     colnames(group) <- c(1:ncol(group))
-    colnames(data) <- group
+    colnames(data) <- rownames(group)
     rownames(data) <- dataraw[, 1]
     return(list(data = data, mz = mz, group = group, rt = rt))
 }
