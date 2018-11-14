@@ -498,3 +498,37 @@ plote <- function(xset, name = "test", test = "t", nonpara = "n",
         nonpara = nonpara, ...)
     return(a)
 }
+#' Get chemical formula for mass to charge ratio.
+#' @param mz a vector with mass to charge ratio
+#' @param charge The charge value of the formula.
+#' @param window The window accuracy in the same units as mass
+#' @param elements Elements list to take into account.
+#' @return list with chemical formula
+#' @export
+getformula <- function(mz,charge = 1, window = 0.001, elements = list(C=c(1,50), H=c(1,50), N=c(0,50),O = c(0,50),P=c(0,1),S=c(0,1))){
+        list <- list()
+        for(i in 1:length(mz)){
+                a <- mz[i]
+                mfSet <- rcdk::generate.formula.iter(a,charge=charge,window = window,
+                                                     elements=elements,validation = T)
+                hit <- itertools::ihasNext(mfSet)
+                re <- NULL
+                while(itertools::hasNext(hit)){
+                        temp <- iterators::nextElem(hit)
+                        re <- c(re,temp)
+                }
+                list[[i]] <- re
+        }
+        aa <- lapply(list, unlist)
+        getvalid <- function(x){
+                a <- NULL
+                for(i in x){
+                        re <- rcdk::isvalid.formula(rcdk::get.formula(i))
+                        a <- c(a,re)
+                }
+                return(x[a])
+        }
+        bb <- lapply(aa,getvalid)
+
+        return(bb)
+}

@@ -44,5 +44,7 @@ Imports: xcms,
     crosstalk,
     dplyr,
     plotly,
-    broom
-RoxygenNote: 6.1.0
+    broom,
+    itertools,
+    iterators
+RoxygenNote: 6.1.1
