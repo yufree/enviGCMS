@@ -9,7 +9,7 @@ r_packages:
   - devtools
 cache:
   packages: true
-apt_packages: netcdf-bin
+apt_packages: libnetcdf-dev
 
 env:
   global:
