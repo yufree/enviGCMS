@@ -252,8 +252,8 @@ getupload <- function(xset, method = "medret", value = "into", name = "Peaklist"
                 filename <- paste0(name, ".csv")
                 utils::write.csv(data, file = filename)
         }else if(type == 'a'){
-                mz <- xcms::groups(xset)[, 1]
-                time <- xcms::groups(xset)[, 4]
+                mz <- mz
+                time <- rt
                 data <- as.data.frame(cbind(mz, time, data))
                 data <- unique(data)
                 filename <- paste0(name, ".csv")
@@ -262,7 +262,7 @@ getupload <- function(xset, method = "medret", value = "into", name = "Peaklist"
                 data <- cbind(mz = mz, rt = rt, data = data)
                 rownames(data) <- paste0(round(mz, 4), "/",
                                          round(rt, 4))
-                data <- t(cbind(group = t(cbind(mz = 'mz',rt = 'rt',t(list$group))), t(data)))
+                data <- t(cbind(group = t(cbind(mz = 'mz',rt = 'rt',t(group))), t(data)))
                 filename <- paste0(name, ".csv")
                 utils::write.csv(data, file = filename)
         }
