@@ -201,7 +201,6 @@ getdata2 <- function(path, index = F, snames = NULL, sclass = NULL,
     xod <- xcms::fillChromPeaks(xod, param = fpp, BPPARAM = BPPARAM)
     return(xod)
 }
-
 #' Get the csv files from xcmsset/XCMSnExp/list object
 #' @param xset the xcmsset/XCMSnExp/list object which you want to submitted to Metaboanalyst
 #' @param method parameter for groupval function
@@ -237,10 +236,10 @@ getupload <- function(xset, method = "medret", value = "into", name = "Peaklist"
                 mz <- peaks$mzmed
                 rt <- peaks$rtmed
         }else if(class(xset) == 'list'){
-                data <- list$data
-                group <- as.character(list$group)
-                mz <- list$mz
-                rt <- list$rt
+                data <- xset$data
+                group <- as.character(xset$group)
+                mz <- xset$mz
+                rt <- xset$rt
 
         }else{
                 stop('The object should be xcmsset/XCMSnExp/list.')
