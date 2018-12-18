@@ -5,7 +5,7 @@
 \title{Get the csv files from xcmsset/XCMSnExp/list object}
 \usage{
 getupload(xset, method = "medret", value = "into", name = "Peaklist",
-  type = "m")
+  type = "m", mzdigit = 4, rtdigit = 1)
 }
 \arguments{
 \item{xset}{the xcmsset/XCMSnExp/list object which you want to submitted to Metaboanalyst}
@@ -17,6 +17,10 @@ getupload(xset, method = "medret", value = "into", name = "Peaklist",
 \item{name}{file name}
 
 \item{type}{m means  Metaboanalyst, a means xMSannotator, o means full infomation csv}
+
+\item{mzdigit}{m/z digits of row names of data frame}
+
+\item{rtdigit}{retention time digits of row names of data frame}
 }
 \value{
 dataframe with data needed for Metaboanalyst/xMSannotator/pmd if your want to perform local analysis.

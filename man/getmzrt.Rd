@@ -4,12 +4,18 @@
 \alias{getmzrt}
 \title{Get the mzrt profile and group information for batch correction and plot as a list}
 \usage{
-getmzrt(xset, name = NULL)
+getmzrt(xset, name = NULL, mzdigit = 4, rtdigit = 1, eic = F)
 }
 \arguments{
 \item{xset}{xcmsSet/XCMSnExp objects}
 
 \item{name}{file name for csv file, default NULL}
+
+\item{mzdigit}{m/z digits of row names of data frame}
+
+\item{rtdigit}{retention time digits of row names of data frame}
+
+\item{eic}{logical, save xcmsEIC objects for further investigation with the same name of files, you will need raw files in the same directory as defined in xcmsSet to extract the EIC based on the binned data. default F}
 }
 \value{
 list with rtmz profile and group infomation

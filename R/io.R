@@ -207,6 +207,8 @@ getdata2 <- function(path, index = F, snames = NULL, sclass = NULL,
 #' @param value parameter for groupval function
 #' @param name file name
 #' @param type m means  Metaboanalyst, a means xMSannotator, o means full infomation csv
+#' @param mzdigit m/z digits of row names of data frame
+#' @param rtdigit retention time digits of row names of data frame
 #' @return dataframe with data needed for Metaboanalyst/xMSannotator/pmd if your want to perform local analysis.
 #' @examples
 #' \dontrun{
@@ -217,7 +219,7 @@ getdata2 <- function(path, index = F, snames = NULL, sclass = NULL,
 #' }
 #' @seealso \code{\link{getdata}}, \code{\link{getmzrt}}
 #' @export
-getupload <- function(xset, method = "medret", value = "into", name = "Peaklist", type = 'm') {
+getupload <- function(xset, method = "medret", value = "into", name = "Peaklist", type = 'm', mzdigit = 4, rtdigit = 1) {
         if(class(xset)=='xcmsSet'){
                 data <- xcms::groupval(xset, method = method,
                                                   value = value)
@@ -247,21 +249,23 @@ getupload <- function(xset, method = "medret", value = "into", name = "Peaklist"
 
         if(type == 'm'){
                 data <- rbind(group,data)
-                rownames(data) <- c("group", paste0(round(mz, 4), "/",
-                                                    round(rt, 4)))
+                rownames(data) <- c("group", paste0("M",round(mz, mzdigit), "T",
+                                                    round(rt, rtdigit)))
                 filename <- paste0(name, ".csv")
                 utils::write.csv(data, file = filename)
         }else if(type == 'a'){
                 mz <- mz
                 time <- rt
                 data <- as.data.frame(cbind(mz, time, data))
+                rownames(data) <- paste0("M",round(mz, mzdigit), "T",
+                                         round(rt, rtdigit))
                 data <- unique(data)
                 filename <- paste0(name, ".csv")
                 utils::write.csv(data, file = filename)
         }else{
                 data <- cbind(mz = mz, rt = rt, data = data)
-                rownames(data) <- paste0(round(mz, 4), "/",
-                                         round(rt, 4))
+                rownames(data) <- paste0("M",round(mz, mzdigit), "T",
+                                         round(rt, rtdigit))
                 data <- t(cbind(group = t(cbind(mz = 'mz',rt = 'rt',t(group))), t(data)))
                 filename <- paste0(name, ".csv")
                 utils::write.csv(data, file = filename)
@@ -317,6 +321,9 @@ getupload3 <- function(list, name = "Peaklist") {
 #' Get the mzrt profile and group information for batch correction and plot as a list
 #' @param xset xcmsSet/XCMSnExp objects
 #' @param name file name for csv file, default NULL
+#' @param mzdigit m/z digits of row names of data frame
+#' @param rtdigit retention time digits of row names of data frame
+#' @param eic logical, save xcmsEIC objects for further investigation with the same name of files, you will need raw files in the same directory as defined in xcmsSet to extract the EIC based on the binned data. default F
 #' @return list with rtmz profile and group infomation
 #' @examples
 #' \dontrun{
@@ -327,18 +334,30 @@ getupload3 <- function(list, name = "Peaklist") {
 #' }
 #' @seealso \code{\link{getdata}},\code{\link{getupload}}, \code{\link{getdoe}},\code{\link{getmzrt}}
 #' @export
-getmzrt <- function(xset, name = NULL) {
-        if(class(xset)=='xcmsSet'){
+getmzrt <- function(xset, name = NULL, mzdigit = 4, rtdigit = 1, eic = F) {
+        if(class(xset) =='xcmsSet'){
     data <- xcms::groupval(xset, value = "into")
     # group info
     group <- xcms::phenoData(xset)
     # peaks info
-    peaks <- as.data.frame(xcms::groups(xset))}else{
+    peaks <- as.data.frame(xcms::groups(xset))
+    # save EIC object
+    if(eic){
+            eic <- xcms::getEIC(xset,rt = "corrected", groupidx = 1:nrow(xset@groups))
+            saveRDS(eic, file = paste0(name,'.rds'))
+    }
+    }
+        else{
             data <- xcms::featureValues(xset, value = "into")
             # group info
             group <- xset@phenoData@data
             # peaks info
             peaks <- xcms::featureDefinitions(xset)
+            xset2 <- xcms::as(xset,'xcmsSet')
+            if(eic){
+                    eic <- xcms::getEIC(xset2,rt = "corrected", groupidx = 1:nrow(xset2@groups))
+                    saveRDS(eic, file = paste0(name,'.rds'))
+            }
     }
     mz <- peaks$mzmed
     rt <- peaks$rtmed
@@ -349,8 +368,8 @@ getmzrt <- function(xset, name = NULL) {
         rt = rt, mzrange = mzrange, rtrange = rtrange)
     if (!is.null(name)) {
             data <- cbind(mz = result$mz, rt = result$rt, result$data)
-            rownames(data) <- paste0(round(mz, 4), "/",
-                                                round(rt, 4))
+            rownames(data) <- paste0("M",round(mz, mzdigit), "T",
+                                     round(rt, rtdigit))
             data <- t(cbind(group = t(cbind(mz = 'mz',rt = 'rt',t(result$group))), t(data)))
         utils::write.csv(data, file = paste0(name, ".csv"))
     }

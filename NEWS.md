@@ -11,6 +11,7 @@
 - add function to perform pmd analysis
 - add function to get chemical formula
 - fix wrong object name in getmzrt/getmzrt2
+- add options to export EIC object
 
 # enviGCMS 0.5.0
 
