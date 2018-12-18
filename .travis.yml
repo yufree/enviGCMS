@@ -12,6 +12,7 @@ cache:
 apt_packages: 
   - libnetcdf-dev
   - netcdf-bin
+  - libmagick++-dev
 env:
   global:
     - NOT_CRAN: true
