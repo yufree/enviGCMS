@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Plot mass spectrum of certain retention time and return mass spectrum vector (MSP file) for NIST search — plotrtms • enviGCMS</title>
+<title>Get chemical formula for mass to charge ratio. — getformula • enviGCMS</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Plot mass spectrum of certain retention time and return mass spectrum vector (MSP file) for NIST search — plotrtms" />
+<meta property="og:title" content="Get chemical formula for mass to charge ratio. — getformula" />
 
-<meta property="og:description" content="Plot mass spectrum of certain retention time and return mass spectrum vector (MSP file) for NIST search" />
+<meta property="og:description" content="Get chemical formula for mass to charge ratio." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -114,47 +114,46 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Plot mass spectrum of certain retention time and return mass spectrum vector (MSP file) for NIST search</h1>
-    <small class="dont-index">Source: <a href='https://github.com/yufree/enviGCMS/blob/master/R/general.R'><code>R/general.R</code></a></small>
-    <div class="hidden name"><code>plotrtms.Rd</code></div>
+    <h1>Get chemical formula for mass to charge ratio.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/yufree/enviGCMS/blob/master/R/io.R'><code>R/io.R</code></a></small>
+    <div class="hidden name"><code>getformula.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Plot mass spectrum of certain retention time and return mass spectrum vector (MSP file) for NIST search</p>
+    <p>Get chemical formula for mass to charge ratio.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>plotrtms</span>(<span class='no'>data</span>, <span class='no'>rt</span>, <span class='no'>ms</span>)</pre>
+    <pre class="usage"><span class='fu'>getformula</span>(<span class='no'>mz</span>, <span class='kw'>charge</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>window</span> <span class='kw'>=</span> <span class='fl'>0.001</span>, <span class='kw'>elements</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>C</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>,
+  <span class='fl'>50</span>), <span class='kw'>H</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>50</span>), <span class='kw'>N</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>50</span>), <span class='kw'>O</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>50</span>), <span class='kw'>P</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>), <span class='kw'>S</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>)))</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>data</th>
-      <td><p>imported data matrix of GC-MS</p></td>
+      <th>mz</th>
+      <td><p>a vector with mass to charge ratio</p></td>
     </tr>
     <tr>
-      <th>rt</th>
-      <td><p>vector range of the retention time</p></td>
+      <th>charge</th>
+      <td><p>The charge value of the formula.</p></td>
     </tr>
     <tr>
-      <th>ms</th>
-      <td><p>vector range of the m/z</p></td>
+      <th>window</th>
+      <td><p>The window accuracy in the same units as mass</p></td>
+    </tr>
+    <tr>
+      <th>elements</th>
+      <td><p>Elements list to take into account.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>plot, vector and MSP files for NIST search</p>
+    <p>list with chemical formula</p>
     
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"># NOT RUN {
-matrix <- getmd(rawdata)
-plotrtms(matrix,rt = c(500,1000),ms = (300,500))
-# }
-</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -162,9 +161,7 @@ plotrtms(matrix,rt = c(500,1000),ms = (300,500))
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+          </ul>
 
   </div>
 </div>
