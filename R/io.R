@@ -264,7 +264,7 @@ getupload <- function(xset, method = "medret", value = "into", name = "Peaklist"
                 utils::write.csv(data, file = filename)
         }else{
                 data <- cbind(mz = mz, rt = rt, data = data)
-                colname <- colname(data)
+                colname <- colnames(data)
                 rownames(data) <- paste0("M",round(mz, mzdigit), "T",
                                          round(rt, rtdigit))
                 data <- t(cbind(group = t(cbind(mz = 'mz',rt = 'rt',t(group))), t(data)))
