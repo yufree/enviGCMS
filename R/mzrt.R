@@ -100,6 +100,7 @@ getdoe <- function(list,
                 indext <- as.vector(apply(rsd, 1, function(x)
                         all(x <
                                     rsdcft)))
+                indext <- indext & (!is.na(indext))
                 data <- data[indext,]
                 # data with mean of the technical replicates
                 list$data <- data
