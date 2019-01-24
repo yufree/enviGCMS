@@ -266,7 +266,7 @@ getupload <- function(xset, method = "medret", value = "into", name = "Peaklist"
                 data <- cbind(mz = mz, rt = rt, data = data)
                 colname <- colnames(data)
                 groupt = c('mz','rt',group)
-                data <- rbind.data.frame(groupt,data)
+                data <- rbind(groupt,data)
                 rownames(data) <- c('group',paste0("M",round(mz, mzdigit), "T",
                                          round(rt, rtdigit)))
                 colnames(data) <- colname
