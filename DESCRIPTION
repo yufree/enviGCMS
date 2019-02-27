@@ -46,5 +46,8 @@ Imports: xcms,
     plotly,
     broom,
     itertools,
-    iterators
+    iterators,
+    igraph,
+    ggraph,
+    ggplot2
 RoxygenNote: 6.1.1

@@ -4,7 +4,8 @@
 \alias{plotpca}
 \title{plot the PCA of list}
 \usage{
-plotpca(data, lv = NULL, index = NULL, center = T, scale = T, ...)
+plotpca(data, lv = NULL, index = NULL, center = T, scale = T,
+  xrange = NULL, yrange = NULL, ...)
 }
 \arguments{
 \item{data}{mzrt profile with row peaks and column samples}
@@ -17,7 +18,14 @@ plotpca(data, lv = NULL, index = NULL, center = T, scale = T, ...)
 
 \item{scale}{parameters for scale}
 
+\item{xrange}{x axis range for return samples, default NULL}
+
+\item{yrange}{y axis range for return samples, default NULL}
+
 \item{...}{other parameters for `plot` function}
+}
+\value{
+if xrange and yrange are not NULL, return file name of all selected samples on 2D score plot
 }
 \description{
 plot the PCA of list

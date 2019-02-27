@@ -269,3 +269,85 @@ getmdh <- function(mz,cus = c('CH2,H2'), method = 'round'){
         }
         return(re)
 }
+
+#' Screen organohalogen compounds by retention time, mass defect analysis and isotope relationship
+#' @param list list with data as peaks list, mz, rt and group information
+#' @param sf scale factor, default 78/77.91051(Br)
+#' @param step mass defect step, default 0.001
+#' @param stepsd1 mass defect uncertainty for lower mass, default 0.003
+#' @param stepsd2 mass defect uncertainty for higher mass, default 0.005
+#' @param mzc threshold of lower mass and higher mass, default 700
+#' @param cutoffint the cutoff of intensity, default 1000
+#' @param cutoffr the cutoff of [M] and [M+2] ratio, default 0.4
+#' @param clustercf the cutoff of cluster analysis to seperate two different ions groups, default 10
+#' @return list with filtered organohalogen compounds
+#' @references Identification of Novel Brominated Compounds in Flame Retarded Plastics Containing TBBPA by Combining Isotope Pattern and Mass Defect Cluster Analysis Ana Ballesteros-Gómez, Joaquín Ballesteros, Xavier Ortiz, Willem Jonker, Rick Helmus, Karl J. Jobst, John R. Parsons, and Eric J. Reiner Environmental Science & Technology 2017 51 (3), 1518-1526 DOI: 10.1021/acs.est.6b03294
+#' @export
+#'
+findohc <-
+        function(list,
+                 sf = 78 / 77.91051,
+                 step = 0.001,
+                 stepsd1 = 0.003,
+                 stepsd2 = 0.005,
+                 mzc = 700,
+                 cutoffint = 1000,
+                 cutoffr = 0.4,
+                 clustercf = 10) {
+                mz <- list$mz
+                ins <- apply(list$data,1,mean,na.rm=T)
+                rt <- list$rt
+                mzr <- round(mz)
+                sm <- mz * sf
+                sd <- ceiling(sm) - sm
+                smsd <- ifelse(mz <= mzc, stepsd1, stepsd2)
+                smstep <- seq(0, 1, step)
+                data <-
+                        cbind.data.frame(
+                                mz = mz,
+                                mzr = mzr,
+                                sm = sm,
+                                sd = sd,
+                                ins = ins,
+                                rt = rt
+                        )
+
+                result <- NULL
+                for (i in 1:length(smstep)) {
+                        mini = smstep[i] - smsd
+                        maxi = smstep[i] + smsd
+                        index = sd < maxi & sd > mini
+
+                        li <- data[index & ins > cutoffint, ]
+                        mzt <- mzr[index & ins > cutoffint]
+                        #dist(mzt) <-
+                        if (length(mzt) >= 2) {
+                                c <- stats::cutree(stats::hclust(stats::dist(mzt)), h = 10)
+                                cn <- length(unique(c))
+                                lit <- cbind.data.frame(li, c, i)
+                                for (j in 1:cn) {
+                                        li2 <- lit[lit[, 7] == j, ]
+                                        mzt2 <- lit$mzr[lit[, 7] == j]
+                                        if (length(mzt2) >= 2) {
+                                                if (length(unique(li2$ins)) > 1) {
+                                                        ratio <- max(li2$ins[li2$ins != max(li2$ins)]) / max(li2$ins)
+                                                        diff <-
+                                                                abs(li2$mzr[round(li2$ins) == round(max(li2$ins[li2$ins != max(li2$ins)]))] - li2$mzr[which.max(li2$ins)])
+                                                } else{
+                                                        ratio <- 1
+                                                        diff <-
+                                                                abs(li2$mzr[1] - li2$mzr[2])
+                                                }
+
+                                                if (ratio > cutoffr &
+                                                    round(diff) == 2) {
+                                                        result <-
+                                                                as.data.frame(rbind(result, li2))
+                                                }
+                                        }
+                                }
+                        }
+                }
+                list$ohc <- result[!duplicated(result$mz),]
+                return(list)
+        }

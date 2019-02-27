@@ -843,8 +843,10 @@ gifmr <- function(list,
 #' @param index index for selected peaks
 #' @param center parameters for PCA
 #' @param scale parameters for scale
+#' @param xrange x axis range for return samples, default NULL
+#' @param yrange y axis range for return samples, default NULL
 #' @param ... other parameters for `plot` function
-#' @return NULL
+#' @return if xrange and yrange are not NULL, return file name of all selected samples on 2D score plot
 #' @examples
 #' \dontrun{
 #' library(faahKO)
@@ -861,6 +863,8 @@ plotpca <- function(data,
                     index = NULL,
                     center = T,
                     scale = T,
+                    xrange = NULL,
+                    yrange = NULL,
                     ...) {
         if (!is.null(index)) {
                 data <- data[index,]
@@ -885,6 +889,9 @@ plotpca <- function(data,
                 pch = pch,
                 ...
         )
+        if(!(is.null(xrange)&is.null(yrange))){
+                return(colnames(data)[pcao$x[, 1]>xrange[1]&pcao$x[, 1]<xrange[2]& pcao$x[, 2] >yrange[1] & pcao$x[, 2]<yrange[2]])
+        }
 }
 
 #' Plot the heatmap of mzrt profiles
@@ -985,3 +992,4 @@ plothm <- function(data, lv, index = NULL) {
         graphics::par(mar = c(3, 1, 2, 6))
         plotchange(zlim)
 }
+
