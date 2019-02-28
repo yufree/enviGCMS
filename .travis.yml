@@ -9,10 +9,11 @@ r_packages:
   - devtools
 cache:
   packages: true
-apt_packages: 
+apt_packages:
   - libnetcdf-dev
   - netcdf-bin
   - libmagick++-dev
+  - libudunits2-dev
 env:
   global:
     - NOT_CRAN: true
