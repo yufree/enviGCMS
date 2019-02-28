@@ -344,6 +344,7 @@ findohc <-
 
                                                 if (ratio > cutoffr &
                                                     round(diff) == 2) {
+                                                        li2 <- cbind.data.frame(li2,ratio)
                                                         result <-
                                                                 as.data.frame(rbind(result, li2))
                                                 }
