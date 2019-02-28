@@ -279,7 +279,7 @@ getmdh <- function(mz,cus = c('CH2,H2'), method = 'round'){
 #' @param mzc threshold of lower mass and higher mass, default 700
 #' @param cutoffint the cutoff of intensity, default 1000
 #' @param cutoffr the cutoff of [M] and [M+2] ratio, default 0.4
-#' @param clustercf the cutoff of cluster analysis to seperate two different ions groups, default 10
+#' @param clustercf the cutoff of cluster analysis to seperate two different ions groups for mass distances and retention time, default 10
 #' @return list with filtered organohalogen compounds
 #' @references Identification of Novel Brominated Compounds in Flame Retarded Plastics Containing TBBPA by Combining Isotope Pattern and Mass Defect Cluster Analysis Ana Ballesteros-Gómez, Joaquín Ballesteros, Xavier Ortiz, Willem Jonker, Rick Helmus, Karl J. Jobst, John R. Parsons, and Eric J. Reiner Environmental Science & Technology 2017 51 (3), 1518-1526 DOI: 10.1021/acs.est.6b03294
 #' @export
@@ -320,11 +320,14 @@ findohc <-
 
                         li <- data[index & ins > cutoffint, ]
                         mzt <- mzr[index & ins > cutoffint]
+                        rtt <- rt[index & ins > cutoffint]
                         #dist(mzt) <-
                         if (length(mzt) >= 2) {
                                 c <- stats::cutree(stats::hclust(stats::dist(mzt)), h = 10)
-                                cn <- length(unique(c))
-                                lit <- cbind.data.frame(li, c, i)
+                                t <- stats::cutree(stats::hclust(stats::dist(rtt)), h = 10)
+                                u <- paste0(c,t)
+                                cn <- length(unique(u))
+                                lit <- cbind.data.frame(li, u, i)
                                 for (j in 1:cn) {
                                         li2 <- lit[lit[, 7] == j, ]
                                         mzt2 <- lit$mzr[lit[, 7] == j]
