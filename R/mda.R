@@ -270,7 +270,7 @@ getmdh <- function(mz,cus = c('CH2,H2'), method = 'round'){
         return(re)
 }
 
-#' Screen organohalogen compounds by retention time, mass defect analysis and isotope relationship
+#' Screen organohalogen compounds by retention time, mass defect analysis and isotope relationship modified by literature report
 #' @param list list with data as peaks list, mz, rt and group information
 #' @param sf scale factor, default 78/77.91051(Br)
 #' @param step mass defect step, default 0.001

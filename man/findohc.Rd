@@ -2,7 +2,7 @@
 % Please edit documentation in R/mda.R
 \name{findohc}
 \alias{findohc}
-\title{Screen organohalogen compounds by retention time, mass defect analysis and isotope relationship}
+\title{Screen organohalogen compounds by retention time, mass defect analysis and isotope relationship modified by literature report}
 \usage{
 findohc(list, sf = 78/77.91051, step = 0.001, stepsd1 = 0.003,
   stepsd2 = 0.005, mzc = 700, cutoffint = 1000, cutoffr = 0.4,
@@ -31,7 +31,7 @@ findohc(list, sf = 78/77.91051, step = 0.001, stepsd1 = 0.003,
 list with filtered organohalogen compounds
 }
 \description{
-Screen organohalogen compounds by retention time, mass defect analysis and isotope relationship
+Screen organohalogen compounds by retention time, mass defect analysis and isotope relationship modified by literature report
 }
 \references{
 Identification of Novel Brominated Compounds in Flame Retarded Plastics Containing TBBPA by Combining Isotope Pattern and Mass Defect Cluster Analysis Ana Ballesteros-Gómez, Joaquín Ballesteros, Xavier Ortiz, Willem Jonker, Rick Helmus, Karl J. Jobst, John R. Parsons, and Eric J. Reiner Environmental Science & Technology 2017 51 (3), 1518-1526 DOI: 10.1021/acs.est.6b03294
