@@ -1,3 +1,9 @@
+# enviGCMS 0.5.4
+
+## Major changes
+
+- add demo data and organize examples
+
 # enviGCMS 0.5.2
 
 ## Major changes
