@@ -1005,7 +1005,7 @@ plotden <- function(data,
                 col <- as.numeric(as.factor(lv))
                 coli <- unique(lv)
         }
-        plot(
+        graphics::plot(
                 1,
                 1,
                 typ = 'n',
@@ -1021,7 +1021,7 @@ plotden <- function(data,
                 ...
         )
         for (i in 1:(ncol(data))) {
-                lines(density(log10(data[, i]+1)),
+                graphics::lines(stats::density(log10(data[, i]+1)),
                       col = col[i],
                       lwd = 3)
         }

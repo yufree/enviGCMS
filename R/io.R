@@ -356,7 +356,7 @@ getmzrt <- function(xset, name = NULL, mzdigit = 4, rtdigit = 1, eic = F) {
             group <- xset@phenoData@data
             # peaks info
             peaks <- xcms::featureDefinitions(xset)
-            xset2 <- xcms::as(xset,'xcmsSet')
+            xset2 <- methods::as(xset,'xcmsSet')
             if(eic){
                     eic <- xcms::getEIC(xset2,rt = "corrected", groupidx = 1:nrow(xset2@groups))
                     saveRDS(eic, file = paste0(name,'.rds'))
