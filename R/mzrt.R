@@ -14,7 +14,7 @@ getimputation <- function(list, method = "l") {
 
         if (method == "r") {
                 idx <- stats::complete.cases(data)
-                data <- data[idx,]
+                data <- data[idx, ]
                 mz <- mz[idx]
                 rt <- rt[idx]
         } else if (method == "l") {
@@ -67,7 +67,7 @@ getdoe <- function(list,
         list <- getimputation(list, method = imputation)
         # use index
         if (!is.null(index)) {
-                list$data <- list$data[index,]
+                list$data <- list$data[index, ]
                 list$mz <- list$mz[index]
                 list$rt <- list$rt[index]
         }
@@ -82,9 +82,9 @@ getdoe <- function(list,
                 # get the rsd of the technical replicates
                 meant <- stats::aggregate(t(data), list(mlv), mean)
                 sdt <- stats::aggregate(t(data), list(mlv), sd)
-                suppressWarnings(rsd <- sdt[,-1] / meant[,-1] *
+                suppressWarnings(rsd <- sdt[, -1] / meant[, -1] *
                                          100)
-                data <- t(meant[,-1])
+                data <- t(meant[, -1])
                 colnames(data) <- unique(mlv)
                 rsd <- t(rsd)
                 # filter the data based on rsd of the technical
@@ -93,7 +93,7 @@ getdoe <- function(list,
                         all(x <
                                     rsdcft)))
                 indext <- indext & (!is.na(indext))
-                data <- data[indext,]
+                data <- data[indext, ]
                 # data with mean of the technical replicates
                 list$data <- data
                 # get new group infomation
@@ -130,28 +130,30 @@ getdoe <- function(list,
                 }
                 mean <- stats::aggregate(t(data), list(mlv), mean)
                 sd <- stats::aggregate(t(data), list(mlv), sd)
-                suppressWarnings(rsd <- sd[,-1] / mean[,-1] * 100)
-                mean <- t(mean[,-1])
-                sd <- t(sd[,-1])
+                suppressWarnings(rsd <- sd[, -1] / mean[, -1] * 100)
+                mean <- t(mean[, -1])
+                sd <- t(sd[, -1])
                 rsd <- t(rsd)
                 colnames(rsd) <-
-                        colnames(sd) <- colnames(mean) <- unique(mlv)
+                        colnames(sd) <-
+                        colnames(mean) <- unique(mlv)
                 index <- as.vector(apply(rsd, 1, function(x)
                         all(x <
-                                    rsdcf))) & as.vector(apply(mean, 1, function(x)
-                                            any(x >
-                                                        10 ^ (
-                                                                inscf
-                                                        ))))
+                                    rsdcf))) &
+                        as.vector(apply(mean, 1, function(x)
+                                any(x >
+                                            10 ^ (
+                                                    inscf
+                                            ))))
                 list$groupmean <- mean
                 list$groupsd <- sd
                 list$grouprsd <- rsd
-                list$datafiltered <- data[index,]
+                list$datafiltered <- data[index, ]
                 list$mzfiltered <- list$mz[index]
                 list$rtfiltered <- list$rt[index]
-                list$groupmeanfiltered <- mean[index,]
-                list$groupsdfiltered <- sd[index,]
-                list$grouprsdfiltered <- rsd[index,]
+                list$groupmeanfiltered <- mean[index, ]
+                list$groupsdfiltered <- sd[index, ]
+                list$grouprsdfiltered <- rsd[index, ]
                 list$index <- index
                 return(list)
         } else {
@@ -216,7 +218,7 @@ getfeaturest <- function(list,
         q <- stats::p.adjust(p, method = "BH")
         m <- nrow(data)
         df <- cbind.data.frame(sdn, dm, p, q, mz, rt, data)
-        df <- df[order(df$p),]
+        df <- df[order(df$p), ]
         df$alpha <- c(1:m) * pt / m
         rp <- vector()
         for (i in c(1:nrow(df))) {
@@ -229,7 +231,7 @@ getfeaturest <- function(list,
                 rp[i] <- r$power
         }
         df <- cbind(power = rp, df)
-        df <- df[df$power > power,]
+        df <- df[df$power > power, ]
         return(df)
 }
 
@@ -283,7 +285,7 @@ getfeaturesanova <- function(list,
         m <- nrow(data)
         df <- cbind.data.frame(sdn, sdg, rsd, p, q, mz, rt,
                                data)
-        df <- df[order(df$p),]
+        df <- df[order(df$p), ]
         df$alpha <- c(1:m) * pt / m
         rp <- vector()
         for (i in c(1:nrow(df))) {
@@ -297,7 +299,7 @@ getfeaturesanova <- function(list,
                 rp[i] <- r$power
         }
         df <- cbind(power = rp, df)
-        df <- df[df$power > power,]
+        df <- df[df$power > power, ]
         return(df)
 }
 #' Get the overlap peaks by mass and retention time range
@@ -305,17 +307,20 @@ getfeaturesanova <- function(list,
 #' @param list2 list with data as peaks list, mz, rt, mzrange, rtrange and group information to overlap
 #' @return logical index for list 1's peaks
 #' @export
-getoverlappeak <- function(list1,list2){
+getoverlappeak <- function(list1, list2) {
         mz1 <- data.table::as.data.table(list1$mzrange)
         rt1 <- data.table::as.data.table(list1$rtrange)
         mz2 <- data.table::as.data.table(list2$mzrange)
         rt2 <- data.table::as.data.table(list2$rtrange)
-        colnames(mz1) <- colnames(mz2) <- colnames(rt1) <- colnames(rt2) <- c('min','max')
+        colnames(mz1) <-
+                colnames(mz2) <- colnames(rt1) <- colnames(rt2) <- c('min', 'max')
         data.table::setkey(mz2, min, max)
         data.table::setkey(rt2, min, max)
-        overlapms <- data.table::foverlaps(mz1,mz2, which=TRUE,mult = 'first')
-        overlaprt <- data.table::foverlaps(rt1, rt2, which=TRUE,mult = 'first')
-        index <- (!is.na(overlapms))&(!is.na(overlaprt))
+        overlapms <-
+                data.table::foverlaps(mz1, mz2, which = TRUE, mult = 'first')
+        overlaprt <-
+                data.table::foverlaps(rt1, rt2, which = TRUE, mult = 'first')
+        index <- (!is.na(overlapms)) & (!is.na(overlaprt))
         return(index)
 }
 #' Get the overlap peaks by mass range
@@ -323,12 +328,13 @@ getoverlappeak <- function(list1,list2){
 #' @param mzrange2 mass range 2 to overlap
 #' @return logical index for mzrange1's peaks
 #' @export
-getoverlapmass <- function(mzrange1,mzrange2){
+getoverlapmass <- function(mzrange1, mzrange2) {
         mz1 <- data.table::as.data.table(mzrange1)
         mz2 <- data.table::as.data.table(mzrange2)
-        colnames(mz1) <- colnames(mz2) <- c('min','max')
+        colnames(mz1) <- colnames(mz2) <- c('min', 'max')
         data.table::setkey(mz2, min, max)
-        overlapms <- data.table::foverlaps(mz1,mz2, which=TRUE,mult = 'first')
+        overlapms <-
+                data.table::foverlaps(mz1, mz2, which = TRUE, mult = 'first')
 
         index <- (!is.na(overlapms))
         return(index)
@@ -338,12 +344,13 @@ getoverlapmass <- function(mzrange1,mzrange2){
 #' @param rtrange2 mass range 2 to overlap
 #' @return logical index for rtrange1's peaks
 #' @export
-getoverlaprt <- function(rtrange1,rtrange2){
+getoverlaprt <- function(rtrange1, rtrange2) {
         rt1 <- data.table::as.data.table(rtrange1)
         rt2 <- data.table::as.data.table(rtrange2)
-        colnames(rt1) <- colnames(rt2) <- c('min','max')
+        colnames(rt1) <- colnames(rt2) <- c('min', 'max')
         data.table::setkey(rt2, min, max)
-        overlapms <- data.table::foverlaps(rt1,rt2, which=TRUE,mult = 'first')
+        overlapms <-
+                data.table::foverlaps(rt1, rt2, which = TRUE, mult = 'first')
 
         index <- (!is.na(overlapms))
         return(index)
@@ -416,9 +423,11 @@ plotmr <- function(list,
                         if (!is.null(ms) & !is.null(rt)) {
                                 graphics::points(
                                         x = RT[RT > rt[1] & RT <
-                                                       rt[2] & mz > ms[1] & mz < ms[2]],
+                                                       rt[2] &
+                                                       mz > ms[1] & mz < ms[2]],
                                         y = mz[RT >
-                                                       rt[1] & RT < rt[2] & mz > ms[1] & mz <
+                                                       rt[1] &
+                                                       RT < rt[2] & mz > ms[1] & mz <
                                                        ms[2]],
                                         cex = cex,
                                         col = col[i],
@@ -442,7 +451,7 @@ plotmr <- function(list,
                         pch = 19,
                         horiz = T,
                         bty = "n",
-                        inset = c(0,-0.25)
+                        inset = c(0, -0.25)
                 )
                 graphics::legend(
                         "topleft",
@@ -455,7 +464,7 @@ plotmr <- function(list,
                         cex = 0.7,
                         col = grDevices::rgb(0,
                                              0, 0, 0.318),
-                        inset = c(0,-0.25)
+                        inset = c(0, -0.25)
                 )
         } else if (NROW(data) > 0) {
                 graphics::plot(
@@ -488,10 +497,12 @@ plotmr <- function(list,
                         graphics::points(
                                 x = RT[RT > rt[1] & RT <
                                                rt[2] &
-                                               mz > ms[1] & mz < ms[2]],
+                                               mz > ms[1] &
+                                               mz < ms[2]],
                                 y = mz[RT >
                                                rt[1] &
-                                               RT < rt[2] & mz > ms[1] & mz <
+                                               RT < rt[2] &
+                                               mz > ms[1] & mz <
                                                ms[2]],
                                 ,
                                 col = col,
@@ -514,7 +525,7 @@ plotmr <- function(list,
                         pch = 19,
                         horiz = T,
                         bty = "n",
-                        inset = c(0,-0.25)
+                        inset = c(0, -0.25)
                 )
                 graphics::legend(
                         "topleft",
@@ -527,7 +538,7 @@ plotmr <- function(list,
                         cex = 0.7,
                         col = grDevices::rgb(0,
                                              0, 0, 0.318),
-                        inset = c(0,-0.25)
+                        inset = c(0, -0.25)
                 )
 
         } else
@@ -634,7 +645,7 @@ plotmrc <- function(list,
                                              0, 0, 0.618),
                         bty = "n",
                         horiz = T,
-                        inset = c(0,-0.25)
+                        inset = c(0, -0.25)
                 )
                 graphics::legend(
                         "topright",
@@ -648,7 +659,7 @@ plotmrc <- function(list,
                         ),
                         bty = "n",
                         horiz = T,
-                        inset = c(0,-0.25)
+                        inset = c(0, -0.25)
                 )
         } else {
                 graphics::plot(
@@ -731,7 +742,7 @@ plotrsd <- function(list,
                 horiz = T,
                 pch = 19,
                 bty = "n",
-                inset = c(0,-0.25)
+                inset = c(0, -0.25)
         )
         graphics::legend(
                 "topleft",
@@ -743,7 +754,7 @@ plotrsd <- function(list,
                 horiz = T,
                 cex = 0.8,
                 col = grDevices::rgb(0, 0, 0, 0.318),
-                inset = c(0,-0.25)
+                inset = c(0, -0.25)
         )
 }
 
@@ -812,7 +823,7 @@ gifmr <- function(list,
         }, movie.name = filename, ani.width = 800, ani.height = 500)
 }
 
-#' plot the PCA of list
+#' plot the PCA for multiple samples
 #' @param data mzrt profile with row peaks and column samples
 #' @param lv group information
 #' @param index index for selected peaks
@@ -835,7 +846,7 @@ plotpca <- function(data,
                     yrange = NULL,
                     ...) {
         if (!is.null(index)) {
-                data <- data[index,]
+                data <- data[index, ]
         }
 
         if (is.null(lv)) {
@@ -843,7 +854,8 @@ plotpca <- function(data,
         } else {
                 pch = lv
         }
-        pcao <- stats::prcomp(t(data), center = center, scale = scale)
+        pcao <-
+                stats::prcomp(t(data), center = center, scale = scale)
         pcaoVars = signif(((pcao$sdev) ^ 2) / (sum((pcao$sdev) ^ 2)),
                           3) * 100
         graphics::plot(
@@ -857,8 +869,10 @@ plotpca <- function(data,
                 pch = pch,
                 ...
         )
-        if(!(is.null(xrange)&is.null(yrange))){
-                return(colnames(data)[pcao$x[, 1]>xrange[1]&pcao$x[, 1]<xrange[2]& pcao$x[, 2] >yrange[1] & pcao$x[, 2]<yrange[2]])
+        if (!(is.null(xrange) & is.null(yrange))) {
+                return(colnames(data)[pcao$x[, 1] > xrange[1] &
+                                              pcao$x[, 1] < xrange[2] &
+                                              pcao$x[, 2] > yrange[1] & pcao$x[, 2] < yrange[2]])
         }
 }
 
@@ -917,8 +931,9 @@ plothm <- function(data, lv, index = NULL) {
                         xpd = NA,
                         srt = -90
                 )
-                bks <- seq(zlim[1], zlim[2], length.out = (length(icolors) +
-                                                                   1))
+                bks <-
+                        seq(zlim[1], zlim[2], length.out = (length(icolors) +
+                                                                    1))
                 for (i in seq(poly)) {
                         graphics::polygon(
                                 c(0.1, 0.1, 0.3, 0.3),
@@ -964,3 +979,57 @@ plothm <- function(data, lv, index = NULL) {
         plotchange(zlim)
 }
 
+#' plot the density for multiple samples
+#' @param data mzrt profile with row peaks and column samples
+#' @param lv group information
+#' @param index index for selected peaks
+#' @param name name on the figure for samples
+#' @param ... parameters for `plot` function
+#' @return NULL
+#' @examples
+#' data(list)
+#' plotden(list$data, lv = as.character(list$group$class))
+#' @export
+plotden <- function(data,
+                    lv,
+                    index = NULL,
+                    name = NULL,... ) {
+        if (!is.null(index)) {
+                data <- data[index, ]
+        }
+        xlim <- range(log10(data+1),na.rm = T)
+        if (is.null(lv)) {
+                col <- as.numeric(as.factor(colnames(data)))
+                coli <- unique(colnames(data))
+        } else {
+                col <- as.numeric(as.factor(lv))
+                coli <- unique(lv)
+        }
+        plot(
+                1,
+                1,
+                typ = 'n',
+                main = paste0(
+                        'Metabolites profiles changes in',
+                        name,
+                        ' samples'
+                ),
+                xlab = 'Intensity(log based 10)',
+                ylab = 'Density',
+                xlim = c(xlim[1],xlim[2]+1),
+                ylim = c(0, 1),
+                ...
+        )
+        for (i in 1:(ncol(data))) {
+                lines(density(log10(data[, i]+1)),
+                      col = col[i],
+                      lwd = 3)
+        }
+        graphics::legend(
+                "topright",
+                legend = coli,
+                col = unique(col),
+                pch = 19,
+                bty = "n"
+        )
+}

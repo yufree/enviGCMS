@@ -2,7 +2,7 @@
 % Please edit documentation in R/mzrt.R
 \name{plotpca}
 \alias{plotpca}
-\title{plot the PCA of list}
+\title{plot the PCA for multiple samples}
 \usage{
 plotpca(data, lv = NULL, index = NULL, center = T, scale = T,
   xrange = NULL, yrange = NULL, ...)
@@ -28,7 +28,7 @@ plotpca(data, lv = NULL, index = NULL, center = T, scale = T,
 if xrange and yrange are not NULL, return file name of all selected samples on 2D score plot
 }
 \description{
-plot the PCA of list
+plot the PCA for multiple samples
 }
 \examples{
 data(list)

@@ -19,6 +19,7 @@
 - fix wrong object name in getmzrt/getmzrt2
 - add options to export EIC object
 - add function to screen organohalogen compounds
+- add density plot for multiple samples
 
 # enviGCMS 0.5.0
 
@@ -110,7 +111,3 @@
 - Add getdoe and remove former DoE related function
 - Change the plot function from xcmsset based to list based
 - Add support for xcms 3 function
-
-## Tips
-
-- Former related functions could be found in xsetplus package here: https://github.com/yufree/xsetplus
