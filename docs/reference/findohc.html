@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Plot mass spectrum of certain retention time and return mass spectrum vector (MSP file) for NIST search — plotrtms • enviGCMS</title>
+<title>Screen organohalogen compounds by retention time, mass defect analysis and isotope relationship modified by literature report. Also support compounds with [M] and [M+2] ratio cutoff. — findohc • enviGCMS</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Plot mass spectrum of certain retention time and return mass spectrum vector (MSP file) for NIST search — plotrtms" />
+<meta property="og:title" content="Screen organohalogen compounds by retention time, mass defect analysis and isotope relationship modified by literature report. Also support compounds with [M] and [M+2] ratio cutoff. — findohc" />
 
-<meta property="og:description" content="Plot mass spectrum of certain retention time and return mass spectrum vector (MSP file) for NIST search" />
+<meta property="og:description" content="Screen organohalogen compounds by retention time, mass defect analysis and isotope relationship modified by literature report. Also support compounds with [M] and [M+2] ratio cutoff." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -124,47 +124,71 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Plot mass spectrum of certain retention time and return mass spectrum vector (MSP file) for NIST search</h1>
-    <small class="dont-index">Source: <a href='https://github.com/yufree/enviGCMS/blob/master/R/general.R'><code>R/general.R</code></a></small>
-    <div class="hidden name"><code>plotrtms.Rd</code></div>
+    <h1>Screen organohalogen compounds by retention time, mass defect analysis and isotope relationship modified by literature report. Also support compounds with [M] and [M+2] ratio cutoff.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/yufree/enviGCMS/blob/master/R/mda.R'><code>R/mda.R</code></a></small>
+    <div class="hidden name"><code>findohc.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Plot mass spectrum of certain retention time and return mass spectrum vector (MSP file) for NIST search</p>
+    <p>Screen organohalogen compounds by retention time, mass defect analysis and isotope relationship modified by literature report. Also support compounds with [M] and [M+2] ratio cutoff.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>plotrtms</span>(<span class='no'>data</span>, <span class='no'>rt</span>, <span class='no'>ms</span>)</pre>
+    <pre class="usage"><span class='fu'>findohc</span>(<span class='no'>list</span>, <span class='kw'>sf</span> <span class='kw'>=</span> <span class='fl'>78</span>/<span class='fl'>77.91051</span>, <span class='kw'>step</span> <span class='kw'>=</span> <span class='fl'>0.001</span>, <span class='kw'>stepsd1</span> <span class='kw'>=</span> <span class='fl'>0.003</span>,
+  <span class='kw'>stepsd2</span> <span class='kw'>=</span> <span class='fl'>0.005</span>, <span class='kw'>mzc</span> <span class='kw'>=</span> <span class='fl'>700</span>, <span class='kw'>cutoffint</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='kw'>cutoffr</span> <span class='kw'>=</span> <span class='fl'>0.4</span>,
+  <span class='kw'>clustercf</span> <span class='kw'>=</span> <span class='fl'>10</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>data</th>
-      <td><p>imported data matrix of GC-MS</p></td>
+      <th>list</th>
+      <td><p>list with data as peaks list, mz, rt and group information, retention time should be in seconds</p></td>
     </tr>
     <tr>
-      <th>rt</th>
-      <td><p>vector range of the retention time</p></td>
+      <th>sf</th>
+      <td><p>scale factor, default 78/77.91051(Br)</p></td>
     </tr>
     <tr>
-      <th>ms</th>
-      <td><p>vector range of the m/z</p></td>
+      <th>step</th>
+      <td><p>mass defect step, default 0.001</p></td>
+    </tr>
+    <tr>
+      <th>stepsd1</th>
+      <td><p>mass defect uncertainty for lower mass, default 0.003</p></td>
+    </tr>
+    <tr>
+      <th>stepsd2</th>
+      <td><p>mass defect uncertainty for higher mass, default 0.005</p></td>
+    </tr>
+    <tr>
+      <th>mzc</th>
+      <td><p>threshold of lower mass and higher mass, default 700</p></td>
+    </tr>
+    <tr>
+      <th>cutoffint</th>
+      <td><p>the cutoff of intensity, default 1000</p></td>
+    </tr>
+    <tr>
+      <th>cutoffr</th>
+      <td><p>the cutoff of [M] and [M+2] ratio, default 0.4</p></td>
+    </tr>
+    <tr>
+      <th>clustercf</th>
+      <td><p>the cutoff of cluster analysis to seperate two different ions groups for mass distances and retention time, default 10</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>plot, vector and MSP files for NIST search</p>
+    <p>list with filtered organohalogen compounds</p>
+    
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p>Identification of Novel Brominated Compounds in Flame Retarded Plastics Containing TBBPA by Combining Isotope Pattern and Mass Defect Cluster Analysis Ana Ballesteros-Gómez, Joaquín Ballesteros, Xavier Ortiz, Willem Jonker, Rick Helmus, Karl J. Jobst, John R. Parsons, and Eric J. Reiner Environmental Science &amp; Technology 2017 51 (3), 1518-1526 DOI: 10.1021/acs.est.6b03294</p>
     
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"># NOT RUN {
-matrix <- getmd(rawdata)
-plotrtms(matrix,rt = c(500,1000),ms = (300,500))
-# }
-</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -172,9 +196,9 @@ plotrtms(matrix,rt = c(500,1000),ms = (300,500))
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+
+      <li><a href="#references">References</a></li>
+          </ul>
 
   </div>
 </div>

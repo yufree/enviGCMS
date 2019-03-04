@@ -73,7 +73,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">enviGCMS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.4</span>
       </span>
     </div>
 
@@ -185,12 +185,13 @@
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>faahKO</span>)
-<span class='no'>cdfpath</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>'cdf'</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>'faahKO'</span>)
-<span class='no'>list</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='getmr.html'>getmr</a></span>(<span class='no'>cdfpath</span>, <span class='kw'>pmethod</span> <span class='kw'>=</span> <span class='st'>' '</span>)
-<span class='fu'>getfeaturest</span>(<span class='no'>list</span>)
-<span class='co'># }</span></pre>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>list</span>)
+<span class='fu'>getfeaturest</span>(<span class='no'>list</span>,<span class='kw'>rsdcf</span><span class='kw'>=</span><span class='fl'>100</span>)</div><div class='output co'>#&gt;                power      sdn        dm          p         q      mz       rt
+#&gt; 288.1/2796 0.9895975 55091.44 -442635.6 0.07674178 0.5619478 288.138 2796.024
+#&gt;                ko15     ko16     ko18     ko19     ko21     ko22     wt15
+#&gt; 288.1/2796 233984.2 295667.6 323173.5 286756.3 318510.6 401680.3 988202.9
+#&gt;                wt16     wt18     wt19     wt21    wt22       alpha
+#&gt; 288.1/2796 213838.3 639029.4 395495.1 544135.3 1734885 0.006828194</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

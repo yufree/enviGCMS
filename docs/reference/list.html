@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Plot mass spectrum of certain retention time and return mass spectrum vector (MSP file) for NIST search — plotrtms • enviGCMS</title>
+<title>Demo data — list • enviGCMS</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Plot mass spectrum of certain retention time and return mass spectrum vector (MSP file) for NIST search — plotrtms" />
+<meta property="og:title" content="Demo data — list" />
 
-<meta property="og:description" content="Plot mass spectrum of certain retention time and return mass spectrum vector (MSP file) for NIST search" />
+<meta property="og:description" content="Demo data" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -124,57 +124,31 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Plot mass spectrum of certain retention time and return mass spectrum vector (MSP file) for NIST search</h1>
+    <h1>Demo data</h1>
     <small class="dont-index">Source: <a href='https://github.com/yufree/enviGCMS/blob/master/R/general.R'><code>R/general.R</code></a></small>
-    <div class="hidden name"><code>plotrtms.Rd</code></div>
+    <div class="hidden name"><code>list.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Plot mass spectrum of certain retention time and return mass spectrum vector (MSP file) for NIST search</p>
+    <p>Demo data</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>plotrtms</span>(<span class='no'>data</span>, <span class='no'>rt</span>, <span class='no'>ms</span>)</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>data</th>
-      <td><p>imported data matrix of GC-MS</p></td>
-    </tr>
-    <tr>
-      <th>rt</th>
-      <td><p>vector range of the retention time</p></td>
-    </tr>
-    <tr>
-      <th>ms</th>
-      <td><p>vector range of the m/z</p></td>
-    </tr>
-    </table>
-    
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    <pre class="usage"><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>list</span>)</pre>
+        
+    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>plot, vector and MSP files for NIST search</p>
+    <p>A list object with data, mass to charge ratio, retention time and group information. The list is generated from faahKO package by `getmr` function.</p>
     
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"># NOT RUN {
-matrix <- getmd(rawdata)
-plotrtms(matrix,rt = c(500,1000),ms = (300,500))
-# }
-</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#value">Value</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+      <li><a href="#format">Format</a></li>
+          </ul>
 
   </div>
 </div>
