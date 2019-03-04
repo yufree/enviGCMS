@@ -31,12 +31,6 @@ if xrange and yrange are not NULL, return file name of all selected samples on 2
 plot the PCA of list
 }
 \examples{
-\dontrun{
-library(faahKO)
-cdfpath <- system.file('cdf', package = 'faahKO')
-list <- getmr(cdfpath, pmethod = ' ')
-data <- list$data
-lv <- as.character(list$group$class)
-plotpca(data, lv)
-}
+data(list)
+plotpca(list$data, lv = as.character(list$group$class))
 }

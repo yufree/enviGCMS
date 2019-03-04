@@ -16,3 +16,7 @@ plothm(data, lv, index = NULL)
 \description{
 Plot the heatmap of mzrt profiles
 }
+\examples{
+data(list)
+plothm(list$data, lv = list$group$class)
+}

@@ -16,7 +16,5 @@ Relative Mass Defect
 Get the Relative Mass Defect
 }
 \examples{
-\dontrun{
 getrmd(getmass('C2H4'))
-}
 }

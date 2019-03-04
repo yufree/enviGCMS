@@ -29,12 +29,8 @@ list with group infomation, filtered peaks and index
 Filter the data based on DoE, rsd, intensity
 }
 \examples{
-\dontrun{
-library(faahKO)
-cdfpath <- system.file('cdf', package = 'faahKO')
-list <- getmr(cdfpath, pmethod = ' ')
+data(list)
 getdoe(list)
-}
 }
 \seealso{
 \code{\link{getdata2}},\code{\link{getdata}}, \code{\link{getmzrt}}, \code{\link{getimputation}}, \code{\link{getmr}}

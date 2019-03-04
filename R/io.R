@@ -447,11 +447,9 @@ getmzrtcsv <- function(path) {
 #' @param outfilename the name of the MSP file, default is 'unknown'
 #' @return none a MSP file will be created at the subfolder working dictionary with name 'MSP'
 #' @examples
-#' \dontrun{
 #' mz <- c(10000,20000,10000,30000,5000)
 #' names(mz) <- c(101,143,189,221,234)
 #' writeMSP(mz,'test')
-#' }
 #' @export
 writeMSP <- function(mz, outfilename = "unknown") {
     mz <- paste(names(mz), round(mz))

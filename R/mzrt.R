@@ -3,12 +3,8 @@
 #' @param method 'r' means remove, 'l' means use half the minimum of the values across the peaks list, 'mean' means mean of the values across the samples, 'median' means median of the values across the samples, '0' means 0, '1' means 1. Default 'l'.
 #' @return list with imputed peaks
 #' @examples
-#' \dontrun{
-#' library(faahKO)
-#' cdfpath <- system.file('cdf', package = 'faahKO')
-#' list <- getmr(cdfpath, pmethod = ' ')
+#' data(list)
 #' getimputation(list)
-#' }
 #' @export
 #' @seealso \code{\link{getdata2}},\code{\link{getdata}}, \code{\link{getmzrt}},\code{\link{getdoe}}, \code{\link{getmr}}
 getimputation <- function(list, method = "l") {
@@ -57,12 +53,8 @@ getimputation <- function(list, method = "l") {
 #' @param index the index of peaks considered, default NULL
 #' @return list with group infomation, filtered peaks and index
 #' @examples
-#' \dontrun{
-#' library(faahKO)
-#' cdfpath <- system.file('cdf', package = 'faahKO')
-#' list <- getmr(cdfpath, pmethod = ' ')
+#' data(list)
 #' getdoe(list)
-#' }
 #' @export
 #' @seealso \code{\link{getdata2}},\code{\link{getdata}}, \code{\link{getmzrt}}, \code{\link{getimputation}}, \code{\link{getmr}}
 getdoe <- function(list,
@@ -192,12 +184,8 @@ getdoe <- function(list,
 #' @param index the index of peaks considered, default NULL
 #' @return dataframe with peaks fit the setting above
 #' @examples
-#' \dontrun{
-#' library(faahKO)
-#' cdfpath <- system.file('cdf', package = 'faahKO')
-#' list <- getmr(cdfpath, pmethod = ' ')
-#' getfeaturest(list)
-#' }
+#' data(list)
+#' getfeaturest(list,rsdcf=100)
 #' @export
 
 getfeaturest <- function(list,
@@ -257,6 +245,9 @@ getfeaturest <- function(list,
 #' @param imputation parameters for `getimputation` function method
 #' @param index the index of peaks considered, default NULL
 #' @return dataframe with peaks fit the setting above
+#' @examples
+#' data(list)
+#' getfeaturesanova(list)
 #' @export
 
 getfeaturesanova <- function(list,
@@ -369,12 +360,8 @@ getoverlaprt <- function(rtrange1,rtrange2){
 #' @param ... parameters for `plot` function
 #' @return data fit the cutoff
 #' @examples
-#' \dontrun{
-#' library(faahKO)
-#' cdfpath <- system.file('cdf', package = 'faahKO')
-#' list <- getmr(cdfpath, pmethod = ' ')
+#' data(list)
 #' plotmr(list)
-#' }
 #' @export
 plotmr <- function(list,
                    rt = NULL,
@@ -569,12 +556,8 @@ plotmr <- function(list,
 #' @param ... parameters for `plot` function
 #' @return NULL
 #' @examples
-#' \dontrun{
-#' library(faahKO)
-#' cdfpath <- system.file('cdf', package = 'faahKO')
-#' list <- getmr(cdfpath, pmethod = ' ')
+#' data(list)
 #' plotmrc(list)
-#' }
 #' @export
 plotmrc <- function(list,
                     ms = c(100, 800),
@@ -692,12 +675,8 @@ plotmrc <- function(list,
 #' @param ... other parameters for `plot` function
 #' @return NULL
 #' @examples
-#' \dontrun{
-#' library(faahKO)
-#' cdfpath <- system.file('cdf', package = 'faahKO')
-#' list <- getmr(cdfpath, pmethod = ' ')
+#' data(list)
 #' plotrsd(list)
-#' }
 #' @export
 plotrsd <- function(list,
                     ms = c(100, 800),
@@ -779,12 +758,8 @@ plotrsd <- function(list,
 #' @param ... parameters for `plot` function
 #' @return gif file
 #' @examples
-#' \dontrun{
-#' library(faahKO)
-#' cdfpath <- system.file('cdf', package = 'faahKO')
-#' list <- getmr(cdfpath, pmethod = ' ')
+#' data(list)
 #' gifmr(list)
-#' }
 #' @export
 gifmr <- function(list,
                   ms = c(100, 500),
@@ -848,16 +823,9 @@ gifmr <- function(list,
 #' @param ... other parameters for `plot` function
 #' @return if xrange and yrange are not NULL, return file name of all selected samples on 2D score plot
 #' @examples
-#' \dontrun{
-#' library(faahKO)
-#' cdfpath <- system.file('cdf', package = 'faahKO')
-#' list <- getmr(cdfpath, pmethod = ' ')
-#' data <- list$data
-#' lv <- as.character(list$group$class)
-#' plotpca(data, lv)
-#' }
+#' data(list)
+#' plotpca(list$data, lv = as.character(list$group$class))
 #' @export
-
 plotpca <- function(data,
                     lv = NULL,
                     index = NULL,
@@ -899,6 +867,9 @@ plotpca <- function(data,
 #' @param lv group information
 #' @param index index for selected peaks
 #' @return NULL
+#' @examples
+#' data(list)
+#' plothm(list$data, lv = list$group$class)
 #' @export
 plothm <- function(data, lv, index = NULL) {
         icolors <-

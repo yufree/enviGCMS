@@ -31,10 +31,6 @@ data fit the cutoff
 plot the scatter plot for peaks list with threshold
 }
 \examples{
-\dontrun{
-library(faahKO)
-cdfpath <- system.file('cdf', package = 'faahKO')
-list <- getmr(cdfpath, pmethod = ' ')
+data(list)
 plotmr(list)
-}
 }

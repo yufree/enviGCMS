@@ -16,7 +16,5 @@ raw Mass Defect
 Get the raw Mass Defect
 }
 \examples{
-\dontrun{
 getmdr(getmass('C2H4'))
-}
 }

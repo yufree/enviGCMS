@@ -33,10 +33,6 @@ dataframe with peaks fit the setting above
 Get the features from t test, with p value, q value, rsd and power restriction
 }
 \examples{
-\dontrun{
-library(faahKO)
-cdfpath <- system.file('cdf', package = 'faahKO')
-list <- getmr(cdfpath, pmethod = ' ')
-getfeaturest(list)
-}
+data(list)
+getfeaturest(list,rsdcf=100)
 }

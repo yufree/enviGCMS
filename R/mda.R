@@ -2,9 +2,7 @@
 #' @param data a chemical formula or reaction e.g. 'Cl-H', 'C2H4'
 #' @return numerical vector
 #' @examples
-#' \dontrun{
 #' getmass('CH2')
-#' }
 #' @export
 getmass <- function(data) {
         if (grepl('-', data)) {
@@ -26,9 +24,7 @@ getmass <- function(data) {
 #' @param mz numeric vector for exact mass
 #' @return Relative Mass Defect
 #' @examples
-#' \dontrun{
 #' getrmd(getmass('C2H4'))
-#' }
 #' @export
 getrmd <- function(mz){
         rmd <- round((round(mz) - mz) / mz * 10 ^ 6)
@@ -38,9 +34,7 @@ getrmd <- function(mz){
 #' @param mz numeric vector for exact mass
 #' @return raw Mass Defect
 #' @examples
-#' \dontrun{
 #' getmdr(getmass('C2H4'))
-#' }
 #' @export
 getmdr <- function(mz){
         md <- round((round(mz) - mz) * 10 ^ 3)
@@ -52,9 +46,7 @@ getmdr <- function(mz){
 #' @param method you could use `round`, `floor` or `ceiling`
 #' @return high order Mass Defect with details
 #' @examples
-#' \dontrun{
 #' getmdh(getmass('C2H4'))
-#' }
 #' @export
 getmdh <- function(mz,cus = c('CH2,H2'), method = 'round'){
         getorder <- function(input) {
@@ -283,7 +275,6 @@ getmdh <- function(mz,cus = c('CH2,H2'), method = 'round'){
 #' @return list with filtered organohalogen compounds
 #' @references Identification of Novel Brominated Compounds in Flame Retarded Plastics Containing TBBPA by Combining Isotope Pattern and Mass Defect Cluster Analysis Ana Ballesteros-Gómez, Joaquín Ballesteros, Xavier Ortiz, Willem Jonker, Rick Helmus, Karl J. Jobst, John R. Parsons, and Eric J. Reiner Environmental Science & Technology 2017 51 (3), 1518-1526 DOI: 10.1021/acs.est.6b03294
 #' @export
-#'
 findohc <-
         function(list,
                  sf = 78 / 77.91051,

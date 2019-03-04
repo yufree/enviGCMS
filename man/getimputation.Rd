@@ -18,12 +18,8 @@ list with imputed peaks
 Impute the peaks list data
 }
 \examples{
-\dontrun{
-library(faahKO)
-cdfpath <- system.file('cdf', package = 'faahKO')
-list <- getmr(cdfpath, pmethod = ' ')
+data(list)
 getimputation(list)
-}
 }
 \seealso{
 \code{\link{getdata2}},\code{\link{getdata}}, \code{\link{getmzrt}},\code{\link{getdoe}}, \code{\link{getmr}}

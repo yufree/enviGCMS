@@ -1,3 +1,9 @@
+#' Demo data
+#' @docType data
+#' @usage data(list)
+#' @format A list object with data, mass to charge ratio, retention time and group information. The list is generated from faahKO package by `getmr` function.
+"list"
+
 #' define the Mode function
 #' @param x vector
 #' @return Mode of the vector

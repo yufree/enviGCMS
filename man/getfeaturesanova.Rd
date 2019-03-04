@@ -34,3 +34,7 @@ dataframe with peaks fit the setting above
 \description{
 Get the features from anova, with p value, q value, rsd and power restriction
 }
+\examples{
+data(list)
+getfeaturesanova(list)
+}

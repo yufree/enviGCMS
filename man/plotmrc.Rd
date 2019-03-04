@@ -26,10 +26,6 @@ plotmrc(list, ms = c(100, 800), inscf = 5, rsdcf = 30,
 plot the diff scatter plot for one xcmsset objects with threshold between two groups
 }
 \examples{
-\dontrun{
-library(faahKO)
-cdfpath <- system.file('cdf', package = 'faahKO')
-list <- getmr(cdfpath, pmethod = ' ')
+data(list)
 plotmrc(list)
-}
 }
