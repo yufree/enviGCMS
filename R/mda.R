@@ -270,8 +270,8 @@ getmdh <- function(mz,cus = c('CH2,H2'), method = 'round'){
         return(re)
 }
 
-#' Screen organohalogen compounds by retention time, mass defect analysis and isotope relationship modified by literature report
-#' @param list list with data as peaks list, mz, rt and group information
+#' Screen organohalogen compounds by retention time, mass defect analysis and isotope relationship modified by literature report. Also support compounds with [M] and [M+2] ratio cutoff.
+#' @param list list with data as peaks list, mz, rt and group information, retention time should be in seconds
 #' @param sf scale factor, default 78/77.91051(Br)
 #' @param step mass defect step, default 0.001
 #' @param stepsd1 mass defect uncertainty for lower mass, default 0.003
@@ -323,8 +323,8 @@ findohc <-
                         rtt <- rt[index & ins > cutoffint]
                         #dist(mzt) <-
                         if (length(mzt) >= 2) {
-                                c <- stats::cutree(stats::hclust(stats::dist(mzt)), h = 10)
-                                t <- stats::cutree(stats::hclust(stats::dist(rtt)), h = 10)
+                                c <- stats::cutree(stats::hclust(stats::dist(mzt)), h = clustercf)
+                                t <- stats::cutree(stats::hclust(stats::dist(rtt)), h = clustercf)
                                 u <- paste0(c,t)
                                 cn <- length(unique(u))
                                 lit <- cbind.data.frame(li, u, i)
