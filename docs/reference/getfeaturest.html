@@ -125,7 +125,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get the features from t test, with p value, q value, rsd and power restriction</h1>
-    <small class="dont-index">Source: <a href='https://github.com/yufree/enviGCMS/blob/master/R/mzrt.R'><code>R/mzrt.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/yufree/enviGCMS/blob/master/R/deprecated.R'><code>R/deprecated.R</code></a></small>
     <div class="hidden name"><code>getfeaturest.Rd</code></div>
     </div>
 
@@ -136,7 +136,7 @@
     </div>
 
     <pre class="usage"><span class='fu'>getfeaturest</span>(<span class='no'>list</span>, <span class='kw'>power</span> <span class='kw'>=</span> <span class='fl'>0.8</span>, <span class='kw'>pt</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='kw'>qt</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>3</span>,
-  <span class='kw'>inscf</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>rsdcf</span> <span class='kw'>=</span> <span class='fl'>30</span>, <span class='kw'>imputation</span> <span class='kw'>=</span> <span class='st'>"l"</span>, <span class='kw'>index</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+  <span class='kw'>imputation</span> <span class='kw'>=</span> <span class='st'>"l"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -162,20 +162,8 @@
       <td><p>sample numbers in one group</p></td>
     </tr>
     <tr>
-      <th>inscf</th>
-      <td><p>Log intensity cutoff for peaks across samples. If any peaks show a intensity higher than the cutoff in any samples, this peaks would not be filtered. default 5</p></td>
-    </tr>
-    <tr>
-      <th>rsdcf</th>
-      <td><p>the rsd cutoff of all peaks in all group</p></td>
-    </tr>
-    <tr>
       <th>imputation</th>
       <td><p>parameters for `getimputation` function method</p></td>
-    </tr>
-    <tr>
-      <th>index</th>
-      <td><p>the index of peaks considered, default NULL</p></td>
     </tr>
     </table>
     
@@ -184,14 +172,6 @@
     <p>dataframe with peaks fit the setting above</p>
     
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>list</span>)
-<span class='fu'>getfeaturest</span>(<span class='no'>list</span>,<span class='kw'>rsdcf</span><span class='kw'>=</span><span class='fl'>100</span>)</div><div class='output co'>#&gt;                power      sdn        dm          p         q      mz       rt
-#&gt; 288.1/2796 0.9895975 55091.44 -442635.6 0.07674178 0.5619478 288.138 2796.024
-#&gt;                ko15     ko16     ko18     ko19     ko21     ko22     wt15
-#&gt; 288.1/2796 233984.2 295667.6 323173.5 286756.3 318510.6 401680.3 988202.9
-#&gt;                wt16     wt18     wt19     wt21    wt22       alpha
-#&gt; 288.1/2796 213838.3 639029.4 395495.1 544135.3 1734885 0.006828194</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -199,9 +179,7 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+          </ul>
 
   </div>
 </div>

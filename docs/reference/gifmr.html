@@ -125,7 +125,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>plot scatter plot for rt-mz profile and output gif file for mutiple groups</h1>
-    <small class="dont-index">Source: <a href='https://github.com/yufree/enviGCMS/blob/master/R/mzrt.R'><code>R/mzrt.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/yufree/enviGCMS/blob/master/R/plotmzrt.R'><code>R/plotmzrt.R</code></a></small>
     <div class="hidden name"><code>gifmr.Rd</code></div>
     </div>
 
@@ -136,7 +136,7 @@
     </div>
 
     <pre class="usage"><span class='fu'>gifmr</span>(<span class='no'>list</span>, <span class='kw'>ms</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>100</span>, <span class='fl'>500</span>), <span class='kw'>rsdcf</span> <span class='kw'>=</span> <span class='fl'>30</span>, <span class='kw'>inscf</span> <span class='kw'>=</span> <span class='fl'>5</span>,
-  <span class='kw'>imputation</span> <span class='kw'>=</span> <span class='st'>"i"</span>, <span class='kw'>index</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>file</span> <span class='kw'>=</span> <span class='st'>"test"</span>)</pre>
+  <span class='kw'>imputation</span> <span class='kw'>=</span> <span class='st'>"i"</span>, <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"test"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -162,12 +162,8 @@
       <td><p>parameters for `getimputation` function method</p></td>
     </tr>
     <tr>
-      <th>index</th>
-      <td><p>the index of peaks considered, default NULL</p></td>
-    </tr>
-    <tr>
-      <th>file</th>
-      <td><p>file name for gif file, default NULL</p></td>
+      <th>name</th>
+      <td><p>file name for gif file, default test</p></td>
     </tr>
     <tr>
       <th>...</th>

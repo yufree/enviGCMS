@@ -89,7 +89,7 @@
       <h1>Data analysis of GC-MS and LC-MS in Envrionmental Science</h1>
                         <h4 class="author">Miao Yu</h4>
             
-            <h4 class="date">2019-03-04</h4>
+            <h4 class="date">2019-03-08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/yufree/enviGCMS/blob/master/vignettes/GCMSDA.Rmd"><code>vignettes/GCMSDA.Rmd</code></a></small>
       <div class="hidden name"><code>GCMSDA.Rmd</code></div>
@@ -165,19 +165,19 @@ plotmz(data)</a></code></pre>
 <ul>
 <li><p><code>getdata</code> could be used to get the <code>xcmsSet</code> object in one step with optimized methods</p></li>
 <li><p><code>getdata2</code> could be used to get the <code>XCMSnExp</code> object in one step with optimized methods</p></li>
-<li><p><code>getupload</code> could get the csv files to be submitted to Metaboanalyst from <code>xcmsSet</code>/<code>XCMSnExp</code>/<code>list</code> object</p></li>
-<li><p><code>getmzrt</code> could get a list or csv files with peaks list, mz, retention time and class of samples from <code>xcmsSet</code>/<code>XCMSnExp</code> object</p></li>
-<li><p><code>getmzrtcsv</code> could read in the csv files and return a list for peaks list</p></li>
+<li><p><code>getmzrt</code> could get a list as <code>mzrt</code> object with peaks list, mz, retention time and class of samples from <code>xcmsSet</code>/<code>XCMSnExp</code> object. You could also save related <code>xcmsSet</code> and <code>xcmsEIC</code> object for further analysis. It also support to output the file for metaboanalyst, xMSannotator, Mummichog pathway analysis and paired mass distance(PMD) analysis.</p></li>
+<li><p><code>getmzrtcsv</code> could read in the csv files and return a list for peaks list as <code>mzrt</code> object</p></li>
 </ul>
 </div>
 <div id="data-imputation-and-filtering" class="section level3">
 <h3 class="hasAnchor">
 <a href="#data-imputation-and-filtering" class="anchor"></a>Data imputation and filtering</h3>
 <ul>
-<li><p><code>getimputation</code> could impute NA in the peaks list</p></li>
-<li><p><code>getdoe</code> could filter the data based on DoE, rsd, intensity</p></li>
-<li><p><code>getfeaturest</code> could get the features from t test, with p value, q value, rsd and power restriction</p></li>
-<li><p><code>getfeaturesanova</code> could get the features from anova, with p value, q value, rsd and power restriction</p></li>
+<li><p><code>getimputation</code> could impute NA in the peaks list.</p></li>
+<li><p><code>getfilter</code> could filter the data based on row and colomn index.</p></li>
+<li><p><code>getdoe</code> could filter the data based on rsd and intensity and generate group mean, standard deviation, and group rsd.</p></li>
+<li><p><code>getpower</code> could compute the power for known peaks list or the sample numbers for each peak</p></li>
+<li><p><code>getoverlappeak</code> could get the overlap peaks by mass and retention time range for two different list objects</p></li>
 </ul>
 </div>
 <div id="visulation-of-peaks-list-data" class="section level3">
@@ -186,9 +186,11 @@ plotmz(data)</a></code></pre>
 <ul>
 <li><p><code>plotmr</code> could plot the scatter plot for peaks list with threshold</p></li>
 <li><p><code>plotmrc</code> could plot the differences as scatter plot for peaks list with threshold between two group of data</p></li>
-<li><p><code>plote</code> could plot EIC and boxplot for all peaks and return diffreport</p></li>
 <li><p><code>plotrsd</code> could plot the rsd influnces of data in different groups</p></li>
 <li><p><code>gifmr</code> could plot scatter plot for peaks list and output gif file for mutiple groups</p></li>
+<li><p><code>plotpca</code> could plot pca score plot</p></li>
+<li><p><code>plothm</code> could plot heapmap</p></li>
+<li><p><code>plotden</code> could plot density of multiple samples</p></li>
 </ul>
 </div>
 </div>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Principal component analysis(PCA) for SVA corrected data and raw data — svapca • enviGCMS</title>
+<title>Filter the data based on row and column index — getfilter • enviGCMS</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Principal component analysis(PCA) for SVA corrected data and raw data — svapca" />
+<meta property="og:title" content="Filter the data based on row and column index — getfilter" />
 
-<meta property="og:description" content="Principal component analysis(PCA) for SVA corrected data and raw data" />
+<meta property="og:description" content="Filter the data based on row and column index" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -124,62 +124,49 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Principal component analysis(PCA) for SVA corrected data and raw data</h1>
-    <small class="dont-index">Source: <a href='https://github.com/yufree/enviGCMS/blob/master/R/deprecated.R'><code>R/deprecated.R</code></a></small>
-    <div class="hidden name"><code>svapca.Rd</code></div>
+    <h1>Filter the data based on row and column index</h1>
+    <small class="dont-index">Source: <a href='https://github.com/yufree/enviGCMS/blob/master/R/getmzrt.R'><code>R/getmzrt.R</code></a></small>
+    <div class="hidden name"><code>getfilter.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Principal component analysis(PCA) for SVA corrected data and raw data</p>
+    <p>Filter the data based on row and column index</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>svapca</span>(<span class='no'>list</span>, <span class='kw'>center</span> <span class='kw'>=</span> <span class='no'>T</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='no'>T</span>, <span class='kw'>lv</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>getfilter</span>(<span class='no'>list</span>, <span class='kw'>rowindex</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>colindex</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>list</th>
-      <td><p>results from svacor function</p></td>
+      <td><p>list with data as peaks list, mz, rt and group information</p></td>
     </tr>
     <tr>
-      <th>center</th>
-      <td><p>parameters for PCA</p></td>
+      <th>rowindex</th>
+      <td><p>logical, row index to keep</p></td>
     </tr>
     <tr>
-      <th>scale</th>
-      <td><p>parameters for scale</p></td>
-    </tr>
-    <tr>
-      <th>lv</th>
-      <td><p>group information</p></td>
+      <th>colindex</th>
+      <td><p>logical, column index to keep</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>plot</p>
+    <p>list with remain peaks, and filtered peaks index</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='svacor.html'>svacor</a></code>, <code><a href='svaplot.html'>svaplot</a></code>, <code><a href='svabatch.html'>svabatch</a></code></p></div>
+    <div class='dont-index'><p><code><a href='getdata2.html'>getdata2</a></code>,<code><a href='getdata.html'>getdata</a></code>, <code><a href='getmzrt.html'>getmzrt</a></code>, <code><a href='getimputation.html'>getimputation</a></code>, <code><a href='getmr.html'>getmr</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>faahKO</span>)
-<span class='no'>cdfpath</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"cdf"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"faahKO"</span>)
-<span class='no'>cdffiles</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list.files'>list.files</a></span>(<span class='no'>cdfpath</span>, <span class='kw'>recursive</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>full.names</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='no'>xset</span> <span class='kw'>&lt;-</span> <span class='fu'>xcmsSet</span>(<span class='no'>cdffiles</span>)
-<span class='no'>xset</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/grDevices/topics/plotmath'>group</a></span>(<span class='no'>xset</span>)
-<span class='no'>xset2</span> <span class='kw'>&lt;-</span> <span class='fu'>retcor</span>(<span class='no'>xset</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='st'>"symmetric"</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='st'>"mdevden"</span>)
-<span class='no'>xset2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/grDevices/topics/plotmath'>group</a></span>(<span class='no'>xset2</span>, <span class='kw'>bw</span> <span class='kw'>=</span> <span class='fl'>10</span>)
-<span class='no'>xset3</span> <span class='kw'>&lt;-</span> <span class='fu'>fillPeaks</span>(<span class='no'>xset2</span>)
-<span class='no'>df</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='svacor.html'>svacor</a></span>(<span class='no'>xset3</span>)
-<span class='fu'>svapca</span>(<span class='no'>df</span>)
-<span class='co'># }</span></pre>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>list</span>)
+<span class='no'>li</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='getdoe.html'>getdoe</a></span>(<span class='no'>list</span>)
+<span class='no'>lif</span> <span class='kw'>&lt;-</span> <span class='fu'>getfilter</span>(<span class='no'>li</span>,<span class='kw'>rowindex</span> <span class='kw'>=</span> <span class='no'>li</span>$<span class='no'>rsdindex</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
