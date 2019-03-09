@@ -1,369 +1,10 @@
-#' Impute the peaks list data
-#' @param list list with data as peaks list, mz, rt and group information
-#' @param method 'r' means remove, 'l' means use half the minimum of the values across the peaks list, 'mean' means mean of the values across the samples, 'median' means median of the values across the samples, '0' means 0, '1' means 1. Default 'l'.
-#' @return list with imputed peaks
-#' @examples
-#' data(list)
-#' getimputation(list)
-#' @export
-#' @seealso \code{\link{getdata2}},\code{\link{getdata}}, \code{\link{getmzrt}},\code{\link{getdoe}}, \code{\link{getmr}}
-getimputation <- function(list, method = "l") {
-        data <- list$data
-        mz <- list$mz
-        rt <- list$rt
-
-        if (method == "r") {
-                idx <- stats::complete.cases(data)
-                data <- data[idx, ]
-                mz <- mz[idx]
-                rt <- rt[idx]
-        } else if (method == "l") {
-                impute <- min(data, na.rm = T) / 2
-                data[is.na(data)] <- impute
-        } else if (method == "mean") {
-                for (i in 1:ncol(data)) {
-                        data[is.na(data[, i]), i] <- mean(data[, i],
-                                                          na.rm = TRUE)
-                }
-        } else if (method == "median") {
-                for (i in 1:ncol(data)) {
-                        data[is.na(data[, i]), i] <- stats::median(data[,
-                                                                        i], na.rm = TRUE)
-                }
-        } else if (method == "1") {
-                data[is.na(data)] <- 1
-        } else if (method == "0") {
-                data[is.na(data)] <- 0
-        } else {
-                data <- data
-        }
-        list$data <- data
-        list$mz <- mz
-        list$rt <- rt
-        return(list)
-}
-
-#' Filter the data based on DoE, rsd, intensity
-#' @param list list with data as peaks list, mz, rt and group information
-#' @param inscf Log intensity cutoff for peaks across samples. If any peaks show a intensity higher than the cutoff in any samples, this peaks would not be filtered. default 5
-#' @param rsdcf the rsd cutoff of all peaks in all group
-#' @param imputation parameters for `getimputation` function method
-#' @param tr logical. TRUE means dataset with technical replicates at the base level folder
-#' @param rsdcft the rsd cutoff of all peaks in technical replicates
-#' @param index the index of peaks considered, default NULL
-#' @return list with group infomation, filtered peaks and index
-#' @examples
-#' data(list)
-#' getdoe(list)
-#' @export
-#' @seealso \code{\link{getdata2}},\code{\link{getdata}}, \code{\link{getmzrt}}, \code{\link{getimputation}}, \code{\link{getmr}}
-getdoe <- function(list,
-                   inscf = 5,
-                   rsdcf = 100,
-                   rsdcft = 30,
-                   imputation = "l",
-                   tr = F,
-                   index = NULL) {
-        list <- getimputation(list, method = imputation)
-        # use index
-        if (!is.null(index)) {
-                list$data <- list$data[index, ]
-                list$mz <- list$mz[index]
-                list$rt <- list$rt[index]
-        }
-        # remove the technical replicates and use biological
-        # replicates instead
-        if (tr) {
-                data <- list$data
-                lv <- list$group
-                # group base on levels
-                cols <- colnames(lv)
-                mlv <- do.call(paste, c(lv[cols]))
-                # get the rsd of the technical replicates
-                meant <- stats::aggregate(t(data), list(mlv), mean)
-                sdt <- stats::aggregate(t(data), list(mlv), sd)
-                suppressWarnings(rsd <- sdt[, -1] / meant[, -1] *
-                                         100)
-                data <- t(meant[, -1])
-                colnames(data) <- unique(mlv)
-                rsd <- t(rsd)
-                # filter the data based on rsd of the technical
-                # replicates
-                indext <- as.vector(apply(rsd, 1, function(x)
-                        all(x <
-                                    rsdcft)))
-                indext <- indext & (!is.na(indext))
-                data <- data[indext, ]
-                # data with mean of the technical replicates
-                list$data <- data
-                # get new group infomation
-                ng <- NULL
-                if (ncol(lv) > 1) {
-                        for (i in 1:(ncol(lv) - 1)) {
-                                lvi <- sapply(strsplit(
-                                        unique(mlv),
-                                        split = " ",
-                                        fixed = TRUE
-                                ),
-                                `[`,
-                                i)
-                                ng <- cbind(ng, lvi)
-                        }
-                        list$group <- data.frame(ng)
-                } else {
-                        list$group <- data.frame(unique(mlv))
-                }
-                # save the index
-                list$indext <- indext
-        }
-
-        # filter the data based on rsd/intensity
-        data <- list$data
-        lv <- list$group
-        cols <- colnames(lv)
-        # one peak for metabolomics is hard to happen
-        if (sum(NROW(lv) > 1) != 0) {
-                if (sum(NCOL(lv) > 1)) {
-                        mlv <- do.call(paste0, c(lv[cols], sep = ""))
-                } else {
-                        mlv <- unlist(lv)
-                }
-                mean <- stats::aggregate(t(data), list(mlv), mean)
-                sd <- stats::aggregate(t(data), list(mlv), sd)
-                suppressWarnings(rsd <- sd[, -1] / mean[, -1] * 100)
-                mean <- t(mean[, -1])
-                sd <- t(sd[, -1])
-                rsd <- t(rsd)
-                colnames(rsd) <-
-                        colnames(sd) <-
-                        colnames(mean) <- unique(mlv)
-                index <- as.vector(apply(rsd, 1, function(x)
-                        all(x <
-                                    rsdcf))) &
-                        as.vector(apply(mean, 1, function(x)
-                                any(x >
-                                            10 ^ (
-                                                    inscf
-                                            ))))
-                list$groupmean <- mean
-                list$groupsd <- sd
-                list$grouprsd <- rsd
-                list$datafiltered <- data[index, ]
-                list$mzfiltered <- list$mz[index]
-                list$rtfiltered <- list$rt[index]
-                list$groupmeanfiltered <- mean[index, ]
-                list$groupsdfiltered <- sd[index, ]
-                list$grouprsdfiltered <- rsd[index, ]
-                list$index <- index
-                return(list)
-        } else {
-                index <- data > 10 ^ (inscf)
-                list$datafiltered <- data[index]
-                list$mzfiltered <- list$mz[index]
-                list$rtfiltered <- list$rt[index]
-                list$groupmean <- apply(data, 1, mean)
-                list$groupsd <- apply(data, 1, sd)
-                suppressWarnings(list$grouprsd <-
-                                         list$groupsd / list$groupmean * 100)
-                list$groupmeanfiltered <- list$groupmean[index]
-                list$groupsdfiltered <- list$groupsd[index]
-                list$grouprsdfiltered <- list$grouprsd[index]
-                list$index <- index
-                message("Only technical replicates were shown for ONE sample !!!")
-                return(list)
-        }
-}
-
-#' Get the features from t test, with p value, q value, rsd and power restriction
-#' @param list list with data as peaks list, mz, rt and group information (two groups)
-#' @param power defined power
-#' @param pt p value threshold
-#' @param qt q value threshold, BH adjust
-#' @param n sample numbers in one group
-#' @param inscf Log intensity cutoff for peaks across samples. If any peaks show a intensity higher than the cutoff in any samples, this peaks would not be filtered. default 5
-#' @param rsdcf the rsd cutoff of all peaks in all group
-#' @param imputation parameters for `getimputation` function method
-#' @param index the index of peaks considered, default NULL
-#' @return dataframe with peaks fit the setting above
-#' @examples
-#' data(list)
-#' getfeaturest(list,rsdcf=100)
-#' @export
-
-getfeaturest <- function(list,
-                         power = 0.8,
-                         pt = 0.05,
-                         qt = 0.05,
-                         n = 3,
-                         inscf = 5,
-                         rsdcf = 30,
-                         imputation = "l",
-                         index = NULL) {
-        list <- getdoe(
-                list,
-                inscf = inscf,
-                rsdcf = rsdcf,
-                imputation = imputation,
-                index = index
-        )
-        data <- list$datafiltered
-        lv <- list$group$class
-        sdn <- list$groupsdfiltered[, 1]
-        mz <- list$mzfiltered
-        rt <- list$rtfiltered
-
-        ar <- genefilter::rowttests(data, fac = lv)
-        dm <- ar$dm
-        p <- ar$p.value
-        q <- stats::p.adjust(p, method = "BH")
-        m <- nrow(data)
-        df <- cbind.data.frame(sdn, dm, p, q, mz, rt, data)
-        df <- df[order(df$p), ]
-        df$alpha <- c(1:m) * pt / m
-        rp <- vector()
-        for (i in c(1:nrow(df))) {
-                r <- stats::power.t.test(
-                        delta = df$dm[i],
-                        sd = df$sd[i],
-                        sig.level = df$alpha[i],
-                        n = n
-                )
-                rp[i] <- r$power
-        }
-        df <- cbind(power = rp, df)
-        df <- df[df$power > power, ]
-        return(df)
-}
-
-#' Get the features from anova, with p value, q value, rsd and power restriction
-#' @param list list with data as peaks list, mz, rt and group information (more than two groups)
-#' @param power defined power
-#' @param pt p value threshold
-#' @param qt q value threshold, BH adjust
-#' @param n sample numbers in one group
-#' @param ng group numbers
-#' @param inscf Log intensity cutoff for peaks across samples. If any peaks show a intensity higher than the cutoff in any samples, this peaks would not be filtered. default 5
-#' @param rsdcf the rsd cutoff of all peaks in all group
-#' @param imputation parameters for `getimputation` function method
-#' @param index the index of peaks considered, default NULL
-#' @return dataframe with peaks fit the setting above
-#' @examples
-#' data(list)
-#' getfeaturesanova(list)
-#' @export
-
-getfeaturesanova <- function(list,
-                             power = 0.8,
-                             pt = 0.05,
-                             qt = 0.05,
-                             n = 3,
-                             ng = 3,
-                             rsdcf = 100,
-                             inscf = 5,
-                             imputation = "l",
-                             index = NULL) {
-        list <- getdoe(
-                list,
-                inscf = inscf,
-                rsdcf = rsdcf,
-                imputation = imputation,
-                index = index
-        )
-        data <- list$datafiltered
-        lv <- list$group$class
-        sdn <- list$groupsdfiltered[, 1]
-        mz <- list$mzfiltered
-        rt <- list$rtfiltered
-        rsd <- list$grouprsdfiltered
-
-        sdn <- genefilter::rowSds(data[, 1:n])
-        sdg <- genefilter::rowSds(list$groupmeanfiltered)
-
-        ar <- genefilter::rowFtests(data, lv)
-        p <- ar$p.value
-        q <- stats::p.adjust(p, method = "BH")
-        m <- nrow(data)
-        df <- cbind.data.frame(sdn, sdg, rsd, p, q, mz, rt,
-                               data)
-        df <- df[order(df$p), ]
-        df$alpha <- c(1:m) * pt / m
-        rp <- vector()
-        for (i in c(1:nrow(df))) {
-                r <- stats::power.anova.test(
-                        groups = ng,
-                        between.var = df$sdg[i],
-                        within.var = df$sdn[i],
-                        sig.level = df$alpha[i],
-                        n = n
-                )
-                rp[i] <- r$power
-        }
-        df <- cbind(power = rp, df)
-        df <- df[df$power > power, ]
-        return(df)
-}
-#' Get the overlap peaks by mass and retention time range
-#' @param list1 list with data as peaks list, mz, rt, mzrange, rtrange and group information to be overlapped
-#' @param list2 list with data as peaks list, mz, rt, mzrange, rtrange and group information to overlap
-#' @return logical index for list 1's peaks
-#' @export
-getoverlappeak <- function(list1, list2) {
-        mz1 <- data.table::as.data.table(list1$mzrange)
-        rt1 <- data.table::as.data.table(list1$rtrange)
-        mz2 <- data.table::as.data.table(list2$mzrange)
-        rt2 <- data.table::as.data.table(list2$rtrange)
-        colnames(mz1) <-
-                colnames(mz2) <- colnames(rt1) <- colnames(rt2) <- c('min', 'max')
-        data.table::setkey(mz2, min, max)
-        data.table::setkey(rt2, min, max)
-        overlapms <-
-                data.table::foverlaps(mz1, mz2, which = TRUE, mult = 'first')
-        overlaprt <-
-                data.table::foverlaps(rt1, rt2, which = TRUE, mult = 'first')
-        index <- (!is.na(overlapms)) & (!is.na(overlaprt))
-        return(index)
-}
-#' Get the overlap peaks by mass range
-#' @param mzrange1 mass range 1 to be overlapped
-#' @param mzrange2 mass range 2 to overlap
-#' @return logical index for mzrange1's peaks
-#' @export
-getoverlapmass <- function(mzrange1, mzrange2) {
-        mz1 <- data.table::as.data.table(mzrange1)
-        mz2 <- data.table::as.data.table(mzrange2)
-        colnames(mz1) <- colnames(mz2) <- c('min', 'max')
-        data.table::setkey(mz2, min, max)
-        overlapms <-
-                data.table::foverlaps(mz1, mz2, which = TRUE, mult = 'first')
-
-        index <- (!is.na(overlapms))
-        return(index)
-}
-#' Get the overlap peaks by retention time
-#' @param rtrange1 mass range 1 to be overlapped
-#' @param rtrange2 mass range 2 to overlap
-#' @return logical index for rtrange1's peaks
-#' @export
-getoverlaprt <- function(rtrange1, rtrange2) {
-        rt1 <- data.table::as.data.table(rtrange1)
-        rt2 <- data.table::as.data.table(rtrange2)
-        colnames(rt1) <- colnames(rt2) <- c('min', 'max')
-        data.table::setkey(rt2, min, max)
-        overlapms <-
-                data.table::foverlaps(rt1, rt2, which = TRUE, mult = 'first')
-
-        index <- (!is.na(overlapms))
-        return(index)
-}
-
 #' plot the scatter plot for peaks list with threshold
 #' @param list list with data as peaks list, mz, rt and group information
 #' @param rt vector range of the retention time
 #' @param ms vector vector range of the m/z
 #' @param inscf Log intensity cutoff for peaks across samples. If any peaks show a intensity higher than the cutoff in any samples, this peaks would not be filtered. default 5
-#' @param rsdcf the rsd cutoff of all peaks in all group
+#' @param rsdcf the rsd cutoff of all peaks in all group, default 30
 #' @param imputation parameters for `getimputation` function method
-#' @param index the index of peaks considered, default NULL
 #' @param ... parameters for `plot` function
 #' @return data fit the cutoff
 #' @examples
@@ -376,20 +17,19 @@ plotmr <- function(list,
                    inscf = 5,
                    rsdcf = 30,
                    imputation = "l",
-                   index = NULL,
                    ...) {
         graphics::par(mar = c(5, 4.2, 6.1, 2.1), xpd = TRUE)
         list <- getdoe(
                 list,
                 rsdcf = rsdcf,
                 inscf = inscf,
-                imputation = imputation,
-                index = index
+                imputation = imputation
         )
-        data <- list$groupmeanfiltered
+        lif <- getfilter(list,rowindex = list$rsdindex&list$insindex)
+        data <- lif$groupmean
         dataname <- colnames(data)
-        mz <- list$mzfiltered
-        RT <- list$rtfiltered
+        mz <- lif$mz
+        RT <- lif$rt
         suppressWarnings(if (sum(nrow(data) > 0) > 0) {
                 n <- dim(data)[2]
                 col <- grDevices::rainbow(n, alpha = 0.318)
@@ -563,7 +203,6 @@ plotmr <- function(list,
 #' @param inscf Log intensity cutoff for peaks across samples. If any peaks show a intensity higher than the cutoff in any samples, this peaks would not be filtered. default 5
 #' @param rsdcf the rsd cutoff of all peaks in all group
 #' @param imputation parameters for `getimputation` function method
-#' @param index the index of peaks considered, default NULL
 #' @param ... parameters for `plot` function
 #' @return NULL
 #' @examples
@@ -575,19 +214,18 @@ plotmrc <- function(list,
                     inscf = 5,
                     rsdcf = 30,
                     imputation = "l",
-                    index = NULL,
                     ...) {
         list <- getdoe(
                 list,
                 rsdcf = rsdcf,
                 inscf = inscf,
                 imputation = imputation,
-                index = NULL
         )
-        data <- list$groupmeanfiltered
+        lif <- getfilter(list,rowindex = list$rsdindex&list$insindex)
+        data <- lif$groupmean
         dataname <- colnames(data)
-        mz <- list$mzfiltered
-        rt <- list$rtfiltered
+        mz <- lif$mz
+        rt <- lif$rt
         suppressWarnings(if (!is.na(data)) {
                 diff1 <- data[, 1] - data[, 2]
                 diff2 <- data[, 2] - data[, 1]
@@ -682,7 +320,6 @@ plotmrc <- function(list,
 #' @param inscf Log intensity cutoff for peaks across samples. If any peaks show a intensity higher than the cutoff in any samples, this peaks would not be filtered. default 5
 #' @param rsdcf the rsd cutoff of all peaks in all group
 #' @param imputation parameters for `getimputation` function method
-#' @param index the index of peaks considered, default NULL
 #' @param ... other parameters for `plot` function
 #' @return NULL
 #' @examples
@@ -694,21 +331,20 @@ plotrsd <- function(list,
                     inscf = 5,
                     rsdcf = 100,
                     imputation = "l",
-                    index = NULL,
                     ...) {
         cexlab = c("<20%", "20-40%", "40-60%", "60-80%", ">80%")
         list <- getdoe(
                 list,
                 rsdcf = rsdcf,
                 inscf = inscf,
-                imputation = imputation,
-                index = NULL
+                imputation = imputation
         )
-        data <- list$groupmeanfiltered
+        lif <- getfilter(list,rowindex = list$rsdindex&list$insindex)
+        data <- lif$groupmean
         dataname <- colnames(data)
-        mz <- list$mzfiltered
-        rt <- list$rtfiltered
-        rsd <- list$grouprsdfiltered
+        mz <- lif$mz
+        rt <- lif$rt
+        rsd <- lif$grouprsd
 
         n <- dim(rsd)[2]
         col <- grDevices::rainbow(n, alpha = 0.318)
@@ -760,12 +396,11 @@ plotrsd <- function(list,
 
 #' plot scatter plot for rt-mz profile and output gif file for mutiple groups
 #' @param list list with data as peaks list, mz, rt and group information
-#' @param file file name for gif file, default NULL
+#' @param name file name for gif file, default test
 #' @param ms the mass range to plot the data
 #' @param inscf Log intensity cutoff for peaks across samples. If any peaks show a intensity higher than the cutoff in any samples, this peaks would not be filtered. default 5
 #' @param rsdcf the rsd cutoff of all peaks in all group
 #' @param imputation parameters for `getimputation` function method
-#' @param index the index of peaks considered, default NULL
 #' @param ... parameters for `plot` function
 #' @return gif file
 #' @examples
@@ -777,19 +412,18 @@ gifmr <- function(list,
                   rsdcf = 30,
                   inscf = 5,
                   imputation = "i",
-                  index = NULL,
-                  file = "test") {
+                  name = "test") {
         list <- getdoe(
                 list,
                 rsdcf = rsdcf,
                 inscf = inscf,
-                imputation = imputation,
-                index = NULL
+                imputation = imputation
         )
-        data <- list$groupmeanfiltered
-        mz <- list$mzfiltered
-        rt <- list$rtfiltered
-        filename = paste0(file, ".gif")
+        lif <- getfilter(list,rowindex = list$rsdindex&list$insindex)
+        data <- lif$groupmean
+        mz <- lif$mz
+        rt <- lif$rt
+        filename = paste0(name, ".gif")
         mean <- apply(data, 1, mean)
 
         graphics::plot(
@@ -1022,8 +656,8 @@ plotden <- function(data,
         )
         for (i in 1:(ncol(data))) {
                 graphics::lines(stats::density(log10(data[, i]+1)),
-                      col = col[i],
-                      lwd = 3)
+                                col = col[i],
+                                lwd = 3)
         }
         graphics::legend(
                 "topright",
@@ -1033,3 +667,4 @@ plotden <- function(data,
                 bty = "n"
         )
 }
+
