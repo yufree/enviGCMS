@@ -100,21 +100,21 @@ In environmetnal non-target analysis, when multiple samples are collected, probl
 
 - `getdata2` could be used to get the `XCMSnExp` object in one step with optimized methods 
 
-- `getupload` could get the csv files to be submitted to Metaboanalyst from `xcmsSet`/`XCMSnExp`/`list` object
+- `getmzrt` could get a list as `mzrt` object with peaks list, mz, retention time and class of samples from `xcmsSet`/`XCMSnExp` object. You could also save related `xcmsSet` and `xcmsEIC` object for further analysis. It also support to output the file for metaboanalyst, xMSannotator, Mummichog pathway analysis and paired mass distance(PMD) analysis.
 
-- `getmzrt` could get a list or csv files with peaks list, mz, retention time and class of samples from `xcmsSet`/`XCMSnExp` object
-
-- `getmzrtcsv` could read in the csv files and return a list for peaks list
+- `getmzrtcsv` could read in the csv files and return a list for peaks list as `mzrt` object
 
 ### Data imputation and filtering
 
-- `getimputation` could impute NA in the peaks list
+- `getimputation` could impute NA in the peaks list.
 
-- `getdoe` could filter the data based on DoE, rsd, intensity
+- `getfilter` could filter the data based on row and colomn index.
 
-- `getfeaturest` could get the features from t test, with p value, q value, rsd and power restriction
+- `getdoe` could filter the data based on rsd and intensity and generate group mean, standard deviation, and group rsd.
 
-- `getfeaturesanova` could get the features from anova, with p value, q value, rsd and power restriction
+- `getpower` could compute the power for known peaks list or the sample numbers for each peak
+
+- `getoverlappeak` could get the overlap peaks by mass and retention time range for two different list objects
 
 ### Visulation of peaks list data
 
@@ -122,11 +122,15 @@ In environmetnal non-target analysis, when multiple samples are collected, probl
 
 - `plotmrc` could plot the differences as scatter plot for peaks list with threshold between two group of data
 
-- `plote` could plot EIC and boxplot for all peaks and return diffreport
-
 - `plotrsd` could plot the rsd influnces of data in different groups
 
 - `gifmr` could plot scatter plot for peaks list and output gif file for mutiple groups
+
+- `plotpca` could plot pca score plot
+
+- `plothm` could plot heapmap
+
+- `plotden` could plot density of multiple samples
 
 ## Summary
 

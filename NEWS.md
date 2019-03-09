@@ -3,6 +3,11 @@
 ## Major changes
 
 - add demo data and organize examples
+- add getfilter to filter the list
+- add getpower to deal with power analysis in metabolomics
+- rewrite getmzrt and getdoe to make analysis easier
+- deprecated getupload, getfeaturest and getfeaturesanova
+- update vignettes
 
 # enviGCMS 0.5.2
 
