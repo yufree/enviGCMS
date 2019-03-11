@@ -19,13 +19,12 @@ plotmr <- function(list,
                    imputation = "l",
                    ...) {
         graphics::par(mar = c(5, 4.2, 6.1, 2.1), xpd = TRUE)
-        list <- getdoe(
-                list,
-                rsdcf = rsdcf,
-                inscf = inscf,
-                imputation = imputation
-        )
-        lif <- getfilter(list,rowindex = list$rsdindex&list$insindex)
+        list <- getdoe(list,
+                       rsdcf = rsdcf,
+                       inscf = inscf,
+                       imputation = imputation)
+        lif <-
+                getfilter(list, rowindex = list$rsdindex & list$insindex)
         data <- lif$groupmean
         dataname <- colnames(data)
         mz <- lif$mz
@@ -64,10 +63,12 @@ plotmr <- function(list,
                                 graphics::points(
                                         x = RT[RT > rt[1] & RT <
                                                        rt[2] &
-                                                       mz > ms[1] & mz < ms[2]],
+                                                       mz > ms[1] &
+                                                       mz < ms[2]],
                                         y = mz[RT >
                                                        rt[1] &
-                                                       RT < rt[2] & mz > ms[1] & mz <
+                                                       RT < rt[2] &
+                                                       mz > ms[1] & mz <
                                                        ms[2]],
                                         cex = cex,
                                         col = col[i],
@@ -91,7 +92,7 @@ plotmr <- function(list,
                         pch = 19,
                         horiz = T,
                         bty = "n",
-                        inset = c(0, -0.25)
+                        inset = c(0,-0.25)
                 )
                 graphics::legend(
                         "topleft",
@@ -104,7 +105,7 @@ plotmr <- function(list,
                         cex = 0.7,
                         col = grDevices::rgb(0,
                                              0, 0, 0.318),
-                        inset = c(0, -0.25)
+                        inset = c(0,-0.25)
                 )
         } else if (NROW(data) > 0) {
                 graphics::plot(
@@ -165,7 +166,7 @@ plotmr <- function(list,
                         pch = 19,
                         horiz = T,
                         bty = "n",
-                        inset = c(0, -0.25)
+                        inset = c(0,-0.25)
                 )
                 graphics::legend(
                         "topleft",
@@ -178,7 +179,7 @@ plotmr <- function(list,
                         cex = 0.7,
                         col = grDevices::rgb(0,
                                              0, 0, 0.318),
-                        inset = c(0, -0.25)
+                        inset = c(0,-0.25)
                 )
 
         } else
@@ -221,7 +222,8 @@ plotmrc <- function(list,
                 inscf = inscf,
                 imputation = imputation,
         )
-        lif <- getfilter(list,rowindex = list$rsdindex&list$insindex)
+        lif <-
+                getfilter(list, rowindex = list$rsdindex & list$insindex)
         data <- lif$groupmean
         dataname <- colnames(data)
         mz <- lif$mz
@@ -283,7 +285,7 @@ plotmrc <- function(list,
                                              0, 0, 0.618),
                         bty = "n",
                         horiz = T,
-                        inset = c(0, -0.25)
+                        inset = c(0,-0.25)
                 )
                 graphics::legend(
                         "topright",
@@ -297,7 +299,7 @@ plotmrc <- function(list,
                         ),
                         bty = "n",
                         horiz = T,
-                        inset = c(0, -0.25)
+                        inset = c(0,-0.25)
                 )
         } else {
                 graphics::plot(
@@ -333,13 +335,12 @@ plotrsd <- function(list,
                     imputation = "l",
                     ...) {
         cexlab = c("<20%", "20-40%", "40-60%", "60-80%", ">80%")
-        list <- getdoe(
-                list,
-                rsdcf = rsdcf,
-                inscf = inscf,
-                imputation = imputation
-        )
-        lif <- getfilter(list,rowindex = list$rsdindex&list$insindex)
+        list <- getdoe(list,
+                       rsdcf = rsdcf,
+                       inscf = inscf,
+                       imputation = imputation)
+        lif <-
+                getfilter(list, rowindex = list$rsdindex & list$insindex)
         data <- lif$groupmean
         dataname <- colnames(data)
         mz <- lif$mz
@@ -378,7 +379,7 @@ plotrsd <- function(list,
                 horiz = T,
                 pch = 19,
                 bty = "n",
-                inset = c(0, -0.25)
+                inset = c(0,-0.25)
         )
         graphics::legend(
                 "topleft",
@@ -390,7 +391,7 @@ plotrsd <- function(list,
                 horiz = T,
                 cex = 0.8,
                 col = grDevices::rgb(0, 0, 0, 0.318),
-                inset = c(0, -0.25)
+                inset = c(0,-0.25)
         )
 }
 
@@ -413,13 +414,12 @@ gifmr <- function(list,
                   inscf = 5,
                   imputation = "i",
                   name = "test") {
-        list <- getdoe(
-                list,
-                rsdcf = rsdcf,
-                inscf = inscf,
-                imputation = imputation
-        )
-        lif <- getfilter(list,rowindex = list$rsdindex&list$insindex)
+        list <- getdoe(list,
+                       rsdcf = rsdcf,
+                       inscf = inscf,
+                       imputation = imputation)
+        lif <-
+                getfilter(list, rowindex = list$rsdindex & list$insindex)
         data <- lif$groupmean
         mz <- lif$mz
         rt <- lif$rt
@@ -480,7 +480,7 @@ plotpca <- function(data,
                     yrange = NULL,
                     ...) {
         if (!is.null(index)) {
-                data <- data[index, ]
+                data <- data[index,]
         }
 
         if (is.null(lv)) {
@@ -506,7 +506,8 @@ plotpca <- function(data,
         if (!(is.null(xrange) & is.null(yrange))) {
                 return(colnames(data)[pcao$x[, 1] > xrange[1] &
                                               pcao$x[, 1] < xrange[2] &
-                                              pcao$x[, 2] > yrange[1] & pcao$x[, 2] < yrange[2]])
+                                              pcao$x[, 2] > yrange[1] &
+                                              pcao$x[, 2] < yrange[2]])
         }
 }
 
@@ -627,11 +628,12 @@ plothm <- function(data, lv, index = NULL) {
 plotden <- function(data,
                     lv,
                     index = NULL,
-                    name = NULL,... ) {
+                    name = NULL,
+                    ...) {
         if (!is.null(index)) {
-                data <- data[index, ]
+                data <- data[index,]
         }
-        xlim <- range(log10(data+1),na.rm = T)
+        xlim <- range(log10(data + 1), na.rm = T)
         if (is.null(lv)) {
                 col <- as.numeric(as.factor(colnames(data)))
                 coli <- unique(colnames(data))
@@ -643,19 +645,17 @@ plotden <- function(data,
                 1,
                 1,
                 typ = 'n',
-                main = paste0(
-                        'Metabolites profiles changes in',
-                        name,
-                        ' samples'
-                ),
+                main = paste0('Metabolites profiles changes in',
+                              name,
+                              ' samples'),
                 xlab = 'Intensity(log based 10)',
                 ylab = 'Density',
-                xlim = c(xlim[1],xlim[2]+1),
+                xlim = c(xlim[1], xlim[2] + 1),
                 ylim = c(0, 1),
                 ...
         )
         for (i in 1:(ncol(data))) {
-                graphics::lines(stats::density(log10(data[, i]+1)),
+                graphics::lines(stats::density(log10(data[, i] + 1)),
                                 col = col[i],
                                 lwd = 3)
         }
@@ -667,4 +667,3 @@ plotden <- function(data,
                 bty = "n"
         )
 }
-

@@ -312,12 +312,17 @@ svaupload <- function(xset, lv = NULL) {
 #' }
 #' @seealso \code{\link{getdata}}, \code{\link{getmzrt}}
 #' @export
-getupload <- function(xset, method = "medret", value = "into", name = "Peaklist", type = 'm', mzdigit = 4, rtdigit = 1) {
-        .Deprecated()
-        message(
-                "This function has been deprecated and you could use getmzrt to get csv file."
-        )
-}
+getupload <-
+        function(xset,
+                 method = "medret",
+                 value = "into",
+                 name = "Peaklist",
+                 type = 'm',
+                 mzdigit = 4,
+                 rtdigit = 1) {
+                .Deprecated()
+                message("This function has been deprecated and you could use getmzrt to get csv file.")
+        }
 #' Get the csv files to be submitted to Metaboanalyst
 #' @param xset a XCMSnExp object with processed data which you want to submitted to Metaboanalyst
 #' @param value value for `xcms::featureValues`
@@ -334,9 +339,7 @@ getupload <- function(xset, method = "medret", value = "into", name = "Peaklist"
 #' @export
 getupload2 <- function(xset, value = "into", name = "Peaklist") {
         .Deprecated()
-        message(
-                "This function has been deprecated and you could use getupload to get csv file."
-        )
+        message("This function has been deprecated and you could use getupload to get csv file.")
 }
 
 #' Get the csv files to be submitted to Metaboanalyst
@@ -358,9 +361,7 @@ getupload2 <- function(xset, value = "into", name = "Peaklist") {
 #' @export
 getupload3 <- function(list, name = "Peaklist") {
         .Deprecated()
-        message(
-                "This function has been deprecated and you could use getupload to get csv file."
-        )
+        message("This function has been deprecated and you could use getupload to get csv file.")
 }
 #' Get the mzrt profile and group information for batch correction and plot as a list for xcms 3 object
 #' @param xset a XCMSnExp object with processed data
@@ -399,15 +400,24 @@ getmzrt2 <- function(xset, name = NULL) {
 #' plote(xset)
 #' }
 #' @export
-plote <- function(xset, name = "test", test = "t", nonpara = "n",
+plote <- function(xset,
+                  name = "test",
+                  test = "t",
+                  nonpara = "n",
                   ...) {
         .Deprecated()
         message(
                 "This function will be deprecated and you could use getmzrt to get related object to plot EIC."
         )
         gt <- xcms::groups(xset)
-        a <- xcms::diffreport(xset, filebase = name, eicmax = nrow(gt),
-                              nonpara = nonpara, ...)
+        a <-
+                xcms::diffreport(
+                        xset,
+                        filebase = name,
+                        eicmax = nrow(gt),
+                        nonpara = nonpara,
+                        ...
+                )
         return(a)
 }
 
@@ -457,5 +467,6 @@ getfeaturesanova <- function(list,
                              index = NULL) {
         .Deprecated()
         message(
-                "This function has been deprecated and you could use getpower to calculate post-hoc power for each peaks.")
+                "This function has been deprecated and you could use getpower to calculate post-hoc power for each peaks."
+        )
 }

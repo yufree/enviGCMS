@@ -16,120 +16,227 @@
 #' }
 #' @seealso \code{\link{getdata2}},\code{\link{getupload}}, \code{\link{getmzrt}}
 #' @export
-getdata <- function(path, index = F, BPPARAM = BiocParallel::SnowParam(),
-                    pmethod = "hplcorbitrap", minfrac = 0.67, ...) {
-        cdffiles <- list.files(path, recursive = TRUE, full.names = TRUE)
-        if (index) {
-                cdffiles <- cdffiles[index]
+getdata <-
+        function(path,
+                 index = F,
+                 BPPARAM = BiocParallel::SnowParam(),
+                 pmethod = "hplcorbitrap",
+                 minfrac = 0.67,
+                 ...) {
+                cdffiles <- list.files(path, recursive = TRUE, full.names = TRUE)
+                if (index) {
+                        cdffiles <- cdffiles[index]
+                }
+                if (pmethod == "hplcorbitrap") {
+                        xset <- xcms::xcmsSet(
+                                cdffiles,
+                                BPPARAM = BPPARAM,
+                                method = "centWave",
+                                ppm = 2.5,
+                                peakwidth = c(10,
+                                              60),
+                                prefilter = c(3, 5000),
+                                ...
+                        )
+                        if (index & length(index) == 1) {
+                                xset3 <- xset
+                        } else {
+                                xset <- xcms::group(
+                                        xset,
+                                        bw = 5,
+                                        mzwid = 0.015,
+                                        minfrac = min
+                                )
+                                xset2 <- xcms::retcor(xset, "obiwarp")
+                                # you need group the peaks again for this corrected
+                                # data
+                                xset2 <-
+                                        xcms::group(
+                                                xset2,
+                                                bw = 5,
+                                                mzwid = 0.015,
+                                                minfrac = minfrac
+                                        )
+                                xset3 <-
+                                        xcms::fillPeaks(xset2, BPPARAM = BPPARAM)
+                        }
+                } else if (pmethod == "uplcorbitrap") {
+                        xset <- xcms::xcmsSet(
+                                cdffiles,
+                                BPPARAM = BPPARAM,
+                                method = "centWave",
+                                ppm = 2.5,
+                                peakwidth = c(5,
+                                              20),
+                                prefilter = c(3, 5000),
+                                ...
+                        )
+                        xset <- xcms::group(
+                                xset,
+                                bw = 2,
+                                mzwid = 0.015,
+                                minfrac = minfrac
+                        )
+                        xset2 <- xcms::retcor(xset, "obiwarp")
+                        # you need group the peaks again for this corrected
+                        # data
+                        xset2 <- xcms::group(
+                                xset2,
+                                bw = 2,
+                                mzwid = 0.015,
+                                minfrac = minfrac
+                        )
+                        xset3 <- xcms::fillPeaks(xset2, BPPARAM = BPPARAM)
+                } else if (pmethod == "hplcqtof") {
+                        xset <- xcms::xcmsSet(
+                                cdffiles,
+                                BPPARAM = BPPARAM,
+                                method = "centWave",
+                                ppm = 30,
+                                peakwidth = c(10,
+                                              60),
+                                prefilter = c(0, 0),
+                                ...
+                        )
+                        if (index & length(index) == 1) {
+                                xset3 <- xset
+                        } else {
+                                xset <- xcms::group(
+                                        xset,
+                                        bw = 5,
+                                        mzwid = 0.025,
+                                        minfrac = minfrac
+                                )
+                                xset2 <- xcms::retcor(xset, "obiwarp")
+                                # you need group the peaks again for this corrected
+                                # data
+                                xset2 <-
+                                        xcms::group(
+                                                xset2,
+                                                bw = 5,
+                                                mzwid = 0.025,
+                                                minfrac = minfrac
+                                        )
+                                xset3 <-
+                                        xcms::fillPeaks(xset2, BPPARAM = BPPARAM)
+                        }
+                } else if (pmethod == "hplchqtof") {
+                        xset <- xcms::xcmsSet(
+                                cdffiles,
+                                BPPARAM = BPPARAM,
+                                method = "centWave",
+                                ppm = 15,
+                                peakwidth = c(10,
+                                              60),
+                                prefilter = c(0, 0),
+                                ...
+                        )
+                        if (index & length(index) == 1) {
+                                xset3 <- xset
+                        } else {
+                                xset <- xcms::group(
+                                        xset,
+                                        bw = 5,
+                                        mzwid = 0.015,
+                                        minfrac = minfrac
+                                )
+                                xset2 <- xcms::retcor(xset, "obiwarp")
+                                # you need group the peaks again for this corrected
+                                # data
+                                xset2 <-
+                                        xcms::group(
+                                                xset2,
+                                                bw = 5,
+                                                mzwid = 0.015,
+                                                minfrac = minfrac
+                                        )
+                                xset3 <-
+                                        xcms::fillPeaks(xset2, BPPARAM = BPPARAM)
+                        }
+                } else if (pmethod == "uplcqtof") {
+                        xset <- xcms::xcmsSet(
+                                cdffiles,
+                                BPPARAM = BPPARAM,
+                                method = "centWave",
+                                ppm = 30,
+                                peakwidth = c(5,
+                                              20),
+                                prefilter = c(0, 0),
+                                ...
+                        )
+                        if (index & length(index) == 1) {
+                                xset3 <- xset
+                        } else {
+                                xset <- xcms::group(
+                                        xset,
+                                        bw = 2,
+                                        mzwid = 0.025,
+                                        minfrac = minfrac
+                                )
+                                xset2 <- xcms::retcor(xset, "obiwarp")
+                                # you need group the peaks again for this corrected
+                                # data
+                                xset2 <-
+                                        xcms::group(
+                                                xset2,
+                                                bw = 2,
+                                                mzwid = 0.025,
+                                                minfrac = minfrac
+                                        )
+                                xset3 <-
+                                        xcms::fillPeaks(xset2, BPPARAM = BPPARAM)
+                        }
+                } else if (pmethod == "uplchqtof") {
+                        xset <- xcms::xcmsSet(
+                                cdffiles,
+                                BPPARAM = BPPARAM,
+                                method = "centWave",
+                                ppm = 15,
+                                peakwidth = c(5,
+                                              20),
+                                prefilter = c(0, 0),
+                                ...
+                        )
+                        if (index & length(index) == 1) {
+                                xset3 <- xset
+                        } else {
+                                xset <- xcms::group(
+                                        xset,
+                                        bw = 2,
+                                        mzwid = 0.015,
+                                        minfrac = minfrac
+                                )
+                                xset2 <- xcms::retcor(xset, "obiwarp")
+                                # you need group the peaks again for this corrected
+                                # data
+                                xset2 <-
+                                        xcms::group(
+                                                xset2,
+                                                bw = 2,
+                                                mzwid = 0.015,
+                                                minfrac = minfrac
+                                        )
+                                xset3 <-
+                                        xcms::fillPeaks(xset2, BPPARAM = BPPARAM)
+                        }
+                } else {
+                        xset <- xcms::xcmsSet(cdffiles, BPPARAM = BPPARAM,
+                                              ...)
+                        if (index & length(index) == 1) {
+                                xset3 <- xset
+                        } else {
+                                xset <- xcms::group(xset, minfrac = minfrac)
+                                xset2 <- xcms::retcor(xset, "obiwarp")
+                                # you need group the peaks again for this corrected
+                                # data
+                                xset2 <-
+                                        xcms::group(xset2, minfrac = minfrac)
+                                xset3 <-
+                                        xcms::fillPeaks(xset2, BPPARAM = BPPARAM)
+                        }
+                }
+                return(xset3)
         }
-        if (pmethod == "hplcorbitrap") {
-                xset <- xcms::xcmsSet(cdffiles, BPPARAM = BPPARAM,
-                                      method = "centWave", ppm = 2.5, peakwidth = c(10,
-                                                                                    60), prefilter = c(3, 5000), ...)
-                if (index & length(index) == 1) {
-                        xset3 <- xset
-                } else {
-                        xset <- xcms::group(xset, bw = 5, mzwid = 0.015,
-                                            minfrac = min)
-                        xset2 <- xcms::retcor(xset, "obiwarp")
-                        # you need group the peaks again for this corrected
-                        # data
-                        xset2 <- xcms::group(xset2, bw = 5, mzwid = 0.015,
-                                             minfrac = minfrac)
-                        xset3 <- xcms::fillPeaks(xset2, BPPARAM = BPPARAM)
-                }
-        } else if (pmethod == "uplcorbitrap") {
-                xset <- xcms::xcmsSet(cdffiles, BPPARAM = BPPARAM,
-                                      method = "centWave", ppm = 2.5, peakwidth = c(5,
-                                                                                    20), prefilter = c(3, 5000), ...)
-                xset <- xcms::group(xset, bw = 2, mzwid = 0.015,
-                                    minfrac = minfrac)
-                xset2 <- xcms::retcor(xset, "obiwarp")
-                # you need group the peaks again for this corrected
-                # data
-                xset2 <- xcms::group(xset2, bw = 2, mzwid = 0.015,
-                                     minfrac = minfrac)
-                xset3 <- xcms::fillPeaks(xset2, BPPARAM = BPPARAM)
-        } else if (pmethod == "hplcqtof") {
-                xset <- xcms::xcmsSet(cdffiles, BPPARAM = BPPARAM,
-                                      method = "centWave", ppm = 30, peakwidth = c(10,
-                                                                                   60), prefilter = c(0, 0), ...)
-                if (index & length(index) == 1) {
-                        xset3 <- xset
-                } else {
-                        xset <- xcms::group(xset, bw = 5, mzwid = 0.025,
-                                            minfrac = minfrac)
-                        xset2 <- xcms::retcor(xset, "obiwarp")
-                        # you need group the peaks again for this corrected
-                        # data
-                        xset2 <- xcms::group(xset2, bw = 5, mzwid = 0.025,
-                                             minfrac = minfrac)
-                        xset3 <- xcms::fillPeaks(xset2, BPPARAM = BPPARAM)
-                }
-        } else if (pmethod == "hplchqtof") {
-                xset <- xcms::xcmsSet(cdffiles, BPPARAM = BPPARAM,
-                                      method = "centWave", ppm = 15, peakwidth = c(10,
-                                                                                   60), prefilter = c(0, 0), ...)
-                if (index & length(index) == 1) {
-                        xset3 <- xset
-                } else {
-                        xset <- xcms::group(xset, bw = 5, mzwid = 0.015,
-                                            minfrac = minfrac)
-                        xset2 <- xcms::retcor(xset, "obiwarp")
-                        # you need group the peaks again for this corrected
-                        # data
-                        xset2 <- xcms::group(xset2, bw = 5, mzwid = 0.015,
-                                             minfrac = minfrac)
-                        xset3 <- xcms::fillPeaks(xset2, BPPARAM = BPPARAM)
-                }
-        } else if (pmethod == "uplcqtof") {
-                xset <- xcms::xcmsSet(cdffiles, BPPARAM = BPPARAM,
-                                      method = "centWave", ppm = 30, peakwidth = c(5,
-                                                                                   20), prefilter = c(0, 0), ...)
-                if (index & length(index) == 1) {
-                        xset3 <- xset
-                } else {
-                        xset <- xcms::group(xset, bw = 2, mzwid = 0.025,
-                                            minfrac = minfrac)
-                        xset2 <- xcms::retcor(xset, "obiwarp")
-                        # you need group the peaks again for this corrected
-                        # data
-                        xset2 <- xcms::group(xset2, bw = 2, mzwid = 0.025,
-                                             minfrac = minfrac)
-                        xset3 <- xcms::fillPeaks(xset2, BPPARAM = BPPARAM)
-                }
-        } else if (pmethod == "uplchqtof") {
-                xset <- xcms::xcmsSet(cdffiles, BPPARAM = BPPARAM,
-                                      method = "centWave", ppm = 15, peakwidth = c(5,
-                                                                                   20), prefilter = c(0, 0), ...)
-                if (index & length(index) == 1) {
-                        xset3 <- xset
-                } else {
-                        xset <- xcms::group(xset, bw = 2, mzwid = 0.015,
-                                            minfrac = minfrac)
-                        xset2 <- xcms::retcor(xset, "obiwarp")
-                        # you need group the peaks again for this corrected
-                        # data
-                        xset2 <- xcms::group(xset2, bw = 2, mzwid = 0.015,
-                                             minfrac = minfrac)
-                        xset3 <- xcms::fillPeaks(xset2, BPPARAM = BPPARAM)
-                }
-        } else {
-                xset <- xcms::xcmsSet(cdffiles, BPPARAM = BPPARAM,
-                                      ...)
-                if (index & length(index) == 1) {
-                        xset3 <- xset
-                } else {
-                        xset <- xcms::group(xset, minfrac = minfrac)
-                        xset2 <- xcms::retcor(xset, "obiwarp")
-                        # you need group the peaks again for this corrected
-                        # data
-                        xset2 <- xcms::group(xset2, minfrac = minfrac)
-                        xset3 <- xcms::fillPeaks(xset2, BPPARAM = BPPARAM)
-                }
-        }
-        return(xset3)
-}
 #' Get XCMSnExp object in one step from structured folder path for xcms 3.
 #' @param path the path to your data
 #' @param index the index of the files
@@ -146,12 +253,26 @@ getdata <- function(path, index = F, BPPARAM = BiocParallel::SnowParam(),
 #' @return a XCMSnExp object with processed data
 #' @seealso \code{\link{getdata}},\code{\link{getupload2}}, \code{\link{getmzrt2}}
 #' @export
-getdata2 <- function(path, index = F, snames = NULL, sclass = NULL,
-                     phenoData = NULL, BPPARAM = BiocParallel::SnowParam(),
-                     mode = "onDisk", ppp = xcms::CentWaveParam(ppm = 5,
-                                                                peakwidth = c(5, 25), prefilter = c(3, 5000)),
-                     rtp = xcms::ObiwarpParam(binSize = 1), gpp = xcms::PeakDensityParam(sampleGroups = 1,
-                                                                                         minFraction = 0.67, bw = 2, binSize = 0.025), fpp = xcms::FillChromPeaksParam()) {
+getdata2 <- function(path,
+                     index = F,
+                     snames = NULL,
+                     sclass = NULL,
+                     phenoData = NULL,
+                     BPPARAM = BiocParallel::SnowParam(),
+                     mode = "onDisk",
+                     ppp = xcms::CentWaveParam(
+                             ppm = 5,
+                             peakwidth = c(5, 25),
+                             prefilter = c(3, 5000)
+                     ),
+                     rtp = xcms::ObiwarpParam(binSize = 1),
+                     gpp = xcms::PeakDensityParam(
+                             sampleGroups = 1,
+                             minFraction = 0.67,
+                             bw = 2,
+                             binSize = 0.025
+                     ),
+                     fpp = xcms::FillChromPeaksParam()) {
         files <- list.files(path, recursive = TRUE, full.names = TRUE)
         if (index) {
                 files <- files[index]
@@ -197,6 +318,7 @@ getdata2 <- function(path, index = F, snames = NULL, sclass = NULL,
                                     BPPARAM = BPPARAM)
         xod <- xcms::adjustRtime(xod, param = rtp)
         xod <- xcms::groupChromPeaks(xod, param = gpp)
-        xod <- xcms::fillChromPeaks(xod, param = fpp, BPPARAM = BPPARAM)
+        xod <-
+                xcms::fillChromPeaks(xod, param = fpp, BPPARAM = BPPARAM)
         return(xod)
 }

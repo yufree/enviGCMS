@@ -14,13 +14,23 @@
 #' }
 #' @seealso \code{\link{getdata}},\code{\link{getupload}}, \code{\link{getmzrt}}, \code{\link{getdoe}}
 #' @export
-getmr <- function(path, index = F, BPPARAM = BiocParallel::SnowParam(),
-    pmethod = "hplcorbitrap", minfrac = 0.67, ...) {
-    xset <- getdata(path = path, index = index, BPPARAM = BPPARAM,
-        pmethod = pmethod, minfrac = minfrac)
-    list <- getmzrt(xset,...)
-    return(list)
-}
+getmr <-
+        function(path,
+                 index = F,
+                 BPPARAM = BiocParallel::SnowParam(),
+                 pmethod = "hplcorbitrap",
+                 minfrac = 0.67,
+                 ...) {
+                xset <- getdata(
+                        path = path,
+                        index = index,
+                        BPPARAM = BPPARAM,
+                        pmethod = pmethod,
+                        minfrac = minfrac
+                )
+                list <- getmzrt(xset, ...)
+                return(list)
+        }
 
 #' Covert the peaks list csv file into list
 #' @param path the path to your csv file
@@ -28,17 +38,22 @@ getmr <- function(path, index = F, BPPARAM = BiocParallel::SnowParam(),
 #' @seealso \code{\link{getmzrt}}
 #' @export
 getmzrtcsv <- function(path) {
-    dataraw <- utils::read.csv(path, skip = 1)
-    mz <- dataraw[, 2]
-    rt <- dataraw[, 3]
-    data <- dataraw[, -c(1:3)]
-    group <- data.frame(t(utils::read.csv(path, nrows = 1)[-(1:3)]))
-    colnames(group) <- c(1:ncol(group))
-    colnames(data) <- rownames(group)
-    rownames(data) <- dataraw[, 1]
-    re <- list(data = data, mz = mz, group = group, rt = rt)
-    class(re) <- "mzrt"
-    return(re)
+        dataraw <- utils::read.csv(path, skip = 1)
+        mz <- dataraw[, 2]
+        rt <- dataraw[, 3]
+        data <- dataraw[,-c(1:3)]
+        group <- data.frame(t(utils::read.csv(path, nrows = 1)[-(1:3)]))
+        colnames(group) <- c(1:ncol(group))
+        colnames(data) <- rownames(group)
+        rownames(data) <- dataraw[, 1]
+        re <- list(
+                data = data,
+                mz = mz,
+                group = group,
+                rt = rt
+        )
+        class(re) <- "mzrt"
+        return(re)
 }
 #' Write MSP files for NIST search
 #' @param mz a intensity vector, who name is the mass in m/z
@@ -50,25 +65,42 @@ getmzrtcsv <- function(path) {
 #' writeMSP(mz,'test')
 #' @export
 writeMSP <- function(mz, outfilename = "unknown") {
-    mz <- paste(names(mz), round(mz))
-    dir.create("MSP")
-    zz <- file(file.path("MSP", paste(outfilename, ".msp",
-        sep = "")), "w")
-    nPeaks <- length(mz)
-    cat("Name: unknown", paste("Num Peaks: ", nPeaks),
-        file = zz, sep = "\n")
-    while (length(mz) >= 5) {
-        cat(paste(mz[1:5]), "", file = zz, sep = "; ")
-        cat(paste("\n"), file = zz)
-        mz <- mz[6:length(mz)]
-    }
-    if (!is.na(mz[1])) {
-        cat(paste(mz), "", file = zz, sep = "; ")
-        cat(paste("\n"), file = zz)
-    }
-    close(zz)
-    print(paste("A data file", outfilename, ".MSP has been generated in the folder:",
-        "MSP", cat("\n")))
+        mz <- paste(names(mz), round(mz))
+        dir.create("MSP")
+        zz <- file(file.path("MSP", paste(outfilename, ".msp",
+                                          sep = "")), "w")
+        nPeaks <- length(mz)
+        cat(
+                "Name: unknown",
+                paste("Num Peaks: ", nPeaks),
+                file = zz,
+                sep = "\n"
+        )
+        while (length(mz) >= 5) {
+                cat(paste(mz[1:5]),
+                    "",
+                    file = zz,
+                    sep = "; ")
+                cat(paste("\n"), file = zz)
+                mz <- mz[6:length(mz)]
+        }
+        if (!is.na(mz[1])) {
+                cat(paste(mz),
+                    "",
+                    file = zz,
+                    sep = "; ")
+                cat(paste("\n"), file = zz)
+        }
+        close(zz)
+        print(
+                paste(
+                        "A data file",
+                        outfilename,
+                        ".MSP has been generated in the folder:",
+                        "MSP",
+                        cat("\n")
+                )
+        )
 }
 
 #' get the data of QC compound for a group of data
@@ -79,18 +111,18 @@ writeMSP <- function(mz, outfilename = "unknown") {
 #' @return number vector, each number indicate the peak area of that mass and retention time range
 #' @export
 getQCraw <- function(path, mzrange, rtrange, index = NULL) {
-    cdffiles <- list.files(path, recursive = TRUE, full.names = TRUE)
-    if (index) {
-        cdffiles <- cdffiles[index]
-    }
-    nsamples <- length(cdffiles)
-    area <- numeric()
-    for (i in 1:nsamples) {
-        RAW <- xcms::xcmsRaw(cdffiles[i])
-        peak <- xcms::rawEIC(RAW, mzrange, rtrange)
-        area[i] <- sum(peak$intensity)
-    }
-    return(area)
+        cdffiles <- list.files(path, recursive = TRUE, full.names = TRUE)
+        if (index) {
+                cdffiles <- cdffiles[index]
+        }
+        nsamples <- length(cdffiles)
+        area <- numeric()
+        for (i in 1:nsamples) {
+                RAW <- xcms::xcmsRaw(cdffiles[i])
+                peak <- xcms::rawEIC(RAW, mzrange, rtrange)
+                area[i] <- sum(peak$intensity)
+        }
+        return(area)
 }
 
 #' Get chemical formula for mass to charge ratio.
@@ -100,30 +132,47 @@ getQCraw <- function(path, mzrange, rtrange, index = NULL) {
 #' @param elements Elements list to take into account.
 #' @return list with chemical formula
 #' @export
-getformula <- function(mz,charge = 1, window = 0.001, elements = list(C=c(1,50), H=c(1,50), N=c(0,50),O = c(0,50),P=c(0,1),S=c(0,1))){
-        list <- list()
-        for(i in 1:length(mz)){
-                a <- mz[i]
-                mfSet <- rcdk::generate.formula.iter(a,charge=charge,window = window,
-                                                     elements=elements,validation = T)
-                hit <- itertools::ihasNext(mfSet)
-                re <- NULL
-                while(itertools::hasNext(hit)){
-                        temp <- iterators::nextElem(hit)
-                        re <- c(re,temp)
+getformula <-
+        function(mz,
+                 charge = 1,
+                 window = 0.001,
+                 elements = list(
+                         C = c(1, 50),
+                         H = c(1, 50),
+                         N = c(0, 50),
+                         O = c(0, 50),
+                         P = c(0, 1),
+                         S = c(0, 1)
+                 )) {
+                list <- list()
+                for (i in 1:length(mz)) {
+                        a <- mz[i]
+                        mfSet <-
+                                rcdk::generate.formula.iter(
+                                        a,
+                                        charge = charge,
+                                        window = window,
+                                        elements = elements,
+                                        validation = T
+                                )
+                        hit <- itertools::ihasNext(mfSet)
+                        re <- NULL
+                        while (itertools::hasNext(hit)) {
+                                temp <- iterators::nextElem(hit)
+                                re <- c(re, temp)
+                        }
+                        list[[i]] <- re
                 }
-                list[[i]] <- re
-        }
-        aa <- lapply(list, unlist)
-        getvalid <- function(x){
-                a <- NULL
-                for(i in x){
-                        re <- rcdk::isvalid.formula(rcdk::get.formula(i))
-                        a <- c(a,re)
+                aa <- lapply(list, unlist)
+                getvalid <- function(x) {
+                        a <- NULL
+                        for (i in x) {
+                                re <- rcdk::isvalid.formula(rcdk::get.formula(i))
+                                a <- c(a, re)
+                        }
+                        return(x[a])
                 }
-                return(x[a])
-        }
-        bb <- lapply(aa,getvalid)
+                bb <- lapply(aa, getvalid)
 
-        return(bb)
-}
+                return(bb)
+        }

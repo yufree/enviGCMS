@@ -1,43 +1,71 @@
 #' Convert an XCMSnExp object to an mzrt S3 object.
 #'
 #' @noRd
-.XCMSnExp2mzrt <- function(XCMSnExp, method = "medret", value = "into", mzdigit = 4, rtdigit = 1)
-{
-        data <- xcms::featureValues(XCMSnExp, value = value)
-        group <- as.character(XCMSnExp@phenoData@data)
+.XCMSnExp2mzrt <-
+        function(XCMSnExp,
+                 method = "medret",
+                 value = "into",
+                 mzdigit = 4,
+                 rtdigit = 1)
+        {
+                data <- xcms::featureValues(XCMSnExp, value = value)
+                group <- as.character(XCMSnExp@phenoData@data)
 
-        # peaks info
-        peaks <- xcms::featureDefinitions(XCMSnExp)
-        mz <- peaks$mzmed
-        rt <- peaks$rtmed
-        mzrange <- peaks[,c("mzmin","mzmax")]
-        rtrange <- peaks[,c("rtmin","rtmax")]
-        rownames(data) <- paste0("M",round(mz, mzdigit), "T", round(rt, rtdigit))
-        mzrt <- list(data=data,group=group,mz=mz,rt=rt,mzrange=mzrange,rtrange=rtrange)
-        class(mzrt) <- "mzrt"
-        return(mzrt)
-}
+                # peaks info
+                peaks <- xcms::featureDefinitions(XCMSnExp)
+                mz <- peaks$mzmed
+                rt <- peaks$rtmed
+                mzrange <- peaks[, c("mzmin", "mzmax")]
+                rtrange <- peaks[, c("rtmin", "rtmax")]
+                rownames(data) <-
+                        paste0("M", round(mz, mzdigit), "T", round(rt, rtdigit))
+                mzrt <-
+                        list(
+                                data = data,
+                                group = group,
+                                mz = mz,
+                                rt = rt,
+                                mzrange = mzrange,
+                                rtrange = rtrange
+                        )
+                class(mzrt) <- "mzrt"
+                return(mzrt)
+        }
 #' Convert an xcmsSet object to an mzrt S3 object.
 #'
 #' @noRd
-.xcmsSet2mzrt <- function(xcmsSet, method = "medret", value = "into", mzdigit = 4, rtdigit = 1)
-{
-        data <- xcms::groupval(xcmsSet, method = method,
-                               value = value)
-        # peaks info
-        peaks <- as.data.frame(xcms::groups(xcmsSet))
-        mz <- peaks$mzmed
-        rt <- peaks$rtmed
-        group <- as.character(xcms::phenoData(xcmsSet)$class)
-        mzrange <- peaks[,c("mzmin","mzmax")]
-        rtrange <- peaks[,c("rtmin","rtmax")]
-        mzrt <- list(data=data,group=group,mz=mz,rt=rt,mzrange=mzrange,rtrange=rtrange)
-        class(mzrt) <- "mzrt"
-        return(mzrt)
-}
+.xcmsSet2mzrt <-
+        function(xcmsSet,
+                 method = "medret",
+                 value = "into",
+                 mzdigit = 4,
+                 rtdigit = 1)
+        {
+                data <- xcms::groupval(xcmsSet, method = method,
+                                       value = value)
+                # peaks info
+                peaks <- as.data.frame(xcms::groups(xcmsSet))
+                mz <- peaks$mzmed
+                rt <- peaks$rtmed
+                group <- as.character(xcms::phenoData(xcmsSet)$class)
+                mzrange <- peaks[, c("mzmin", "mzmax")]
+                rtrange <- peaks[, c("rtmin", "rtmax")]
+                mzrt <-
+                        list(
+                                data = data,
+                                group = group,
+                                mz = mz,
+                                rt = rt,
+                                mzrange = mzrange,
+                                rtrange = rtrange
+                        )
+                class(mzrt) <- "mzrt"
+                return(mzrt)
+        }
 
 #' Convert an list object to csv file.
-#' @param name file name for csv and/or eic file, default NULL
+#' @param list list with data as peaks list, mz, rt and group information
+#' @param name result name for csv and/or eic file, default NULL
 #' @param mzdigit m/z digits of row names of data frame, default 4
 #' @param rtdigit retention time digits of row names of data frame, default 1
 #' @param type csv formate for furthor analysis, m means  Metaboanalyst, a means xMSannotator, p means Mummichog(NA values are imputed by `getimputation`, and F test is used here to generate stats and p vlaue), o means full infomation csv (for `pmd` package), default o. mapo could output all those format files.
@@ -47,50 +75,86 @@
 #' Xia, J., Sinelnikov, I.V., Han, B., Wishart, D.S., 2015. MetaboAnalyst 3.0—making metabolomics more meaningful. Nucl. Acids Res. 43, W251–W257.
 #' @examples
 #' data(list)
-#' getcsv(list)
+#' getcsv(list,name='demo')
 #' @export
-getcsv <- function(result, name, mzdigit=4, rtdigit=1, type = 'o', ...){
-        if (!is.null(name)) {
-                if(grepl('m',type)){
-                        data <- rbind(result$group,result$data)
-                        rownames(data) <- c("group", paste0("M",round(result$mz, mzdigit), "T",
-                                                            round(result$rt, mzdigit)))
-                        filename <- paste0(name, "metaboanalyst.csv")
-                        utils::write.csv(data, file = filename,...)
-                }
-                if(grepl('a',type)){
-                        mz <- result$mz
-                        time <- result$rt
-                        data <- as.data.frame(cbind(mz, time, result$data))
-                        rownames(data) <- paste0("M",round(mz, mzdigit), "T",
-                                                 round(time, rtdigit))
-                        data <- unique(data)
-                        filename <- paste0(name, "xMSannotator.csv")
-                        utils::write.csv(data, file = filename,...)
-                }
-                if(grepl('p',type)){
-                        lv <- result$group
-                        lif <- getimputation(list, method = "l")
-                        fstats <- genefilter::rowFtests(as.matrix(lif$data),fac = as.factor(lv))
-                        df <- cbind.data.frame(m.z = result$mz, rt = result$rt, p.value = fstats$p.value, t.score = fstats$statistic)
-                        filename <- paste0(name, 'mummichog.txt')
-                        utils::write.table(df,
-                                           file = filename,
-                                           sep = "\t",
-                                           row.names = F,...)
-                }
-                if(grepl('o',type)){
-                        data <- cbind(mz=result$mz, rt=result$rt, result$data)
-                        colname <- colnames(data)
-                        groupt = c('mz','rt',result$group)
-                        data <- rbind(groupt,data)
-                        rownames(data) <- c('group',paste0("M",round(result$mz, mzdigit), "T", round(result$rt, rtdigit)))
-                        colnames(data) <- colname
-                        filename <- paste0(name, "mzrt.csv")
-                        utils::write.csv(data, file = filename,...)
+getcsv <-
+        function(list,
+                 name,
+                 mzdigit = 4,
+                 rtdigit = 1,
+                 type = 'o',
+                 ...) {
+                if (!is.null(name)) {
+                        if (grepl('m', type)) {
+                                data <- rbind(list$group, list$data)
+                                rownames(data) <-
+                                        c("group",
+                                          paste0(
+                                                  "M",
+                                                  round(list$mz, mzdigit),
+                                                  "T",
+                                                  round(list$rt, mzdigit)
+                                          ))
+                                filename <-
+                                        paste0(name, "metaboanalyst.csv")
+                                utils::write.csv(data, file = filename, ...)
+                        }
+                        if (grepl('a', type)) {
+                                mz <- list$mz
+                                time <- list$rt
+                                data <-
+                                        as.data.frame(cbind(mz, time, list$data))
+                                rownames(data) <-
+                                        paste0("M",
+                                               round(mz, mzdigit),
+                                               "T",
+                                               round(time, rtdigit))
+                                data <- unique(data)
+                                filename <- paste0(name, "xMSannotator.csv")
+                                utils::write.csv(data, file = filename, ...)
+                        }
+                        if (grepl('p', type)) {
+                                lv <- list$group
+                                lif <- getimputation(list, method = "l")
+                                fstats <-
+                                        genefilter::rowFtests(as.matrix(lif$data), fac = as.factor(lv))
+                                df <-
+                                        cbind.data.frame(
+                                                m.z = list$mz,
+                                                rt = list$rt,
+                                                p.value = fstats$p.value,
+                                                t.score = fstats$statistic
+                                        )
+                                filename <- paste0(name, 'mummichog.txt')
+                                utils::write.table(
+                                        df,
+                                        file = filename,
+                                        sep = "\t",
+                                        row.names = F,
+                                        ...
+                                )
+                        }
+                        if (grepl('o', type)) {
+                                data <- cbind(mz = list$mz,
+                                              rt = list$rt,
+                                              list$data)
+                                colname <- colnames(data)
+                                groupt = c('mz', 'rt', list$group)
+                                data <- rbind(groupt, data)
+                                rownames(data) <-
+                                        c('group',
+                                          paste0(
+                                                  "M",
+                                                  round(list$mz, mzdigit),
+                                                  "T",
+                                                  round(list$rt, rtdigit)
+                                          ))
+                                colnames(data) <- colname
+                                filename <- paste0(name, "mzrt.csv")
+                                utils::write.csv(data, file = filename, ...)
+                        }
                 }
         }
-}
 #' Get the mzrt profile and group information as a mzrt list and/or save them as csv or rds for further analysis.
 #' @param xset xcmsSet/XCMSnExp objects
 #' @param name file name for csv and/or eic file, default NULL
@@ -113,28 +177,73 @@ getcsv <- function(result, name, mzdigit=4, rtdigit=1, type = 'o', ...){
 #' Smith, C.A., Want, E.J., O’Maille, G., Abagyan, R., Siuzdak, G., 2006. XCMS: Processing Mass Spectrometry Data for Metabolite Profiling Using Nonlinear Peak Alignment, Matching, and Identification. Anal. Chem. 78, 779–787.
 #' @export
 
-getmzrt <- function(xset, name = NULL, mzdigit = 4, rtdigit = 1,  method = "medret", value = "into", eic = F, type = 'o') {
-        if(class(xset) =='xcmsSet'){
-                if(eic){
-                        eic <- xcms::getEIC(xset,rt = "corrected", groupidx = 1:nrow(xset@groups))
-                        eic@groupnames <- xcms::groupnames(xset,template = paste0('M.',10^(mzdigit-1),'T.',10^(rtdigit-1)))
-                        saveRDS(eic, file = paste0(name,'eic.rds'))
-                        saveRDS(xset, file = paste0(name,'xset.rds'))
+getmzrt <-
+        function(xset,
+                 name = NULL,
+                 mzdigit = 4,
+                 rtdigit = 1,
+                 method = "medret",
+                 value = "into",
+                 eic = F,
+                 type = 'o') {
+                if (class(xset) == 'xcmsSet') {
+                        if (eic) {
+                                eic <-
+                                        xcms::getEIC(
+                                                xset,
+                                                rt = "corrected",
+                                                groupidx = 1:nrow(xset@groups)
+                                        )
+                                eic@groupnames <-
+                                        xcms::groupnames(xset,
+                                                         template = paste0(
+                                                                 'M.',
+                                                                 10 ^ (mzdigit - 1),
+                                                                 'T.',
+                                                                 10 ^ (rtdigit - 1)
+                                                         ))
+                                saveRDS(eic, file = paste0(name, 'eic.rds'))
+                                saveRDS(xset, file = paste0(name, 'xset.rds'))
+                        }
+                        result <-
+                                .xcmsSet2mzrt(
+                                        xset,
+                                        mzdigit = mzdigit,
+                                        rtdigit = rtdigit,
+                                        method = method,
+                                        value = value
+                                )
                 }
-                result <- .xcmsSet2mzrt(xset, mzdigit = mzdigit, rtdigit = rtdigit, method = method, value = value)
-        }
-        else if(class(xset) =='XCMSnExp'){
-                xset2 <- methods::as(xset,'xcmsSet')
-                if(eic){
-                        eic <- xcms::getEIC(xset2,rt = "corrected", groupidx = 1:nrow(xset2@groups))
-                        saveRDS(eic, file = paste0(name,'.rds'))
-                        saveRDS(xset2, file = paste0(name,'xset.rds'))
+                else if (class(xset) == 'XCMSnExp') {
+                        xset2 <- methods::as(xset, 'xcmsSet')
+                        if (eic) {
+                                eic <-
+                                        xcms::getEIC(
+                                                xset2,
+                                                rt = "corrected",
+                                                groupidx = 1:nrow(xset2@groups)
+                                        )
+                                saveRDS(eic, file = paste0(name, '.rds'))
+                                saveRDS(xset2, file = paste0(name, 'xset.rds'))
+                        }
+                        result <-
+                                .XCMSnExp2mzrt(
+                                        xset,
+                                        mzdigit = mzdigit,
+                                        rtdigit = rtdigit,
+                                        method = method,
+                                        value = value
+                                )
                 }
-                result <- .XCMSnExp2mzrt(xset, mzdigit = mzdigit, rtdigit = rtdigit, method = method, value = value)
+                getcsv(
+                        result = result,
+                        name = name,
+                        mzdigit = mzdigit,
+                        rtdigit = rtdigit,
+                        type = type
+                )
+                return(result)
         }
-        getcsv(result = result, name = name, mzdigit = mzdigit, rtdigit = rtdigit, type = type)
-        return(result)
-}
 #' Impute the peaks list data
 #' @param list list with data as peaks list, mz, rt and group information
 #' @param method 'r' means remove, 'l' means use half the minimum of the values across the peaks list, 'mean' means mean of the values across the samples, 'median' means median of the values across the samples, '0' means 0, '1' means 1. Default 'l'.
@@ -151,7 +260,7 @@ getimputation <- function(list, method = "l") {
 
         if (method == "r") {
                 idx <- stats::complete.cases(data)
-                data <- data[idx, ]
+                data <- data[idx,]
                 mz <- mz[idx]
                 rt <- rt[idx]
         } else if (method == "l") {
@@ -194,33 +303,41 @@ getimputation <- function(list, method = "l") {
 #' lif <- getfilter(li,rowindex = li$rsdindex)
 #' @export
 #' @seealso \code{\link{getdata2}},\code{\link{getdata}}, \code{\link{getmzrt}}, \code{\link{getimputation}}, \code{\link{getmr}}, \code{\link{getcsv}}
-getfilter <- function(list, rowindex = T, colindex = T,name = NULL,type = 'o', ...){
-        if(!is.null(rowindex)&!is.null(list$rowindex)){
-                rowindex <- rowindex & list$rowindex}
-        else if(is.null(rowindex)&!is.null(list$rowindex)){
-                rowindex <- list$rowindex
-        }
-        list$data <- list$data[rowindex,]
-        list$mz <- list$mz[rowindex]
-        list$rt <- list$rt[rowindex]
-        list$mzrange <- list$mzrange[rowindex,]
-        list$rtrange <- list$rtrange[rowindex,]
-        list$groupmean <- list$groupmean[rowindex,]
-        list$groupsd <- list$groupsd[rowindex,]
-        list$grouprsd <- list$grouprsd[rowindex,]
-        list$rowindex <- rowindex
+getfilter <-
+        function(list,
+                 rowindex = T,
+                 colindex = T,
+                 name = NULL,
+                 type = 'o',
+                 ...) {
+                if (!is.null(rowindex) & !is.null(list$rowindex)) {
+                        rowindex <- rowindex & list$rowindex
+                }
+                else if (is.null(rowindex) & !is.null(list$rowindex)) {
+                        rowindex <- list$rowindex
+                }
+                list$data <- list$data[rowindex, ]
+                list$mz <- list$mz[rowindex]
+                list$rt <- list$rt[rowindex]
+                list$mzrange <- list$mzrange[rowindex, ]
+                list$rtrange <- list$rtrange[rowindex, ]
+                list$groupmean <- list$groupmean[rowindex, ]
+                list$groupsd <- list$groupsd[rowindex, ]
+                list$grouprsd <- list$grouprsd[rowindex, ]
+                list$rowindex <- rowindex
 
-        if(!is.null(colindex)&!is.null(list$colindex)){
-                colindex <- colindex & list$colindex}
-        else if(is.null(colindex)&!is.null(list$colindex)){
-                colindex <- list$colindex
+                if (!is.null(colindex) & !is.null(list$colindex)) {
+                        colindex <- colindex & list$colindex
+                }
+                else if (is.null(colindex) & !is.null(list$colindex)) {
+                        colindex <- list$colindex
+                }
+                list$data <- list$data[, colindex]
+                list$group <- list$group[colindex]
+                list$colindex <- colindex
+                getcsv(list, name = name, type = type, ...)
+                return(list)
         }
-        list$data <- list$data[,colindex]
-        list$group <- list$group[colindex]
-        list$colindex <- colindex
-        getcsv(list,name = name,type = type,...)
-        return(list)
-}
 #' Filter the data based on DoE, rsd, intensity
 #' @param list list with data as peaks list, mz, rt and group information
 #' @param inscf Log intensity cutoff for peaks across samples. If any peaks show a intensity higher than the cutoff in any samples, this peaks would not be filtered. default 5
@@ -252,9 +369,9 @@ getdoe <- function(list,
                 # get the rsd of the technical replicates
                 meant <- stats::aggregate(t(data), list(mlv), mean)
                 sdt <- stats::aggregate(t(data), list(mlv), sd)
-                suppressWarnings(rsd <- sdt[, -1] / meant[, -1] *
+                suppressWarnings(rsd <- sdt[,-1] / meant[,-1] *
                                          100)
-                data <- t(meant[, -1])
+                data <- t(meant[,-1])
                 colnames(data) <- unique(mlv)
                 rsd <- t(rsd)
                 # filter the data based on rsd of the technical
@@ -263,7 +380,7 @@ getdoe <- function(list,
                         all(x <
                                     rsdcft)))
                 indext <- indext & (!is.na(indext))
-                data <- data[indext, ]
+                data <- data[indext,]
                 # data with mean of the technical replicates
                 list$data <- data
                 # get new group infomation
@@ -300,9 +417,9 @@ getdoe <- function(list,
                 }
                 mean <- stats::aggregate(t(data), list(mlv), mean)
                 sd <- stats::aggregate(t(data), list(mlv), sd)
-                suppressWarnings(rsd <- sd[, -1] / mean[, -1] * 100)
-                mean <- t(mean[, -1])
-                sd <- t(sd[, -1])
+                suppressWarnings(rsd <- sd[,-1] / mean[,-1] * 100)
+                mean <- t(mean[,-1])
+                sd <- t(sd[,-1])
                 rsd <- t(rsd)
                 colnames(rsd) <-
                         colnames(sd) <-
@@ -345,77 +462,85 @@ getdoe <- function(list,
 #' getpower(list)
 #' @export
 #' @seealso \code{\link{getdata2}},\code{\link{getdata}}, \code{\link{getmzrt}}, \code{\link{getimputation}}, \code{\link{getmr}},\code{\link{getdoe}}
-getpower <- function(list, pt = 0.05, qt = 0.05, powert = 0.8, imputation = "l"){
-        group <- list$group$class
-        g <- unique(group)
-        ng <- length(g)
-        n <- min(table(group))
-        list <- getdoe(list,imputation = imputation)
-        sd <- apply(list$groupmean,1,mean)
-        if(ng == 2){
-                ar <- genefilter::rowttests(list$data, fac = list$group$class)
-                dm <- ar$dm
-                m <- nrow(list$data)
-                p <- ar$p.value
-                q <- stats::p.adjust(p, method = "BH")
-                qc <- c(1:m) * pt / m
-                cf <- qc[match(order(qc),order(q))]
-                re <- stats::power.t.test(
-                        delta = dm,
-                        sd = sd,
-                        sig.level = cf,
-                        n = n
-                )
-                n <- vector()
-                for (i in 1:m){
-                        re2 <- try(stats::power.t.test(
-                                delta = dm[i],
-                                sd = sd[i],
-                                sig.level = cf[i],
-                                power = powert
-                        ),silent=T)
-                        if (inherits(re2,"try-error"))
-                                n[i] <- NA
-                        else
-                                n[i] <- re2$n
-                }
+getpower <-
+        function(list,
+                 pt = 0.05,
+                 qt = 0.05,
+                 powert = 0.8,
+                 imputation = "l") {
+                group <- list$group$class
+                g <- unique(group)
+                ng <- length(g)
+                n <- min(table(group))
+                list <- getdoe(list, imputation = imputation)
+                sd <- apply(list$groupmean, 1, mean)
+                if (ng == 2) {
+                        ar <- genefilter::rowttests(list$data, fac = list$group$class)
+                        dm <- ar$dm
+                        m <- nrow(list$data)
+                        p <- ar$p.value
+                        q <- stats::p.adjust(p, method = "BH")
+                        qc <- c(1:m) * pt / m
+                        cf <- qc[match(order(qc), order(q))]
+                        re <- stats::power.t.test(
+                                delta = dm,
+                                sd = sd,
+                                sig.level = cf,
+                                n = n
+                        )
+                        n <- vector()
+                        for (i in 1:m) {
+                                re2 <- try(stats::power.t.test(
+                                        delta = dm[i],
+                                        sd = sd[i],
+                                        sig.level = cf[i],
+                                        power = powert
+                                ),
+                                silent = T)
+                                if (inherits(re2, "try-error"))
+                                        n[i] <- NA
+                                else
+                                        n[i] <- re2$n
+                        }
 
-                list$power <- re$power
-                list$n <- n
-        }else{
-                sdg <- genefilter::rowSds(list$groupmean)
-                ar <- genefilter::rowFtests(list$data, list$group$class)
-                p <- ar$p.value
-                q <- stats::p.adjust(p, method = "BH")
-                m <- nrow(list$data)
-                qc <- c(1:m) * pt / m
-                cf <- qc[match(order(qc),order(q))]
-                re <- stats::power.anova.test(
-                        groups = ng,
-                        between.var = sdg,
-                        within.var = sd,
-                        sig.level = cf,
-                        n = n
-                )
-                n <- vector()
-                for (i in 1:m){
-                        re2 <- try(stats::power.anova.test(
+                        list$power <- re$power
+                        list$n <- n
+                } else{
+                        sdg <- genefilter::rowSds(list$groupmean)
+                        ar <-
+                                genefilter::rowFtests(list$data, list$group$class)
+                        p <- ar$p.value
+                        q <- stats::p.adjust(p, method = "BH")
+                        m <- nrow(list$data)
+                        qc <- c(1:m) * pt / m
+                        cf <- qc[match(order(qc), order(q))]
+                        re <- stats::power.anova.test(
                                 groups = ng,
                                 between.var = sdg,
                                 within.var = sd,
                                 sig.level = cf,
-                                power = powert
-                        ),silent=T)
-                        if (inherits(re2,"try-error"))
-                                n[i] <- NA
-                        else
-                                n[i] <- re2$n
+                                n = n
+                        )
+                        n <- vector()
+                        for (i in 1:m) {
+                                re2 <- try(stats::power.anova.test(
+                                        groups = ng,
+                                        between.var = sdg,
+                                        within.var = sd,
+                                        sig.level = cf,
+                                        power = powert
+                                ),
+                                silent = T)
+                                if (inherits(re2, "try-error"))
+                                        n[i] <- NA
+                                else
+                                        n[i] <- re2$n
+                        }
+                        list$power <- re$power
+                        list$n <- re2$n
                 }
-                list$power <- re$power
-                list$n <- re2$n
+                return(list)
         }
-        return(list)
-}
 
 #' Get the overlap peaks by mass and retention time range
 #' @param list1 list with data as peaks list, mz, rt, mzrange, rtrange and group information to be overlapped
@@ -429,7 +554,8 @@ getoverlappeak <- function(list1, list2) {
         mz2 <- data.table::as.data.table(list2$mzrange)
         rt2 <- data.table::as.data.table(list2$rtrange)
         colnames(mz1) <-
-                colnames(mz2) <- colnames(rt1) <- colnames(rt2) <- c('min', 'max')
+                colnames(mz2) <-
+                colnames(rt1) <- colnames(rt2) <- c('min', 'max')
         data.table::setkey(mz2, min, max)
         data.table::setkey(rt2, min, max)
         overlapms <-

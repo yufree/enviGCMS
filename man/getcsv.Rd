@@ -4,10 +4,12 @@
 \alias{getcsv}
 \title{Convert an list object to csv file.}
 \usage{
-getcsv(result, name, mzdigit = 4, rtdigit = 1, type = "o", ...)
+getcsv(list, name, mzdigit = 4, rtdigit = 1, type = "o", ...)
 }
 \arguments{
-\item{name}{file name for csv and/or eic file, default NULL}
+\item{list}{list with data as peaks list, mz, rt and group information}
+
+\item{name}{result name for csv and/or eic file, default NULL}
 
 \item{mzdigit}{m/z digits of row names of data frame, default 4}
 
@@ -25,7 +27,7 @@ Convert an list object to csv file.
 }
 \examples{
 data(list)
-getcsv(list)
+getcsv(list,name='demo')
 }
 \references{
 Li, S.; Park, Y.; Duraisingham, S.; Strobel, F. H.; Khan, N.; Soltow, Q. A.; Jones, D. P.; Pulendran, B. PLOS Computational Biology 2013, 9 (7), e1003123.
