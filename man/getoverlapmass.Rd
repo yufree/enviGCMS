@@ -17,3 +17,6 @@ logical index for mzrange1's peaks
 \description{
 Get the overlap peaks by mass range
 }
+\seealso{
+\code{\link{getmzrt}}, \code{\link{getimputation}}, \code{\link{getmr}},\code{\link{getdoe}}, \code{\link{getoverlappeak}},\code{\link{getoverlaprt}}
+}

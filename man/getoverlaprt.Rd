@@ -17,3 +17,6 @@ logical index for rtrange1's peaks
 \description{
 Get the overlap peaks by retention time
 }
+\seealso{
+\code{\link{getmzrt}}, \code{\link{getimputation}}, \code{\link{getmr}},\code{\link{getdoe}}, \code{\link{getoverlapmass}},\code{\link{getoverlappeak}}
+}

@@ -4,7 +4,8 @@
 \alias{getfilter}
 \title{Filter the data based on row and column index}
 \usage{
-getfilter(list, rowindex = NULL, colindex = NULL)
+getfilter(list, rowindex = T, colindex = T, name = NULL,
+  type = "o", ...)
 }
 \arguments{
 \item{list}{list with data as peaks list, mz, rt and group information}
@@ -12,6 +13,12 @@ getfilter(list, rowindex = NULL, colindex = NULL)
 \item{rowindex}{logical, row index to keep}
 
 \item{colindex}{logical, column index to keep}
+
+\item{name}{file name for csv and/or eic file, default NULL}
+
+\item{type}{csv formate for furthor analysis, m means  Metaboanalyst, a means xMSannotator, p means Mummichog(NA values are imputed by `getimputation`, and F test is used here to generate stats and p vlaue), o means full infomation csv (for `pmd` package), default o. mapo could output all those format files.}
+
+\item{...}{other parameters for `getcsv`}
 }
 \value{
 list with remain peaks, and filtered peaks index
@@ -25,5 +32,5 @@ li <- getdoe(list)
 lif <- getfilter(li,rowindex = li$rsdindex)
 }
 \seealso{
-\code{\link{getdata2}},\code{\link{getdata}}, \code{\link{getmzrt}}, \code{\link{getimputation}}, \code{\link{getmr}}
+\code{\link{getdata2}},\code{\link{getdata}}, \code{\link{getmzrt}}, \code{\link{getimputation}}, \code{\link{getmr}}, \code{\link{getcsv}}
 }

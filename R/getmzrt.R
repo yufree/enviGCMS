@@ -36,14 +36,69 @@
         return(mzrt)
 }
 
-#' Get the mzrt profile and group information as a mzrt list and/or save them as csv or rds for furthor analysis.
+#' Convert an list object to csv file.
+#' @param name file name for csv and/or eic file, default NULL
+#' @param mzdigit m/z digits of row names of data frame, default 4
+#' @param rtdigit retention time digits of row names of data frame, default 1
+#' @param type csv formate for furthor analysis, m means  Metaboanalyst, a means xMSannotator, p means Mummichog(NA values are imputed by `getimputation`, and F test is used here to generate stats and p vlaue), o means full infomation csv (for `pmd` package), default o. mapo could output all those format files.
+#' @param ... other parameters for `write.table`
+#' @return NULL, csv file
+#' @references Li, S.; Park, Y.; Duraisingham, S.; Strobel, F. H.; Khan, N.; Soltow, Q. A.; Jones, D. P.; Pulendran, B. PLOS Computational Biology 2013, 9 (7), e1003123.
+#' Xia, J., Sinelnikov, I.V., Han, B., Wishart, D.S., 2015. MetaboAnalyst 3.0—making metabolomics more meaningful. Nucl. Acids Res. 43, W251–W257.
+#' @examples
+#' data(list)
+#' getcsv(list)
+#' @export
+getcsv <- function(result, name, mzdigit=4, rtdigit=1, type = 'o', ...){
+        if (!is.null(name)) {
+                if(grepl('m',type)){
+                        data <- rbind(result$group,result$data)
+                        rownames(data) <- c("group", paste0("M",round(result$mz, mzdigit), "T",
+                                                            round(result$rt, mzdigit)))
+                        filename <- paste0(name, "metaboanalyst.csv")
+                        utils::write.csv(data, file = filename,...)
+                }
+                if(grepl('a',type)){
+                        mz <- result$mz
+                        time <- result$rt
+                        data <- as.data.frame(cbind(mz, time, result$data))
+                        rownames(data) <- paste0("M",round(mz, mzdigit), "T",
+                                                 round(time, rtdigit))
+                        data <- unique(data)
+                        filename <- paste0(name, "xMSannotator.csv")
+                        utils::write.csv(data, file = filename,...)
+                }
+                if(grepl('p',type)){
+                        lv <- result$group
+                        lif <- getimputation(list, method = "l")
+                        fstats <- genefilter::rowFtests(as.matrix(lif$data),fac = as.factor(lv))
+                        df <- cbind.data.frame(m.z = result$mz, rt = result$rt, p.value = fstats$p.value, t.score = fstats$statistic)
+                        filename <- paste0(name, 'mummichog.txt')
+                        utils::write.table(df,
+                                           file = filename,
+                                           sep = "\t",
+                                           row.names = F,...)
+                }
+                if(grepl('o',type)){
+                        data <- cbind(mz=result$mz, rt=result$rt, result$data)
+                        colname <- colnames(data)
+                        groupt = c('mz','rt',result$group)
+                        data <- rbind(groupt,data)
+                        rownames(data) <- c('group',paste0("M",round(result$mz, mzdigit), "T", round(result$rt, rtdigit)))
+                        colnames(data) <- colname
+                        filename <- paste0(name, "mzrt.csv")
+                        utils::write.csv(data, file = filename,...)
+                }
+        }
+}
+#' Get the mzrt profile and group information as a mzrt list and/or save them as csv or rds for further analysis.
 #' @param xset xcmsSet/XCMSnExp objects
 #' @param name file name for csv and/or eic file, default NULL
 #' @param mzdigit m/z digits of row names of data frame, default 4
 #' @param rtdigit retention time digits of row names of data frame, default 1
 #' @param method parameter for groupval or featureDefinitions function, default medret
 #' @param value parameter for groupval or featureDefinitions function, default into
-#' @param eic logical, save xcmsSet and xcmsEIC objects for further investigation with the same name of files, you will need raw files in the same directory as defined in xcmsSet to extract the EIC based on the binned data. You could use `plot` to plot EIC for specific peaks. For example, `plot(xcmsEIC,xcmsSet,groupidx = 'M206T2789')` could show the EIC for certain peaks with m/z 206 and retention time 2789. default F
+#' @param eic logical, save xcmsSet and xcmsEIC objects for further investigation with the same name of files, you will need raw files in the same directory as defined in xcmsSet to extract the EIC based on the binned data. You could use `plot` to plot EIC for specific peaks. For example, `plot(xcmsEIC,xcmsSet,groupidx = 'M123.4567T278.9')` could show the EIC for certain peaks with m/z 206 and retention time 2789. default F
 #' @param type csv formate for furthor analysis, m means  Metaboanalyst, a means xMSannotator, p means Mummichog(NA values are imputed by `getimputation`, and F test is used here to generate stats and p vlaue), o means full infomation csv (for `pmd` package), default o. mapo could output all those format files.
 #' @return mzrt object, a list with mzrt profile and group infomation
 #' @examples
@@ -53,15 +108,16 @@
 #' xset <- getdata(cdfpath, pmethod = ' ')
 #' getmzrt(xset, name = 'demo', type = 'mapo')
 #' }
-#' @seealso \code{\link{getdata}}, \code{\link{getdoe}}
-#' @references Li, S.; Park, Y.; Duraisingham, S.; Strobel, F. H.; Khan, N.; Soltow, Q. A.; Jones, D. P.; Pulendran, B. PLOS Computational Biology 2013, 9 (7), e1003123.
-#' Xia, J., Sinelnikov, I.V., Han, B., Wishart, D.S., 2015. MetaboAnalyst 3.0—making metabolomics more meaningful. Nucl. Acids Res. 43, W251–W257.
+#' @seealso \code{\link{getdata}},\code{\link{getdata2}}, \code{\link{getdoe}}, \code{\link{getcsv}}, \code{\link{getfilter}}
+#' @references
 #' Smith, C.A., Want, E.J., O’Maille, G., Abagyan, R., Siuzdak, G., 2006. XCMS: Processing Mass Spectrometry Data for Metabolite Profiling Using Nonlinear Peak Alignment, Matching, and Identification. Anal. Chem. 78, 779–787.
 #' @export
+
 getmzrt <- function(xset, name = NULL, mzdigit = 4, rtdigit = 1,  method = "medret", value = "into", eic = F, type = 'o') {
         if(class(xset) =='xcmsSet'){
                 if(eic){
                         eic <- xcms::getEIC(xset,rt = "corrected", groupidx = 1:nrow(xset@groups))
+                        eic@groupnames <- xcms::groupnames(xset,template = paste0('M.',10^(mzdigit-1),'T.',10^(rtdigit-1)))
                         saveRDS(eic, file = paste0(name,'eic.rds'))
                         saveRDS(xset, file = paste0(name,'xset.rds'))
                 }
@@ -76,46 +132,7 @@ getmzrt <- function(xset, name = NULL, mzdigit = 4, rtdigit = 1,  method = "medr
                 }
                 result <- .XCMSnExp2mzrt(xset, mzdigit = mzdigit, rtdigit = rtdigit, method = method, value = value)
         }
-        if (!is.null(name)) {
-                if(grepl('m',type)){
-                        data <- rbind(result$group,result$data)
-                        rownames(data) <- c("group", paste0("M",round(result$mz, mzdigit), "T",
-                                                            round(result$rt, rtdigit)))
-                        filename <- paste0(name, "metaboanalyst.csv")
-                        utils::write.csv(data, file = filename)
-                }
-                if(grepl('a',type)){
-                        mz <- result$mz
-                        time <- result$rt
-                        data <- as.data.frame(cbind(mz, time, result$data))
-                        rownames(data) <- paste0("M",round(mz, mzdigit), "T",
-                                                 round(time, rtdigit))
-                        data <- unique(data)
-                        filename <- paste0(name, "xMSannotator.csv")
-                        utils::write.csv(data, file = filename)
-                }
-                if(grepl('p',type)){
-                        lv <- result$group
-                        lif <- getimputation(list, method = "l")
-                        fstats <- genefilter::rowFtests(as.matrix(lif$data),fac = as.factor(lv))
-                        df <- cbind.data.frame(m.z = result$mz, rt = result$rt, p.value = fstats$p.value, t.score = fstats$statistic)
-                        filename <- paste0(name, 'mummichog.txt')
-                        utils::write.table(df,
-                                           file = filename,
-                                           sep = "\t",
-                                           row.names = F)
-                }
-                if(grepl('o',type)){
-                        data <- cbind(mz=result$mz, rt=result$rt, result$data)
-                        colname <- colnames(data)
-                        groupt = c('mz','rt',result$group)
-                        data <- rbind(groupt,data)
-                        rownames(data) <- c('group',paste0("M",round(result$mz, mzdigit), "T", round(result$rt, rtdigit)))
-                        colnames(data) <- colname
-                        filename <- paste0(name, "mzrt.csv")
-                        utils::write.csv(data, file = filename)
-                }
-        }
+        getcsv(result = result, name = name, mzdigit = mzdigit, rtdigit = rtdigit, type = type)
         return(result)
 }
 #' Impute the peaks list data
@@ -167,14 +184,17 @@ getimputation <- function(list, method = "l") {
 #' @param list list with data as peaks list, mz, rt and group information
 #' @param rowindex logical, row index to keep
 #' @param colindex logical, column index to keep
+#' @param name file name for csv and/or eic file, default NULL
+#' @param type csv formate for furthor analysis, m means  Metaboanalyst, a means xMSannotator, p means Mummichog(NA values are imputed by `getimputation`, and F test is used here to generate stats and p vlaue), o means full infomation csv (for `pmd` package), default o. mapo could output all those format files.
+#' @param ... other parameters for `getcsv`
 #' @return list with remain peaks, and filtered peaks index
 #' @examples
 #' data(list)
 #' li <- getdoe(list)
 #' lif <- getfilter(li,rowindex = li$rsdindex)
 #' @export
-#' @seealso \code{\link{getdata2}},\code{\link{getdata}}, \code{\link{getmzrt}}, \code{\link{getimputation}}, \code{\link{getmr}}
-getfilter <- function(list, rowindex = NULL, colindex = NULL){
+#' @seealso \code{\link{getdata2}},\code{\link{getdata}}, \code{\link{getmzrt}}, \code{\link{getimputation}}, \code{\link{getmr}}, \code{\link{getcsv}}
+getfilter <- function(list, rowindex = T, colindex = T,name = NULL,type = 'o', ...){
         if(!is.null(rowindex)&!is.null(list$rowindex)){
                 rowindex <- rowindex & list$rowindex}
         else if(is.null(rowindex)&!is.null(list$rowindex)){
@@ -198,6 +218,7 @@ getfilter <- function(list, rowindex = NULL, colindex = NULL){
         list$data <- list$data[,colindex]
         list$group <- list$group[colindex]
         list$colindex <- colindex
+        getcsv(list,name = name,type = type,...)
         return(list)
 }
 #' Filter the data based on DoE, rsd, intensity
@@ -212,7 +233,7 @@ getfilter <- function(list, rowindex = NULL, colindex = NULL){
 #' data(list)
 #' getdoe(list)
 #' @export
-#' @seealso \code{\link{getdata2}},\code{\link{getdata}}, \code{\link{getmzrt}}, \code{\link{getimputation}}, \code{\link{getmr}}
+#' @seealso \code{\link{getdata2}},\code{\link{getdata}}, \code{\link{getmzrt}}, \code{\link{getimputation}}, \code{\link{getmr}},\code{\link{getpower}}
 getdoe <- function(list,
                    inscf = 5,
                    rsdcf = 100,
@@ -323,6 +344,7 @@ getdoe <- function(list,
 #' data(list)
 #' getpower(list)
 #' @export
+#' @seealso \code{\link{getdata2}},\code{\link{getdata}}, \code{\link{getmzrt}}, \code{\link{getimputation}}, \code{\link{getmr}},\code{\link{getdoe}}
 getpower <- function(list, pt = 0.05, qt = 0.05, powert = 0.8, imputation = "l"){
         group <- list$group$class
         g <- unique(group)
@@ -400,6 +422,7 @@ getpower <- function(list, pt = 0.05, qt = 0.05, powert = 0.8, imputation = "l")
 #' @param list2 list with data as peaks list, mz, rt, mzrange, rtrange and group information to overlap
 #' @return logical index for list 1's peaks
 #' @export
+#' @seealso \code{\link{getmzrt}}, \code{\link{getimputation}}, \code{\link{getmr}},\code{\link{getdoe}}, \code{\link{getoverlapmass}},\code{\link{getoverlaprt}}
 getoverlappeak <- function(list1, list2) {
         mz1 <- data.table::as.data.table(list1$mzrange)
         rt1 <- data.table::as.data.table(list1$rtrange)
@@ -421,6 +444,7 @@ getoverlappeak <- function(list1, list2) {
 #' @param mzrange2 mass range 2 to overlap
 #' @return logical index for mzrange1's peaks
 #' @export
+#' @seealso \code{\link{getmzrt}}, \code{\link{getimputation}}, \code{\link{getmr}},\code{\link{getdoe}}, \code{\link{getoverlappeak}},\code{\link{getoverlaprt}}
 getoverlapmass <- function(mzrange1, mzrange2) {
         mz1 <- data.table::as.data.table(mzrange1)
         mz2 <- data.table::as.data.table(mzrange2)
@@ -437,6 +461,7 @@ getoverlapmass <- function(mzrange1, mzrange2) {
 #' @param rtrange2 mass range 2 to overlap
 #' @return logical index for rtrange1's peaks
 #' @export
+#' @seealso \code{\link{getmzrt}}, \code{\link{getimputation}}, \code{\link{getmr}},\code{\link{getdoe}}, \code{\link{getoverlapmass}},\code{\link{getoverlappeak}}
 getoverlaprt <- function(rtrange1, rtrange2) {
         rt1 <- data.table::as.data.table(rtrange1)
         rt2 <- data.table::as.data.table(rtrange2)

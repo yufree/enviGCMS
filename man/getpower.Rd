@@ -28,3 +28,6 @@ Get the index with power restriction for certain study with BH adjusted p-value 
 data(list)
 getpower(list)
 }
+\seealso{
+\code{\link{getdata2}},\code{\link{getdata}}, \code{\link{getmzrt}}, \code{\link{getimputation}}, \code{\link{getmr}},\code{\link{getdoe}}
+}

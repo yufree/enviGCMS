@@ -2,7 +2,7 @@
 % Please edit documentation in R/getmzrt.R
 \name{getmzrt}
 \alias{getmzrt}
-\title{Get the mzrt profile and group information as a mzrt list and/or save them as csv or rds for furthor analysis.}
+\title{Get the mzrt profile and group information as a mzrt list and/or save them as csv or rds for further analysis.}
 \usage{
 getmzrt(xset, name = NULL, mzdigit = 4, rtdigit = 1,
   method = "medret", value = "into", eic = F, type = "o")
@@ -20,7 +20,7 @@ getmzrt(xset, name = NULL, mzdigit = 4, rtdigit = 1,
 
 \item{value}{parameter for groupval or featureDefinitions function, default into}
 
-\item{eic}{logical, save xcmsSet and xcmsEIC objects for further investigation with the same name of files, you will need raw files in the same directory as defined in xcmsSet to extract the EIC based on the binned data. You could use `plot` to plot EIC for specific peaks. For example, `plot(xcmsEIC,xcmsSet,groupidx = 'M206T2789')` could show the EIC for certain peaks with m/z 206 and retention time 2789. default F}
+\item{eic}{logical, save xcmsSet and xcmsEIC objects for further investigation with the same name of files, you will need raw files in the same directory as defined in xcmsSet to extract the EIC based on the binned data. You could use `plot` to plot EIC for specific peaks. For example, `plot(xcmsEIC,xcmsSet,groupidx = 'M123.4567T278.9')` could show the EIC for certain peaks with m/z 206 and retention time 2789. default F}
 
 \item{type}{csv formate for furthor analysis, m means  Metaboanalyst, a means xMSannotator, p means Mummichog(NA values are imputed by `getimputation`, and F test is used here to generate stats and p vlaue), o means full infomation csv (for `pmd` package), default o. mapo could output all those format files.}
 }
@@ -28,7 +28,7 @@ getmzrt(xset, name = NULL, mzdigit = 4, rtdigit = 1,
 mzrt object, a list with mzrt profile and group infomation
 }
 \description{
-Get the mzrt profile and group information as a mzrt list and/or save them as csv or rds for furthor analysis.
+Get the mzrt profile and group information as a mzrt list and/or save them as csv or rds for further analysis.
 }
 \examples{
 \dontrun{
@@ -39,10 +39,8 @@ getmzrt(xset, name = 'demo', type = 'mapo')
 }
 }
 \references{
-Li, S.; Park, Y.; Duraisingham, S.; Strobel, F. H.; Khan, N.; Soltow, Q. A.; Jones, D. P.; Pulendran, B. PLOS Computational Biology 2013, 9 (7), e1003123.
-Xia, J., Sinelnikov, I.V., Han, B., Wishart, D.S., 2015. MetaboAnalyst 3.0—making metabolomics more meaningful. Nucl. Acids Res. 43, W251–W257.
 Smith, C.A., Want, E.J., O’Maille, G., Abagyan, R., Siuzdak, G., 2006. XCMS: Processing Mass Spectrometry Data for Metabolite Profiling Using Nonlinear Peak Alignment, Matching, and Identification. Anal. Chem. 78, 779–787.
 }
 \seealso{
-\code{\link{getdata}}, \code{\link{getdoe}}
+\code{\link{getdata}},\code{\link{getdata2}}, \code{\link{getdoe}}, \code{\link{getcsv}}, \code{\link{getfilter}}
 }

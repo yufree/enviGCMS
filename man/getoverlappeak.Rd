@@ -17,3 +17,6 @@ logical index for list 1's peaks
 \description{
 Get the overlap peaks by mass and retention time range
 }
+\seealso{
+\code{\link{getmzrt}}, \code{\link{getimputation}}, \code{\link{getmr}},\code{\link{getdoe}}, \code{\link{getoverlapmass}},\code{\link{getoverlaprt}}
+}
