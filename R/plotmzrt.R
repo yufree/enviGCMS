@@ -334,6 +334,7 @@ plotrsd <- function(list,
                     rsdcf = 100,
                     imputation = "l",
                     ...) {
+        graphics::par(mar = c(5, 4.2, 6.1, 2.1), xpd = TRUE)
         cexlab = c("<20%", "20-40%", "40-60%", "60-80%", ">80%")
         list <- getdoe(list,
                        rsdcf = rsdcf,

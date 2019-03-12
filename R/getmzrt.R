@@ -43,6 +43,13 @@
         {
                 data <- xcms::groupval(xcmsSet, method = method,
                                        value = value)
+                rownames(data) <- xcms::groupnames(xcmsSet,
+                                                   template = paste0(
+                                                           'M.',
+                                                           10 ^ (mzdigit - 1),
+                                                           'T.',
+                                                           10 ^ (rtdigit - 1)
+                                                   ))
                 # peaks info
                 peaks <- as.data.frame(xcms::groups(xcmsSet))
                 mz <- peaks$mzmed
@@ -236,7 +243,7 @@ getmzrt <-
                                 )
                 }
                 getcsv(
-                        result = result,
+                        list = result,
                         name = name,
                         mzdigit = mzdigit,
                         rtdigit = rtdigit,
@@ -324,7 +331,7 @@ getfilter <-
                 list$groupmean <- list$groupmean[rowindex, ]
                 list$groupsd <- list$groupsd[rowindex, ]
                 list$grouprsd <- list$grouprsd[rowindex, ]
-                list$rowindex <- rowindex
+                # list$rowindex <- rowindex
 
                 if (!is.null(colindex) & !is.null(list$colindex)) {
                         colindex <- colindex & list$colindex
@@ -334,7 +341,7 @@ getfilter <-
                 }
                 list$data <- list$data[, colindex]
                 list$group <- list$group[colindex]
-                list$colindex <- colindex
+                # list$colindex <- colindex
                 getcsv(list, name = name, type = type, ...)
                 return(list)
         }
@@ -435,6 +442,7 @@ getdoe <- function(list,
                 list$groupmean <- mean
                 list$groupsd <- sd
                 list$grouprsd <- rsd
+                indexrsd[is.na(indexrsd)] <- F
                 list$rsdindex <- indexrsd
                 list$insindex <- indexins
                 return(list)
