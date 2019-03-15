@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotmzrt.R
 \name{plotridges}
 \alias{plotridges}
-\title{Relative Log Abundance Ridge(RLAR) plots}
+\title{Relative Log Abundance Ridge (RLAR) plots}
 \usage{
 plotridges(data, lv, type = "g")
 }
@@ -17,7 +17,7 @@ plotridges(data, lv, type = "g")
 Relative Log Abundance Ridge(RLA) plots
 }
 \description{
-Relative Log Abundance Ridge(RLAR) plots
+Relative Log Abundance Ridge (RLAR) plots
 }
 \examples{
 data(list)

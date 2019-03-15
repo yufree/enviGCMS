@@ -132,6 +132,10 @@ In environmetnal non-target analysis, when multiple samples are collected, probl
 
 - `plotden` could plot density of multiple samples
 
+- `plotrla` could plot Relative Log Abundance (RLA) plots
+
+- `plotridges` could plot Relative Log Abundance Ridge (RLAR) plots
+
 ## Summary
 
 In general, `enviGCMS` could be used to explore single data or peaks list from GC/LC-MS and extract certain patterns in the data with various purposes.

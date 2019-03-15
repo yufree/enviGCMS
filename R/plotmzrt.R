@@ -699,7 +699,7 @@ plotrla <- function(data, lv, type = "g") {
         graphics::boxplot(outmat, col = lv[order(lv)])
         graphics::abline(h = 0)
 }
-#' Relative Log Abundance Ridge(RLAR) plots
+#' Relative Log Abundance Ridge (RLAR) plots
 #' @param data data as mzrt profile
 #' @param lv factor vector for the group infomation
 #' @param type 'g' means group median based, other means all samples median based.
