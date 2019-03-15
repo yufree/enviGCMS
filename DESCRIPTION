@@ -49,5 +49,6 @@ Imports: xcms,
     iterators,
     igraph,
     ggraph,
-    ggplot2
+    ggplot2,
+    ggridges
 RoxygenNote: 6.1.1

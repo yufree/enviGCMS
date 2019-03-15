@@ -668,3 +668,74 @@ plotden <- function(data,
                 bty = "n"
         )
 }
+#' Relative Log Abundance (RLA) plots
+#' @param data data as mzrt profile
+#' @param lv factor vector for the group infomation
+#' @param type 'g' means group median based, other means all samples median based.
+#' @return Relative Log Abundance (RLA) plots
+#' @examples
+#' data(list)
+#' plotrla(list$data, as.factor(list$group$class))
+#' @export
+plotrla <- function(data, lv, type = "g") {
+        data <- log(data)
+        data[is.nan(data)] <- 0
+        outmat = NULL
+
+        if (type == "g") {
+                for (lvi in levels(lv)) {
+                        submat <- data[, lv == lvi]
+                        median <- apply(submat, 1, median)
+                        tempmat <- sweep(submat, 1, median, "-")
+                        outmat <- cbind(outmat, tempmat)
+                }
+        } else {
+                median <- apply(data, 1, median)
+                outmat <- sweep(data, 1, median, "-")
+
+        }
+
+        outmat <- outmat[, order(lv)]
+        graphics::boxplot(outmat, col = lv[order(lv)])
+        graphics::abline(h = 0)
+}
+#' Relative Log Abundance Ridge(RLAR) plots
+#' @param data data as mzrt profile
+#' @param lv factor vector for the group infomation
+#' @param type 'g' means group median based, other means all samples median based.
+#' @return Relative Log Abundance Ridge(RLA) plots
+#' @examples
+#' data(list)
+#' plotridges(list$data, as.factor(list$group$class))
+#' @export
+plotridges <- function(data, lv, type = "g") {
+        data <- log(data)
+        data[is.nan(data)] <- 0
+        outmat = NULL
+
+        if (type == "g") {
+                for (lvi in levels(lv)) {
+                        submat <- data[, lv == lvi]
+                        median <- apply(submat, 1, median)
+                        tempmat <- sweep(submat, 1, median, "-")
+                        outmat <- cbind(outmat, tempmat)
+                }
+        } else {
+                median <- apply(data, 1, median)
+                outmat <- sweep(data, 1, median, "-")
+
+        }
+
+        ov <- reshape2::melt(outmat)
+        colnames(outmat) <- lv[order(lv)]
+        ov2 <- reshape2::melt(outmat)
+        ov2$group <- as.factor(ov2$Var2)
+        ggplot2::ggplot(ov,
+                        ggplot2::aes(
+                                x = ov$value,
+                                y = ov$Var2,
+                                fill = ov2$group
+                        )) + ggridges::geom_density_ridges(stat = "binline",
+                                                           bins = 100) + ggplot2::xlim(-0.5, 0.5) + ggplot2::scale_fill_discrete(name = "Group") +
+                ggplot2::labs(x = "Relative Log Abundance", y = "Samples")
+}
