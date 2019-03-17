@@ -14,7 +14,7 @@
 #' cdfpath <- system.file('cdf', package = 'faahKO')
 #' xset <- getdata(cdfpath, pmethod = ' ')
 #' }
-#' @seealso \code{\link{getdata2}},\code{\link{getupload}}, \code{\link{getmzrt}}
+#' @seealso \code{\link{getdata2}}, \code{\link{getmzrt}}
 #' @export
 getdata <-
         function(path,
@@ -251,7 +251,7 @@ getdata <-
 #' @param fpp parameters for peaks filling, e.g. xcms::FillChromPeaksParam(), PeakGroupsParam()
 #' @details This is a wrap function for metabolomics data process for xcms 3.
 #' @return a XCMSnExp object with processed data
-#' @seealso \code{\link{getdata}},\code{\link{getupload2}}, \code{\link{getmzrt2}}
+#' @seealso \code{\link{getdata}},\code{\link{getmzrt}}
 #' @export
 getdata2 <- function(path,
                      index = F,
