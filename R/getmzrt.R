@@ -374,8 +374,8 @@ getdoe <- function(list,
                 cols <- colnames(lv)
                 mlv <- do.call(paste, c(lv[cols]))
                 # get the rsd of the technical replicates
-                meant <- stats::aggregate(t(data), list(mlv), mean)
-                sdt <- stats::aggregate(t(data), list(mlv), sd)
+                meant <- BiocParallel::bpaggregate(t(data), list(mlv),  mean)
+                sdt <- BiocParallel::bpaggregate(t(data), list(mlv),  sd)
                 suppressWarnings(rsd <- sdt[,-1] / meant[,-1] *
                                          100)
                 data <- t(meant[,-1])
@@ -422,8 +422,8 @@ getdoe <- function(list,
                 } else {
                         mlv <- unlist(lv)
                 }
-                mean <- stats::aggregate(t(data), list(mlv), mean)
-                sd <- stats::aggregate(t(data), list(mlv), sd)
+                mean <- BiocParallel::bpaggregate(t(data), list(mlv), mean)
+                sd <- BiocParallel::bpaggregate(t(data), list(mlv), sd)
                 suppressWarnings(rsd <- sd[,-1] / mean[,-1] * 100)
                 mean <- t(mean[,-1])
                 sd <- t(sd[,-1])

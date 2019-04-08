@@ -44,5 +44,5 @@ Get XCMSnExp object in one step from structured folder path for xcms 3.
 This is a wrap function for metabolomics data process for xcms 3.
 }
 \seealso{
-\code{\link{getdata}},\code{\link{getupload2}}, \code{\link{getmzrt2}}
+\code{\link{getdata}},\code{\link{getmzrt}}
 }

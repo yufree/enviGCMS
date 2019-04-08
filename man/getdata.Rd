@@ -40,5 +40,5 @@ xset <- getdata(cdfpath, pmethod = ' ')
 Patti, G. J.; Tautenhahn, R.; Siuzdak, G. Nat. Protocols 2012, 7 (3), 508–516.
 }
 \seealso{
-\code{\link{getdata2}},\code{\link{getupload}}, \code{\link{getmzrt}}
+\code{\link{getdata2}}, \code{\link{getmzrt}}
 }
