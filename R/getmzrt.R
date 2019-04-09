@@ -390,6 +390,8 @@ getdoe <- function(list,
                 data <- data[indext,]
                 # data with mean of the technical replicates
                 list$data <- data
+                list$mz <- list$mz[indext]
+                list$rt <- list$rt[indext]
                 # get new group infomation
                 ng <- NULL
                 if (ncol(lv) > 1) {
