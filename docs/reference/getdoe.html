@@ -136,7 +136,7 @@
     </div>
 
     <pre class="usage"><span class='fu'>getdoe</span>(<span class='no'>list</span>, <span class='kw'>inscf</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>rsdcf</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>rsdcft</span> <span class='kw'>=</span> <span class='fl'>30</span>, <span class='kw'>imputation</span> <span class='kw'>=</span> <span class='st'>"l"</span>,
-  <span class='kw'>tr</span> <span class='kw'>=</span> <span class='no'>F</span>)</pre>
+  <span class='kw'>tr</span> <span class='kw'>=</span> <span class='no'>F</span>, <span class='kw'>BPPARAM</span> <span class='kw'>=</span> <span class='kw pkg'>BiocParallel</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/BiocParallel/topics/register'>bpparam</a></span>())</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -164,6 +164,10 @@
     <tr>
       <th>tr</th>
       <td><p>logical. TRUE means dataset with technical replicates at the base level folder</p></td>
+    </tr>
+    <tr>
+      <th>BPPARAM</th>
+      <td><p>An optional BiocParallelParam instance determining the parallel back-end to be used during evaluation.</p></td>
     </tr>
     </table>
     
