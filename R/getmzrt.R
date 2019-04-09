@@ -352,6 +352,7 @@ getfilter <-
 #' @param imputation parameters for `getimputation` function method
 #' @param tr logical. TRUE means dataset with technical replicates at the base level folder
 #' @param rsdcft the rsd cutoff of all peaks in technical replicates
+#' @param BPPARAM An optional BiocParallelParam instance determining the parallel back-end to be used during evaluation.
 #' @return list with group mean, standard deviation, and relative standard deviation for all peaks, and filtered peaks index
 #' @examples
 #' data(list)
@@ -363,7 +364,7 @@ getdoe <- function(list,
                    rsdcf = 100,
                    rsdcft = 30,
                    imputation = "l",
-                   tr = F) {
+                   tr = F, BPPARAM = BiocParallel::bpparam()) {
         list <- getimputation(list, method = imputation)
         # remove the technical replicates and use biological
         # replicates instead
@@ -374,8 +375,8 @@ getdoe <- function(list,
                 cols <- colnames(lv)
                 mlv <- do.call(paste, c(lv[cols]))
                 # get the rsd of the technical replicates
-                meant <- BiocParallel::bpaggregate(t(data), list(mlv),  mean)
-                sdt <- BiocParallel::bpaggregate(t(data), list(mlv),  sd)
+                meant <- BiocParallel::bpaggregate(t(data), list(mlv),  mean,BPPARAM = BPPARAM)
+                sdt <- BiocParallel::bpaggregate(t(data), list(mlv),  sd,BPPARAM = BPPARAM)
                 suppressWarnings(rsd <- sdt[,-1] / meant[,-1] *
                                          100)
                 data <- t(meant[,-1])
@@ -424,8 +425,8 @@ getdoe <- function(list,
                 } else {
                         mlv <- unlist(lv)
                 }
-                mean <- BiocParallel::bpaggregate(t(data), list(mlv), mean)
-                sd <- BiocParallel::bpaggregate(t(data), list(mlv), sd)
+                mean <- BiocParallel::bpaggregate(t(data), list(mlv), mean,BPPARAM = BPPARAM)
+                sd <- BiocParallel::bpaggregate(t(data), list(mlv), sd,BPPARAM = BPPARAM)
                 suppressWarnings(rsd <- sd[,-1] / mean[,-1] * 100)
                 mean <- t(mean[,-1])
                 sd <- t(sd[,-1])

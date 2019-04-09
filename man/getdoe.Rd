@@ -5,7 +5,7 @@
 \title{Filter the data based on DoE, rsd, intensity}
 \usage{
 getdoe(list, inscf = 5, rsdcf = 100, rsdcft = 30, imputation = "l",
-  tr = F)
+  tr = F, BPPARAM = BiocParallel::bpparam())
 }
 \arguments{
 \item{list}{list with data as peaks list, mz, rt and group information}
@@ -19,6 +19,8 @@ getdoe(list, inscf = 5, rsdcf = 100, rsdcft = 30, imputation = "l",
 \item{imputation}{parameters for `getimputation` function method}
 
 \item{tr}{logical. TRUE means dataset with technical replicates at the base level folder}
+
+\item{BPPARAM}{An optional BiocParallelParam instance determining the parallel back-end to be used during evaluation.}
 }
 \value{
 list with group mean, standard deviation, and relative standard deviation for all peaks, and filtered peaks index
