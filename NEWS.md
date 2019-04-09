@@ -2,6 +2,7 @@
 
 ## Major changes
 
+- introduce parallel computation in `getdoe`
 - add demo data and organize examples
 - add Relative Log Abundance (RLA) plots and Relative Log Abundance Ridge(RLA) plots
 - add getcsv to save the list as csv file
