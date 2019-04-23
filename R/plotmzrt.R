@@ -485,25 +485,40 @@ plotpca <- function(data,
         }
 
         if (is.null(lv)) {
-                pch = colnames(data)
+                pch0 = colnames(data)
         } else {
-                pch = lv
+                pch0 = lv
         }
         pcao <-
                 stats::prcomp(t(data), center = center, scale = scale)
         pcaoVars = signif(((pcao$sdev) ^ 2) / (sum((pcao$sdev) ^ 2)),
                           3) * 100
-        graphics::plot(
-                pcao$x[, 1],
-                pcao$x[, 2],
-                xlab = paste("PC1:",
-                             pcaoVars[1], "% of Variance Explained"),
-                ylab = paste("PC2:",
-                             pcaoVars[2], "% of Variance Explained"),
-                cex = 2,
-                pch = pch,
-                ...
-        )
+        if(hasArg(pch)){
+                graphics::plot(
+                        pcao$x[, 1],
+                        pcao$x[, 2],
+                        xlab = paste("PC1:",
+                                     pcaoVars[1], "% of Variance Explained"),
+                        ylab = paste("PC2:",
+                                     pcaoVars[2], "% of Variance Explained"),
+                        cex = 2,
+                        ...
+                )
+        }else{
+                graphics::plot(
+                        pcao$x[, 1],
+                        pcao$x[, 2],
+                        xlab = paste("PC1:",
+                                     pcaoVars[1], "% of Variance Explained"),
+                        ylab = paste("PC2:",
+                                     pcaoVars[2], "% of Variance Explained"),
+                        cex = 2,
+                        pch = pch0,
+                        ...
+                )
+        }
+        # pch = ifelse(hasArg(pch),pch,pch0)
+
         if (!(is.null(xrange) & is.null(yrange))) {
                 return(colnames(data)[pcao$x[, 1] > xrange[1] &
                                               pcao$x[, 1] < xrange[2] &
