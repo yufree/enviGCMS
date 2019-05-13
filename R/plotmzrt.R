@@ -466,6 +466,7 @@ gifmr <- function(list,
 #' @param scale parameters for scale
 #' @param xrange x axis range for return samples, default NULL
 #' @param yrange y axis range for return samples, default NULL
+#' @param pch deault pch would be the first charactor of group information or samples name
 #' @param ... other parameters for `plot` function
 #' @return if xrange and yrange are not NULL, return file name of all selected samples on 2D score plot
 #' @examples
@@ -479,6 +480,7 @@ plotpca <- function(data,
                     scale = T,
                     xrange = NULL,
                     yrange = NULL,
+                    pch = NULL,
                     ...) {
         if (!is.null(index)) {
                 data <- data[index,]
@@ -493,7 +495,7 @@ plotpca <- function(data,
                 stats::prcomp(t(data), center = center, scale = scale)
         pcaoVars = signif(((pcao$sdev) ^ 2) / (sum((pcao$sdev) ^ 2)),
                           3) * 100
-        if(hasArg(pch)){
+        if(!is.null(pch)){
                 graphics::plot(
                         pcao$x[, 1],
                         pcao$x[, 2],
@@ -502,6 +504,7 @@ plotpca <- function(data,
                         ylab = paste("PC2:",
                                      pcaoVars[2], "% of Variance Explained"),
                         cex = 2,
+                        pch = pch,
                         ...
                 )
         }else{

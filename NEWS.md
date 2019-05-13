@@ -11,6 +11,7 @@
 - rewrite getmzrt and getdoe to make analysis easier
 - deprecated getupload, getfeaturest and getfeaturesanova
 - update vignettes
+- add support for group dim larger than 2
 
 # enviGCMS 0.5.2
 

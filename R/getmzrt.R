@@ -54,7 +54,12 @@
                 peaks <- as.data.frame(xcms::groups(xcmsSet))
                 mz <- peaks$mzmed
                 rt <- peaks$rtmed
-                group <- as.character(xcms::phenoData(xcmsSet)$class)
+                if(dim(xcms::phenoData(xcmsSet))[2]>1){
+                        group <- xcms::phenoData(xcmsSet)
+                }else{
+                        group <- as.character(xcms::phenoData(xcmsSet)$class)
+                }
+
                 mzrange <- peaks[, c("mzmin", "mzmax")]
                 rtrange <- peaks[, c("rtmin", "rtmax")]
                 mzrt <-
@@ -340,7 +345,11 @@ getfilter <-
                         colindex <- list$colindex
                 }
                 list$data <- list$data[, colindex]
-                list$group <- list$group[colindex]
+                if(dim(list$group)[2]>1) {
+                        list$group <- list$group[colindex,]
+                }else{
+                        list$group <- list$group[colindex]
+                        }
                 # list$colindex <- colindex
                 getcsv(list, name = name, type = type, ...)
                 return(list)

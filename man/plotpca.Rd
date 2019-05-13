@@ -5,7 +5,7 @@
 \title{plot the PCA for multiple samples}
 \usage{
 plotpca(data, lv = NULL, index = NULL, center = T, scale = T,
-  xrange = NULL, yrange = NULL, ...)
+  xrange = NULL, yrange = NULL, pch = NULL, ...)
 }
 \arguments{
 \item{data}{mzrt profile with row peaks and column samples}
@@ -21,6 +21,8 @@ plotpca(data, lv = NULL, index = NULL, center = T, scale = T,
 \item{xrange}{x axis range for return samples, default NULL}
 
 \item{yrange}{y axis range for return samples, default NULL}
+
+\item{pch}{deault pch would be the first charactor of group information or samples name}
 
 \item{...}{other parameters for `plot` function}
 }
