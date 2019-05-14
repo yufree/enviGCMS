@@ -13,7 +13,6 @@
 #' list <- getmr(cdfpath, pmethod = ' ')
 #' }
 #' @seealso \code{\link{getdata}},\code{\link{getupload}}, \code{\link{getmzrt}}, \code{\link{getdoe}}
-#' @export
 getmr <-
         function(path,
                  index = F,
@@ -36,7 +35,6 @@ getmr <-
 #' @param path the path to your csv file
 #' @return list with rtmz profile and group infomation
 #' @seealso \code{\link{getmzrt}}
-#' @export
 getmzrtcsv <- function(path) {
         dataraw <- utils::read.csv(path, skip = 1)
         mz <- dataraw[, 2]
@@ -109,7 +107,6 @@ writeMSP <- function(mz, outfilename = "unknown") {
 #' @param rtrange retention time of the QC compound
 #' @param index index of the files contained QC compounds, default is all of the compounds
 #' @return number vector, each number indicate the peak area of that mass and retention time range
-#' @export
 getQCraw <- function(path, mzrange, rtrange, index = NULL) {
         cdffiles <- list.files(path, recursive = TRUE, full.names = TRUE)
         if (index) {

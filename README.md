@@ -27,11 +27,11 @@ Usage
 
 ~~~
 # enviGCMS use functions in xcms to import the data, just type the path to your single sample
-data1 <- getmd(‘sample1-1’)
-data2 <- getmd(‘sample1-2’)
-data3 <- getmd(‘sample1-3’)
-data4 <- getmd(‘sample1-4’)
-data5 <- getmd(‘sample1-5’)
+data1 <- enviGCMS:::getmd(‘sample1-1’)
+data2 <- enviGCMS:::getmd(‘sample1-2’)
+data3 <- enviGCMS:::getmd(‘sample1-3’)
+data4 <- enviGCMS:::getmd(‘sample1-4’)
+data5 <- enviGCMS:::getmd(‘sample1-5’)
 ~~~
 
 - get the mean

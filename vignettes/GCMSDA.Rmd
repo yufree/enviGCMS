@@ -28,13 +28,13 @@ When you perform a selected ions monitor(SIM) mode analysis, only few mass data 
 You could use `getmd` to import the mass spectrum data as supported by `xcms` and get the profile of GC-MS data matrix. `mzstep` is the bin step for mass:
 
 ```
-data <- getmd('data/data1.CDF', mzstep = 0.1)
+data <- enviGCMS:::getmd('data/data1.CDF', mzstep = 0.1)
 ```
 
 You could also subset the data by the mass(m/z 100-1000) or retention time range(40-100s) in `getmd` function:
 
 ```
-data <- getmd(data,mzrange=c(100,1000),rtrange=c(40,100))
+data <- enviGCMS:::getmd(data,mzrange=c(100,1000),rtrange=c(40,100))
 ```
 
 You could also combined the mass full-scan data with the same range of retention time by `cbmd`:

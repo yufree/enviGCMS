@@ -36,7 +36,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">enviGCMS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.5</span>
       </span>
     </div>
 
@@ -89,7 +89,7 @@
       <h1>Data analysis of GC-MS and LC-MS in Envrionmental Science</h1>
                         <h4 class="author">Miao Yu</h4>
             
-            <h4 class="date">2019-05-13</h4>
+            <h4 class="date">2019-05-14</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/yufree/enviGCMS/blob/master/vignettes/GCMSDA.Rmd"><code>vignettes/GCMSDA.Rmd</code></a></small>
       <div class="hidden name"><code>GCMSDA.Rmd</code></div>
@@ -117,9 +117,9 @@
 <h3 class="hasAnchor">
 <a href="#data-input" class="anchor"></a>Data input</h3>
 <p>You could use <code>getmd</code> to import the mass spectrum data as supported by <code>xcms</code> and get the profile of GC-MS data matrix. <code>mzstep</code> is the bin step for mass:</p>
-<pre><code>data &lt;- getmd('data/data1.CDF', mzstep = 0.1)</code></pre>
+<pre><code>data &lt;- enviGCMS:::getmd('data/data1.CDF', mzstep = 0.1)</code></pre>
 <p>You could also subset the data by the mass(m/z 100-1000) or retention time range(40-100s) in <code>getmd</code> function:</p>
-<pre><code>data &lt;- getmd(data,mzrange=c(100,1000),rtrange=c(40,100))</code></pre>
+<pre><code>data &lt;- enviGCMS:::getmd(data,mzrange=c(100,1000),rtrange=c(40,100))</code></pre>
 <p>You could also combined the mass full-scan data with the same range of retention time by <code>cbmd</code>:</p>
 <pre><code>data &lt;- cbmd(data1,data2,data3)</code></pre>
 </div>

@@ -44,7 +44,6 @@ ma <- function(x, n) {
 #' cdffiles <- list.files(cdfpath, recursive = TRUE, full.names = TRUE)
 #' matrix <- getmd(cdffiles[1])
 #' }
-#' @export
 getmd <- function(data,
                   mzstep = 0.1,
                   mzrange = F,
