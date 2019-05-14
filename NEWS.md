@@ -7,7 +7,7 @@
 ## Major changes
 
 - remove dependances for xcms and MSnbase to suggest and remove the export for those functions
-- introduce parallel computation in `getdoe`
+- introduce parallel computation in getdoe
 - add demo data and organize examples
 - add Relative Log Abundance (RLA) plots and Relative Log Abundance Ridge(RLA) plots
 - add getcsv to save the list as csv file
