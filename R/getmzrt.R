@@ -345,7 +345,7 @@ getfilter <-
                         colindex <- list$colindex
                 }
                 list$data <- list$data[, colindex]
-                if(dim(list$group)[2]>1) {
+                if(!is.vector(list$group)) {
                         list$group <- list$group[colindex,]
                 }else{
                         list$group <- list$group[colindex]
