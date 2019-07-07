@@ -638,6 +638,7 @@ plothm <- function(data, lv, index = NULL) {
 #' @param lv group information
 #' @param index index for selected peaks
 #' @param name name on the figure for samples
+#' @param lwd the line width for density plot, default 1
 #' @param ... parameters for `plot` function
 #' @return NULL
 #' @examples
@@ -648,6 +649,7 @@ plotden <- function(data,
                     lv,
                     index = NULL,
                     name = NULL,
+                    lwd = 1,
                     ...) {
         if (!is.null(index)) {
                 data <- data[index,]
@@ -675,7 +677,7 @@ plotden <- function(data,
         for (i in 1:(ncol(data))) {
                 graphics::lines(stats::density(log10(data[, i] + 1)),
                                 col = col[i],
-                                lwd = 3)
+                                lwd = lwd)
         }
         graphics::legend(
                 "topright",

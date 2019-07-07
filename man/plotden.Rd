@@ -4,7 +4,7 @@
 \alias{plotden}
 \title{plot the density for multiple samples}
 \usage{
-plotden(data, lv, index = NULL, name = NULL, ...)
+plotden(data, lv, index = NULL, name = NULL, lwd = 1, ...)
 }
 \arguments{
 \item{data}{mzrt profile with row peaks and column samples}
@@ -15,6 +15,8 @@ plotden(data, lv, index = NULL, name = NULL, ...)
 
 \item{name}{name on the figure for samples}
 
+\item{lwd}{the line width for density plot, default 1}
+
 \item{...}{parameters for `plot` function}
 }
 \description{
@@ -22,5 +24,5 @@ plot the density for multiple samples
 }
 \examples{
 data(list)
-plotden(list$data, lv = as.character(list$group$class))
+plotden(list$data, lv = as.character(list$group$class),ylim = c(0,1))
 }
