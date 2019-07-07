@@ -642,7 +642,7 @@ plothm <- function(data, lv, index = NULL) {
 #' @return NULL
 #' @examples
 #' data(list)
-#' plotden(list$data, lv = as.character(list$group$class))
+#' plotden(list$data, lv = as.character(list$group$class),ylim = c(0,1))
 #' @export
 plotden <- function(data,
                     lv,
@@ -664,13 +664,12 @@ plotden <- function(data,
                 1,
                 1,
                 typ = 'n',
-                main = paste0('Metabolites profiles changes in',
+                main = paste0('Metabolites profiles changes in ',
                               name,
                               ' samples'),
                 xlab = 'Intensity(log based 10)',
                 ylab = 'Density',
                 xlim = c(xlim[1], xlim[2] + 1),
-                ylim = c(0, 1),
                 ...
         )
         for (i in 1:(ncol(data))) {
