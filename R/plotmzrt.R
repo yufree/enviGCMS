@@ -471,7 +471,7 @@ gifmr <- function(list,
 #' @return if xrange and yrange are not NULL, return file name of all selected samples on 2D score plot
 #' @examples
 #' data(list)
-#' plotpca(list$data, lv = as.character(list$group$class))
+#' plotpca(list$data, lv = as.character(list$group))
 #' @export
 plotpca <- function(data,
                     lv = NULL,
@@ -537,7 +537,7 @@ plotpca <- function(data,
 #' @return NULL
 #' @examples
 #' data(list)
-#' plothm(list$data, lv = list$group$class)
+#' plothm(list$data, lv = as.factor(list$group))
 #' @export
 plothm <- function(data, lv, index = NULL) {
         icolors <-
@@ -643,7 +643,7 @@ plothm <- function(data, lv, index = NULL) {
 #' @return NULL
 #' @examples
 #' data(list)
-#' plotden(list$data, lv = as.character(list$group$class),ylim = c(0,1))
+#' plotden(list$data, lv = as.character(list$group),ylim = c(0,1))
 #' @export
 plotden <- function(data,
                     lv,
@@ -694,7 +694,7 @@ plotden <- function(data,
 #' @return Relative Log Abundance (RLA) plots
 #' @examples
 #' data(list)
-#' plotrla(list$data, as.factor(list$group$class))
+#' plotrla(list$data, as.factor(list$group))
 #' @export
 plotrla <- function(data, lv, type = "g") {
         data <- log(data)
@@ -725,7 +725,7 @@ plotrla <- function(data, lv, type = "g") {
 #' @return Relative Log Abundance Ridge(RLA) plots
 #' @examples
 #' data(list)
-#' plotridges(list$data, as.factor(list$group$class))
+#' plotridges(list$data, as.factor(list$group))
 #' @export
 plotridges <- function(data, lv, type = "g") {
         data <- log(data)

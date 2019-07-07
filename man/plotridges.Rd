@@ -21,5 +21,5 @@ Relative Log Abundance Ridge (RLAR) plots
 }
 \examples{
 data(list)
-plotridges(list$data, as.factor(list$group$class))
+plotridges(list$data, as.factor(list$group))
 }

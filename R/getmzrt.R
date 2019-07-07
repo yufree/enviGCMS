@@ -496,14 +496,14 @@ getpower <-
                  qt = 0.05,
                  powert = 0.8,
                  imputation = "l") {
-                group <- list$group$class
+                group <- as.factor(list$group)
                 g <- unique(group)
                 ng <- length(g)
                 n <- min(table(group))
                 list <- getdoe(list, imputation = imputation)
                 sd <- apply(list$groupmean, 1, mean)
                 if (ng == 2) {
-                        ar <- genefilter::rowttests(list$data, fac = list$group$class)
+                        ar <- genefilter::rowttests(list$data, fac = group)
                         dm <- ar$dm
                         m <- nrow(list$data)
                         p <- ar$p.value
@@ -536,7 +536,7 @@ getpower <-
                 } else{
                         sdg <- genefilter::rowSds(list$groupmean)
                         ar <-
-                                genefilter::rowFtests(list$data, list$group$class)
+                                genefilter::rowFtests(list$data, group)
                         p <- ar$p.value
                         q <- stats::p.adjust(p, method = "BH")
                         m <- nrow(list$data)

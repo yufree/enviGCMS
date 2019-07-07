@@ -42,8 +42,6 @@ getmzrtcsv <- function(path) {
         rt <- dataraw[, 3]
         data <- dataraw[,-c(1:3)]
         group <- c(t(utils::read.csv(path, nrows = 1)[-(1:3)]))
-        colnames(group) <- c(1:ncol(group))
-        colnames(data) <- rownames(group)
         rownames(data) <- dataraw[, 1]
         re <- list(
                 data = data,

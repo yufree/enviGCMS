@@ -18,5 +18,5 @@ Plot the heatmap of mzrt profiles
 }
 \examples{
 data(list)
-plothm(list$data, lv = list$group$class)
+plothm(list$data, lv = as.factor(list$group))
 }
