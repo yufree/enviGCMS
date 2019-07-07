@@ -10,7 +10,7 @@ getmzrtcsv(path)
 \item{path}{the path to your csv file}
 }
 \value{
-list with rtmz profile and group infomation
+list with rtmz profile and group infomation as the first row
 }
 \description{
 Covert the peaks list csv file into list

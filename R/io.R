@@ -33,14 +33,15 @@ getmr <-
 
 #' Covert the peaks list csv file into list
 #' @param path the path to your csv file
-#' @return list with rtmz profile and group infomation
+#' @return list with rtmz profile and group infomation as the first row
 #' @seealso \code{\link{getmzrt}}
+#' @export
 getmzrtcsv <- function(path) {
         dataraw <- utils::read.csv(path, skip = 1)
         mz <- dataraw[, 2]
         rt <- dataraw[, 3]
         data <- dataraw[,-c(1:3)]
-        group <- data.frame(t(utils::read.csv(path, nrows = 1)[-(1:3)]))
+        group <- c(t(utils::read.csv(path, nrows = 1)[-(1:3)]))
         colnames(group) <- c(1:ncol(group))
         colnames(data) <- rownames(group)
         rownames(data) <- dataraw[, 1]
