@@ -1,3 +1,10 @@
+#' Demo data for TBBPA metabolism in Pumpkin
+#' @docType data
+#' @usage data(TBBPA)
+#' @format A list object with data, mass to charge ratio, retention time and group information. Three pumpkin seeding root samples' peaks list is extracted by xcms online.
+#' @references Hou, X., Yu, M., Liu, A., Wang, X., Li, Y., Liu, J., Schnoor, J.L., Jiang, G., 2019. Glycosylation of Tetrabromobisphenol A in Pumpkin. Environ. Sci. Technol. https://doi.org/10.1021/acs.est.9b02122
+"TBBPA"
+
 #' Get mass defect with certain scaled factor
 #' @param mass vector of mass
 #' @param sf scaled factors
