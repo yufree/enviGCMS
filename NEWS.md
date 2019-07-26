@@ -1,3 +1,10 @@
+# enviGCMS 0.5.6
+
+- fix group issue in mzrt object
+- all the group info will be imported as character while user could change the character into dataframe
+- export getmzrtcsv 
+- add getmet to export metabolites for certain compounds based on mass defect
+
 # enviGCMS 0.5.5
 
 - CRAN
