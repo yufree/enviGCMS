@@ -309,7 +309,7 @@ getmdh <- function(mz,
 #' @param mzc threshold of lower mass and higher mass, default 700
 #' @param cutoffint the cutoff of intensity, default 1000
 #' @param cutoffr the cutoff of [M] and [M+2] ratio, default 0.4
-#' @param clustercf the cutoff of cluster analysis to seperate two different ions groups for mass distances and retention time, default 10
+#' @param clustercf the cutoff of cluster analysis to seperate two different ions groups for retention time, default 10
 #' @return list with filtered organohalogen compounds
 #' @references Identification of Novel Brominated Compounds in Flame Retarded Plastics Containing TBBPA by Combining Isotope Pattern and Mass Defect Cluster Analysis Ana Ballesteros-Gómez, Joaquín Ballesteros, Xavier Ortiz, Willem Jonker, Rick Helmus, Karl J. Jobst, John R. Parsons, and Eric J. Reiner Environmental Science & Technology 2017 51 (3), 1518-1526 DOI: 10.1021/acs.est.6b03294
 #' @export
@@ -352,13 +352,15 @@ findohc <-
                         rtt <- rt[index & ins > cutoffint]
                         #dist(mzt) <-
                         if (length(mzt) >= 2) {
-                                c <- stats::cutree(stats::hclust(stats::dist(mzt)), h = clustercf)
-                                t <-
-                                        stats::cutree(stats::hclust(stats::dist(rtt)), h = clustercf)
-                                u <- paste0(c, t)
-                                cn <- length(unique(u))
-                                lit <- cbind.data.frame(li, u, i)
-                                for (j in 1:cn) {
+                                #c <- stats::cutree(stats::hclust(stats::dist(mzt)), h = clustercf)
+                                t <- stats::cutree(stats::hclust(stats::dist(rtt)), h = clustercf)
+                                # u <- paste0(c, t)
+                                # cn <- length(unique(u))
+                                # lit <- cbind.data.frame(li, u, i)
+                                #
+                                # for (j in 1:cn) {
+                                lit <- cbind.data.frame(li, t, i)
+                                for (j in 1:length(unique(t))){
                                         li2 <- lit[lit[, 7] == j,]
                                         mzt2 <-
                                                 lit$mzr[lit[, 7] == j]
@@ -385,4 +387,32 @@ findohc <-
                 }
                 list$ohc <- result[!duplicated(result$mz), ]
                 return(list)
+        }
+
+#' Screen metabolites by Mass Defect
+#' @param list list with data as peaks list, mz, rt and group information, retention time should be in seconds
+#' @param mass mass to charge ratio of specific compounds
+#' @param mdr mass defect range, default 50mDa
+#' @return list with filtered metabolites mass to charge index of certain compound
+#' @export
+findmet <-
+        function(list, mass, mdr = 50){
+
+                rmd <- (round(mass) - mass)*1000
+                rmdall <-(round(list$mz) - list$mz)*1000
+
+                if(length(mass)>1){
+                        metindex <- NULL
+                        for(i in 1:length(mass)){
+                                metindexi <- rmdall>rmd[i]-mdr & rmdall<rmd[i]+mdr
+                                metindex <- cbind(metindex,metindexi)
+                        }
+                        colnames(metindex) <- mass
+                        list$metindex <- metindex
+                        return(list)
+                }else{
+                        list$metindex <- rmdall>rmd-mdr & rmdall<rmd+mdr
+                        return(list)
+                }
+
         }
