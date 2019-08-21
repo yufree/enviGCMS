@@ -29,6 +29,8 @@ gif file
 plot scatter plot for rt-mz profile and output gif file for mutiple groups
 }
 \examples{
+\dontrun{
 data(list)
 gifmr(list)
+}
 }

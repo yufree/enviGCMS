@@ -406,8 +406,10 @@ plotrsd <- function(list,
 #' @param ... parameters for `plot` function
 #' @return gif file
 #' @examples
+#' \dontrun{
 #' data(list)
 #' gifmr(list)
+#' }
 #' @export
 gifmr <- function(list,
                   ms = c(100, 500),

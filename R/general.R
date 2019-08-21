@@ -509,6 +509,7 @@ plotsub <- function(data) {
 #' @param data imported data matrix of GC-MS
 #' @param rt vector range of the retention time
 #' @param ms vector range of the m/z
+#' @param msp logical, return MSP files or not, default False
 #' @return plot, vector and MSP files for NIST search
 #' @examples
 #' \dontrun{
@@ -516,7 +517,7 @@ plotsub <- function(data) {
 #' plotrtms(matrix,rt = c(500,1000),ms = (300,500))
 #' }
 #' @export
-plotrtms <- function(data, rt, ms) {
+plotrtms <- function(data, rt, ms, msp=F) {
         data <- getmd(data, rt, ms)
         temp <- apply(data, 1, mean)
         graphics::plot(
@@ -533,7 +534,7 @@ plotrtms <- function(data, rt, ms) {
         index <- seq(1, length(temp))
         graphics::axis(1, at = index[mz %% 100 == 0], labels = mz[mz %% 100 ==
                                                                           0])
-        writeMSP(temp)
+        if(msp) writeMSP(temp)
         return(temp)
 }
 

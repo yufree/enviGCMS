@@ -4,7 +4,7 @@
 \alias{plotrtms}
 \title{Plot mass spectrum of certain retention time and return mass spectrum vector (MSP file) for NIST search}
 \usage{
-plotrtms(data, rt, ms)
+plotrtms(data, rt, ms, msp = F)
 }
 \arguments{
 \item{data}{imported data matrix of GC-MS}
@@ -12,6 +12,8 @@ plotrtms(data, rt, ms)
 \item{rt}{vector range of the retention time}
 
 \item{ms}{vector range of the m/z}
+
+\item{msp}{logical, return MSP files or not, default False}
 }
 \value{
 plot, vector and MSP files for NIST search

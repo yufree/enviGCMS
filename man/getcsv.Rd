@@ -26,8 +26,10 @@ NULL, csv file
 Convert an list object to csv file.
 }
 \examples{
+\dontrun{
 data(list)
 getcsv(list,name='demo')
+}
 }
 \references{
 Li, S.; Park, Y.; Duraisingham, S.; Strobel, F. H.; Khan, N.; Soltow, Q. A.; Jones, D. P.; Pulendran, B. PLOS Computational Biology 2013, 9 (7), e1003123.

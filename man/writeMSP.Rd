@@ -18,7 +18,9 @@ none a MSP file will be created at the subfolder working dictionary with name 'M
 Write MSP files for NIST search
 }
 \examples{
+\dontrun{
 mz <- c(10000,20000,10000,30000,5000)
 names(mz) <- c(101,143,189,221,234)
 writeMSP(mz,'test')
+}
 }
