@@ -1,3 +1,7 @@
+# enviGCMS 0.5.7
+
+- CRAN
+
 # enviGCMS 0.5.6
 
 - fix group issue in mzrt object
