@@ -629,3 +629,17 @@ getoverlaprt <- function(rtrange1, rtrange2) {
         index <- (!is.na(overlapms))
         return(index)
 }
+#' Density weighted intensity for one sample
+#' @param peak peaks intensity one sample
+#' @param n the number of equally spaced points at which the density is to be estimated, default 512
+#' @param log log transformation
+#' @return Density weighted intensity for one sample
+#' @export
+#'
+getdwtus <- function(peak,n=512,log=F){
+        if(log){
+                peak <- log(peak+1)
+        }
+        sum <- sum(density(peak,bw='sj',n=n)$x*density(peak,bw='sj',n=n)$y)
+        return(sum)
+}

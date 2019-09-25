@@ -760,3 +760,22 @@ plotridges <- function(data, lv, type = "g") {
                                                            bins = 100) + ggplot2::xlim(-0.5, 0.5) + ggplot2::scale_fill_discrete(name = "Group") +
                 ggplot2::labs(x = "Relative Log Abundance", y = "Samples")
 }
+#' plot density weighted intensity for multiple samples
+#' @param list list with data as peaks list, mz, rt and group information
+#' @param n the number of equally spaced points at which the density is to be estimated, default 512
+#' @param ... parameters for `plot` function
+#' @return Density weighted intensity for multiple samples
+#' @examples
+#' data(list)
+#' plotdwtus(list)
+#' @export
+plotdwtus <- function(list,n=512,...){
+        dwtus <- apply(list$data, 2, function(x) getdwtus(x,n = n))
+        if(!is.null(list$order)){
+                plot(dwtus~as.numeric(list$order), xlab='Run order', ylab = 'DWTUS', col = as.numeric(as.factor(list$group)),...)
+                legend('topright',legend = unique(list$group),col = unique(as.numeric(as.factor(list$group))),pch = 19,bty = 'n')
+        }else{
+                plot(dwtus~as.numeric(as.factor(list$group)),xlab='Group', ylab = 'DWTUS',col = as.numeric(as.factor(list$group)),...)
+                legend('topright',legend = unique(list$group),col = unique(as.numeric(as.factor(list$group))),pch = 19,bty = 'n')
+        }
+}
