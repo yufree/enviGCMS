@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Plot the influnces of DoE and Batch effects on each peaks — svabatch • enviGCMS</title>
+<title>Density weighted intensity for one sample — getdwtus • enviGCMS</title>
 
 
 <!-- jquery -->
@@ -35,8 +35,8 @@
 
 
 
-<meta property="og:title" content="Plot the influnces of DoE and Batch effects on each peaks — svabatch" />
-<meta property="og:description" content="Plot the influnces of DoE and Batch effects on each peaks" />
+<meta property="og:title" content="Density weighted intensity for one sample — getdwtus" />
+<meta property="og:description" content="Density weighted intensity for one sample" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -130,64 +130,44 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Plot the influnces of DoE and Batch effects on each peaks</h1>
-    <small class="dont-index">Source: <a href='https://github.com/yufree/enviGCMS/blob/master/R/deprecated.R'><code>R/deprecated.R</code></a></small>
-    <div class="hidden name"><code>svabatch.Rd</code></div>
+    <h1>Density weighted intensity for one sample</h1>
+    <small class="dont-index">Source: <a href='https://github.com/yufree/enviGCMS/blob/master/R/getmzrt.R'><code>R/getmzrt.R</code></a></small>
+    <div class="hidden name"><code>getdwtus.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Plot the influnces of DoE and Batch effects on each peaks</p>
+    <p>Density weighted intensity for one sample</p>
     </div>
 
-    <pre class="usage"><span class='fu'>svabatch</span>(<span class='no'>df</span>, <span class='no'>dfsv</span>, <span class='no'>dfanova</span>)</pre>
+    <pre class="usage"><span class='fu'>getdwtus</span>(<span class='no'>peak</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>512</span>, <span class='kw'>log</span> <span class='kw'>=</span> <span class='no'>F</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>df</th>
-      <td><p>data output from `svacor` function</p></td>
+      <th>peak</th>
+      <td><p>peaks intensity one sample</p></td>
     </tr>
     <tr>
-      <th>dfsv</th>
-      <td><p>data output from `svaplot` function for corrected data</p></td>
+      <th>n</th>
+      <td><p>the number of equally spaced points at which the density is to be estimated, default 512</p></td>
     </tr>
     <tr>
-      <th>dfanova</th>
-      <td><p>data output from `svaplot` function for raw data</p></td>
+      <th>log</th>
+      <td><p>log transformation</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>influnces plot</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+    <p>Density weighted intensity for one sample</p>
 
-    <div class='dont-index'><p><code><a href='svacor.html'>svacor</a></code>, <code><a href='svaplot.html'>svaplot</a></code>, <code><a href='svapca.html'>svapca</a></code></p></div>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>faahKO</span>)
-<span class='no'>cdfpath</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"cdf"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"faahKO"</span>)
-<span class='no'>cdffiles</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.files.html'>list.files</a></span>(<span class='no'>cdfpath</span>, <span class='kw'>recursive</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>full.names</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='no'>xset</span> <span class='kw'>&lt;-</span> <span class='fu'>xcmsSet</span>(<span class='no'>cdffiles</span>)
-<span class='no'>xset</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/grDevices/plotmath.html'>group</a></span>(<span class='no'>xset</span>)
-<span class='no'>xset2</span> <span class='kw'>&lt;-</span> <span class='fu'>retcor</span>(<span class='no'>xset</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='st'>"symmetric"</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='st'>"mdevden"</span>)
-<span class='no'>xset2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/grDevices/plotmath.html'>group</a></span>(<span class='no'>xset2</span>, <span class='kw'>bw</span> <span class='kw'>=</span> <span class='fl'>10</span>)
-<span class='no'>xset3</span> <span class='kw'>&lt;-</span> <span class='fu'>fillPeaks</span>(<span class='no'>xset2</span>)
-<span class='no'>df</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='svacor.html'>svacor</a></span>(<span class='no'>xset3</span>)
-<span class='no'>dfsv</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='svaplot.html'>svaplot</a></span>(<span class='no'>xset3</span>)
-<span class='no'>dfanova</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='svaplot.html'>svaplot</a></span>(<span class='no'>xset3</span>, <span class='kw'>pqvalues</span> <span class='kw'>=</span> <span class='st'>"anova"</span>)
-<span class='fu'>svabatch</span>(<span class='no'>df</span>,<span class='no'>dfsv</span>,<span class='no'>dfanova</span>)
-}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>
