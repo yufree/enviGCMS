@@ -324,9 +324,9 @@ Getisotopologues <- function(formula = "C12OH6Br4",
                                                    2])
         peak <-
                 c(
-                        round(isotopologuesL, digits = 1),
+                        round(isotopologuesL, digits = 5),
                         round(isotopologuesH,
-                              digits = 1),
+                              digits = 5),
                         round(ratio, digits = 5)
                 )
         # peak <- as.character(peak)

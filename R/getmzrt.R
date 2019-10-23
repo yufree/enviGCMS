@@ -391,7 +391,7 @@ getdoe <- function(list,
                 meant <- meant[idx,]
                 sdt <- BiocParallel::bpaggregate(t(data), list(mlv), stats::sd,BPPARAM = BPPARAM)
                 idx <- match(unique(mlv), sdt[,1])
-                sdt <- sdt[,idx]
+                sdt <- sdt[idx,]
                 suppressWarnings(rsd <- sdt[,-1] / meant[,-1] *
                                          100)
                 data <- t(meant[,-1])
