@@ -19,3 +19,7 @@ Density weighted intensity for one sample
 \description{
 Density weighted intensity for one sample
 }
+\examples{
+data(list)
+getdwtus(list$data[,1])
+}

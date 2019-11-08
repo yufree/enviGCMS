@@ -1,6 +1,7 @@
 # enviGCMS 0.5.8
 
 - add functions to get and plot density weighted intensity
+- add pooled QC vignette
 
 # enviGCMS 0.5.7
 

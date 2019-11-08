@@ -1,0 +1,80 @@
+---
+title: "Pooled QC analysis"
+author: "Miao Yu"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Pooled QC analysis}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(enviGCMS)
+```
+
+Pooled QC samples within injection sequences are very important to control the quality of untargeted analysis. I added some function in `enviGCMS` package to visualize or analysis Pooled QC samples.
+
+## Density distribution
+
+For each sample, the peaks' density distribution will tell us if certain samples show large shift.
+
+```{r}
+data(list)
+plotden(list$data,list$group,ylim = c(0,1))
+```
+
+## Relative Log Abundance (RLA) plots
+
+Relative Log Abundance (RLA) plots could be another way to show the intensity shift.
+
+```{r}
+data(list)
+plotrla(list$data,as.factor(list$group))
+```
+
+## Relative Log Abundance Ridge (RLAR) plots
+
+Relative Log Abundance Ridge (RLAR) plots could also be used to show the intensity shift.
+
+```{r}
+data(list)
+plotridges(list$data, as.factor(list$group))
+```
+
+
+## Density Weighted Total Usable Signal
+
+The sum of all peaks' intensity or total usable signal(TUS) could show the general trends for each sample while peaks with lower ionization energy will dominated such value. Here I introduced a density weighted TUS to make the values robust to low frequency high intensity peaks. You could use `getdwtus` to calculate DWTUS for samples.
+
+$$DWTUS = \sum peak\ intensity * peak\ density$$
+
+```{r}
+data(list)
+apply(list$data,2,getdwtus)
+plotdwtus(list)
+```
+
+## Run order effect analysis
+
+For LC/GC-MS analysis, the run order will affect the intensity of single peak until the instrument is stable. The intensity will decrease/increase with initial run order and researcher need to evaluate how many samples are enough to eliminated run order effects. Here I introduced a pooled QC linear index to show such trends in the sequence. Such index would be a value between 0 and 1. The higher of such index, more peaks within that sample would be affected by run order effect. You could use such function to check the very first samples at the beginning of your sequence to see if run order effects would influence the samples in the beginning of sequences.
+
+```{r}
+order <- 1:12
+# n means how many points to build a linear regression model
+n = 5
+idx <- getpqsi(list$data,order,n = n)
+plot(idx~order[-(1:(n-1))],pch=19)
+```
+
+In this case, we could see at 5th sample, 30% peaks show correlation with the run order. However, ever since 6th sample, the run order effects could be ignore.
+
+
+
