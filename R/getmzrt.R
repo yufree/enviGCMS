@@ -8,8 +8,8 @@
                  mzdigit = 4,
                  rtdigit = 1)
         {
-                data <- xcms::featureValues(XCMSnExp, value = value)
-                group <- as.character(XCMSnExp@phenoData@data)
+                data <- xcms::featureValues(XCMSnExp, value = value, missing = 0)
+                group <- data.frame(apply(XCMSnExp@phenoData@data, 2, as.character),stringsAsFactors = F)
 
                 # peaks info
                 peaks <- xcms::featureDefinitions(XCMSnExp)

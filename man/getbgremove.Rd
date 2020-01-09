@@ -4,8 +4,14 @@
 \alias{getbgremove}
 \title{Get the peak list with blank samples' peaks removed}
 \usage{
-getbgremove(xset, method = "medret", intensity = "into", file = NULL,
-  rsdcf = 30, inscf = 1000)
+getbgremove(
+  xset,
+  method = "medret",
+  intensity = "into",
+  file = NULL,
+  rsdcf = 30,
+  inscf = 1000
+)
 }
 \arguments{
 \item{xset}{the xcmsset object with blank and certain group samples' data}

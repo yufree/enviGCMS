@@ -4,8 +4,14 @@
 \alias{getbiotechrep}
 \title{Get the report for biological replicates.}
 \usage{
-getbiotechrep(xset, method = "medret", intensity = "into",
-  file = NULL, rsdcf = 30, inscf = 1000)
+getbiotechrep(
+  xset,
+  method = "medret",
+  intensity = "into",
+  file = NULL,
+  rsdcf = 30,
+  inscf = 1000
+)
 }
 \arguments{
 \item{xset}{the xcmsset object which for all of your technique replicates for bio replicated sample in single group}

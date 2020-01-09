@@ -52,4 +52,4 @@ Imports:
     ggraph,
     ggplot2,
     ggridges
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2

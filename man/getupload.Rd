@@ -4,8 +4,15 @@
 \alias{getupload}
 \title{Get the csv files from xcmsset/XCMSnExp/list object}
 \usage{
-getupload(xset, method = "medret", value = "into", name = "Peaklist",
-  type = "m", mzdigit = 4, rtdigit = 1)
+getupload(
+  xset,
+  method = "medret",
+  value = "into",
+  name = "Peaklist",
+  type = "m",
+  mzdigit = 4,
+  rtdigit = 1
+)
 }
 \arguments{
 \item{xset}{the xcmsset/XCMSnExp/list object which you want to submitted to Metaboanalyst}

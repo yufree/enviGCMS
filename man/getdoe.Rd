@@ -4,8 +4,15 @@
 \alias{getdoe}
 \title{Filter the data based on DoE, rsd, intensity}
 \usage{
-getdoe(list, inscf = 5, rsdcf = 100, rsdcft = 30, imputation = "l",
-  tr = F, BPPARAM = BiocParallel::bpparam())
+getdoe(
+  list,
+  inscf = 5,
+  rsdcf = 100,
+  rsdcft = 30,
+  imputation = "l",
+  tr = F,
+  BPPARAM = BiocParallel::bpparam()
+)
 }
 \arguments{
 \item{list}{list with data as peaks list, mz, rt and group information}

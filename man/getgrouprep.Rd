@@ -4,8 +4,14 @@
 \alias{getgrouprep}
 \title{Get the report for samples with biological and technique replicates in different groups}
 \usage{
-getgrouprep(xset, file = NULL, method = "medret", intensity = "into",
-  rsdcf = 30, inscf = 1000)
+getgrouprep(
+  xset,
+  file = NULL,
+  method = "medret",
+  intensity = "into",
+  rsdcf = 30,
+  inscf = 1000
+)
 }
 \arguments{
 \item{xset}{the xcmsset object all of samples with technique replicates}

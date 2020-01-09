@@ -4,8 +4,16 @@
 \alias{getmzrt}
 \title{Get the mzrt profile and group information as a mzrt list and/or save them as csv or rds for further analysis.}
 \usage{
-getmzrt(xset, name = NULL, mzdigit = 4, rtdigit = 1,
-  method = "medret", value = "into", eic = F, type = "o")
+getmzrt(
+  xset,
+  name = NULL,
+  mzdigit = 4,
+  rtdigit = 1,
+  method = "medret",
+  value = "into",
+  eic = F,
+  type = "o"
+)
 }
 \arguments{
 \item{xset}{xcmsSet/XCMSnExp objects}

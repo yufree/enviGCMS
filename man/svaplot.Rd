@@ -4,8 +4,7 @@
 \alias{svaplot}
 \title{Filter the data with p value and q value and show them}
 \usage{
-svaplot(list, pqvalues = "sv", pt = 0.05, qt = 0.05, lv = NULL,
-  index = NULL)
+svaplot(list, pqvalues = "sv", pt = 0.05, qt = 0.05, lv = NULL, index = NULL)
 }
 \arguments{
 \item{list}{results from svacor function}

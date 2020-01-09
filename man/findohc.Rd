@@ -4,9 +4,17 @@
 \alias{findohc}
 \title{Screen organohalogen compounds by retention time, mass defect analysis and isotope relationship modified by literature report. Also support compounds with [M] and [M+2] ratio cutoff.}
 \usage{
-findohc(list, sf = 78/77.91051, step = 0.001, stepsd1 = 0.003,
-  stepsd2 = 0.005, mzc = 700, cutoffint = 1000, cutoffr = 0.4,
-  clustercf = 10)
+findohc(
+  list,
+  sf = 78/77.91051,
+  step = 0.001,
+  stepsd1 = 0.003,
+  stepsd2 = 0.005,
+  mzc = 700,
+  cutoffint = 1000,
+  cutoffr = 0.4,
+  clustercf = 10
+)
 }
 \arguments{
 \item{list}{list with data as peaks list, mz, rt and group information, retention time should be in seconds}

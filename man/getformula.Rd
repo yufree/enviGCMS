@@ -4,8 +4,13 @@
 \alias{getformula}
 \title{Get chemical formula for mass to charge ratio.}
 \usage{
-getformula(mz, charge = 1, window = 0.001, elements = list(C = c(1,
-  50), H = c(1, 50), N = c(0, 50), O = c(0, 50), P = c(0, 1), S = c(0, 1)))
+getformula(
+  mz,
+  charge = 1,
+  window = 0.001,
+  elements = list(C = c(1, 50), H = c(1, 50), N = c(0, 50), O = c(0, 50), P = c(0, 1), S
+    = c(0, 1))
+)
 }
 \arguments{
 \item{mz}{a vector with mass to charge ratio}

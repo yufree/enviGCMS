@@ -4,8 +4,18 @@
 \alias{getfeaturesanova}
 \title{Get the features from anova, with p value, q value, rsd and power restriction}
 \usage{
-getfeaturesanova(list, power = 0.8, pt = 0.05, qt = 0.05, n = 3,
-  ng = 3, rsdcf = 100, inscf = 5, imputation = "l", index = NULL)
+getfeaturesanova(
+  list,
+  power = 0.8,
+  pt = 0.05,
+  qt = 0.05,
+  n = 3,
+  ng = 3,
+  rsdcf = 100,
+  inscf = 5,
+  imputation = "l",
+  index = NULL
+)
 }
 \arguments{
 \item{list}{list with data as peaks list, mz, rt and group information (more than two groups)}

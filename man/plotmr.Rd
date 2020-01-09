@@ -4,8 +4,15 @@
 \alias{plotmr}
 \title{plot the scatter plot for peaks list with threshold}
 \usage{
-plotmr(list, rt = NULL, ms = NULL, inscf = 5, rsdcf = 30,
-  imputation = "l", ...)
+plotmr(
+  list,
+  rt = NULL,
+  ms = NULL,
+  inscf = 5,
+  rsdcf = 30,
+  imputation = "l",
+  ...
+)
 }
 \arguments{
 \item{list}{list with data as peaks list, mz, rt and group information}

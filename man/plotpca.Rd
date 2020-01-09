@@ -4,8 +4,17 @@
 \alias{plotpca}
 \title{plot the PCA for multiple samples}
 \usage{
-plotpca(data, lv = NULL, index = NULL, center = T, scale = T,
-  xrange = NULL, yrange = NULL, pch = NULL, ...)
+plotpca(
+  data,
+  lv = NULL,
+  index = NULL,
+  center = T,
+  scale = T,
+  xrange = NULL,
+  yrange = NULL,
+  pch = NULL,
+  ...
+)
 }
 \arguments{
 \item{data}{mzrt profile with row peaks and column samples}

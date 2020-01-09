@@ -4,8 +4,7 @@
 \alias{plotrsd}
 \title{plot the rsd influnces of data in different groups}
 \usage{
-plotrsd(list, ms = c(100, 800), inscf = 5, rsdcf = 100,
-  imputation = "l", ...)
+plotrsd(list, ms = c(100, 800), inscf = 5, rsdcf = 100, imputation = "l", ...)
 }
 \arguments{
 \item{list}{list with data as peaks list, mz, rt and group information}

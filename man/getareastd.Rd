@@ -4,8 +4,7 @@
 \alias{getareastd}
 \title{Get the peak information from SCCPs standards}
 \usage{
-getareastd(data = NULL, ismz = 323, ppm = 5, con = 2000,
-  rt = NULL, rts = NULL)
+getareastd(data = NULL, ismz = 323, ppm = 5, con = 2000, rt = NULL, rts = NULL)
 }
 \arguments{
 \item{data}{list from `xcmsRaw` function}

@@ -4,8 +4,14 @@
 \alias{getmr}
 \title{Get the mzrt profile and group information for batch correction and plot as a list directly from path with default setting}
 \usage{
-getmr(path, index = F, BPPARAM = BiocParallel::SnowParam(),
-  pmethod = "hplcorbitrap", minfrac = 0.67, ...)
+getmr(
+  path,
+  index = F,
+  BPPARAM = BiocParallel::SnowParam(),
+  pmethod = "hplcorbitrap",
+  minfrac = 0.67,
+  ...
+)
 }
 \arguments{
 \item{path}{the path to your data}

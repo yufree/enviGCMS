@@ -4,8 +4,7 @@
 \alias{getfeaturest}
 \title{Get the features from t test, with p value, q value, rsd and power restriction}
 \usage{
-getfeaturest(list, power = 0.8, pt = 0.05, qt = 0.05, n = 3,
-  imputation = "l")
+getfeaturest(list, power = 0.8, pt = 0.05, qt = 0.05, n = 3, imputation = "l")
 }
 \arguments{
 \item{list}{list with data as peaks list, mz, rt and group information (two groups)}

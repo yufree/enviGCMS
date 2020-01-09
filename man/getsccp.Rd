@@ -4,8 +4,16 @@
 \alias{getsccp}
 \title{Quantitative analysis for short-chain chlorinated paraffins(SCCPs)}
 \usage{
-getsccp(pathstds, pathsample, ismz = 323, ppm = 5, con = 2000,
-  rt = NULL, rts = NULL, log = T)
+getsccp(
+  pathstds,
+  pathsample,
+  ismz = 323,
+  ppm = 5,
+  con = 2000,
+  rt = NULL,
+  rts = NULL,
+  log = T
+)
 }
 \arguments{
 \item{pathstds}{mzxml file path for SCCPs standards}

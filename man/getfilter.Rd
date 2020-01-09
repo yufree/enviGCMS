@@ -4,8 +4,7 @@
 \alias{getfilter}
 \title{Filter the data based on row and column index}
 \usage{
-getfilter(list, rowindex = T, colindex = T, name = NULL,
-  type = "o", ...)
+getfilter(list, rowindex = T, colindex = T, name = NULL, type = "o", ...)
 }
 \arguments{
 \item{list}{list with data as peaks list, mz, rt and group information}

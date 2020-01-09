@@ -4,8 +4,14 @@
 \alias{gettechrep}
 \title{Get the report for technique replicates.}
 \usage{
-gettechrep(xset, method = "medret", intensity = "into", file = NULL,
-  rsdcf = 30, inscf = 1000)
+gettechrep(
+  xset,
+  method = "medret",
+  intensity = "into",
+  file = NULL,
+  rsdcf = 30,
+  inscf = 1000
+)
 }
 \arguments{
 \item{xset}{the xcmsset object which for all of your technique replicates for one sample}

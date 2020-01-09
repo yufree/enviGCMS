@@ -4,8 +4,7 @@
 \alias{getpower}
 \title{Get the index with power restriction for certain study with BH adjusted p-value and certain power.}
 \usage{
-getpower(list, pt = 0.05, qt = 0.05, powert = 0.8,
-  imputation = "l")
+getpower(list, pt = 0.05, qt = 0.05, powert = 0.8, imputation = "l")
 }
 \arguments{
 \item{list}{list with data as peaks list, mz, rt and group information}
