@@ -643,7 +643,7 @@ getdwtus <- function(peak,n=512,log=F){
         if(log){
                 peak <- log(peak+1)
         }
-        sum <- sum(density(peak,bw='sj',n=n)$x*density(peak,bw='sj',n=n)$y)
+        sum <- sum(stats::density(peak,bw='sj',n=n)$x*stats::density(peak,bw='sj',n=n)$y)
         return(sum)
 }
 

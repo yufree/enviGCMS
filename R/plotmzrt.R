@@ -772,10 +772,10 @@ plotridges <- function(data, lv, type = "g") {
 plotdwtus <- function(list,n=512,...){
         dwtus <- apply(list$data, 2, function(x) getdwtus(x,n = n))
         if(!is.null(list$order)){
-                plot(dwtus~as.numeric(list$order), xlab='Run order', ylab = 'DWTUS', col = as.numeric(as.factor(list$group)),...)
-                legend('topright',legend = unique(list$group),col = unique(as.numeric(as.factor(list$group))),pch = 19,bty = 'n')
+                graphics::plot(dwtus~as.numeric(list$order), xlab='Run order', ylab = 'DWTUS', col = as.numeric(as.factor(list$group)),...)
+                graphics::legend('topright',legend = unique(list$group),col = unique(as.numeric(as.factor(list$group))),pch = 19,bty = 'n')
         }else{
-                plot(dwtus~as.numeric(as.factor(list$group)),xlab='Group', ylab = 'DWTUS',col = as.numeric(as.factor(list$group)),...)
-                legend('topright',legend = unique(list$group),col = unique(as.numeric(as.factor(list$group))),pch = 19,bty = 'n')
+                graphics::plot(dwtus~as.numeric(as.factor(list$group)),xlab='Group', ylab = 'DWTUS',col = as.numeric(as.factor(list$group)),...)
+                graphics::legend('topright',legend = unique(list$group),col = unique(as.numeric(as.factor(list$group))),pch = 19,bty = 'n')
         }
 }
