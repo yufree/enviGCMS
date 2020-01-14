@@ -2,6 +2,7 @@
 
 - add functions to get and plot density weighted intensity
 - add pooled QC vignette
+- add plotcc to plot calibration curve
 
 # enviGCMS 0.5.7
 

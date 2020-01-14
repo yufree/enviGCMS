@@ -990,3 +990,39 @@ plothist <- function(data) {
                         "black")
         )
 }
+#' plot the calibration curve with error bar, r squared and equation.
+#' @param x concertration
+#' @param y response
+#' @param upper upper error bar
+#' @param lower lower error bar
+#' @param ... parameters for `plot` function
+#' @return NULL
+#' @examples
+#' \dontrun{
+#' plotcc(x,y,upper)
+#' }
+#' @export
+plotcc <- function(x, y, upper, lower = upper, ...) {
+        graphics::plot(x, y, ...)
+        graphics::arrows(
+                x,
+                y + upper,
+                x,
+                y - lower,
+                angle = 90,
+                code = 3,
+                length = 0.1
+        )
+        fit <- stats::lm(y ~ x)
+        graphics::abline(fit)
+        m1 <-  summary(fit)
+        graphics::mtext(paste0("R squared: ", round(m1$r.squared, 4)), adj = 0)
+        graphics::mtext(paste0(
+                "y ~ ",
+                round(m1$coefficients[2], 2),
+                "x",
+                " + ",
+                round(m1$coefficients[1], 2)
+        ),
+        adj = 1)
+}
