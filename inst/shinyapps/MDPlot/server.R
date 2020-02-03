@@ -4,7 +4,7 @@ library(shinythemes)
 library(DT)
 library(plotly)
 library(crosstalk)
-library(rcdk)
+library(Rdisop)
 library(enviGCMS)
 
 shinyServer(function(input, output, session) {

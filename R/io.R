@@ -125,14 +125,14 @@ getQCraw <- function(path, mzrange, rtrange, index = NULL) {
 
 #' Get chemical formula for mass to charge ratio.
 #' @param mz a vector with mass to charge ratio
-#' @param charge The charge value of the formula.
+#' @param charge The charge value of the formula, default 0 for autodetect
 #' @param window The window accuracy in the same units as mass
 #' @param elements Elements list to take into account.
 #' @return list with chemical formula
 #' @export
 getformula <-
         function(mz,
-                 charge = 1,
+                 charge = 0,
                  window = 0.001,
                  elements = list(
                          C = c(1, 50),
@@ -144,33 +144,17 @@ getformula <-
                  )) {
                 list <- list()
                 for (i in 1:length(mz)) {
-                        a <- mz[i]
+                        element <- paste(names(elements), sep="", collapse="")
+                        minelement <- sapply(elements, function(x) x[1])
+                        maxelement <- sapply(elements, function(x) x[2])
+                        minelement2 <- paste(paste0(names(minelement),minelement), sep="", collapse="")
+                        maxelement2 <- paste(paste0(names(maxelement),maxelement), sep="", collapse="")
                         mfSet <-
-                                rcdk::generate.formula.iter(
-                                        a,
-                                        charge = charge,
-                                        window = window,
-                                        elements = elements,
-                                        validation = T
-                                )
-                        hit <- itertools::ihasNext(mfSet)
-                        re <- NULL
-                        while (itertools::hasNext(hit)) {
-                                temp <- iterators::nextElem(hit)
-                                re <- c(re, temp)
-                        }
-                        list[[i]] <- re
-                }
-                aa <- lapply(list, unlist)
-                getvalid <- function(x) {
-                        a <- NULL
-                        for (i in x) {
-                                re <- rcdk::isvalid.formula(rcdk::get.formula(i))
-                                a <- c(a, re)
-                        }
-                        return(x[a])
-                }
-                bb <- lapply(aa, getvalid)
+                                Rdisop::decomposeMass(mz[i],mzabs = window,z = charge, elements = element, minElements = minelement2, maxElements = maxelement2)
+                        formula <- mfSet$formula
+                        valid <- mfSet$valid
+                        list[[i]] <- formula[valid=='Valid']
 
-                return(bb)
+                }
+                return(list)
         }

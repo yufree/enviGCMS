@@ -1,6 +1,6 @@
 options(shiny.maxRequestSize=100*1024^2)
 library(shiny)
-library(rcdk)
+library(Rdisop)
 library(xcms)
 library(broom)
 library(enviGCMS)

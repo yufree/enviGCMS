@@ -1,7 +1,7 @@
 Package: enviGCMS
 Type: Package
 Title: GC/LC-MS Data Analysis for Environmental Science
-Version: 0.5.9
+Version: 0.6.0
 Date: 2020-02-03
 Authors@R: c(person(given = "Miao", family = "YU",
         role = c("aut", "cre"), 
@@ -25,7 +25,7 @@ VignetteBuilder: knitr
 biocViews:
 Depends: R (>= 2.10)
 Imports: 
-    rcdk,
+    Rdisop,
     RColorBrewer,
     mixtools,
     BiocParallel,
@@ -46,8 +46,6 @@ Imports:
     dplyr,
     plotly,
     broom,
-    itertools,
-    iterators,
     igraph,
     ggraph,
     ggplot2,

@@ -4,7 +4,7 @@
 \alias{Getisotopologues}
 \title{Get the selected isotopologues at certain MS data}
 \usage{
-Getisotopologues(formula = "C12OH6Br4", charge = "1", width = 0.3)
+Getisotopologues(formula = "C12OH6Br4", charge = 1, width = 0.3)
 }
 \arguments{
 \item{formula}{the molecular formula. C12OH6Br4 means BDE-47 as default}

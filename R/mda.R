@@ -52,18 +52,19 @@ plotkms <- function(data, cutoff = 1000) {
 getmass <- function(data) {
         if (grepl('-', data)) {
                 name <- unlist(strsplit(data, '-'))
+                table1 <- Rdisop::getMolecule(name[1])$isotopes[[1]]
+                table2 <- Rdisop::getMolecule(name[2])$isotopes[[1]]
                 iso1 <-
-                        rcdk::get.isotopes.pattern(rcdk::get.formula(name[1]))
+                        table1[1,which.max(table1[2,])]
                 iso2 <-
-                        rcdk::get.isotopes.pattern(rcdk::get.formula(name[2]))
-                cus <-
-                        as.numeric(iso1[max(iso1[, 2]), 1]) - as.numeric(iso2[max(iso2[, 2]), 1])
+                        table2[1,which.max(table2[2,])]
+                iso <-
+                        iso1 - iso2
         } else{
-                iso <- rcdk::get.isotopes.pattern(rcdk::get.formula(data))
-                cus <-
-                        as.numeric(iso[max(iso[, 2]), 1])
+                table <- Rdisop::getMolecule(data)$isotopes[[1]]
+                iso <- table[1,which.max(table[2,])]
         }
-        return(cus)
+        return(iso)
 }
 #' Get the Relative Mass Defect
 #' @param mz numeric vector for exact mass

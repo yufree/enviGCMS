@@ -4,7 +4,7 @@ library(shinythemes)
 library(DT)
 library(plotly)
 library(crosstalk)
-library(rcdk)
+library(Rdisop)
 
 shinyUI(navbarPage(
         "MDPlotR: interactive mass defect plots",

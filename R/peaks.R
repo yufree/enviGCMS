@@ -293,21 +293,21 @@ qbatch <- function(file,
 #' Getisotopologues(formula = 'C12OH6Br4')
 #' @export
 Getisotopologues <- function(formula = "C12OH6Br4",
-                             charge = "1",
+                             charge = 1,
                              width = 0.3) {
         # input the forlmula and charge for your molecular,
         # this demo was for BDE-47
-        formula <- rcdk::get.formula(formula, charge)
+        formula <-  Rdisop::getMolecule(formula, z = charge)
         # get the isotopes pattern of your molecular with high
         # abandances. Here we suggest more than 10% abundance
         # of your base peak would meet the SNR
-        isotopes <- data.frame(rcdk::get.isotopes.pattern(formula,
-                                                          minAbund = 0.1))
+        isotopes <- data.frame(t(formula$isotopes[[1]]))
+        isotopes <- isotopes[isotopes[, 2]>0.1,]
         # order the intensity by the abandance
         findpairs <- isotopes[order(isotopes[, 2], decreasing = T),]
         # find the most similar pairs with high abandance
-        df <- outer(findpairs[, 2], findpairs[, 2], "/")
-        rownames(df) <- colnames(df) <- findpairs$mass
+        df <- outer(findpairs[, 1], findpairs[, 1], "/")
+        rownames(df) <- colnames(df) <- findpairs[,1]
         diag(df) <- df[upper.tri(df)] <- 0
         t <- which(df == max(df), arr.ind = T)
         isotopologues1 <- as.numeric(rownames(df)[t[1]])
@@ -316,7 +316,7 @@ Getisotopologues <- function(formula = "C12OH6Br4",
         isotopologuesH <- max(isotopologues1, isotopologues2)
         # get the caculated ratio at certain resolution
         isotopes2 <-
-                rcdk::get.isotopes.pattern(formula, minAbund = 1e-08)
+                data.frame(t(formula$isotopes[[1]]))
         ratio <- sum(isotopes2[isotopes2[, 1] > isotopologuesL -
                                        width & isotopes2[, 1] < isotopologuesL + width,
                                2]) / sum(isotopes2[isotopes2[, 1] > isotopologuesH -
