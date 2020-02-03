@@ -79,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">enviGCMS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.9</span>
       </span>
     </div>
 
@@ -142,12 +142,20 @@
     <p>Get XCMSnExp object in one step from structured folder path for xcms 3.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>getdata2</span>(<span class='no'>path</span>, <span class='kw'>index</span> <span class='kw'>=</span> <span class='no'>F</span>, <span class='kw'>snames</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>sclass</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>phenoData</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>BPPARAM</span> <span class='kw'>=</span> <span class='kw pkg'>BiocParallel</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/BiocParallel/man/SnowParam-class.html'>SnowParam</a></span>(),
-  <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"onDisk"</span>, <span class='kw'>ppp</span> <span class='kw'>=</span> <span class='kw pkg'>xcms</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/xcms/man/findChromPeaks-centWave.html'>CentWaveParam</a></span>(<span class='kw'>ppm</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>peakwidth</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>5</span>,
-  <span class='fl'>25</span>), <span class='kw'>prefilter</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>, <span class='fl'>5000</span>)), <span class='kw'>rtp</span> <span class='kw'>=</span> <span class='kw pkg'>xcms</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/xcms/man/adjustRtime-obiwarp.html'>ObiwarpParam</a></span>(<span class='kw'>binSize</span> <span class='kw'>=</span> <span class='fl'>1</span>),
-  <span class='kw'>gpp</span> <span class='kw'>=</span> <span class='kw pkg'>xcms</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/xcms/man/groupChromPeaks-density.html'>PeakDensityParam</a></span>(<span class='kw'>sampleGroups</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>minFraction</span> <span class='kw'>=</span> <span class='fl'>0.67</span>, <span class='kw'>bw</span> <span class='kw'>=</span>
-  <span class='fl'>2</span>, <span class='kw'>binSize</span> <span class='kw'>=</span> <span class='fl'>0.025</span>), <span class='kw'>fpp</span> <span class='kw'>=</span> <span class='kw pkg'>xcms</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/xcms/man/fillChromPeaks.html'>FillChromPeaksParam</a></span>())</pre>
+    <pre class="usage"><span class='fu'>getdata2</span>(
+  <span class='no'>path</span>,
+  <span class='kw'>index</span> <span class='kw'>=</span> <span class='no'>F</span>,
+  <span class='kw'>snames</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>sclass</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>phenoData</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>BPPARAM</span> <span class='kw'>=</span> <span class='kw pkg'>BiocParallel</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/BiocParallel/man/SnowParam-class.html'>SnowParam</a></span>(),
+  <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"onDisk"</span>,
+  <span class='kw'>ppp</span> <span class='kw'>=</span> <span class='kw pkg'>xcms</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/xcms/man/findChromPeaks-centWave.html'>CentWaveParam</a></span>(<span class='kw'>ppm</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>peakwidth</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>5</span>, <span class='fl'>25</span>), <span class='kw'>prefilter</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>, <span class='fl'>5000</span>)),
+  <span class='kw'>rtp</span> <span class='kw'>=</span> <span class='kw pkg'>xcms</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/xcms/man/adjustRtime-obiwarp.html'>ObiwarpParam</a></span>(<span class='kw'>binSize</span> <span class='kw'>=</span> <span class='fl'>1</span>),
+  <span class='kw'>gpp</span> <span class='kw'>=</span> <span class='kw pkg'>xcms</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/xcms/man/groupChromPeaks-density.html'>PeakDensityParam</a></span>(<span class='kw'>sampleGroups</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>minFraction</span> <span class='kw'>=</span> <span class='fl'>0.67</span>, <span class='kw'>bw</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>binSize</span> <span class='kw'>=</span>
+    <span class='fl'>0.025</span>),
+  <span class='kw'>fpp</span> <span class='kw'>=</span> <span class='kw pkg'>xcms</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/xcms/man/fillChromPeaks.html'>FillChromPeaksParam</a></span>()
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">

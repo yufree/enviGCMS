@@ -79,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">enviGCMS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.9</span>
       </span>
     </div>
 
@@ -142,8 +142,14 @@
     <p>Get the mzrt profile and group information for batch correction and plot as a list directly from path with default setting</p>
     </div>
 
-    <pre class="usage"><span class='fu'>getmr</span>(<span class='no'>path</span>, <span class='kw'>index</span> <span class='kw'>=</span> <span class='no'>F</span>, <span class='kw'>BPPARAM</span> <span class='kw'>=</span> <span class='kw pkg'>BiocParallel</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/BiocParallel/man/SnowParam-class.html'>SnowParam</a></span>(),
-  <span class='kw'>pmethod</span> <span class='kw'>=</span> <span class='st'>"hplcorbitrap"</span>, <span class='kw'>minfrac</span> <span class='kw'>=</span> <span class='fl'>0.67</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>getmr</span>(
+  <span class='no'>path</span>,
+  <span class='kw'>index</span> <span class='kw'>=</span> <span class='no'>F</span>,
+  <span class='kw'>BPPARAM</span> <span class='kw'>=</span> <span class='kw pkg'>BiocParallel</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/BiocParallel/man/SnowParam-class.html'>SnowParam</a></span>(),
+  <span class='kw'>pmethod</span> <span class='kw'>=</span> <span class='st'>"hplcorbitrap"</span>,
+  <span class='kw'>minfrac</span> <span class='kw'>=</span> <span class='fl'>0.67</span>,
+  <span class='no'>...</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">

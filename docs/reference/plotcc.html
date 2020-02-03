@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Shiny application for Short-Chain Chlorinated Paraffins analysis — runsccp • enviGCMS</title>
+<title>plot the calibration curve with error bar, r squared and equation. — plotcc • enviGCMS</title>
 
 
 <!-- jquery -->
@@ -35,8 +35,8 @@
 
 
 
-<meta property="og:title" content="Shiny application for Short-Chain Chlorinated Paraffins analysis — runsccp" />
-<meta property="og:description" content="Shiny application for Short-Chain Chlorinated Paraffins analysis" />
+<meta property="og:title" content="plot the calibration curve with error bar, r squared and equation. — plotcc" />
+<meta property="og:description" content="plot the calibration curve with error bar, r squared and equation." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -133,23 +133,53 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Shiny application for Short-Chain Chlorinated Paraffins analysis</h1>
-    <small class="dont-index">Source: <a href='https://github.com/yufree/enviGCMS/blob/master/R/shiny.R'><code>R/shiny.R</code></a></small>
-    <div class="hidden name"><code>runsccp.Rd</code></div>
+    <h1>plot the calibration curve with error bar, r squared and equation.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/yufree/enviGCMS/blob/master/R/general.R'><code>R/general.R</code></a></small>
+    <div class="hidden name"><code>plotcc.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Shiny application for Short-Chain Chlorinated Paraffins analysis</p>
+    <p>plot the calibration curve with error bar, r squared and equation.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>runsccp</span>()</pre>
+    <pre class="usage"><span class='fu'>plotcc</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>upper</span>, <span class='kw'>lower</span> <span class='kw'>=</span> <span class='no'>upper</span>, <span class='no'>...</span>)</pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>concertration</p></td>
+    </tr>
+    <tr>
+      <th>y</th>
+      <td><p>response</p></td>
+    </tr>
+    <tr>
+      <th>upper</th>
+      <td><p>upper error bar</p></td>
+    </tr>
+    <tr>
+      <th>lower</th>
+      <td><p>lower error bar</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>parameters for `plot` function</p></td>
+    </tr>
+    </table>
 
 
-
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='fu'>plotcc</span>(<span class='no'>x</span>,<span class='no'>y</span>,<span class='no'>upper</span>)
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>

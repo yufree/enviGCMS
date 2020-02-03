@@ -79,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">enviGCMS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.9</span>
       </span>
     </div>
 
@@ -142,8 +142,14 @@
     <p>Get xcmsset object in one step with optimized methods.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>getdata</span>(<span class='no'>path</span>, <span class='kw'>index</span> <span class='kw'>=</span> <span class='no'>F</span>, <span class='kw'>BPPARAM</span> <span class='kw'>=</span> <span class='kw pkg'>BiocParallel</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/BiocParallel/man/SnowParam-class.html'>SnowParam</a></span>(),
-  <span class='kw'>pmethod</span> <span class='kw'>=</span> <span class='st'>"hplcorbitrap"</span>, <span class='kw'>minfrac</span> <span class='kw'>=</span> <span class='fl'>0.67</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>getdata</span>(
+  <span class='no'>path</span>,
+  <span class='kw'>index</span> <span class='kw'>=</span> <span class='no'>F</span>,
+  <span class='kw'>BPPARAM</span> <span class='kw'>=</span> <span class='kw pkg'>BiocParallel</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/BiocParallel/man/SnowParam-class.html'>SnowParam</a></span>(),
+  <span class='kw'>pmethod</span> <span class='kw'>=</span> <span class='st'>"hplcorbitrap"</span>,
+  <span class='kw'>minfrac</span> <span class='kw'>=</span> <span class='fl'>0.67</span>,
+  <span class='no'>...</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -162,7 +168,7 @@
     </tr>
     <tr>
       <th>pmethod</th>
-      <td><p>parameters used for different instrumentals such as 'hplcorbitrap', 'uplcorbitrap', 'hplcqtof', 'hplchqtof', 'uplcqtof', 'uplchqtof'. The parameters were from the references</p></td>
+      <td><p>parameters used for different instrumentals such as 'hplcorbitrap', 'uplcorbitrap', 'hplcqtof', 'hplchqtof', 'uplcqtof', 'uplchqtof'. The parameters were from the reference</p></td>
     </tr>
     <tr>
       <th>minfrac</th>
