@@ -10,7 +10,8 @@ gifmr(
   rsdcf = 30,
   inscf = 5,
   imputation = "i",
-  name = "test"
+  name = "test",
+  ...
 )
 }
 \arguments{

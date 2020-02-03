@@ -416,7 +416,8 @@ gifmr <- function(list,
                   rsdcf = 30,
                   inscf = 5,
                   imputation = "i",
-                  name = "test") {
+                  name = "test",
+                  ...) {
         list <- getdoe(list,
                        rsdcf = rsdcf,
                        inscf = inscf,
@@ -437,7 +438,8 @@ gifmr <- function(list,
                 cex = log10(mean + 1) -
                         4,
                 col = grDevices::rgb(0, 0, 1, 0.2),
-                main = "All peaks"
+                main = "All peaks",
+                ...
         )
 
         col <- grDevices::rainbow(dim(data)[2], alpha = 0.318)
@@ -454,7 +456,8 @@ gifmr <- function(list,
                                                     1) - 4,
                                 col = col[i],
                                 ylim = ms,
-                                main = name
+                                main = name,
+                                ...
                         )
                 }
         }, movie.name = filename, ani.width = 800, ani.height = 500)
