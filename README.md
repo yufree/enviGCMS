@@ -17,11 +17,15 @@ install.packages("enviGCMS")
 or the current development snapshot from this GitHub repository:
 
 ``` {r}
-devtools::install_github("yufree/enviGCMS")
+remotes::install_github("yufree/enviGCMS")
 ```
 
 Usage
 -----
+
+Check this [vignette](http://yufree.github.io/enviGCMS/articles/GCMSDA.html) for Data analysis of GC-MS and LC-MS in Envrionmental Science.
+
+Check this [vignette](http://yufree.github.io/enviGCMS/articles/PooledQC.html) for Pooled QC analysis in Environmental Science.
 
 - get the mean and RSD of one sample for 5 technique replicate
 
