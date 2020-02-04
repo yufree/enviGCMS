@@ -505,10 +505,10 @@ getpower <-
                 list <- getdoe(list, imputation = imputation)
                 sd <- apply(list$groupmean, 1, mean)
                 if (ng == 2) {
-                        ar <- genefilter::rowttests(list$data, fac = group)
-                        dm <- ar$dm
+                        ar <- apply(list$data, 1, function(x) t.test(x~group))
+                        dm <- sapply(ar,function(x) x$estimate[1]-x$estimate[2])
                         m <- nrow(list$data)
-                        p <- ar$p.value
+                        p <- sapply(ar,function(x) x$p.value)
                         q <- stats::p.adjust(p, method = "BH")
                         qc <- c(1:m) * pt / m
                         cf <- qc[match(order(qc), order(q))]
@@ -536,12 +536,12 @@ getpower <-
                         list$power <- re$power
                         list$n <- n
                 } else{
-                        sdg <- genefilter::rowSds(list$groupmean)
+                        sdg <- apply(list$groupmean, 1, function(x) stats::sd(x))
                         ar <-
-                                genefilter::rowFtests(list$data, group)
-                        p <- ar$p.value
-                        q <- stats::p.adjust(p, method = "BH")
+                                apply(list$data,1, function(x) stats::anova(stats::lm(x~group)))
+                        p <- sapply(ar,function(x) x$`Pr(>F)`[1])
                         m <- nrow(list$data)
+                        q <- stats::p.adjust(p, method = "BH")
                         qc <- c(1:m) * pt / m
                         cf <- qc[match(order(qc), order(q))]
                         re <- stats::power.anova.test(
@@ -555,9 +555,9 @@ getpower <-
                         for (i in 1:m) {
                                 re2 <- try(stats::power.anova.test(
                                         groups = ng,
-                                        between.var = sdg,
-                                        within.var = sd,
-                                        sig.level = cf,
+                                        between.var = sdg[i],
+                                        within.var = sd[i],
+                                        sig.level = cf[i],
                                         power = powert
                                 ),
                                 silent = T)
@@ -567,7 +567,7 @@ getpower <-
                                         n[i] <- re2$n
                         }
                         list$power <- re$power
-                        list$n <- re2$n
+                        list$n <- n
                 }
                 return(list)
         }
