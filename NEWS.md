@@ -1,3 +1,7 @@
+# enviGCMS 0.6.1
+
+- remove dependency of genefilter
+
 # enviGCMS 0.6.0
 
 - remove dependency of rcdk package 

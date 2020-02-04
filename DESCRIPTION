@@ -1,8 +1,8 @@
 Package: enviGCMS
 Type: Package
 Title: GC/LC-MS Data Analysis for Environmental Science
-Version: 0.6.0
-Date: 2020-02-03
+Version: 0.6.1
+Date: 2020-02-04
 Authors@R: c(person(given = "Miao", family = "YU",
         role = c("aut", "cre"), 
         email = "yufreecas@gmail.com",
@@ -20,16 +20,21 @@ LazyData: true
 Suggests: knitr,
     testthat,
     xcms,
-    MSnbase
+    MSnbase,
+    plotly,
+    shiny,
+    shinythemes,
+    rmarkdown,
+    DT,
+    crosstalk,
+    broom,
+    dplyr
 VignetteBuilder: knitr
 biocViews:
 Depends: R (>= 2.10)
 Imports: 
     Rdisop,
-    RColorBrewer,
-    mixtools,
     BiocParallel,
-    genefilter,
     grDevices, 
     graphics, 
     stats, 
@@ -37,17 +42,9 @@ Imports:
     methods,
     reshape2,
     animation (>= 2.2.3),
+    RColorBrewer,
+    mixtools,
     data.table,
-    rmarkdown,
-    shiny,
-    shinythemes,
-    DT,
-    crosstalk,
-    dplyr,
-    plotly,
-    broom,
-    igraph,
-    ggraph,
     ggplot2,
     ggridges
 RoxygenNote: 7.0.2
