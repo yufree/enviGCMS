@@ -130,14 +130,15 @@ getcsv <-
                         if (grepl('p', type)) {
                                 lv <- list$group
                                 lif <- getimputation(list, method = "l")
-                                fstats <-
-                                        genefilter::rowFtests(as.matrix(lif$data), fac = as.factor(lv))
+                                ar <-
+                                        apply(lif$data,1, function(x) stats::anova(stats::lm(x~lv)))
+
                                 df <-
                                         cbind.data.frame(
                                                 m.z = list$mz,
                                                 rt = list$rt,
-                                                p.value = fstats$p.value,
-                                                t.score = fstats$statistic
+                                                p.value = sapply(ar,function(x) x$`Pr(>F)`[1]),
+                                                t.score = sapply(ar,function(x) x$`F value`[1])
                                         )
                                 filename <- paste0(name, 'mummichog.txt')
                                 utils::write.table(
@@ -505,7 +506,7 @@ getpower <-
                 list <- getdoe(list, imputation = imputation)
                 sd <- apply(list$groupmean, 1, mean)
                 if (ng == 2) {
-                        ar <- apply(list$data, 1, function(x) t.test(x~group))
+                        ar <- apply(list$data, 1, function(x) stats::t.test(x~group))
                         dm <- sapply(ar,function(x) x$estimate[1]-x$estimate[2])
                         m <- nrow(list$data)
                         p <- sapply(ar,function(x) x$p.value)
