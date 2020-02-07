@@ -40,7 +40,6 @@ Imports:
     stats, 
     utils,
     methods,
-    reshape2,
     animation (>= 2.2.3),
     RColorBrewer,
     mixtools,

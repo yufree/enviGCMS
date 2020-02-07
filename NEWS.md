@@ -1,6 +1,7 @@
 # enviGCMS 0.6.1
 
 - remove dependency of genefilter
+- remove dependency of reshape2
 
 # enviGCMS 0.6.0
 

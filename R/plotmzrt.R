@@ -750,14 +750,16 @@ plotridges <- function(data, lv, type = "g") {
 
         }
 
-        ov <- reshape2::melt(outmat)
+        dt <- data.table::data.table(outmat,keep.rownames = T)
+        ov <- suppressWarnings(data.table::melt.data.table(dt))
         colnames(outmat) <- lv[order(lv)]
-        ov2 <- reshape2::melt(outmat)
-        ov2$group <- as.factor(ov2$Var2)
+        dt2 <- data.table::data.table(outmat,keep.rownames = T)
+        ov2 <- suppressWarnings(data.table::melt.data.table(dt2))
+        ov2$group <- as.factor(ov2$variable)
         ggplot2::ggplot(ov,
                         ggplot2::aes(
                                 x = ov$value,
-                                y = ov$Var2,
+                                y = ov$variable,
                                 fill = ov2$group
                         )) + ggridges::geom_density_ridges(stat = "binline",
                                                            bins = 100) + ggplot2::xlim(-0.5, 0.5) + ggplot2::scale_fill_discrete(name = "Group") +
