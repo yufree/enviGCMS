@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>find line of the regression model for GC-MS — findline • enviGCMS</title>
+<title>read in MSP file as list for ms/ms annotation — getMSP • enviGCMS</title>
 
 
 <!-- jquery -->
@@ -35,8 +35,8 @@
 
 
 
-<meta property="og:title" content="find line of the regression model for GC-MS — findline" />
-<meta property="og:description" content="find line of the regression model for GC-MS" />
+<meta property="og:title" content="read in MSP file as list for ms/ms annotation — getMSP" />
+<meta property="og:description" content="read in MSP file as list for ms/ms annotation" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -133,50 +133,36 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>find line of the regression model for GC-MS</h1>
-    <small class="dont-index">Source: <a href='https://github.com/yufree/enviGCMS/blob/master/R/general.R'><code>R/general.R</code></a></small>
-    <div class="hidden name"><code>findline.Rd</code></div>
+    <h1>read in MSP file as list for ms/ms annotation</h1>
+    <small class="dont-index">Source: <a href='https://github.com/yufree/enviGCMS/blob/master/R/io.R'><code>R/io.R</code></a></small>
+    <div class="hidden name"><code>getMSP.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>find line of the regression model for GC-MS</p>
+    <p>read in MSP file as list for ms/ms annotation</p>
     </div>
 
-    <pre class="usage"><span class='fu'>findline</span>(<span class='no'>data</span>, <span class='kw'>threshold</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>temp</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>100</span>, <span class='fl'>320</span>))</pre>
+    <pre class="usage"><span class='fu'>getMSP</span>(<span class='no'>file</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>data</th>
-      <td><p>imported data matrix of GC-MS</p></td>
-    </tr>
-    <tr>
-      <th>threshold</th>
-      <td><p>the threshold of the response (log based 10)</p></td>
-    </tr>
-    <tr>
-      <th>temp</th>
-      <td><p>the scale of the oven temprature(constant rate)</p></td>
+      <th>file</th>
+      <td><p>the path to your MSP file</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>list linear regression model for the matrix</p>
+    <p>list a list with MSP information for MS/MS annotation</p>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='getmd.html'>getmd</a></span>(<span class='no'>rawdata</span>)
-<span class='fu'>findline</span>(<span class='no'>data</span>)
-}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
-      <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>
