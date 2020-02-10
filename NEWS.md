@@ -1,6 +1,6 @@
 # emvoGCMS 0.6.2
 
-- add getMSP to read in MS/MS msp file as list for annotation
+- add getMSP to read in EI-MS or MS/MS msp file as list for annotation
 
 # enviGCMS 0.6.1
 
