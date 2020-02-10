@@ -102,6 +102,54 @@ writeMSP <- function(mz, outfilename = "unknown") {
         )
 }
 
+#' read in MSP file as list for ms/ms or ms(EI) annotation
+#' @param file the path to your MSP file
+#' @return list a list with MSP information for annotation
+#' @export
+getMSP <- function(file){
+        # this part is modified from compMS2Miner's code: https://github.com/WMBEdmands/compMS2Miner/blob/ee20d3d632b11729d6bbb5b5b93cd468b097251d/R/metID.matchSpectralDB.R
+        msp <- readLines(file)
+        # remove empty lines
+        msp <- msp[msp != '']
+        ncomp <- grep('^NAME:', msp, ignore.case = TRUE)
+        splitFactorTmp <- rep(1:length(ncomp), diff(c(ncomp, length(msp) + 1)))
+
+        li <- split(msp,f = splitFactorTmp)
+        getmsp <- function(x){
+                namet <- x[grep('^NAME:',x, ignore.case=TRUE)]
+                name <- gsub('^NAME: ','',namet, ignore.case=TRUE)
+                ionmodet <- x[grep('^ION MODE:|^MODE:|^IONMODE:',x, ignore.case=TRUE)]
+                ionmode <- gsub('^ION MODE: |^MODE: |^IONMODE: ','',ionmodet, ignore.case=TRUE)
+                prect <- x[grep('^PRECURSORMZ: |^PRECURSOR M/Z: |^PRECURSOR MZ: |^PEPMASS: ',x, ignore.case=TRUE)]
+                prec <- as.numeric(gsub('^PRECURSORMZ: |^PRECURSOR M/Z: |^PRECURSOR MZ: |^PEPMASS: ','',prect, ignore.case=TRUE))
+                formt <- x[grep('^FORMULA: ',x, ignore.case=TRUE)]
+                formula <- gsub('^FORMULA: ','',formt,ignore.case = TRUE)
+                npt <- x[grep('^Num Peaks: ',x, ignore.case=TRUE)]
+                np <- gsub('^Num Peaks: ','',npt,ignore.case = TRUE)
+                cet <- x[grep('COLLISIONENERGY: ',x,ignore.case=TRUE)]
+                ce <- gsub('COLLISIONENERGY: ','',cet,ignore.case=TRUE)
+                rtt <- x[grep('RETENTIONINDEX: ',x,ignore.case = TRUE)]
+                rt <- gsub('RETENTIONINDEX: ','',rtt,ignore.case=TRUE)
+                if(as.numeric(np)>0){
+                        # matrix of masses and intensities
+                        massIntIndx <- which(grepl('^[0-9]', x) & !grepl(': ', x))
+                        massesInts <- unlist(strsplit(x[massIntIndx], '\t| '))
+                        massesInts <- as.numeric(massesInts[grep('^[0-9].*[0-9]$|^[0-9]$', massesInts)])
+                        # if any NAs remove from indx
+                        mz <-  massesInts[seq(1, length(massesInts), 2)]
+                        ins <-  massesInts[seq(2, length(massesInts), 2)]
+                        ins <- ins/max(ins)*100
+                        spectra <- cbind.data.frame(mz=mz,ins=ins)
+                        return(list(name=name,ionmode=ionmode,prec=prec,formula=formula,np = np,rti=rt,ce=ce,spectra=spectra))
+                }else{
+                        return(list(name=name,ionmode=ionmode,prec=prec,formula=formula,np = np,rti=rt,ce=ce))
+                }
+
+        }
+        li <- lapply(li,getmsp)
+        return(li)
+}
+
 #' get the data of QC compound for a group of data
 #' @param path data path for your QC samples
 #' @param mzrange mass of the QC compound
@@ -158,69 +206,6 @@ getformula <-
                 }
                 return(list)
         }
-
-#' read in MSP file as list for ms/ms annotation
-#' @param file the path to your MSP file
-#' @return list a list with MSP information for MS/MS annotation
-#' @export
-getMSP <- function(file){
-        # this part is modified from compMS2Miner's code: https://github.com/WMBEdmands/compMS2Miner/blob/ee20d3d632b11729d6bbb5b5b93cd468b097251d/R/metID.matchSpectralDB.R
-        msp <- readLines(file)
-        # remove empty lines
-        msp <- msp[msp != '']
-        ncomp <- grep('^NAME:', msp, ignore.case = TRUE)
-        splitFactorTmp <- rep(1:length(ncomp), diff(c(ncomp, length(msp) + 1)))
-        # matrix of masses and intensities
-        massIntIndx <- which(grepl('^[0-9]', msp) & !grepl(': ', msp))
-        massesInts <- unlist(strsplit(msp[massIntIndx], '\t| '))
-        massesInts <- as.numeric(massesInts[grep('^[0-9].*[0-9]$|^[0-9]$', massesInts)])
-        # if any NAs remove from indx
-        massesTmp <-  massesInts[seq(1, length(massesInts), 2)]
-        relIntTmp <-  massesInts[seq(2, length(massesInts), 2)]
-        # label with entry numbers
-        names(massesTmp) <- splitFactorTmp[massIntIndx]
-        names(relIntTmp) <- splitFactorTmp[massIntIndx]
-        # label with entry numbers
-        names(massesTmp) <- splitFactorTmp[massIntIndx]
-        names(relIntTmp) <- splitFactorTmp[massIntIndx]
-        # entry info
-        entryInfoIndx <- setdiff(1:length(msp), massIntIndx)
-        entryInfo <- msp[entryInfoIndx]
-        names(entryInfo) <- paste0(splitFactorTmp[entryInfoIndx], '_', gsub(':.+', '', entryInfo))
-        entryInfo <- gsub('.+: ', '', entryInfo, ignore.case = TRUE)
-        # remove duplicate entries
-        entryInfo <- entryInfo[duplicated(names(entryInfo)) == FALSE]
-        # identify pertinent msp file entries
-        mandEntryData <- data.frame(matrix('', nrow=length(ncomp), ncol=10), stringsAsFactors = FALSE)
-        colnames(mandEntryData) <- c('DBname', 'DBIonMode', 'DBSMILES', 'DBINCHI',
-                                     'DBprecursorMasses', 'DBesiType', 'FORMULA','RETENTIONTIME','COLLISIONENERGY','NumPeaks')
-        # name of entry
-        mandFieldsRegEx <- c('_NAME$', '_ION MODE$|_MODE$|_IONMODE', '_SMILES$', '_INCHI$|_INCHIKEY$',
-                             '_PRECURSORMZ$|_PRECURSOR M/Z$|_PRECURSOR MZ$|_PEPMASS$',
-                             '_PRECURSORTYPE$|_PRECURSOR TYPE$|_ADDUCT$|_ION TYPE$|_IONTYPE$',
-                             '_FORMULA$','_RETENTIONTIME$','_COLLISIONENERGY$','_Num Peaks$')
-        names(mandFieldsRegEx) <- colnames(mandEntryData)
-        for(mF in 1:length(mandFieldsRegEx)){
-                entInfoTmp <- entryInfo[grep(mandFieldsRegEx[mF], names(entryInfo), ignore.case = TRUE)]
-                entryNosTmp <- gsub(mandFieldsRegEx[mF], '', names(entInfoTmp), ignore.case=TRUE)
-                indxTmp <- row.names(mandEntryData) %in% entryNosTmp
-                mandEntryData[indxTmp, names(mandFieldsRegEx[mF])] <- entInfoTmp
-        }
-        mandEntryData$DBprecursorMasses <- suppressWarnings(as.numeric(mandEntryData$DBprecursorMasses))
-        mandEntryData$NumPeaks <- suppressWarnings(as.numeric(mandEntryData$NumPeaks))
-        missingVals <- mandEntryData$NumPeaks!=0
-        mandEntryData <- mandEntryData[missingVals, , drop=FALSE]
-        mandEntryData$ID <- rownames(mandEntryData)
-        getlist <- function(x) {
-                mz <- massesTmp[names(massesTmp) == x['ID']]
-                ins <- relIntTmp[names(relIntTmp) == x['ID']]
-                msms <- cbind.data.frame(mz=mz,ins=ins)
-                return(list(msms=msms,name=x['DBname'],ionmode = as.character(x['DBIonMode']),smiles = as.character(x['DBSMILES']), inchi = as.character(x['DBINCHI']), prec = suppressWarnings(as.numeric(x['DBprecursorMasses'])), DBesiType = as.character(x['DBesiType']), formula = as.character(x['FORMULA']), rt=as.character(x['RETENTIONTIME']), ce=as.character(x['COLLISIONENERGY']), npeaks=suppressWarnings(as.numeric(x['NumPeaks']))))
-        }
-        li <- apply(mandEntryData,1,getlist)
-        return(li)
-}
-
 
 
 

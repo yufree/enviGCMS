@@ -2,7 +2,7 @@
 % Please edit documentation in R/io.R
 \name{getMSP}
 \alias{getMSP}
-\title{read in MSP file as list for ms/ms annotation}
+\title{read in MSP file as list for ms/ms or ms(EI) annotation}
 \usage{
 getMSP(file)
 }
@@ -10,8 +10,8 @@ getMSP(file)
 \item{file}{the path to your MSP file}
 }
 \value{
-list a list with MSP information for MS/MS annotation
+list a list with MSP information for annotation
 }
 \description{
-read in MSP file as list for ms/ms annotation
+read in MSP file as list for ms/ms or ms(EI) annotation
 }
