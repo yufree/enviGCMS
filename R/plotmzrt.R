@@ -348,52 +348,97 @@ plotrsd <- function(list,
         rt <- lif$rt
         rsd <- lif$grouprsd
 
-        n <- dim(rsd)[2]
-        col <- grDevices::rainbow(n, alpha = 0.318)
-
-        graphics::plot(
-                mz ~ rt,
-                xlab = "Retention Time(s)",
-                ylab = "m/z",
-                main = "RSD(%) distribution",
-                type = "n",
-                pch = 19,
-                ...
-        )
-
-        for (i in 1:n) {
-                cex = as.numeric(cut(rsd[, i], breaks = c(0, 20,
+        if(is.null(dim(rsd))){
+                n <- 1
+                col <- grDevices::rainbow(1)
+                cex = as.numeric(cut(rsd, breaks = c(0, 20,
                                                           40, 60, 80, Inf))) / 2
+                dataname <- unique(lif$group)
+                graphics::plot(
+                        mz ~ rt,
+                        xlab = "Retention Time(s)",
+                        ylab = "m/z",
+                        main = "RSD(%) distribution",
+                        type = "n",
+                        pch = 19,
+                        ...
+                )
                 graphics::points(
                         x = rt,
                         y = mz,
                         ylim = ms,
                         cex = cex,
-                        col = col[i],
+                        col = col,
                         pch = 19
                 )
+                graphics::legend(
+                        "topright",
+                        legend = dataname,
+                        col = col,
+                        horiz = T,
+                        pch = 19,
+                        bty = "n",
+                        inset = c(0,-0.25)
+                )
+                graphics::legend(
+                        "topleft",
+                        legend = cexlab,
+                        pt.cex = c(1,
+                                   2, 3, 4, 5) / 2,
+                        pch = 19,
+                        bty = "n",
+                        horiz = T,
+                        cex = 0.8,
+                        col = grDevices::rgb(0, 0, 0, 0.318),
+                        inset = c(0,-0.25)
+                )
+        }else{
+                n <- dim(rsd)[2]
+                col <- grDevices::rainbow(n, alpha = 0.318)
+                graphics::plot(
+                        mz ~ rt,
+                        xlab = "Retention Time(s)",
+                        ylab = "m/z",
+                        main = "RSD(%) distribution",
+                        type = "n",
+                        pch = 19,
+                        ...
+                )
+
+                for (i in 1:n) {
+                        cex = as.numeric(cut(rsd[, i], breaks = c(0, 20,
+                                                                  40, 60, 80, Inf))) / 2
+                        graphics::points(
+                                x = rt,
+                                y = mz,
+                                ylim = ms,
+                                cex = cex,
+                                col = col[i],
+                                pch = 19
+                        )
+                }
+                graphics::legend(
+                        "topright",
+                        legend = dataname,
+                        col = col,
+                        horiz = T,
+                        pch = 19,
+                        bty = "n",
+                        inset = c(0,-0.25)
+                )
+                graphics::legend(
+                        "topleft",
+                        legend = cexlab,
+                        pt.cex = c(1,
+                                   2, 3, 4, 5) / 2,
+                        pch = 19,
+                        bty = "n",
+                        horiz = T,
+                        cex = 0.8,
+                        col = grDevices::rgb(0, 0, 0, 0.318),
+                        inset = c(0,-0.25)
+                )
         }
-        graphics::legend(
-                "topright",
-                legend = dataname,
-                col = col,
-                horiz = T,
-                pch = 19,
-                bty = "n",
-                inset = c(0,-0.25)
-        )
-        graphics::legend(
-                "topleft",
-                legend = cexlab,
-                pt.cex = c(1,
-                           2, 3, 4, 5) / 2,
-                pch = 19,
-                bty = "n",
-                horiz = T,
-                cex = 0.8,
-                col = grDevices::rgb(0, 0, 0, 0.318),
-                inset = c(0,-0.25)
-        )
 }
 
 #' plot scatter plot for rt-mz profile and output gif file for mutiple groups
