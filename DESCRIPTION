@@ -23,12 +23,9 @@ Suggests: knitr,
     MSnbase,
     plotly,
     shiny,
-    shinythemes,
     rmarkdown,
     DT,
-    crosstalk,
-    broom,
-    dplyr
+    crosstalk
 VignetteBuilder: knitr
 biocViews:
 Depends: R (>= 2.10)

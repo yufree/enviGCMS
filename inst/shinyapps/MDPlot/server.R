@@ -1,10 +1,7 @@
 library(shiny)
-library(dplyr)
-library(shinythemes)
 library(DT)
 library(plotly)
 library(crosstalk)
-library(Rdisop)
 library(enviGCMS)
 
 shinyServer(function(input, output, session) {

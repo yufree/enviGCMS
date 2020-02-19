@@ -1,14 +1,9 @@
 library(shiny)
-library(dplyr)
-library(shinythemes)
 library(DT)
-library(plotly)
-library(crosstalk)
-library(Rdisop)
 
 shinyUI(navbarPage(
         "MDPlotR: interactive mass defect plots",
-        theme = shinytheme('spacelab'),
+        # theme = shinytheme('spacelab'),
         tabPanel("Get Started",
                 fluidPage(sidebarLayout(
                         sidebarPanel(

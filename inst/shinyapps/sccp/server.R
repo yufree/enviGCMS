@@ -1,8 +1,6 @@
 options(shiny.maxRequestSize=100*1024^2)
 library(shiny)
-library(Rdisop)
 library(xcms)
-library(broom)
 library(enviGCMS)
 data("sccp")
 
@@ -24,14 +22,16 @@ shinyServer(function(input, output) {
                 li <- liststd()
                 pCl <- sapply(li,function(x) x$sumpCl)
                 rarea <- sapply(li,function(x) x$sumrarea)
-                tidy(lm(log(rarea)~pCl))
+                t <- summary(lm(rarea~pCl))
+                t$coefficients
         })
 
         output$reg2 <- renderTable({
                 li <- liststd()
                 pCl <- sapply(li,function(x) x$sumpCl)
                 rarea <- sapply(li,function(x) x$sumrarea)
-                tidy(lm(rarea~pCl))
+                t <- summary(lm(rarea~pCl))
+                t$coefficients
         })
 
         output$plotstd <- renderPlot({
