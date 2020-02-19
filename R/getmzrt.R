@@ -170,6 +170,17 @@ getcsv <-
                         }
                 }
         }
+#' Get a mzrt list and/or save mz and rt range as csv file.
+#' @param list list with data as peaks list, mz, rt and group information
+#' @param name result name for csv and/or eic file, default NULL
+#' @param ... other parameters for `write.table`
+#' @return NULL, csv file
+#' @export
+getrangecsv <- function(list,name,...){
+        df <- cbind.data.frame(list$mzrange,list$rtrange)
+        filename <- paste0(name, "mzrtrange.csv")
+        utils::write.csv(df, file = filename, ...)
+}
 #' Get the mzrt profile and group information as a mzrt list and/or save them as csv or rds for further analysis.
 #' @param xset xcmsSet/XCMSnExp objects
 #' @param name file name for csv and/or eic file, default NULL

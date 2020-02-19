@@ -2,6 +2,7 @@
 
 - add getMSP to read in EI-MS or MS/MS msp file as list for annotation
 - add xrankanno and dotpanno function for MS/MS X Rank and dot product annotation
+- add getrangecsv for MS2 mgf file extraction
 
 # enviGCMS 0.6.1
 
