@@ -424,3 +424,40 @@ findmet <-
                 }
 
         }
+#' Find lipid class of metabolites base on referenced Kendrick mass defect
+#' @param list list with data as peaks list, mz, rt and group information, retention time should be in seconds
+#' @param mode 'pos' for positive mode, 'neg' for negative mode and 'none' for neutral mass, only support [M+H] and [M-H] for each mode
+#' @return list list with dataframe with the lipid referenced Kendrick mass defect(RKMD) and logical for class
+#' @references Method for the Identification of Lipid Classes Based on Referenced Kendrick Mass Analysis. Lerno LA, German JB, Lebrilla CB. Anal Chem. 2010 May 15;82(10):4236–45.
+#' @examples
+#' data(list)
+#' RKMD <- findlipid(list)
+#' @export
+findlipid <-
+        function(list,mode='pos'){
+                if(mode=='pos'|mode=='neg'){
+                        km <- (list$mz * 14 / 14.01565-floor(list$mz * 14 / 14.01565))/0.0134
+                }else{
+                        adduct <- ifelse(mode=='pos',1.008,-1.008)
+                        km <- (((list$mz+adduct) * 14 / 14.01565)-floor((list$mz+adduct) * 14 / 14.01565))/0.0134
+                }
+
+                TAG <- 0.8355
+                DAG <- 0.8719
+                MAG <- 0.9082
+                PC <- 0.7430
+                PE <- 0.7430
+                PS <- 0.6771
+                PI <- 0.6141
+                PtdG <- 0.6963
+                PtdH <- 0.7422
+                class <- c(TAG,DAG,MAG,PC,PE,PS,PI,PtdG,PtdH)/0.0134
+                t <- as.data.frame(outer(km,class,`-`))
+                s <- t-floor(t)
+                c <- apply(s, 2, function(x) round(x%%1,digits=2) == 0)
+                colnames(t) <- c('TAG_RKMD','DAG_RKMD','MAG_RKMD','PC_RKMD','PE_RKMD','PS_RKMD','PI_RKMD','PtdG_RKMD','PtdH_RKMD')
+                colnames(c) <- c('TAG','DAG','MAG','PC','PE','PS','PI','PtdG','PtdH')
+                t$mz <- list$mz
+                list$RKMD <- cbind.data.frame(t,c)
+                return(list)
+        }

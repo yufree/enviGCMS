@@ -1,3 +1,7 @@
+# emvoGCMS 0.6.3
+
+- add findlipid to annotate lipid class based on referenced Kendrick mass defect
+
 # emvoGCMS 0.6.2
 
 - add getMSP to read in EI-MS or MS/MS msp file as list for annotation
