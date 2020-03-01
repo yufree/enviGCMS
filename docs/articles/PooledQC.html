@@ -37,7 +37,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">enviGCMS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.3</span>
       </span>
     </div>
 
@@ -94,7 +94,7 @@
       <h1>Pooled QC analysis</h1>
                         <h4 class="author">Miao Yu</h4>
             
-            <h4 class="date">2020-02-12</h4>
+            <h4 class="date">2020-03-01</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/yufree/enviGCMS/blob/master/vignettes/PooledQC.Rmd"><code>vignettes/PooledQC.Rmd</code></a></small>
       <div class="hidden name"><code>PooledQC.Rmd</code></div>
@@ -103,41 +103,41 @@
 
     
     
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(enviGCMS)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(enviGCMS)</span></code></pre></div>
 <p>Pooled QC samples within injection sequences are very important to control the quality of untargeted analysis. I added some function in <code>enviGCMS</code> package to visualize or analysis Pooled QC samples.</p>
 <div id="density-distribution" class="section level2">
 <h2 class="hasAnchor">
 <a href="#density-distribution" class="anchor"></a>Density distribution</h2>
 <p>For each sample, the peaks’ density distribution will tell us if certain samples show large shift.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(list)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw"><a href="../reference/plotden.html">plotden</a></span>(list<span class="op">$</span>data,list<span class="op">$</span>group,<span class="dt">ylim =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">0</span>,<span class="dv">1</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(list)</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="kw"><a href="../reference/plotden.html">plotden</a></span>(list<span class="op">$</span>data,list<span class="op">$</span>group,<span class="dt">ylim =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">0</span>,<span class="dv">1</span>))</span></code></pre></div>
 <p><img src="PooledQC_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
 </div>
 <div id="relative-log-abundance-rla-plots" class="section level2">
 <h2 class="hasAnchor">
 <a href="#relative-log-abundance-rla-plots" class="anchor"></a>Relative Log Abundance (RLA) plots</h2>
 <p>Relative Log Abundance (RLA) plots could be another way to show the intensity shift.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(list)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw"><a href="../reference/plotrla.html">plotrla</a></span>(list<span class="op">$</span>data,<span class="kw"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span>(list<span class="op">$</span>group))</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">#&gt; Warning in bplt(at[i], wid = width[i], stats = z$stats[, i], out = z$out[z$group</span></a>
-<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co">#&gt; == : Outlier (-Inf) in boxplot 5 is not drawn</span></a>
-<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="co">#&gt; Warning in bplt(at[i], wid = width[i], stats = z$stats[, i], out = z$out[z$group</span></a>
-<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">#&gt; == : Outlier (-Inf) in boxplot 6 is not drawn</span></a>
-<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="co">#&gt; Warning in bplt(at[i], wid = width[i], stats = z$stats[, i], out = z$out[z$group</span></a>
-<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">#&gt; == : Outlier (-Inf) in boxplot 7 is not drawn</span></a>
-<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">#&gt; Warning in bplt(at[i], wid = width[i], stats = z$stats[, i], out = z$out[z$group</span></a>
-<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">#&gt; == : Outlier (-Inf) in boxplot 10 is not drawn</span></a>
-<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">#&gt; Warning in bplt(at[i], wid = width[i], stats = z$stats[, i], out = z$out[z$group</span></a>
-<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="co">#&gt; == : Outlier (-Inf) in boxplot 11 is not drawn</span></a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(list)</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="kw"><a href="../reference/plotrla.html">plotrla</a></span>(list<span class="op">$</span>data,<span class="kw"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span>(list<span class="op">$</span>group))</span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="co">#&gt; Warning in bplt(at[i], wid = width[i], stats = z$stats[, i], out = z$out[z$group</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="co">#&gt; == : Outlier (-Inf) in boxplot 5 is not drawn</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="co">#&gt; Warning in bplt(at[i], wid = width[i], stats = z$stats[, i], out = z$out[z$group</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="co">#&gt; == : Outlier (-Inf) in boxplot 6 is not drawn</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="co">#&gt; Warning in bplt(at[i], wid = width[i], stats = z$stats[, i], out = z$out[z$group</span></span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="co">#&gt; == : Outlier (-Inf) in boxplot 7 is not drawn</span></span>
+<span id="cb3-9"><a href="#cb3-9"></a><span class="co">#&gt; Warning in bplt(at[i], wid = width[i], stats = z$stats[, i], out = z$out[z$group</span></span>
+<span id="cb3-10"><a href="#cb3-10"></a><span class="co">#&gt; == : Outlier (-Inf) in boxplot 10 is not drawn</span></span>
+<span id="cb3-11"><a href="#cb3-11"></a><span class="co">#&gt; Warning in bplt(at[i], wid = width[i], stats = z$stats[, i], out = z$out[z$group</span></span>
+<span id="cb3-12"><a href="#cb3-12"></a><span class="co">#&gt; == : Outlier (-Inf) in boxplot 11 is not drawn</span></span></code></pre></div>
 <p><img src="PooledQC_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
 </div>
 <div id="relative-log-abundance-ridge-rlar-plots" class="section level2">
 <h2 class="hasAnchor">
 <a href="#relative-log-abundance-ridge-rlar-plots" class="anchor"></a>Relative Log Abundance Ridge (RLAR) plots</h2>
 <p>Relative Log Abundance Ridge (RLAR) plots could also be used to show the intensity shift.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(list)</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw"><a href="../reference/plotridges.html">plotridges</a></span>(list<span class="op">$</span>data, <span class="kw"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span>(list<span class="op">$</span>group))</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co">#&gt; Warning: Removed 691 rows containing non-finite values (stat_binline).</span></a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(list)</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="kw"><a href="../reference/plotridges.html">plotridges</a></span>(list<span class="op">$</span>data, <span class="kw"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span>(list<span class="op">$</span>group))</span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="co">#&gt; Warning: Removed 691 rows containing non-finite values (stat_binline).</span></span></code></pre></div>
 <p><img src="PooledQC_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
 </div>
 <div id="density-weighted-total-usable-signal" class="section level2">
@@ -145,13 +145,13 @@
 <a href="#density-weighted-total-usable-signal" class="anchor"></a>Density Weighted Total Usable Signal</h2>
 <p>The sum of all peaks’ intensity or total usable signal(TUS) could show the general trends for each sample while peaks with lower ionization energy will dominated such value. Here I introduced a density weighted TUS to make the values robust to low frequency high intensity peaks. You could use <code>getdwtus</code> to calculate DWTUS for samples.</p>
 <p><span class="math display">\[DWTUS = \sum peak\ intensity * peak\ density\]</span></p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(list)</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/apply.html">apply</a></span>(list<span class="op">$</span>data,<span class="dv">2</span>,getdwtus)</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co">#&gt;     ko15     ko16     ko18     ko19     ko21     ko22     wt15     wt16 </span></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co">#&gt; 27.63040 29.95684 29.47828 28.80768 28.55539 29.62787 26.01125 26.66868 </span></a>
-<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#&gt;     wt18     wt19     wt21     wt22 </span></a>
-<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#&gt; 25.42983 27.04065 26.67595 31.46668</span></a>
-<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="kw"><a href="../reference/plotdwtus.html">plotdwtus</a></span>(list)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(list)</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="kw"><a href="https://rdrr.io/r/base/apply.html">apply</a></span>(list<span class="op">$</span>data,<span class="dv">2</span>,getdwtus)</span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="co">#&gt;     ko15     ko16     ko18     ko19     ko21     ko22     wt15     wt16 </span></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="co">#&gt; 27.63040 29.95684 29.47828 28.80768 28.55539 29.62787 26.01125 26.66868 </span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="co">#&gt;     wt18     wt19     wt21     wt22 </span></span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="co">#&gt; 25.42983 27.04065 26.67595 31.46668</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="kw"><a href="../reference/plotdwtus.html">plotdwtus</a></span>(list)</span></code></pre></div>
 <p><img src="PooledQC_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 </div>
 <div id="run-order-effect-analysis" class="section level2">
@@ -159,14 +159,14 @@
 <a href="#run-order-effect-analysis" class="anchor"></a>Run order effect analysis</h2>
 <p>For LC/GC-MS analysis, the run order will affect the intensity of single peak until the instrument is stable. The intensity will decrease/increase with initial run order and researcher need to evaluate how many samples are enough to eliminated run order effects. Here I introduced a pooled QC linear index to show such trends in the sequence.</p>
 <div class="figure">
-<img src="https://yufree.github.io/presentation/figure/pooledQC.png" alt="pqsi"><p class="caption">pqsi</p>
+<img src="https://yufree.github.io/presentation/figure/pooledQC.png" alt=""><p class="caption">pqsi</p>
 </div>
 <p>As shown in above figure, for one peak repeated analyzed in one sequence, the intensity would become stable in long term. In math, the slope of every 5 samples along the run order would become 0. Then we could define the percentage of stable peaks as pooled QC index. Such index would be a value between 0 and 1. The higher of such index, more peaks within the QC would be affected by run order effect. You could use such function to check the QC samples to see if run order effects would influence the samples at the beginning of sequences.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">order &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">12</span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="co"># n means how many points to build a linear regression model</span></a>
-<a class="sourceLine" id="cb6-3" data-line-number="3">n =<span class="st"> </span><span class="dv">5</span></a>
-<a class="sourceLine" id="cb6-4" data-line-number="4">idx &lt;-<span class="st"> </span><span class="kw"><a href="../reference/getpqsi.html">getpqsi</a></span>(list<span class="op">$</span>data,order,<span class="dt">n =</span> n)</a>
-<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(idx<span class="op">~</span>order[<span class="op">-</span>(<span class="dv">1</span><span class="op">:</span>(n<span class="dv">-1</span>))],<span class="dt">pch=</span><span class="dv">19</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>order &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">12</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="co"># n means how many points to build a linear regression model</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a>n =<span class="st"> </span><span class="dv">5</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a>idx &lt;-<span class="st"> </span><span class="kw"><a href="../reference/getpqsi.html">getpqsi</a></span>(list<span class="op">$</span>data,order,<span class="dt">n =</span> n)</span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(idx<span class="op">~</span>order[<span class="op">-</span>(<span class="dv">1</span><span class="op">:</span>(n<span class="dv">-1</span>))],<span class="dt">pch=</span><span class="dv">19</span>)</span></code></pre></div>
 <p><img src="PooledQC_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
 <p>In this case, we could see at 5th sample, 30% peaks show correlation with the run order. However, ever since 6th sample, the run order effects could be ignore.</p>
 </div>
