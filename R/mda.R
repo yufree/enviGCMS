@@ -424,6 +424,7 @@ findmet <-
                 }
 
         }
+
 #' Find lipid class of metabolites base on referenced Kendrick mass defect
 #' @param list list with data as peaks list, mz, rt and group information, retention time should be in seconds
 #' @param mode 'pos' for positive mode, 'neg' for negative mode and 'none' for neutral mass, only support [M+H] and [M-H] for each mode
@@ -441,7 +442,6 @@ findlipid <-
                         adduct <- ifelse(mode=='pos',1.008,-1.008)
                         km <- (((list$mz+adduct) * 14 / 14.01565)-floor((list$mz+adduct) * 14 / 14.01565))/0.0134
                 }
-
                 TAG <- 0.8355
                 DAG <- 0.8719
                 MAG <- 0.9082
