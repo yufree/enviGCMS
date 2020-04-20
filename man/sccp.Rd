@@ -4,7 +4,8 @@
 \name{sccp}
 \alias{sccp}
 \title{Short-Chain Chlorinated Paraffins(SCCPs) peaks infomation for quantitative analysis}
-\format{A data frame with 24 rows and 8 variables:
+\format{
+A data frame with 24 rows and 8 variables:
 \describe{
   \item{Cln}{Chlorine atom numbers}
   \item{Cn}{Carbon atom numbers}
@@ -14,7 +15,8 @@
   \item{mz}{m/z for the isotopologues with highest intensity}
   \item{intensity}{abundance of the isotopologues with highest intensity}
   \item{Clp}{Chlorine contents}
-}}
+}
+}
 \usage{
 data(sccp)
 }

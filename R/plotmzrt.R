@@ -24,7 +24,8 @@ plotmr <- function(list,
                        inscf = inscf,
                        imputation = imputation)
         lif <-
-                getfilter(list, rowindex = list$rsdindex & list$insindex)
+                getfilter(list, rowindex = list$rsdindex &
+                                  list$insindex)
         data <- lif$groupmean
         dataname <- colnames(data)
         mz <- lif$mz
@@ -68,7 +69,8 @@ plotmr <- function(list,
                                         y = mz[RT >
                                                        rt[1] &
                                                        RT < rt[2] &
-                                                       mz > ms[1] & mz <
+                                                       mz > ms[1] &
+                                                       mz <
                                                        ms[2]],
                                         cex = cex,
                                         col = col[i],
@@ -92,7 +94,7 @@ plotmr <- function(list,
                         pch = 19,
                         horiz = T,
                         bty = "n",
-                        inset = c(0,-0.25)
+                        inset = c(0, -0.25)
                 )
                 graphics::legend(
                         "topleft",
@@ -105,7 +107,7 @@ plotmr <- function(list,
                         cex = 0.7,
                         col = grDevices::rgb(0,
                                              0, 0, 0.318),
-                        inset = c(0,-0.25)
+                        inset = c(0, -0.25)
                 )
         } else if (NROW(data) > 0) {
                 graphics::plot(
@@ -166,7 +168,7 @@ plotmr <- function(list,
                         pch = 19,
                         horiz = T,
                         bty = "n",
-                        inset = c(0,-0.25)
+                        inset = c(0, -0.25)
                 )
                 graphics::legend(
                         "topleft",
@@ -179,7 +181,7 @@ plotmr <- function(list,
                         cex = 0.7,
                         col = grDevices::rgb(0,
                                              0, 0, 0.318),
-                        inset = c(0,-0.25)
+                        inset = c(0, -0.25)
                 )
 
         } else
@@ -223,12 +225,13 @@ plotmrc <- function(list,
                 imputation = imputation,
         )
         lif <-
-                getfilter(list, rowindex = list$rsdindex & list$insindex)
+                getfilter(list, rowindex = list$rsdindex &
+                                  list$insindex)
         data <- lif$groupmean
         dataname <- colnames(data)
         mz <- lif$mz
         rt <- lif$rt
-        suppressWarnings(if (!is.na(data[1,1])) {
+        suppressWarnings(if (!is.na(data[1, 1])) {
                 diff1 <- data[, 1] - data[, 2]
                 diff2 <- data[, 2] - data[, 1]
                 diff1[diff1 < 0] <- 0
@@ -285,7 +288,7 @@ plotmrc <- function(list,
                                              0, 0, 0.618),
                         bty = "n",
                         horiz = T,
-                        inset = c(0,-0.25)
+                        inset = c(0, -0.25)
                 )
                 graphics::legend(
                         "topright",
@@ -299,7 +302,7 @@ plotmrc <- function(list,
                         ),
                         bty = "n",
                         horiz = T,
-                        inset = c(0,-0.25)
+                        inset = c(0, -0.25)
                 )
         } else {
                 graphics::plot(
@@ -341,18 +344,19 @@ plotrsd <- function(list,
                        inscf = inscf,
                        imputation = imputation)
         lif <-
-                getfilter(list, rowindex = list$rsdindex & list$insindex)
+                getfilter(list, rowindex = list$rsdindex &
+                                  list$insindex)
         data <- lif$groupmean
         dataname <- colnames(data)
         mz <- lif$mz
         rt <- lif$rt
         rsd <- lif$grouprsd
 
-        if(is.null(dim(rsd))){
+        if (is.null(dim(rsd))) {
                 n <- 1
                 col <- grDevices::rainbow(1)
                 cex = as.numeric(cut(rsd, breaks = c(0, 20,
-                                                          40, 60, 80, Inf))) / 2
+                                                     40, 60, 80, Inf))) / 2
                 dataname <- unique(lif$group)
                 graphics::plot(
                         mz ~ rt,
@@ -378,7 +382,7 @@ plotrsd <- function(list,
                         horiz = T,
                         pch = 19,
                         bty = "n",
-                        inset = c(0,-0.25)
+                        inset = c(0, -0.25)
                 )
                 graphics::legend(
                         "topleft",
@@ -390,9 +394,9 @@ plotrsd <- function(list,
                         horiz = T,
                         cex = 0.8,
                         col = grDevices::rgb(0, 0, 0, 0.318),
-                        inset = c(0,-0.25)
+                        inset = c(0, -0.25)
                 )
-        }else{
+        } else{
                 n <- dim(rsd)[2]
                 col <- grDevices::rainbow(n, alpha = 0.318)
                 graphics::plot(
@@ -406,8 +410,10 @@ plotrsd <- function(list,
                 )
 
                 for (i in 1:n) {
-                        cex = as.numeric(cut(rsd[, i], breaks = c(0, 20,
-                                                                  40, 60, 80, Inf))) / 2
+                        cex = as.numeric(cut(rsd[, i], breaks = c(
+                                0, 20,
+                                40, 60, 80, Inf
+                        ))) / 2
                         graphics::points(
                                 x = rt,
                                 y = mz,
@@ -424,7 +430,7 @@ plotrsd <- function(list,
                         horiz = T,
                         pch = 19,
                         bty = "n",
-                        inset = c(0,-0.25)
+                        inset = c(0, -0.25)
                 )
                 graphics::legend(
                         "topleft",
@@ -436,7 +442,7 @@ plotrsd <- function(list,
                         horiz = T,
                         cex = 0.8,
                         col = grDevices::rgb(0, 0, 0, 0.318),
-                        inset = c(0,-0.25)
+                        inset = c(0, -0.25)
                 )
         }
 }
@@ -468,7 +474,8 @@ gifmr <- function(list,
                        inscf = inscf,
                        imputation = imputation)
         lif <-
-                getfilter(list, rowindex = list$rsdindex & list$insindex)
+                getfilter(list, rowindex = list$rsdindex &
+                                  list$insindex)
         data <- lif$groupmean
         mz <- lif$mz
         rt <- lif$rt
@@ -533,7 +540,7 @@ plotpca <- function(data,
                     pch = NULL,
                     ...) {
         if (!is.null(index)) {
-                data <- data[index,]
+                data <- data[index, ]
         }
 
         if (is.null(lv)) {
@@ -545,7 +552,7 @@ plotpca <- function(data,
                 stats::prcomp(t(data), center = center, scale = scale)
         pcaoVars = signif(((pcao$sdev) ^ 2) / (sum((pcao$sdev) ^ 2)),
                           3) * 100
-        if(!is.null(pch)){
+        if (!is.null(pch)) {
                 graphics::plot(
                         pcao$x[, 1],
                         pcao$x[, 2],
@@ -557,7 +564,7 @@ plotpca <- function(data,
                         pch = pch,
                         ...
                 )
-        }else{
+        } else{
                 graphics::plot(
                         pcao$x[, 1],
                         pcao$x[, 2],
@@ -702,7 +709,7 @@ plotden <- function(data,
                     lwd = 1,
                     ...) {
         if (!is.null(index)) {
-                data <- data[index,]
+                data <- data[index, ]
         }
         xlim <- range(log10(data + 1), na.rm = T)
         if (is.null(lv)) {
@@ -768,9 +775,55 @@ plotrla <- function(data, lv, type = "g") {
         graphics::boxplot(outmat, col = lv[order(lv)])
         graphics::abline(h = 0)
 }
-#' Relative Log Abundance Ridge (RLAR) plots
+
+#' plot ridgeline density plot
+#' @param data matrix
+#' @param xlab label for x axis
+#' @param ylab label for y axis
+#' @param index index for y
+#' @return ridgeline density plot
+#' @examples
+#' data(list)
+#' plotridge(t(list$data),'Intensity','peaks',c(1:10))
+#' @export
+plotridge <- function(data,
+                      xlab = '',
+                      ylab = '',
+                      index = NULL) {
+        if (!is.null(index)) {
+                data <- data[, index]
+        }
+        dens <- apply(data, 2, stats::density)
+        xs <- Map(getElement, dens, "x")
+        ys <- Map(getElement, dens, "y")
+        ys <- Map(function(x)
+                (x - min(x)) / max(x - min(x)) * 1.5, ys)
+        ys <- Map(`+`, ys, length(ys):1)
+
+        graphics::plot.new()
+        graphics::plot.window(xlim = range(xs), ylim = c(1, length(ys) +
+                                                                 1.5))
+        graphics::abline(h = length(ys):1, col = "grey")
+
+        Map(graphics::polygon,
+            xs,
+            ys,
+            col = grDevices::hcl.colors(length(ys), "Zissou", alpha = 0.8))
+
+        graphics::axis(1, tck = -0.01)
+        graphics::mtext(
+                names(dens),
+                2,
+                at = length(ys):1,
+                las = 2,
+                padj = 0
+        )
+        graphics::title(xlab = xlab, ylab = ylab)
+}
+
+#' Relative Log Abundance Ridge (RLAR) plots for samples or peaks
 #' @param data data as mzrt profile
-#' @param lv factor vector for the group infomation
+#' @param lv factor vector for the group infomation for samples
 #' @param type 'g' means group median based, other means all samples median based.
 #' @return Relative Log Abundance Ridge(RLA) plots
 #' @examples
@@ -794,21 +847,7 @@ plotridges <- function(data, lv, type = "g") {
                 outmat <- sweep(data, 1, median, "-")
 
         }
-
-        dt <- data.table::data.table(outmat,keep.rownames = T)
-        ov <- suppressWarnings(data.table::melt.data.table(dt))
-        colnames(outmat) <- lv[order(lv)]
-        dt2 <- data.table::data.table(outmat,keep.rownames = T)
-        ov2 <- suppressWarnings(data.table::melt.data.table(dt2))
-        ov2$group <- as.factor(ov2$variable)
-        ggplot2::ggplot(ov,
-                        ggplot2::aes(
-                                x = ov$value,
-                                y = ov$variable,
-                                fill = ov2$group
-                        )) + ggridges::geom_density_ridges(stat = "binline",
-                                                           bins = 100) + ggplot2::xlim(-0.5, 0.5) + ggplot2::scale_fill_discrete(name = "Group") +
-                ggplot2::labs(x = "Relative Log Abundance", y = "Samples")
+        plotridge(outmat, "Relative Log Abundance", 'Samples')
 }
 #' plot density weighted intensity for multiple samples
 #' @param list list with data as peaks list, mz, rt and group information
@@ -819,13 +858,42 @@ plotridges <- function(data, lv, type = "g") {
 #' data(list)
 #' plotdwtus(list)
 #' @export
-plotdwtus <- function(list,n=512,...){
-        dwtus <- apply(list$data, 2, function(x) getdwtus(x,n = n))
-        if(!is.null(list$order)){
-                graphics::plot(dwtus~as.numeric(list$order), xlab='Run order', ylab = 'DWTUS', col = as.numeric(as.factor(list$group)),...)
-                graphics::legend('topright',legend = unique(list$group),col = unique(as.numeric(as.factor(list$group))),pch = 19,bty = 'n')
-        }else{
-                graphics::plot(dwtus~as.numeric(as.factor(list$group)),xlab='Group', ylab = 'DWTUS',col = as.numeric(as.factor(list$group)),...)
-                graphics::legend('topright',legend = unique(list$group),col = unique(as.numeric(as.factor(list$group))),pch = 19,bty = 'n')
+plotdwtus <- function(list, n = 512, ...) {
+        dwtus <- apply(list$data, 2, function(x)
+                getdwtus(x, n = n))
+        if (!is.null(list$order)) {
+                graphics::plot(
+                        dwtus ~ as.numeric(list$order),
+                        xlab = 'Run order',
+                        ylab = 'DWTUS',
+                        col = as.numeric(as.factor(list$group)),
+                        ...
+                )
+                graphics::legend(
+                        'topright',
+                        legend = unique(list$group),
+                        col = unique(as.numeric(as.factor(
+                                list$group
+                        ))),
+                        pch = 19,
+                        bty = 'n'
+                )
+        } else{
+                graphics::plot(
+                        dwtus ~ as.numeric(as.factor(list$group)),
+                        xlab = 'Group',
+                        ylab = 'DWTUS',
+                        col = as.numeric(as.factor(list$group)),
+                        ...
+                )
+                graphics::legend(
+                        'topright',
+                        legend = unique(list$group),
+                        col = unique(as.numeric(as.factor(
+                                list$group
+                        ))),
+                        pch = 19,
+                        bty = 'n'
+                )
         }
 }

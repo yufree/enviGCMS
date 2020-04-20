@@ -40,7 +40,5 @@ Imports:
     animation (>= 2.2.3),
     RColorBrewer,
     mixtools,
-    data.table,
-    ggplot2,
-    ggridges
-RoxygenNote: 7.0.2
+    data.table
+RoxygenNote: 7.1.0

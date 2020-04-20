@@ -4,7 +4,9 @@
 \name{TBBPA}
 \alias{TBBPA}
 \title{Demo data for TBBPA metabolism in Pumpkin}
-\format{A list object with data, mass to charge ratio, retention time and group information. Three pumpkin seeding root samples' peaks list is extracted by xcms online.}
+\format{
+A list object with data, mass to charge ratio, retention time and group information. Three pumpkin seeding root samples' peaks list is extracted by xcms online.
+}
 \usage{
 data(TBBPA)
 }
