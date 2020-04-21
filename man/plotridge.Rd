@@ -4,16 +4,18 @@
 \alias{plotridge}
 \title{plot ridgeline density plot}
 \usage{
-plotridge(data, xlab = "", ylab = "", index = NULL)
+plotridge(data, lv = NULL, indexx = NULL, indexy = NULL, ...)
 }
 \arguments{
 \item{data}{matrix}
 
-\item{xlab}{label for x axis}
+\item{lv}{factor vector for the column}
 
-\item{ylab}{label for y axis}
+\item{indexx}{index for matrix row}
 
-\item{index}{index for y}
+\item{indexy}{index for matrix column}
+
+\item{...}{parameters for `title` function}
 }
 \value{
 ridgeline density plot
@@ -23,5 +25,6 @@ plot ridgeline density plot
 }
 \examples{
 data(list)
-plotridge(t(list$data),'Intensity','peaks',c(1:10))
+plotridge(t(list$data),indexy=c(1:10),xlab = 'Intensity',ylab = 'peaks')
+plotridge(log(list$data),as.factor(list$group),xlab = 'Intensity',ylab = 'peaks')
 }

@@ -9,7 +9,7 @@ plotridges(data, lv, type = "g")
 \arguments{
 \item{data}{data as mzrt profile}
 
-\item{lv}{factor vector for the group infomation for samples}
+\item{lv}{factor vector for the group infomation of samples}
 
 \item{type}{'g' means group median based, other means all samples median based.}
 }

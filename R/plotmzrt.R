@@ -1,3 +1,241 @@
+#' plot intensity of peaks across samples or samples across peaks
+#' @param data matrix
+#' @param lv factor vector for the column
+#' @param indexx index for matrix row
+#' @param indexy index for matrix column
+#' @param ... parameters for `title` function
+#' @return parallel coordinates plot
+#' @examples
+#' data(list)
+#' # selected peaks across samples
+#' plotpeak(t(list$data), lv = as.factor(c(rep(1,5),rep(2,nrow(list$data)-5))),1:10,1:10)
+#' # selected samples across peaks
+#' plotpeak(list$data, lv = as.factor(list$group),1:10,1:10)
+#' @export
+plotpeak <- function(data,
+                     lv = NULL,
+                     indexx = NULL,
+                     indexy = NULL,
+                     ...) {
+        # from http://karolis.koncevicius.lt/posts/r_base_plotting_without_wrappers/
+        grDevices::palette(c("cornflowerblue", "red3", "orange"))
+        if (!is.null(indexx)) {
+                data <- data[indexx,]
+        }
+        if (!is.null(indexy)) {
+                data <- data[, indexy]
+                lv <- lv[indexy]
+        }
+        graphics::plot.new()
+        graphics::plot.window(xlim = c(1, nrow(data)), ylim = range(data))
+        graphics::grid(nx = NA, ny = NULL)
+        graphics::abline(
+                v = 1:nrow(data),
+                col = "grey",
+                lwd = 5,
+                lty = "dotted"
+        )
+        if (!is.null(lv)) {
+                graphics::matlines(data, col = lv, lty = 1)
+                graphics::legend(
+                        'top',
+                        inset = c(0, -.05),
+                        legend = unique(lv),
+                        col = unique(lv),
+                        lwd = 3,
+                        bty = 'n',
+                        horiz = T
+                )
+        } else{
+                graphics::matlines(
+                        data,
+                        col = grDevices::rgb(
+                                0,
+                                0,
+                                0,
+                                maxColorValue = 255,
+                                alpha = 100
+                        ),
+                        lty = 1
+                )
+        }
+        graphics::axis(2, lwd = 0, las = 2)
+        graphics::mtext(
+                stats::variable.names(t(data)),
+                3,
+                at = 1:nrow(data),
+                line = 1,
+                col = "darkgrey"
+        )
+}
+
+#' plot ridgeline density plot
+#' @param data matrix
+#' @param lv factor vector for the column
+#' @param indexx index for matrix row
+#' @param indexy index for matrix column
+#' @param ... parameters for `title` function
+#' @return ridgeline density plot
+#' @examples
+#' data(list)
+#' plotridge(t(list$data),indexy=c(1:10),xlab = 'Intensity',ylab = 'peaks')
+#' plotridge(log(list$data),as.factor(list$group),xlab = 'Intensity',ylab = 'peaks')
+#' @export
+plotridge <- function(data,
+                      lv = NULL,
+                      indexx = NULL,
+                      indexy = NULL,
+                      ...) {
+        # from http://karolis.koncevicius.lt/posts/r_base_plotting_without_wrappers/
+        if (!is.null(indexx)) {
+                data <- data[indexx,]
+        }
+        if (!is.null(indexy)) {
+                data <- data[, indexy]
+                lv <- lv[indexy]
+        }
+        dens <- apply(data, 2, stats::density)
+        xs <- Map(getElement, dens, "x")
+        ys <- Map(getElement, dens, "y")
+        ys <- Map(function(x)
+                (x - min(x)) / max(x - min(x)) * 1.5, ys)
+        ys <- Map(`+`, ys, length(ys):1)
+
+        graphics::plot.new()
+        graphics::plot.window(xlim = range(xs), ylim = c(1, length(ys) +
+                                                                 1.5))
+        graphics::abline(h = length(ys):1, col = "grey")
+
+        if (!is.null(lv)) {
+                col <- grDevices::hcl.colors(nlevels(lv), "Zissou", alpha = 0.8)
+                Map(graphics::polygon,
+                    xs,
+                    ys,
+                    col = col[match(lv, unique(lv))])
+                graphics::legend(
+                        'topright',
+                        inset = c(0, -.05),
+                        legend = unique(lv),
+                        col = unique(lv),
+                        lwd = 3,
+                        bty = 'n',
+                        horiz = T
+                )
+        } else{
+                Map(
+                        graphics::polygon,
+                        xs,
+                        ys,
+                        col = grDevices::rgb(
+                                0,
+                                0,
+                                0,
+                                maxColorValue = 255,
+                                alpha = 100
+                        )
+                )
+        }
+
+        graphics::axis(1, tck = -0.01)
+        graphics::mtext(
+                names(dens),
+                2,
+                at = length(ys):1,
+                las = 2,
+                padj = 0
+        )
+        graphics::title(...)
+
+}
+
+#' plot 1-d density for multiple samples
+#' @param data matrix
+#' @param lv factor vector for the column
+#' @param indexx index for matrix row
+#' @param indexy index for matrix column
+#' @param ... parameters for `title` function
+#' @return NULL
+#' @examples
+#' data(list)
+#' plotrug(list$data)
+#' plotrug(log(list$data), lv = as.factor(list$group))
+#' @export
+plotrug <- function(data,
+                    lv = NULL,
+                    indexx = NULL,
+                    indexy = NULL,
+                    ...) {
+        if (!is.null(indexx)) {
+                data <- data[indexx,]
+        }
+        if (!is.null(indexy)) {
+                data <- data[, indexy]
+                lv <- lv[indexy]
+        }
+
+        rugs <- apply(data, 2, function(x) x[order(x)])
+
+        rugs <- as.list(as.data.frame(rugs))
+        rugs <- lapply(rugs, function(x) x[is.finite(x)])
+
+        graphics::plot.new()
+        graphics::plot.window(xlim = range(rugs), ylim = c(1, length(rugs) +
+                                                                   1))
+
+
+        len <- Map(length, rugs)
+        idx <- 1:length(rugs)
+        yl <- Map(function(x, y)
+                rep(y - 0.3, x), len, idx)
+        yh <- Map(function(x, y)
+                rep(y + 0.3, x), len, idx)
+        if (!is.null(lv)) {
+                col <- grDevices::hcl.colors(nlevels(lv), "Zissou", alpha = 0.8)
+                Map(graphics::segments,
+                    rugs,
+                    yl,
+                    rugs,
+                    yh,
+                    col = col[match(lv, unique(lv))])
+                graphics::legend(
+                        'top',
+                        inset = c(0, -.05),
+                        legend = unique(lv),
+                        col = unique(lv),
+                        lwd = 3,
+                        bty = 'n',
+                        horiz = T
+
+                )
+        } else{
+                Map(
+                        graphics::segments,
+                        rugs,
+                        yl,
+                        rugs,
+                        yh,
+                        col = grDevices::rgb(
+                                0,
+                                0,
+                                0,
+                                maxColorValue = 255,
+                                alpha = 100
+                        )
+                )
+        }
+
+        graphics::axis(1, tck = -0.01)
+        graphics::mtext(
+                names(rugs),
+                2,
+                at = length(yl):1,
+                las = 2,
+                padj = 0
+        )
+        graphics::title(...)
+
+}
+
 #' plot the scatter plot for peaks list with threshold
 #' @param list list with data as peaks list, mz, rt and group information
 #' @param rt vector range of the retention time
@@ -94,7 +332,7 @@ plotmr <- function(list,
                         pch = 19,
                         horiz = T,
                         bty = "n",
-                        inset = c(0, -0.25)
+                        inset = c(0,-0.25)
                 )
                 graphics::legend(
                         "topleft",
@@ -107,7 +345,7 @@ plotmr <- function(list,
                         cex = 0.7,
                         col = grDevices::rgb(0,
                                              0, 0, 0.318),
-                        inset = c(0, -0.25)
+                        inset = c(0,-0.25)
                 )
         } else if (NROW(data) > 0) {
                 graphics::plot(
@@ -168,7 +406,7 @@ plotmr <- function(list,
                         pch = 19,
                         horiz = T,
                         bty = "n",
-                        inset = c(0, -0.25)
+                        inset = c(0,-0.25)
                 )
                 graphics::legend(
                         "topleft",
@@ -181,7 +419,7 @@ plotmr <- function(list,
                         cex = 0.7,
                         col = grDevices::rgb(0,
                                              0, 0, 0.318),
-                        inset = c(0, -0.25)
+                        inset = c(0,-0.25)
                 )
 
         } else
@@ -288,7 +526,7 @@ plotmrc <- function(list,
                                              0, 0, 0.618),
                         bty = "n",
                         horiz = T,
-                        inset = c(0, -0.25)
+                        inset = c(0,-0.25)
                 )
                 graphics::legend(
                         "topright",
@@ -302,7 +540,7 @@ plotmrc <- function(list,
                         ),
                         bty = "n",
                         horiz = T,
-                        inset = c(0, -0.25)
+                        inset = c(0,-0.25)
                 )
         } else {
                 graphics::plot(
@@ -382,7 +620,7 @@ plotrsd <- function(list,
                         horiz = T,
                         pch = 19,
                         bty = "n",
-                        inset = c(0, -0.25)
+                        inset = c(0,-0.25)
                 )
                 graphics::legend(
                         "topleft",
@@ -394,7 +632,7 @@ plotrsd <- function(list,
                         horiz = T,
                         cex = 0.8,
                         col = grDevices::rgb(0, 0, 0, 0.318),
-                        inset = c(0, -0.25)
+                        inset = c(0,-0.25)
                 )
         } else{
                 n <- dim(rsd)[2]
@@ -430,7 +668,7 @@ plotrsd <- function(list,
                         horiz = T,
                         pch = 19,
                         bty = "n",
-                        inset = c(0, -0.25)
+                        inset = c(0,-0.25)
                 )
                 graphics::legend(
                         "topleft",
@@ -442,78 +680,11 @@ plotrsd <- function(list,
                         horiz = T,
                         cex = 0.8,
                         col = grDevices::rgb(0, 0, 0, 0.318),
-                        inset = c(0, -0.25)
+                        inset = c(0,-0.25)
                 )
         }
 }
 
-#' plot scatter plot for rt-mz profile and output gif file for mutiple groups
-#' @param list list with data as peaks list, mz, rt and group information
-#' @param name file name for gif file, default test
-#' @param ms the mass range to plot the data
-#' @param inscf Log intensity cutoff for peaks across samples. If any peaks show a intensity higher than the cutoff in any samples, this peaks would not be filtered. default 5
-#' @param rsdcf the rsd cutoff of all peaks in all group
-#' @param imputation parameters for `getimputation` function method
-#' @param ... parameters for `plot` function
-#' @return gif file
-#' @examples
-#' \dontrun{
-#' data(list)
-#' gifmr(list)
-#' }
-#' @export
-gifmr <- function(list,
-                  ms = c(100, 500),
-                  rsdcf = 30,
-                  inscf = 5,
-                  imputation = "i",
-                  name = "test",
-                  ...) {
-        list <- getdoe(list,
-                       rsdcf = rsdcf,
-                       inscf = inscf,
-                       imputation = imputation)
-        lif <-
-                getfilter(list, rowindex = list$rsdindex &
-                                  list$insindex)
-        data <- lif$groupmean
-        mz <- lif$mz
-        rt <- lif$rt
-        filename = paste0(name, ".gif")
-        mean <- apply(data, 1, mean)
-
-        graphics::plot(
-                mz ~ rt,
-                xlab = "Retention Time(s)",
-                ylab = "m/z",
-                pch = 19,
-                cex = log10(mean + 1) -
-                        4,
-                col = grDevices::rgb(0, 0, 1, 0.2),
-                main = "All peaks",
-                ...
-        )
-
-        col <- grDevices::rainbow(dim(data)[2], alpha = 0.318)
-        animation::saveGIF({
-                for (i in 1:dim(data)[2]) {
-                        name <- colnames(data)[i]
-                        value <- data[, i]
-                        graphics::plot(
-                                mz ~ rt,
-                                xlab = "Retention Time(s)",
-                                ylab = "m/z",
-                                pch = 19,
-                                cex = log10(value +
-                                                    1) - 4,
-                                col = col[i],
-                                ylim = ms,
-                                main = name,
-                                ...
-                        )
-                }
-        }, movie.name = filename, ani.width = 800, ani.height = 500)
-}
 
 #' plot the PCA for multiple samples
 #' @param data mzrt profile with row peaks and column samples
@@ -540,7 +711,7 @@ plotpca <- function(data,
                     pch = NULL,
                     ...) {
         if (!is.null(index)) {
-                data <- data[index, ]
+                data <- data[index,]
         }
 
         if (is.null(lv)) {
@@ -709,7 +880,7 @@ plotden <- function(data,
                     lwd = 1,
                     ...) {
         if (!is.null(index)) {
-                data <- data[index, ]
+                data <- data[index,]
         }
         xlim <- range(log10(data + 1), na.rm = T)
         if (is.null(lv)) {
@@ -776,54 +947,9 @@ plotrla <- function(data, lv, type = "g") {
         graphics::abline(h = 0)
 }
 
-#' plot ridgeline density plot
-#' @param data matrix
-#' @param xlab label for x axis
-#' @param ylab label for y axis
-#' @param index index for y
-#' @return ridgeline density plot
-#' @examples
-#' data(list)
-#' plotridge(t(list$data),'Intensity','peaks',c(1:10))
-#' @export
-plotridge <- function(data,
-                      xlab = '',
-                      ylab = '',
-                      index = NULL) {
-        if (!is.null(index)) {
-                data <- data[, index]
-        }
-        dens <- apply(data, 2, stats::density)
-        xs <- Map(getElement, dens, "x")
-        ys <- Map(getElement, dens, "y")
-        ys <- Map(function(x)
-                (x - min(x)) / max(x - min(x)) * 1.5, ys)
-        ys <- Map(`+`, ys, length(ys):1)
-
-        graphics::plot.new()
-        graphics::plot.window(xlim = range(xs), ylim = c(1, length(ys) +
-                                                                 1.5))
-        graphics::abline(h = length(ys):1, col = "grey")
-
-        Map(graphics::polygon,
-            xs,
-            ys,
-            col = grDevices::hcl.colors(length(ys), "Zissou", alpha = 0.8))
-
-        graphics::axis(1, tck = -0.01)
-        graphics::mtext(
-                names(dens),
-                2,
-                at = length(ys):1,
-                las = 2,
-                padj = 0
-        )
-        graphics::title(xlab = xlab, ylab = ylab)
-}
-
 #' Relative Log Abundance Ridge (RLAR) plots for samples or peaks
 #' @param data data as mzrt profile
-#' @param lv factor vector for the group infomation for samples
+#' @param lv factor vector for the group infomation of samples
 #' @param type 'g' means group median based, other means all samples median based.
 #' @return Relative Log Abundance Ridge(RLA) plots
 #' @examples
@@ -847,7 +973,7 @@ plotridges <- function(data, lv, type = "g") {
                 outmat <- sweep(data, 1, median, "-")
 
         }
-        plotridge(outmat, "Relative Log Abundance", 'Samples')
+        plotridge(outmat, lv, xlab = "Relative Log Abundance", ylab = 'Samples')
 }
 #' plot density weighted intensity for multiple samples
 #' @param list list with data as peaks list, mz, rt and group information
@@ -896,4 +1022,72 @@ plotdwtus <- function(list, n = 512, ...) {
                         bty = 'n'
                 )
         }
+}
+
+#' plot scatter plot for rt-mz profile and output gif file for mutiple groups
+#' @param list list with data as peaks list, mz, rt and group information
+#' @param name file name for gif file, default test
+#' @param ms the mass range to plot the data
+#' @param inscf Log intensity cutoff for peaks across samples. If any peaks show a intensity higher than the cutoff in any samples, this peaks would not be filtered. default 5
+#' @param rsdcf the rsd cutoff of all peaks in all group
+#' @param imputation parameters for `getimputation` function method
+#' @param ... parameters for `plot` function
+#' @return gif file
+#' @examples
+#' \dontrun{
+#' data(list)
+#' gifmr(list)
+#' }
+#' @export
+gifmr <- function(list,
+                  ms = c(100, 500),
+                  rsdcf = 30,
+                  inscf = 5,
+                  imputation = "i",
+                  name = "test",
+                  ...) {
+        list <- getdoe(list,
+                       rsdcf = rsdcf,
+                       inscf = inscf,
+                       imputation = imputation)
+        lif <-
+                getfilter(list, rowindex = list$rsdindex &
+                                  list$insindex)
+        data <- lif$groupmean
+        mz <- lif$mz
+        rt <- lif$rt
+        filename = paste0(name, ".gif")
+        mean <- apply(data, 1, mean)
+
+        graphics::plot(
+                mz ~ rt,
+                xlab = "Retention Time(s)",
+                ylab = "m/z",
+                pch = 19,
+                cex = log10(mean + 1) -
+                        4,
+                col = grDevices::rgb(0, 0, 1, 0.2),
+                main = "All peaks",
+                ...
+        )
+
+        col <- grDevices::rainbow(dim(data)[2], alpha = 0.318)
+        animation::saveGIF({
+                for (i in 1:dim(data)[2]) {
+                        name <- colnames(data)[i]
+                        value <- data[, i]
+                        graphics::plot(
+                                mz ~ rt,
+                                xlab = "Retention Time(s)",
+                                ylab = "m/z",
+                                pch = 19,
+                                cex = log10(value +
+                                                    1) - 4,
+                                col = col[i],
+                                ylim = ms,
+                                main = name,
+                                ...
+                        )
+                }
+        }, movie.name = filename, ani.width = 800, ani.height = 500)
 }
