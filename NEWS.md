@@ -1,14 +1,14 @@
-# emviGCMS 0.6.4
+# enviGCMS 0.6.4
 
 - plotpeak for intensity of peaks across samples or samples across peaks
 - plotridge for ridgeline density plot
 - plotrug for 1-d density for multiple samples
 
-# emviGCMS 0.6.3
+# enviGCMS 0.6.3
 
 - add findlipid to annotate lipid class based on referenced Kendrick mass defect
 
-# emviGCMS 0.6.2
+# enviGCMS 0.6.2
 
 - add getMSP to read in EI-MS or MS/MS msp file as list for annotation
 - add xrankanno and dotpanno function for MS/MS X Rank and dot product annotation
