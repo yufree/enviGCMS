@@ -82,7 +82,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">enviGCMS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.5</span>
       </span>
     </div>
 
@@ -180,7 +180,7 @@
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>list</span>)
 <span class='co'># selected peaks across samples</span>
 <span class='fu'>plotpeak</span>(<span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='no'>list</span>$<span class='no'>data</span>), <span class='kw'>lv</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>1</span>,<span class='fl'>5</span>),<span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>2</span>,<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>list</span>$<span class='no'>data</span>)-<span class='fl'>5</span>))),<span class='fl'>1</span>:<span class='fl'>10</span>,<span class='fl'>1</span>:<span class='fl'>10</span>)</div><div class='img'><img src='plotpeak-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># selected samples across peaks</span>
-<span class='fu'>plotpeak</span>(<span class='no'>list</span>$<span class='no'>data</span>, <span class='kw'>lv</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span>(<span class='no'>list</span>$<span class='no'>group</span>),<span class='fl'>1</span>:<span class='fl'>10</span>,<span class='fl'>1</span>:<span class='fl'>10</span>)</div><div class='img'><img src='plotpeak-2.png' alt='' width='700' height='433' /></div></pre>
+<span class='fu'>plotpeak</span>(<span class='no'>list</span>$<span class='no'>data</span>, <span class='kw'>lv</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span>(<span class='no'>list</span>$<span class='no'>group</span>$<span class='no'>sample_group</span>),<span class='fl'>1</span>:<span class='fl'>10</span>,<span class='fl'>1</span>:<span class='fl'>10</span>)</div><div class='img'><img src='plotpeak-2.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
