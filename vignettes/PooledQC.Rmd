@@ -27,7 +27,7 @@ Pooled QC samples within injection sequences are very important to control the q
 We could check sample-wise changes of peaks.
 
 ```{r}
-plotpeak(list$data, lv = as.factor(list$group))
+plotpeak(list$data, lv = as.factor(list$group$sample_group))
 ```
 
 Or peak-wise changes of samples.
@@ -43,9 +43,9 @@ For each sample, the peaks' density distribution will tell us if certain samples
 
 ```{r}
 data(list)
-plotden(list$data,list$group,ylim = c(0,1))
+plotden(list$data,list$group$sample_group,ylim = c(0,1))
 # 1-d density for multiple samples
-plotrug(log(list$data), lv = as.factor(list$group))
+plotrug(log(list$data), lv = as.factor(list$group$sample_group))
 ```
 
 ## Relative Log Abundance (RLA) plots
@@ -54,7 +54,7 @@ Relative Log Abundance (RLA) plots could be another way to show the intensity sh
 
 ```{r}
 data(list)
-plotrla(list$data,as.factor(list$group))
+plotrla(list$data,as.factor(list$group$sample_group))
 ```
 
 ## Relative Log Abundance Ridge (RLAR) plots
@@ -63,10 +63,10 @@ Relative Log Abundance Ridge (RLAR) plots could also be used to show the intensi
 
 ```{r}
 data(list)
-plotridges(list$data, as.factor(list$group))
+plotridges(list$data, as.factor(list$group$sample_group))
 # ridgeline density plot
 plotridge(t(list$data),indexy=c(1:10),xlab = 'Intensity',ylab = 'peaks')
-plotridge(log(list$data),as.factor(list$group),xlab = 'Intensity',ylab = 'peaks')
+plotridge(log(list$data),as.factor(list$group$sample_group),xlab = 'Intensity',ylab = 'peaks')
 ```
 
 

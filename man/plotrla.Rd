@@ -21,5 +21,5 @@ Relative Log Abundance (RLA) plots
 }
 \examples{
 data(list)
-plotrla(list$data, as.factor(list$group))
+plotrla(list$data, as.factor(list$group$sample_group))
 }

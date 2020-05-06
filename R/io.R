@@ -38,10 +38,13 @@ getmr <-
 #' @export
 getmzrtcsv <- function(path) {
         dataraw <- utils::read.csv(path, skip = 1)
+        sample_name <- names(utils::read.csv(path, nrows = 1)[-(1:3)])
         mz <- dataraw[, 2]
         rt <- dataraw[, 3]
         data <- dataraw[,-c(1:3)]
-        group <- c(t(utils::read.csv(path, nrows = 1)[-(1:3)]))
+        colnames(data) <- sample_name
+        sample_group <- c(t(utils::read.csv(path, nrows = 1)[-(1:3)]))
+        group <- cbind.data.frame(sample_name,sample_group,stringsAsFactors = F)
         rownames(data) <- dataraw[, 1]
         re <- list(
                 data = data,

@@ -1,3 +1,8 @@
+# enviGCMS 0.6.5
+
+- change to formal group information for mzrt class
+- update list data
+
 # enviGCMS 0.6.4
 
 - plotpeak for intensity of peaks across samples or samples across peaks

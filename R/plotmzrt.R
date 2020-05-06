@@ -10,7 +10,7 @@
 #' # selected peaks across samples
 #' plotpeak(t(list$data), lv = as.factor(c(rep(1,5),rep(2,nrow(list$data)-5))),1:10,1:10)
 #' # selected samples across peaks
-#' plotpeak(list$data, lv = as.factor(list$group),1:10,1:10)
+#' plotpeak(list$data, lv = as.factor(list$group$sample_group),1:10,1:10)
 #' @export
 plotpeak <- function(data,
                      lv = NULL,
@@ -79,7 +79,7 @@ plotpeak <- function(data,
 #' @examples
 #' data(list)
 #' plotridge(t(list$data),indexy=c(1:10),xlab = 'Intensity',ylab = 'peaks')
-#' plotridge(log(list$data),as.factor(list$group),xlab = 'Intensity',ylab = 'peaks')
+#' plotridge(log(list$data),as.factor(list$group$sample_group),xlab = 'Intensity',ylab = 'peaks')
 #' @export
 plotridge <- function(data,
                       lv = NULL,
@@ -158,7 +158,7 @@ plotridge <- function(data,
 #' @examples
 #' data(list)
 #' plotrug(list$data)
-#' plotrug(log(list$data), lv = as.factor(list$group))
+#' plotrug(log(list$data), lv = as.factor(list$group$sample_group))
 #' @export
 plotrug <- function(data,
                     lv = NULL,
@@ -401,7 +401,7 @@ plotmr <- function(list,
                 }
                 graphics::legend(
                         "topright",
-                        legend = unique(list$group),
+                        legend = unique(list$group$sample_group),
                         col = col,
                         pch = 19,
                         horiz = T,
@@ -595,7 +595,7 @@ plotrsd <- function(list,
                 col <- grDevices::rainbow(1)
                 cex = as.numeric(cut(rsd, breaks = c(0, 20,
                                                      40, 60, 80, Inf))) / 2
-                dataname <- unique(lif$group)
+                dataname <- unique(lif$group$sample_group)
                 graphics::plot(
                         mz ~ rt,
                         xlab = "Retention Time(s)",
@@ -699,7 +699,7 @@ plotrsd <- function(list,
 #' @return if xrange and yrange are not NULL, return file name of all selected samples on 2D score plot
 #' @examples
 #' data(list)
-#' plotpca(list$data, lv = as.character(list$group))
+#' plotpca(list$data, lv = as.character(list$group$sample_group))
 #' @export
 plotpca <- function(data,
                     lv = NULL,
@@ -765,7 +765,7 @@ plotpca <- function(data,
 #' @return NULL
 #' @examples
 #' data(list)
-#' plothm(list$data, lv = as.factor(list$group))
+#' plothm(list$data, lv = as.factor(list$group$sample_group))
 #' @export
 plothm <- function(data, lv, index = NULL) {
         icolors <-
@@ -871,7 +871,7 @@ plothm <- function(data, lv, index = NULL) {
 #' @return NULL
 #' @examples
 #' data(list)
-#' plotden(list$data, lv = as.character(list$group),ylim = c(0,1))
+#' plotden(list$data, lv = as.character(list$group$sample_group),ylim = c(0,1))
 #' @export
 plotden <- function(data,
                     lv,
@@ -922,7 +922,7 @@ plotden <- function(data,
 #' @return Relative Log Abundance (RLA) plots
 #' @examples
 #' data(list)
-#' plotrla(list$data, as.factor(list$group))
+#' plotrla(list$data, as.factor(list$group$sample_group))
 #' @export
 plotrla <- function(data, lv, type = "g") {
         data <- log(data)
@@ -954,7 +954,7 @@ plotrla <- function(data, lv, type = "g") {
 #' @return Relative Log Abundance Ridge(RLA) plots
 #' @examples
 #' data(list)
-#' plotridges(list$data, as.factor(list$group))
+#' plotridges(list$data, as.factor(list$group$sample_group))
 #' @export
 plotridges <- function(data, lv, type = "g") {
         data <- log(data)
@@ -992,31 +992,31 @@ plotdwtus <- function(list, n = 512, ...) {
                         dwtus ~ as.numeric(list$order),
                         xlab = 'Run order',
                         ylab = 'DWTUS',
-                        col = as.numeric(as.factor(list$group)),
+                        col = as.numeric(as.factor(list$group$sample_group)),
                         ...
                 )
                 graphics::legend(
                         'topright',
-                        legend = unique(list$group),
+                        legend = unique(list$group$sample_group),
                         col = unique(as.numeric(as.factor(
-                                list$group
+                                list$group$sample_group
                         ))),
                         pch = 19,
                         bty = 'n'
                 )
         } else{
                 graphics::plot(
-                        dwtus ~ as.numeric(as.factor(list$group)),
+                        dwtus ~ as.numeric(as.factor(list$group$sample_group)),
                         xlab = 'Group',
                         ylab = 'DWTUS',
-                        col = as.numeric(as.factor(list$group)),
+                        col = as.numeric(as.factor(list$group$sample_group)),
                         ...
                 )
                 graphics::legend(
                         'topright',
-                        legend = unique(list$group),
+                        legend = unique(list$group$sample_group),
                         col = unique(as.numeric(as.factor(
-                                list$group
+                                list$group$sample_group
                         ))),
                         pch = 19,
                         bty = 'n'

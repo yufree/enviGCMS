@@ -26,5 +26,5 @@ plot ridgeline density plot
 \examples{
 data(list)
 plotridge(t(list$data),indexy=c(1:10),xlab = 'Intensity',ylab = 'peaks')
-plotridge(log(list$data),as.factor(list$group),xlab = 'Intensity',ylab = 'peaks')
+plotridge(log(list$data),as.factor(list$group$sample_group),xlab = 'Intensity',ylab = 'peaks')
 }

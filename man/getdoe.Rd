@@ -2,7 +2,7 @@
 % Please edit documentation in R/getmzrt.R
 \name{getdoe}
 \alias{getdoe}
-\title{Filter the data based on DoE, rsd, intensity}
+\title{Generate the group level rsd and average intensity based on DoE,}
 \usage{
 getdoe(
   list,
@@ -33,7 +33,7 @@ getdoe(
 list with group mean, standard deviation, and relative standard deviation for all peaks, and filtered peaks index
 }
 \description{
-Filter the data based on DoE, rsd, intensity
+Generate the group level rsd and average intensity based on DoE,
 }
 \examples{
 data(list)

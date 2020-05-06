@@ -24,5 +24,5 @@ plot the density for multiple samples
 }
 \examples{
 data(list)
-plotden(list$data, lv = as.character(list$group),ylim = c(0,1))
+plotden(list$data, lv = as.character(list$group$sample_group),ylim = c(0,1))
 }

@@ -43,5 +43,5 @@ plot the PCA for multiple samples
 }
 \examples{
 data(list)
-plotpca(list$data, lv = as.character(list$group))
+plotpca(list$data, lv = as.character(list$group$sample_group))
 }

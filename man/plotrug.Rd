@@ -23,5 +23,5 @@ plot 1-d density for multiple samples
 \examples{
 data(list)
 plotrug(list$data)
-plotrug(log(list$data), lv = as.factor(list$group))
+plotrug(log(list$data), lv = as.factor(list$group$sample_group))
 }
