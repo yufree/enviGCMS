@@ -4,10 +4,12 @@
 \alias{plotanno}
 \title{Show MS/MS pmd annotation result}
 \usage{
-plotanno(anno)
+plotanno(anno, ...)
 }
 \arguments{
 \item{anno}{list from MSmS anno function}
+
+\item{...}{other parameter for plot function}
 }
 \description{
 Show MS/MS pmd annotation result

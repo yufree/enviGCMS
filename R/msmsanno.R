@@ -450,13 +450,14 @@ xrankanno <- function(file,
 
 #' Show MS/MS pmd annotation result
 #' @param anno list from MSmS anno function
+#' @param ... other parameter for plot function
 #' @return NULL
 #' @export
-plotanno <- function(anno) {
+plotanno <- function(anno,...) {
         for (i in 1:length(anno$name)) {
                 graphics::plot(anno$msmsraw[[i]],
                                type = 'h',
-                               main = anno$name[[i]])
+                               main = anno$name[[i]],...)
                 graphics::points(anno$dins ~ anno$dmz,
                                  type = 'h',
                                  col = 'red')

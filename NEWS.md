@@ -1,6 +1,11 @@
+# enviGCMS 0.6.6
+
+- CRAN
+
 # enviGCMS 0.6.5
 
 - change to formal group information for mzrt class
+- fix log infinate issue in plotridge
 - update list data
 
 # enviGCMS 0.6.4

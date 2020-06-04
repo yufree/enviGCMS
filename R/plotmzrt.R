@@ -926,7 +926,7 @@ plotden <- function(data,
 #' @export
 plotrla <- function(data, lv, type = "g") {
         data <- log(data)
-        data[is.nan(data)] <- 0
+        data[is.nan(data)|is.infinite(data)] <- 0
         outmat = NULL
 
         if (type == "g") {
@@ -958,14 +958,20 @@ plotrla <- function(data, lv, type = "g") {
 #' @export
 plotridges <- function(data, lv, type = "g") {
         data <- log(data)
-        data[is.nan(data)] <- 0
+        data[is.nan(data)|is.infinite(data)] <- 0
         outmat = NULL
 
         if (type == "g") {
                 for (lvi in levels(lv)) {
                         submat <- data[, lv == lvi]
-                        median <- apply(submat, 1, median)
-                        tempmat <- sweep(submat, 1, median, "-")
+                        if(is.null(dim(submat))){
+                                tempmat <- submat
+
+                        }else{
+                                median <- apply(submat, 1, median)
+                                tempmat <- sweep(submat, 1, median, "-")
+                        }
+
                         outmat <- cbind(outmat, tempmat)
                 }
         } else {
