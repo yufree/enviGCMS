@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotmzrt.R
 \name{plotmrc}
 \alias{plotmrc}
-\title{plot the diff scatter plot for one xcmsset objects with threshold between two groups}
+\title{plot the diff scatter plot for peaks list with threshold between two groups}
 \usage{
 plotmrc(list, ms = c(100, 800), inscf = 5, rsdcf = 30, imputation = "l", ...)
 }
@@ -20,7 +20,7 @@ plotmrc(list, ms = c(100, 800), inscf = 5, rsdcf = 30, imputation = "l", ...)
 \item{...}{parameters for `plot` function}
 }
 \description{
-plot the diff scatter plot for one xcmsset objects with threshold between two groups
+plot the diff scatter plot for peaks list with threshold between two groups
 }
 \examples{
 data(list)

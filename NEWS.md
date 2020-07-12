@@ -1,3 +1,7 @@
+# enviGCMS 0.6.7
+
+- change default par parameters for plotmrc
+
 # enviGCMS 0.6.6
 
 - CRAN

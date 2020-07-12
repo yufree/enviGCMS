@@ -438,7 +438,7 @@ plotmr <- function(list,
         })
 }
 
-#' plot the diff scatter plot for one xcmsset objects with threshold between two groups
+#' plot the diff scatter plot for peaks list with threshold between two groups
 #' @param list list with data as peaks list, mz, rt and group information
 #' @param ms the mass range to plot the data
 #' @param inscf Log intensity cutoff for peaks across samples. If any peaks show a intensity higher than the cutoff in any samples, this peaks would not be filtered. default 5
@@ -469,6 +469,7 @@ plotmrc <- function(list,
         dataname <- colnames(data)
         mz <- lif$mz
         rt <- lif$rt
+        graphics::par(mar = c(5, 4.2, 6.1, 2.1), xpd = TRUE)
         suppressWarnings(if (!is.na(data[1, 1])) {
                 diff1 <- data[, 1] - data[, 2]
                 diff2 <- data[, 2] - data[, 1]
@@ -517,7 +518,7 @@ plotmrc <- function(list,
                 )
 
                 graphics::legend(
-                        "topleft",
+                        'topleft',
                         legend = cexlab,
                         title = "Intensity in Log scale",
                         pt.cex = c(1, 2, 3, 4, 5) / 2,
@@ -529,7 +530,7 @@ plotmrc <- function(list,
                         inset = c(0,-0.25)
                 )
                 graphics::legend(
-                        "topright",
+                        'topright',
                         legend = c(name1,
                                    name2),
                         pch = 19,
