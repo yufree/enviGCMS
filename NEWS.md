@@ -1,6 +1,12 @@
 # enviGCMS 0.6.7
 
 - change default par parameters for plotmrc
+- remove the export of deprecated function
+- fix the typo in documents
+- improve getMSP to fit MoNA MSP format
+- add getalign function to align two peaks vectors
+- modify getmass to accept negative value
+- add getms1anno for MS1 annotation by local compounds database with predefined paired mass distances
 
 # enviGCMS 0.6.6
 

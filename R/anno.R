@@ -1,3 +1,152 @@
+#' Align two peaks vectors by mass to charge ratio and/or retention time
+#' @param mz1 the mass to charge of reference peaks
+#' @param mz2 the mass to charge of peaks to be aligned
+#' @param ppm mass accuracy, default 10
+#' @param deltart retention time shift table, default 10 seconds
+#' @param rt1 retention time of reference peaks
+#' @param rt2 retention time of peaks to be aligned
+#' @return data frame with aligned peaks table
+#' @examples
+#' mz1 <- c(221.1171, 227.1390, 229.1546, 233.1497, 271.0790 )
+#' mz2 <- c(282.279, 281.113, 227.139, 227.139, 302.207)
+#' rt1 <- c(590.8710, 251.3820, 102.9230, 85.8850, 313.8240)
+#' rt2 <- c(787.08, 160.02, 251.76, 251.76, 220.26)
+#' getalign(mz1,mz2,rt1,rt2)
+#' @export
+getalign <- function(mz1,mz2,rt1 = NULL,rt2 = NULL,ppm=10,deltart=10){
+        mza <- data.table::as.data.table(cbind.data.frame(mzmin=mz1*(1-ppm*10e-6),mzmax=mz1*(1+ppm*10e-6)))
+        mzb <- data.table::as.data.table(cbind.data.frame(mzmin=mz2*(1-ppm*10e-6),mzmax=mz2*(1+ppm*10e-6)))
+        colnames(mza) <- colnames(mzb) <- c("min","max")
+        data.table::setkey(mzb, min, max)
+        overlapms <- data.table::foverlaps(mza, mzb, which = TRUE)
+
+        overlapms$mz1 <- mz1[overlapms$xid]
+        overlapms$mz2 <- mz2[order(mz2,decreasing = F)][overlapms$yid]
+        if(!is.null(rt1)&!is.null(rt2)){
+                rta <- data.table::as.data.table(cbind.data.frame(rtmin=rt1-deltart,rtmax=rt1+deltart))
+                rtb <- data.table::as.data.table(cbind.data.frame(rtmin=rt2-deltart,rtmax=rt2+deltart))
+                colnames(rta) <- colnames(rtb) <- c("min","max")
+                data.table::setkey(rtb, min, max)
+                overlaprt <- data.table::foverlaps(rta, rtb, which = TRUE)
+                overlaprt$rt1 <- rt1[overlaprt$xid]
+                overlaprt$rt2 <- rt2[order(rt2,decreasing = F)][overlaprt$yid]
+                over <- merge(overlapms,overlaprt,by = 'xid')
+                over2 <- over[abs(over$rt1-over$rt2)<deltart,]
+                over3 <- over2[,-c(2,5)]
+                re <- data.frame(over3[!duplicated(over3)&stats::complete.cases(over3)])
+                if(nrow(re)>0){
+                        return(re)
+                }else{
+                        message('No result could be found.')
+                }
+
+        }else{
+                message('No retention time information!')
+                over <- overlapms[,-2]
+                over2 <- over[stats::complete.cases(over)&!duplicated(over),]
+                re <- data.frame(over2)
+                if(nrow(re)>0){
+                        return(re)
+                }else{
+                        message('No result could be found.')
+                }
+        }
+}
+#' Get the overlap peaks by mass and retention time range
+#' @param list1 list with data as peaks list, mz, rt, mzrange, rtrange and group information to be overlapped
+#' @param list2 list with data as peaks list, mz, rt, mzrange, rtrange and group information to overlap
+#' @return logical index for list 1's peaks
+#' @export
+#' @seealso \code{\link{getmzrt}}, \code{\link{getimputation}}, \code{\link{getmr}},\code{\link{getdoe}}, \code{\link{getoverlapmass}},\code{\link{getoverlaprt}}
+getoverlappeak <- function(list1, list2) {
+        mz1 <- data.table::as.data.table(list1$mzrange)
+        rt1 <- data.table::as.data.table(list1$rtrange)
+        mz2 <- data.table::as.data.table(list2$mzrange)
+        rt2 <- data.table::as.data.table(list2$rtrange)
+        colnames(mz1) <-
+                colnames(mz2) <-
+                colnames(rt1) <- colnames(rt2) <- c('min', 'max')
+        data.table::setkey(mz2, min, max)
+        data.table::setkey(rt2, min, max)
+        overlapms <-
+                data.table::foverlaps(mz1, mz2, which = TRUE, mult = 'first')
+        overlaprt <-
+                data.table::foverlaps(rt1, rt2, which = TRUE, mult = 'first')
+        index <- (!is.na(overlapms)) & (!is.na(overlaprt))
+        return(index)
+}
+#' Get the overlap peaks by mass range
+#' @param mzrange1 mass range 1 to be overlapped
+#' @param mzrange2 mass range 2 to overlap
+#' @return logical index for mzrange1's peaks
+#' @export
+#' @seealso \code{\link{getmzrt}}, \code{\link{getimputation}}, \code{\link{getmr}},\code{\link{getdoe}}, \code{\link{getoverlappeak}},\code{\link{getoverlaprt}}
+getoverlapmass <- function(mzrange1, mzrange2) {
+        mz1 <- data.table::as.data.table(mzrange1)
+        mz2 <- data.table::as.data.table(mzrange2)
+        colnames(mz1) <- colnames(mz2) <- c('min', 'max')
+        data.table::setkey(mz2, min, max)
+        overlapms <-
+                data.table::foverlaps(mz1, mz2, which = TRUE, mult = 'first')
+
+        index <- (!is.na(overlapms))
+        return(index)
+}
+#' Get the overlap peaks by retention time
+#' @param rtrange1 mass range 1 to be overlapped
+#' @param rtrange2 mass range 2 to overlap
+#' @return logical index for rtrange1's peaks
+#' @export
+#' @seealso \code{\link{getmzrt}}, \code{\link{getimputation}}, \code{\link{getmr}},\code{\link{getdoe}}, \code{\link{getoverlapmass}},\code{\link{getoverlappeak}}
+getoverlaprt <- function(rtrange1, rtrange2) {
+        rt1 <- data.table::as.data.table(rtrange1)
+        rt2 <- data.table::as.data.table(rtrange2)
+        colnames(rt1) <- colnames(rt2) <- c('min', 'max')
+        data.table::setkey(rt2, min, max)
+        overlapms <-
+                data.table::foverlaps(rt1, rt2, which = TRUE, mult = 'first')
+
+        index <- (!is.na(overlapms))
+        return(index)
+}
+#' Annotation of MS1 data by compounds database by predefined paired mass distance
+#' @param pmd adducts formula or paired mass distance for ions
+#' @param mz unknown mass to charge ratios vector
+#' @param ppm mass accuracy
+#' @param db compounds database as dataframe. Two required columns are name and monisotopic molecular weight wiht colname of name and mass
+#' @return list or data frame
+#' @export
+getms1anno <- function(pmd,mz,ppm=10,db=NULL){
+        # hr <- get(hr)
+        if(is.character(pmd)){
+                pmds <- unlist(Map(enviGCMS::getmass,pmd))
+        }else{
+                pmds <- pmd
+        }
+
+        if(length(pmd)>1){
+                pmdmt <- outer(db$mass,pmds,'+')
+                rownames(pmdmt) <- db$name
+                li <- list()
+                for(i in 1:length(pmd)){
+                        re <- enviGCMS::getalign(pmdmt[,i],mz,ppm = ppm)
+                        re2 <- hr[re$xid,]
+                        re3 <- cbind.data.frame(re[,-1],re2)
+                        colnames(re3)[1] <- pmd[i]
+                        li[[i]] <- re3
+                }
+                return(li)
+        }else{
+                pmdmt <- outer(db$mass,pmds,'+')
+                rownames(pmdmt) <- hr$name
+                re <- enviGCMS::getalign(pmdmt,mz,ppm = ppm)
+                re2 <- db[re$xid,]
+                re3 <- cbind.data.frame(re[,-1],re2)
+                colnames(re3)[1] <- pmd
+                return(re3)
+        }
+}
+
 #' Perform MS/MS dot product annotation for mgf file
 #' @param file mgf file generated from MS/MS data
 #' @param db database could be list object from `getMSP`

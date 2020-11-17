@@ -7,7 +7,7 @@
 plotden(data, lv, index = NULL, name = NULL, lwd = 1, ...)
 }
 \arguments{
-\item{data}{mzrt profile with row peaks and column samples}
+\item{data}{data row as peaks and column as samples}
 
 \item{lv}{group information}
 

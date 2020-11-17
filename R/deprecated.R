@@ -13,7 +13,6 @@
 #' xset <- getdata(cdfpath, pmethod = ' ')
 #' getbgremove(xset)
 #' }
-#' @export
 getbgremove <-
         function(xset,
                  method = "medret",
@@ -33,7 +32,6 @@ getbgremove <-
 #' @param rsdcf rsd cutoff for peaks, default 30
 #' @param inscf intensity cutoff for peaks, default 0
 #' @return dataframe with mean, standard deviation and RSD for those technique replicates & biological replicates combined with raw data
-#' @export
 getbiotechrep <-
         function(xset,
                  method = "medret",
@@ -53,7 +51,6 @@ getbiotechrep <-
 #' @param rsdcf rsd cutoff for peaks, default 30
 #' @param inscf intensity cutoff for peaks, default 1000
 #' @return dataframe with mean, standard deviation and RSD for those technique replicates & biological replicates combined with raw data in different groups if file are defaults NULL.
-#' @export
 getgrouprep <-
         function(xset,
                  file = NULL,
@@ -69,7 +66,6 @@ getgrouprep <-
 #' @param xset1 the first dataset
 #' @param xset2 the second dateset
 #' @return similarity on retention time and rsd %
-#' @export
 getsim <- function(xset1, xset2) {
         .Deprecated()
         message("This function has been deprecated.")
@@ -83,7 +79,6 @@ getsim <- function(xset1, xset2) {
 #' @param rsdcf rsd cutoff for peaks, default 30
 #' @param inscf intensity cutoff for peaks, default 1000
 #' @return dataframe with mean, standard deviation and RSD for those technique replicates combined with raw data
-#' @export
 gettechrep <-
         function(xset,
                  method = "medret",
@@ -103,7 +98,6 @@ gettechrep <-
 #' @param rsdcf rsd cutoff for peaks, default 30
 #' @param inscf intensity cutoff for peaks, default 1000
 #' @return dataframe with time series or two factor DoE mean, standard deviation and RSD for those technique replicates & biological replicates combined with raw data in different groups if file are defaults NULL.
-#' @export
 gettimegrouprep <-
         function(xset,
                  file = NULL,
@@ -136,7 +130,6 @@ gettimegrouprep <-
 #' svabatch(df,dfsv,dfanova)
 #' }
 #' @seealso \code{\link{svacor}}, \code{\link{svaplot}}, \code{\link{svapca}}
-#' @export
 svabatch <- function(df, dfsv, dfanova) {
         .Deprecated()
         message(
@@ -164,7 +157,6 @@ svabatch <- function(df, dfsv, dfanova) {
 #' df <- svacor(xset3)
 #' }
 #' @seealso \code{\link{svapca}}, \code{\link{svaplot}}, \code{\link{svabatch}}
-#' @export
 svacor <- function(xset,
                    lv = NULL,
                    method = "medret",
@@ -194,7 +186,6 @@ svacor <- function(xset,
 #' df <- svacor(xset3)
 #' svadata(df)
 #' }
-#' @export
 svadata <- function(list,
                     pqvalues = "sv",
                     pt = 0.05,
@@ -225,7 +216,6 @@ svadata <- function(list,
 #' svapca(df)
 #' }
 #' @seealso \code{\link{svacor}}, \code{\link{svaplot}}, \code{\link{svabatch}}
-#' @export
 svapca <- function(list,
                    center = T,
                    scale = T,
@@ -258,7 +248,6 @@ svapca <- function(list,
 #' svaplot(df)
 #' }
 #' @seealso \code{\link{svacor}}, \code{\link{svapca}}, \code{\link{svabatch}}
-#' @export
 svaplot <- function(list,
                     pqvalues = "sv",
                     pt = 0.05,
@@ -287,7 +276,6 @@ svaplot <- function(list,
 #' xset3 <- fillPeaks(xset2)
 #' svaupload(xset3)
 #' }
-#' @export
 svaupload <- function(xset, lv = NULL) {
         .Deprecated()
         message(
@@ -311,7 +299,6 @@ svaupload <- function(xset, lv = NULL) {
 #' getupload(xset)
 #' }
 #' @seealso \code{\link{getdata}}, \code{\link{getmzrt}}
-#' @export
 getupload <-
         function(xset,
                  method = "medret",
@@ -336,7 +323,7 @@ getupload <-
 #' getupload2(xset)
 #' }
 #' @seealso \code{\link{getdata2}},\code{\link{getupload}}, \code{\link{getmzrt2}}
-#' @export
+
 getupload2 <- function(xset, value = "into", name = "Peaklist") {
         .Deprecated()
         message("This function has been deprecated and you could use getupload to get csv file.")
@@ -358,7 +345,7 @@ getupload2 <- function(xset, value = "into", name = "Peaklist") {
 #' getupload3(xset)
 #' }
 #' @seealso \code{\link{getmzrt}}, \code{\link{getmzrt2}}
-#' @export
+
 getupload3 <- function(list, name = "Peaklist") {
         .Deprecated()
         message("This function has been deprecated and you could use getupload to get csv file.")
@@ -378,7 +365,7 @@ getupload3 <- function(list, name = "Peaklist") {
 #' getmzrt2(xset)
 #' }
 #' @seealso \code{\link{getdata2}},\code{\link{getupload2}}, \code{\link{getmzrt}}, \code{\link{getdoe}},\code{\link{getmzrtcsv}}
-#' @export
+
 getmzrt2 <- function(xset, name = NULL) {
         .Deprecated()
         message(
@@ -399,7 +386,7 @@ getmzrt2 <- function(xset, name = NULL) {
 #' xset <- getdata(cdfpath, pmethod = ' ')
 #' plote(xset)
 #' }
-#' @export
+
 plote <- function(xset,
                   name = "test",
                   test = "t",
@@ -429,7 +416,7 @@ plote <- function(xset,
 #' @param n sample numbers in one group
 #' @param imputation parameters for `getimputation` function method
 #' @return dataframe with peaks fit the setting above
-#' @export
+
 getfeaturest <- function(list,
                          power = 0.8,
                          pt = 0.05,
@@ -454,7 +441,6 @@ getfeaturest <- function(list,
 #' @param imputation parameters for `getimputation` function method
 #' @param index the index of peaks considered, default NULL
 #' @return dataframe with peaks fit the setting above
-#' @export
 getfeaturesanova <- function(list,
                              power = 0.8,
                              pt = 0.05,

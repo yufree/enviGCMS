@@ -52,14 +52,22 @@ plotkms <- function(data, cutoff = 1000) {
 getmass <- function(data) {
         if (grepl('-', data)) {
                 name <- unlist(strsplit(data, '-'))
-                table1 <- Rdisop::getMolecule(name[1])$isotopes[[1]]
-                table2 <- Rdisop::getMolecule(name[2])$isotopes[[1]]
-                iso1 <-
-                        table1[1,which.max(table1[2,])]
-                iso2 <-
-                        table2[1,which.max(table2[2,])]
-                iso <-
-                        iso1 - iso2
+                if(name[1]==''){
+                        table2 <- Rdisop::getMolecule(name[2])$isotopes[[1]]
+                        iso2 <-
+                                table2[1,which.max(table2[2,])]
+                        iso <- 0-iso2
+                }else{
+                        table1 <- Rdisop::getMolecule(name[1])$isotopes[[1]]
+                        iso1 <-
+                                table1[1,which.max(table1[2,])]
+                        table2 <- Rdisop::getMolecule(name[2])$isotopes[[1]]
+                        iso2 <-
+                                table2[1,which.max(table2[2,])]
+                        iso <-
+                                iso1 - iso2
+                }
+
         } else{
                 table <- Rdisop::getMolecule(data)$isotopes[[1]]
                 iso <- table[1,which.max(table[2,])]

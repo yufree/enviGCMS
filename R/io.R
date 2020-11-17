@@ -121,18 +121,22 @@ getMSP <- function(file){
         getmsp <- function(x){
                 namet <- x[grep('^NAME:',x, ignore.case=TRUE)]
                 name <- gsub('^NAME: ','',namet, ignore.case=TRUE)
-                ionmodet <- x[grep('^ION MODE:|^MODE:|^IONMODE:',x, ignore.case=TRUE)]
-                ionmode <- gsub('^ION MODE: |^MODE: |^IONMODE: ','',ionmodet, ignore.case=TRUE)
-                prect <- x[grep('^PRECURSORMZ: |^PRECURSOR M/Z: |^PRECURSOR MZ: |^PEPMASS: ',x, ignore.case=TRUE)]
-                prec <- as.numeric(gsub('^PRECURSORMZ: |^PRECURSOR M/Z: |^PRECURSOR MZ: |^PEPMASS: ','',prect, ignore.case=TRUE))
-                formt <- x[grep('^FORMULA: ',x, ignore.case=TRUE)]
-                formula <- gsub('^FORMULA: ','',formt,ignore.case = TRUE)
+                ionmodet <- x[grep('^ION MODE:|^MODE:|^IONMODE:|^Ion_mode:',x, ignore.case=TRUE)]
+                ionmode <- gsub('^ION MODE: |^MODE: |^IONMODE: |^Ion_mode: ','',ionmodet, ignore.case=TRUE)
+                prect <- x[grep('^PRECURSORMZ: |^PRECURSOR M/Z: |^PRECURSOR MZ: |^PEPMASS: |^PrecursorMZ: ',x, ignore.case=TRUE)]
+                prec <- as.numeric(gsub('^PRECURSORMZ: |^PRECURSOR M/Z: |^PRECURSOR MZ: |^PEPMASS: |^PrecursorMZ: ','',prect, ignore.case=TRUE))
+                formt <- x[grep('^FORMULA: |^Formula: ',x, ignore.case=TRUE)]
+                formula <- gsub('^FORMULA: |^Formula: ','',formt,ignore.case = TRUE)
                 npt <- x[grep('^Num Peaks: ',x, ignore.case=TRUE)]
                 np <- gsub('^Num Peaks: ','',npt,ignore.case = TRUE)
-                cet <- x[grep('COLLISIONENERGY: ',x,ignore.case=TRUE)]
-                ce <- gsub('COLLISIONENERGY: ','',cet,ignore.case=TRUE)
+                cet <- x[grep('COLLISIONENERGY: |Collision_energy: ',x,ignore.case=TRUE)]
+                ce <- gsub('COLLISIONENERGY: |Collision_energy: ','',cet,ignore.case=TRUE)
                 rtt <- x[grep('RETENTIONINDEX: ',x,ignore.case = TRUE)]
                 rt <- gsub('RETENTIONINDEX: ','',rtt,ignore.case=TRUE)
+                instrt <- x[grep('Instrument_type: ',x,ignore.case = TRUE)]
+                instr <- gsub('Instrument_type: ','',instrt,ignore.case = TRUE)
+                msmt <- x[grep('Spectrum_type: ',x,ignore.case = TRUE)]
+                msm <- gsub('Spectrum_type: ','',msmt,ignore.case = TRUE)
                 if(as.numeric(np)>0){
                         # matrix of masses and intensities
                         massIntIndx <- which(grepl('^[0-9]', x) & !grepl(': ', x))
@@ -143,9 +147,9 @@ getMSP <- function(file){
                         ins <-  massesInts[seq(2, length(massesInts), 2)]
                         ins <- ins/max(ins)*100
                         spectra <- cbind.data.frame(mz=mz,ins=ins)
-                        return(list(name=name,ionmode=ionmode,prec=prec,formula=formula,np = np,rti=rt,ce=ce,spectra=spectra))
+                        return(list(name=name,ionmode=ionmode,prec=prec,formula=formula,np = np,rti=rt,ce=ce,instr=instr, msm = msm, spectra=spectra))
                 }else{
-                        return(list(name=name,ionmode=ionmode,prec=prec,formula=formula,np = np,rti=rt,ce=ce))
+                        return(list(name=name,ionmode=ionmode,prec=prec,formula=formula,np = np,rti=rt,ce=ce,instr=instr,msm = msm))
                 }
 
         }

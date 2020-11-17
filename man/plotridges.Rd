@@ -7,7 +7,7 @@
 plotridges(data, lv, type = "g")
 }
 \arguments{
-\item{data}{data as mzrt profile}
+\item{data}{data row as peaks and column as samples}
 
 \item{lv}{factor vector for the group infomation of samples}
 

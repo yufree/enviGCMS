@@ -18,6 +18,7 @@ plotpeak <- function(data,
                      indexy = NULL,
                      ...) {
         # from http://karolis.koncevicius.lt/posts/r_base_plotting_without_wrappers/
+        data <- as.matrix(data)
         grDevices::palette(c("cornflowerblue", "red3", "orange"))
         if (!is.null(indexx)) {
                 data <- data[indexx,]
@@ -87,6 +88,7 @@ plotridge <- function(data,
                       indexy = NULL,
                       ...) {
         # from http://karolis.koncevicius.lt/posts/r_base_plotting_without_wrappers/
+        data <- as.matrix(data)
         if (!is.null(indexx)) {
                 data <- data[indexx,]
         }
@@ -165,6 +167,7 @@ plotrug <- function(data,
                     indexx = NULL,
                     indexy = NULL,
                     ...) {
+        data <- as.matrix(data)
         if (!is.null(indexx)) {
                 data <- data[indexx,]
         }
@@ -688,7 +691,7 @@ plotrsd <- function(list,
 
 
 #' plot the PCA for multiple samples
-#' @param data mzrt profile with row peaks and column samples
+#' @param data data row as peaks and column as samples
 #' @param lv group information
 #' @param index index for selected peaks
 #' @param center parameters for PCA
@@ -711,6 +714,7 @@ plotpca <- function(data,
                     yrange = NULL,
                     pch = NULL,
                     ...) {
+        data <- as.matrix(data)
         if (!is.null(index)) {
                 data <- data[index,]
         }
@@ -760,7 +764,7 @@ plotpca <- function(data,
 }
 
 #' Plot the heatmap of mzrt profiles
-#' @param data mzrt profile with row peaks and column samples
+#' @param data data row as peaks and column as samples
 #' @param lv group information
 #' @param index index for selected peaks
 #' @return NULL
@@ -769,6 +773,7 @@ plotpca <- function(data,
 #' plothm(list$data, lv = as.factor(list$group$sample_group))
 #' @export
 plothm <- function(data, lv, index = NULL) {
+        data <- as.matrix(data)
         icolors <-
                 (grDevices::colorRampPalette(rev(
                         RColorBrewer::brewer.pal(11,
@@ -863,7 +868,7 @@ plothm <- function(data, lv, index = NULL) {
 }
 
 #' plot the density for multiple samples
-#' @param data mzrt profile with row peaks and column samples
+#' @param data data row as peaks and column as samples
 #' @param lv group information
 #' @param index index for selected peaks
 #' @param name name on the figure for samples
@@ -880,6 +885,7 @@ plotden <- function(data,
                     name = NULL,
                     lwd = 1,
                     ...) {
+        data <- as.matrix(data)
         if (!is.null(index)) {
                 data <- data[index,]
         }
@@ -917,7 +923,7 @@ plotden <- function(data,
         )
 }
 #' Relative Log Abundance (RLA) plots
-#' @param data data as mzrt profile
+#' @param data data row as peaks and column as samples
 #' @param lv factor vector for the group infomation
 #' @param type 'g' means group median based, other means all samples median based.
 #' @return Relative Log Abundance (RLA) plots
@@ -926,6 +932,7 @@ plotden <- function(data,
 #' plotrla(list$data, as.factor(list$group$sample_group))
 #' @export
 plotrla <- function(data, lv, type = "g") {
+        data <- as.matrix(data)
         data <- log(data)
         data[is.nan(data)|is.infinite(data)] <- 0
         outmat = NULL
@@ -949,7 +956,7 @@ plotrla <- function(data, lv, type = "g") {
 }
 
 #' Relative Log Abundance Ridge (RLAR) plots for samples or peaks
-#' @param data data as mzrt profile
+#' @param data data row as peaks and column as samples
 #' @param lv factor vector for the group infomation of samples
 #' @param type 'g' means group median based, other means all samples median based.
 #' @return Relative Log Abundance Ridge(RLA) plots
@@ -958,6 +965,7 @@ plotrla <- function(data, lv, type = "g") {
 #' plotridges(list$data, as.factor(list$group$sample_group))
 #' @export
 plotridges <- function(data, lv, type = "g") {
+        data <- as.matrix(data)
         data <- log(data)
         data[is.nan(data)|is.infinite(data)] <- 0
         outmat = NULL
