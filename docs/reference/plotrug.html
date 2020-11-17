@@ -145,7 +145,7 @@
     <p>plot 1-d density for multiple samples</p>
     </div>
 
-    <pre class="usage"><span class='fu'>plotrug</span>(<span class='no'>data</span>, <span class='kw'>lv</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>indexx</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>indexy</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>plotrug</span><span class='op'>(</span><span class='va'>data</span>, lv <span class='op'>=</span> <span class='cn'>NULL</span>, indexx <span class='op'>=</span> <span class='cn'>NULL</span>, indexy <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -174,8 +174,10 @@
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>list</span>)
-<span class='fu'>plotrug</span>(<span class='no'>list</span>$<span class='no'>data</span>)</div><div class='img'><img src='plotrug-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>plotrug</span>(<span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='no'>list</span>$<span class='no'>data</span>), <span class='kw'>lv</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span>(<span class='no'>list</span>$<span class='no'>group</span>$<span class='no'>sample_group</span>))</div><div class='img'><img src='plotrug-2.png' alt='' width='700' height='433' /></div></pre>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>list</span><span class='op'>)</span>
+<span class='fu'>plotrug</span><span class='op'>(</span><span class='va'>list</span><span class='op'>$</span><span class='va'>data</span><span class='op'>)</span>
+</div><div class='img'><img src='plotrug-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>plotrug</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='va'>list</span><span class='op'>$</span><span class='va'>data</span><span class='op'>)</span>, lv <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='va'>list</span><span class='op'>$</span><span class='va'>group</span><span class='op'>$</span><span class='va'>sample_group</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='img'><img src='plotrug-2.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -191,7 +193,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

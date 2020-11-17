@@ -145,7 +145,7 @@
     <p>Combine two data with similar retention time while different mass range</p>
     </div>
 
-    <pre class="usage"><span class='fu'>cbmd</span>(<span class='no'>data1</span>, <span class='no'>data2</span>, <span class='kw'>mzstep</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>rtstep</span> <span class='kw'>=</span> <span class='fl'>0.01</span>)</pre>
+    <pre class="usage"><span class='fu'>cbmd</span><span class='op'>(</span><span class='va'>data1</span>, <span class='va'>data2</span>, mzstep <span class='op'>=</span> <span class='fl'>0.1</span>, rtstep <span class='op'>=</span> <span class='fl'>0.01</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -173,10 +173,11 @@
     <p>matrix with the row as scantime in second and column as m/z</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># mz100_200 and mz201_300 were the path to the raw data</span>
-<span class='no'>matrix</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='getmd.html'>getmd</a></span>(<span class='no'>mz100_200</span>,<span class='no'>mz201_300</span>)
-}</div></pre>
+<span class='va'>matrix</span> <span class='op'>&lt;-</span> <span class='fu'><a href='getmd.html'>getmd</a></span><span class='op'>(</span><span class='va'>mz100_200</span>,<span class='va'>mz201_300</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -192,7 +193,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -145,15 +145,15 @@
     <p>plot scatter plot for rt-mz profile and output gif file for mutiple groups</p>
     </div>
 
-    <pre class="usage"><span class='fu'>gifmr</span>(
-  <span class='no'>list</span>,
-  <span class='kw'>ms</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>100</span>, <span class='fl'>500</span>),
-  <span class='kw'>rsdcf</span> <span class='kw'>=</span> <span class='fl'>30</span>,
-  <span class='kw'>inscf</span> <span class='kw'>=</span> <span class='fl'>5</span>,
-  <span class='kw'>imputation</span> <span class='kw'>=</span> <span class='st'>"i"</span>,
-  <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"test"</span>,
-  <span class='no'>...</span>
-)</pre>
+    <pre class="usage"><span class='fu'>gifmr</span><span class='op'>(</span>
+  <span class='va'>list</span>,
+  ms <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>100</span>, <span class='fl'>500</span><span class='op'>)</span>,
+  rsdcf <span class='op'>=</span> <span class='fl'>30</span>,
+  inscf <span class='op'>=</span> <span class='fl'>5</span>,
+  imputation <span class='op'>=</span> <span class='st'>"i"</span>,
+  name <span class='op'>=</span> <span class='st'>"test"</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -193,10 +193,11 @@
     <p>gif file</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>list</span>)
-<span class='fu'>gifmr</span>(<span class='no'>list</span>)
-}</div></pre>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>list</span><span class='op'>)</span>
+<span class='fu'>gifmr</span><span class='op'>(</span><span class='va'>list</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -212,7 +213,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

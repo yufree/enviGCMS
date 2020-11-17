@@ -145,17 +145,17 @@
     <p>GetIntegration was mainly used for get the intergration of certain ion's chromatogram data and plot the data</p>
     </div>
 
-    <pre class="usage"><span class='fu'>GetIntegration</span>(
-  <span class='no'>data</span>,
-  <span class='kw'>rt</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>8.3</span>, <span class='fl'>9</span>),
-  <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>5</span>,
-  <span class='kw'>m</span> <span class='kw'>=</span> <span class='fl'>5</span>,
-  <span class='kw'>slope</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>, <span class='fl'>2</span>),
-  <span class='kw'>baseline</span> <span class='kw'>=</span> <span class='fl'>10</span>,
-  <span class='kw'>noslope</span> <span class='kw'>=</span> <span class='no'>T</span>,
-  <span class='kw'>smoothit</span> <span class='kw'>=</span> <span class='no'>T</span>,
-  <span class='kw'>half</span> <span class='kw'>=</span> <span class='no'>F</span>
-)</pre>
+    <pre class="usage"><span class='fu'>GetIntegration</span><span class='op'>(</span>
+  <span class='va'>data</span>,
+  rt <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>8.3</span>, <span class='fl'>9</span><span class='op'>)</span>,
+  n <span class='op'>=</span> <span class='fl'>5</span>,
+  m <span class='op'>=</span> <span class='fl'>5</span>,
+  slope <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>2</span><span class='op'>)</span>,
+  baseline <span class='op'>=</span> <span class='fl'>10</span>,
+  noslope <span class='op'>=</span> <span class='cn'>T</span>,
+  smoothit <span class='op'>=</span> <span class='cn'>T</span>,
+  half <span class='op'>=</span> <span class='cn'>F</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -203,9 +203,10 @@
     <p>intergration data such as peak area, peak hight, signal and the slope data.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='no'>list</span> <span class='kw'>&lt;-</span> <span class='fu'>GetIntergration</span>(<span class='no'>data</span>)
-}</div></pre>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='va'>list</span> <span class='op'>&lt;-</span> <span class='fu'>GetIntergration</span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -221,7 +222,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
