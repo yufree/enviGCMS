@@ -7,6 +7,7 @@
 - add getalign function to align two peaks vectors
 - modify getmass to accept negative value
 - add getms1anno for MS1 annotation by local compounds database with predefined paired mass distances
+- add support to save target data csv without change default name
 
 # enviGCMS 0.6.6
 

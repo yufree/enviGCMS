@@ -4,7 +4,7 @@
 \alias{getcsv}
 \title{Convert an list object to csv file.}
 \usage{
-getcsv(list, name, mzdigit = 4, rtdigit = 1, type = "o", ...)
+getcsv(list, name, mzdigit = 4, rtdigit = 1, type = "o", target = FALSE, ...)
 }
 \arguments{
 \item{list}{list with data as peaks list, mz, rt and group information}
@@ -16,6 +16,8 @@ getcsv(list, name, mzdigit = 4, rtdigit = 1, type = "o", ...)
 \item{rtdigit}{retention time digits of row names of data frame, default 1}
 
 \item{type}{csv formate for furthor analysis, m means  Metaboanalyst, a means xMSannotator, p means Mummichog(NA values are imputed by `getimputation`, and F test is used here to generate stats and p vlaue), o means full infomation csv (for `pmd` package), default o. mapo could output all those format files.}
+
+\item{target}{logical, preserve original rowname of data or not for target data, default FALSE.}
 
 \item{...}{other parameters for `write.table`}
 }

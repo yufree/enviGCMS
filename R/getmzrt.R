@@ -90,6 +90,7 @@
 #' @param mzdigit m/z digits of row names of data frame, default 4
 #' @param rtdigit retention time digits of row names of data frame, default 1
 #' @param type csv formate for furthor analysis, m means  Metaboanalyst, a means xMSannotator, p means Mummichog(NA values are imputed by `getimputation`, and F test is used here to generate stats and p vlaue), o means full infomation csv (for `pmd` package), default o. mapo could output all those format files.
+#' @param target logical, preserve original rowname of data or not for target data, default FALSE.
 #' @param ... other parameters for `write.table`
 #' @return NULL, csv file
 #' @references Li, S.; Park, Y.; Duraisingham, S.; Strobel, F. H.; Khan, N.; Soltow, Q. A.; Jones, D. P.; Pulendran, B. PLOS Computational Biology 2013, 9 (7), e1003123.
@@ -106,6 +107,7 @@ getcsv <-
                  mzdigit = 4,
                  rtdigit = 1,
                  type = 'o',
+                 target = FALSE,
                  ...) {
                 if (!is.null(name)) {
                         if (grepl('m', type)) {
@@ -166,14 +168,16 @@ getcsv <-
                                 colname <- colnames(data)
                                 groupt = c('mz', 'rt', list$group[,-1])
                                 data <- rbind(groupt, data)
-                                rownames(data) <-
-                                        c('group',
-                                          paste0(
-                                                  "M",
-                                                  round(list$mz, mzdigit),
-                                                  "T",
-                                                  round(list$rt, rtdigit)
-                                          ))
+                                if(!target){
+                                        rownames(data) <-
+                                                c('group',
+                                                  paste0(
+                                                          "M",
+                                                          round(list$mz, mzdigit),
+                                                          "T",
+                                                          round(list$rt, rtdigit)
+                                                  ))
+                                }
                                 colnames(data) <- colname
                                 filename <- paste0(name, "mzrt.csv")
                                 utils::write.csv(data, file = filename, ...)
