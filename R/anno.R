@@ -31,14 +31,14 @@ getalign <- function(mz1,mz2,rt1 = NULL,rt2 = NULL,ppm=10,deltart=10){
                 overlaprt$rt1 <- rt1[overlaprt$xid]
                 overlaprt$rt2 <- rt2[order(rt2,decreasing = F)][overlaprt$yid]
                 over <- merge(overlapms,overlaprt,by = 'xid',allow.cartesian=TRUE)
-                over2 <- over[abs(over$rt1-over$rt2)<deltart,]
-                over3 <- over2[,-c(2,5)]
-                re <- data.frame(over3[!duplicated(over3)&stats::complete.cases(over3)])
                 mr <- paste(mz2,rt2)
-                mr2 <- paste(re$mz2,re$rt2)
+                mr2 <- paste(over$mz2,over$rt2)
+                over2 <- over[mr2 %in% mr,]
+                over3<- over2[,-c(2,5)]
+                re <- data.frame(over3[!duplicated(over3)&stats::complete.cases(over3)])
 
                 if(nrow(re)>0){
-                        return(re[mr2 %in% mr,])
+                        return(re)
                 }else{
                         message('No result could be found.')
                 }
