@@ -35,7 +35,7 @@ getalign <- function(mz1,mz2,rt1 = NULL,rt2 = NULL,ppm=10,deltart=10){
                 mr2 <- paste(over$mz2,over$rt2)
                 over2 <- over[mr2 %in% mr,]
                 over3<- over2[,-c(2,5)]
-                re <- data.frame(over3[!duplicated(over3)&stats::complete.cases(over3)])
+                re <- data.frame(over3[!duplicated(over3)&stats::complete.cases(over3),])
 
                 if(nrow(re)>0){
                         return(re)
@@ -60,7 +60,7 @@ getalign <- function(mz1,mz2,rt1 = NULL,rt2 = NULL,ppm=10,deltart=10){
 #' @param list2 list with data as peaks list, mz, rt, mzrange, rtrange and group information to overlap
 #' @return logical index for list 1's peaks
 #' @export
-#' @seealso \code{\link{getmzrt}}, \code{\link{getimputation}}, \code{\link{getmr}},\code{\link{getdoe}}, \code{\link{getoverlapmass}},\code{\link{getoverlaprt}}
+#' @seealso \code{\link{getmzrt}}, \code{\link{getimputation}}, \code{\link{getmr}},\code{\link{getdoe}}
 getoverlappeak <- function(list1, list2) {
         mz1 <- data.table::as.data.table(list1$mzrange)
         rt1 <- data.table::as.data.table(list1$rtrange)
@@ -100,7 +100,7 @@ getms1anno <- function(pmd,mz,ppm=10,db=NULL){
                 li <- list()
                 for(i in 1:length(pmd)){
                         re <- enviGCMS::getalign(pmdmt[,i],mz,ppm = ppm)
-                        re2 <- hr[re$xid,]
+                        re2 <- db[re$xid,]
                         re3 <- cbind.data.frame(re[,-1],re2)
                         colnames(re3)[1] <- pmd[i]
                         li[[i]] <- re3
@@ -108,7 +108,7 @@ getms1anno <- function(pmd,mz,ppm=10,db=NULL){
                 return(li)
         }else{
                 pmdmt <- outer(db$mass,pmds,'+')
-                rownames(pmdmt) <- hr$name
+                rownames(pmdmt) <- db$name
                 re <- enviGCMS::getalign(pmdmt,mz,ppm = ppm)
                 re2 <- db[re$xid,]
                 re3 <- cbind.data.frame(re[,-1],re2)
@@ -154,10 +154,11 @@ dotpanno <- function(file,
                 if (class(db) == "list") {
                         range <- cbind(db$mz - prems, db$mz + prems)
                         idxmz <-
-                                enviGCMS::getoverlapmass(range, matrix(
+                                enviGCMS::getalign(range, matrix(
                                         c(prec - ppm / prec*1e-06, prec + ppm / prec*1e-06),
                                         nrow = 1
                                 ))
+                        idxmz <- idxmz[,1]
                         if (sum(idxmz) > 0) {
                                 name <- db$name[idxmz]
                                 mz2 <- db$mz[idxmz]
@@ -499,10 +500,11 @@ xrankanno <- function(file,
                 if (class(db) == "list") {
                         range <- cbind(db$mz - prems, db$mz + prems)
                         idxmz <-
-                                enviGCMS::getoverlapmass(range, matrix(
+                                enviGCMS::getalign(range, matrix(
                                         c(prec - ppm / prec*1e-06, prec + ppm / prec*1e-06),
                                         nrow = 1
                                 ))
+                        idxmz <- idxmz[,1]
                         if (sum(idxmz) > 0) {
                                 name <- db$name[idxmz]
                                 mz2 <- db$mz[idxmz]

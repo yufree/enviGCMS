@@ -634,3 +634,41 @@ getpqsi <- function(data, order, n=5){
         }
         return(porp[-c(1:(n-1))])
 }
+
+#' Perform peaks list alignment and return features table
+#' @param list each element should be a data.frame with mz, rt and ins as m/z, retetion time in seconds and intensity of certain peaks.
+#' @param ts template sample index in the list, default 1
+#' @param ppm mass accuracy, default 10
+#' @param deltart retention time shift table, default 5 seconds
+#' @param FUN function to deal with multiple aligned peaks from one sample
+#' @return mzrt object without group information
+#' @export
+getretcor <- function(list, ts=1, ppm=10, deltart=5, FUN){
+        nli <- list[-ts]
+        csd <- list[[ts]]
+        i=1
+        df1 <- csd
+        ins <- df1$ins
+        while(i<=length(nli)){
+                df2 <- list[[i]]
+                df <- enviGCMS::getalign(df1$mz,df2$mz,df1$rt,df2$rt,ppm=ppm,deltart=deltart)
+                mr2 <- paste0(df2$mz,'@',df2$rt)
+                mrx <- paste0(df$mz2,'@',df$rt2)
+
+                df$ins2 <- df2$ins[match(mrx,mr2)]
+                dfx <- df[!duplicated(df$xid),]
+                dfx$ins2 <- stats::aggregate(df$ins2,by=list(df$xid),FUN)[,2]
+                df1 <- cbind.data.frame(mz=dfx$mz1,rt=dfx$rt1)
+                if(length(dim(ins))>1){
+                        insn <- ins[df$xid,]
+                        ins <- cbind.data.frame(insn[!duplicated(df$xid),],dfx$ins2)
+                }else{
+                        insn <- ins[df$xid]
+                        ins <- cbind.data.frame(ins1=insn[!duplicated(df$xid)],dfx$ins2)
+                }
+                i=i+1
+        }
+        colnames(ins) <- paste0('ins',1:length(list))
+        li <- list(data = ins, mz=df1[,1], rt=df1[,2])
+        return(li)
+}
