@@ -45,7 +45,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -74,7 +74,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/yufree/enviGCMS/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -88,14 +88,13 @@
 
       
 
-      </header><link href="PooledQC_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
-<script src="PooledQC_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
+      </header><script src="PooledQC_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Pooled QC analysis</h1>
                         <h4 class="author">Miao Yu</h4>
             
-            <h4 class="date">2020-12-16</h4>
+            <h4 class="date">2020-12-18</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/yufree/enviGCMS/blob/master/vignettes/PooledQC.Rmd"><code>vignettes/PooledQC.Rmd</code></a></small>
       <div class="hidden name"><code>PooledQC.Rmd</code></div>
@@ -177,7 +176,7 @@
 <a href="#run-order-effect-analysis" class="anchor"></a>Run order effect analysis</h2>
 <p>For LC/GC-MS analysis, the run order will affect the intensity of single peak until the instrument is stable. The intensity will decrease/increase with initial run order and researcher need to evaluate how many samples are enough to eliminated run order effects. Here I introduced a pooled QC linear index to show such trends in the sequence.</p>
 <div class="figure">
-<img src="https://yufree.github.io/presentation/figure/pooledQC.png" alt="pqsi"><p class="caption">pqsi</p>
+<img src="https://yufree.github.io/presentation/figure/pooledQC.png" alt=""><p class="caption">pqsi</p>
 </div>
 <p>As shown in above figure, for one peak repeated analyzed in one sequence, the intensity would become stable in long term. In math, the slope of every 5 samples along the run order would become 0. Then we could define the percentage of stable peaks as pooled QC index. Such index would be a value between 0 and 1. The higher of such index, more peaks within the QC would be affected by run order effect. You could use such function to check the QC samples to see if run order effects would influence the samples at the beginning of sequences.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
