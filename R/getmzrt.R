@@ -529,7 +529,7 @@ getpower <-
                 ng <- length(g)
                 n <- min(table(group))
                 list <- getdoe(list, imputation = imputation)
-                sd <- apply(list$groupmean, 1, mean)
+                sd <- apply(list$groupsd, 1, mean)
                 if (ng == 2) {
                         ar <- apply(list$data, 1, function(x) stats::t.test(x~group))
                         dm <- sapply(ar,function(x) x$estimate[1]-x$estimate[2])

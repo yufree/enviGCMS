@@ -1,5 +1,6 @@
 # enviGCMS 0.6.7
 
+- fix bug in getpower function
 - change default par parameters for plotmrc
 - remove the export of deprecated function
 - fix the typo in documents
