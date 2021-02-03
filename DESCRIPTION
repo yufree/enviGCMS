@@ -40,5 +40,6 @@ Imports:
     animation (>= 2.2.3),
     RColorBrewer,
     mixtools,
-    data.table
+    data.table,
+    igraph
 RoxygenNote: 7.1.1

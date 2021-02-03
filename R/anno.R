@@ -23,19 +23,11 @@ getalign <- function(mz1,mz2,rt1 = NULL,rt2 = NULL,ppm=10,deltart=10){
         overlapms$mz1 <- mz1[overlapms$xid]
         overlapms$mz2 <- mz2[order(mz2,decreasing = F)][overlapms$yid]
         if(!is.null(rt1)&!is.null(rt2)){
-                rta <- data.table::as.data.table(cbind.data.frame(rtmin=rt1-deltart,rtmax=rt1+deltart))
-                rtb <- data.table::as.data.table(cbind.data.frame(rtmin=rt2-deltart,rtmax=rt2+deltart))
-                colnames(rta) <- colnames(rtb) <- c("min","max")
-                data.table::setkey(rtb, min, max)
-                overlaprt <- data.table::foverlaps(rta, rtb, which = TRUE)
-                overlaprt$rt1 <- rt1[overlaprt$xid]
-                overlaprt$rt2 <- rt2[order(rt2,decreasing = F)][overlaprt$yid]
-                over <- merge(overlapms,overlaprt,by = 'xid',allow.cartesian=TRUE)
-                mr <- paste(mz2,rt2)
-                mr2 <- paste(over$mz2,over$rt2)
-                over2 <- over[mr2 %in% mr,]
-                over3<- over2[,-c(2,5)]
-                re <- data.frame(over3[!duplicated(over3)&stats::complete.cases(over3),])
+                overlapms$rt1 <- rt1[overlapms$xid]
+                overlapms$rt2 <- rt2[order(mz2,decreasing = F)][overlapms$yid]
+                drt <- abs(overlapms$rt1-overlapms$rt2)
+                overlapms <- overlapms[drt<deltart,-c(2)]
+                re <- data.frame(overlapms[!duplicated(overlapms)&stats::complete.cases(overlapms),])
 
                 if(nrow(re)>0){
                         return(re)
@@ -53,6 +45,42 @@ getalign <- function(mz1,mz2,rt1 = NULL,rt2 = NULL,ppm=10,deltart=10){
                 }else{
                         message('No result could be found.')
                 }
+        }
+}
+#' Align mass to charge ratio and/or retention time to remove redundancy
+#' @param mz the mass to charge of reference peaks
+#' @param rt retention time of reference peaks
+#' @param ppm mass accuracy, default 10
+#' @param deltart retention time shift table, default 10 seconds
+#' @return index for
+#' @examples
+#' mz <- c(221.1171, 221.1170, 229.1546, 233.1497, 271.0790 )
+#' rt <- c(590.8710, 587.3820, 102.9230, 85.8850, 313.8240)
+#' getalign2(mz,rt)
+#' @export
+getalign2 <- function(mz,rt,ppm=5,deltart=5){
+        mzr <- data.table::as.data.table(cbind.data.frame(mzmin=mz*(1-ppm*10e-6),mzmax=mz*(1+ppm*10e-6)))
+        colnames(mzr) <- c("min","max")
+        data.table::setkey(mzr, min, max)
+        overlapms <- data.table::foverlaps(mzr, mzr, which = TRUE)
+        overlapms$mz1 <- mz[overlapms$xid]
+        overlapms$rt1 <- rt[overlapms$xid]
+        overlapms$mz2 <- mz[overlapms$yid]
+        overlapms$rt2 <- rt[overlapms$yid]
+        drt <- abs(overlapms$rt1-overlapms$rt2)
+        overlapms <- overlapms[drt<deltart,]
+
+        overlap1 <- overlapms[overlapms$xid==overlapms$yid,]
+        overlap2 <- overlapms[overlapms$xid!=overlapms$yid,]
+        overlap3 <- overlap1[!overlap1$xid%in%overlap2$xid,]
+        x <- igraph::graph_from_data_frame(overlap2,directed = F)
+        y <- names(igraph::components(x)$membership[!duplicated(igraph::components(x)$membership)])
+        idx <- c(overlap3$xid,as.numeric(y))
+        idxx <- idx[order(idx,decreasing = F)]
+        if(length(idxx)>0){
+                return(idxx)
+        }else{
+                message('No result could be found.')
         }
 }
 #' Get the overlap peaks by mass and retention time range
@@ -76,7 +104,11 @@ getoverlappeak <- function(list1, list2) {
         overlaprt <-
                 data.table::foverlaps(rt1, rt2, which = TRUE, mult = 'first')
         index <- (!is.na(overlapms)) & (!is.na(overlaprt))
-        return(index)
+        if(length(index)>0){
+                return(index)
+        }else{
+                message('No result could be found.')
+        }
 }
 
 #' Annotation of MS1 data by compounds database by predefined paired mass distance

@@ -10,6 +10,7 @@
 - add getms1anno for MS1 annotation by local compounds database with predefined paired mass distances
 - add support to save target data csv without change default name
 - add retention time alignment function for peaks lists
+- add getalign2 function to align mass to charge ratio, retention time for the same peak list, this function could be used to refine peaks list
 
 # enviGCMS 0.6.6
 
