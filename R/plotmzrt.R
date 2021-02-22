@@ -118,8 +118,8 @@ plotridge <- function(data,
                         'topright',
                         inset = c(0, -.05),
                         legend = unique(lv),
-                        col = unique(lv),
-                        lwd = 3,
+                        col = col[unique(lv)],
+                        lwd = 10,
                         bty = 'n',
                         horiz = T
                 )
@@ -926,12 +926,13 @@ plotden <- function(data,
 #' @param data data row as peaks and column as samples
 #' @param lv factor vector for the group infomation
 #' @param type 'g' means group median based, other means all samples median based.
+#' @param ... parameters for boxplot
 #' @return Relative Log Abundance (RLA) plots
 #' @examples
 #' data(list)
 #' plotrla(list$data, as.factor(list$group$sample_group))
 #' @export
-plotrla <- function(data, lv, type = "g") {
+plotrla <- function(data, lv, type = "g",...) {
         data <- as.matrix(data)
         data <- log(data)
         data[is.nan(data)|is.infinite(data)] <- 0
@@ -951,7 +952,7 @@ plotrla <- function(data, lv, type = "g") {
         }
 
         outmat <- outmat[, order(lv)]
-        graphics::boxplot(outmat, col = lv[order(lv)])
+        graphics::boxplot(outmat,...)
         graphics::abline(h = 0)
 }
 
