@@ -8,21 +8,21 @@
 #' @param x vector
 #' @return Mode of the vector
 #' @export
-Mode = function(x) {
-        ta = table(x)
-        tam = max(ta)
+Mode <- function(x) {
+        ta <- table(x)
+        tam <- max(ta)
         if (all(ta == tam))
-                mod = x
+                mod <- x
         else if (is.numeric(x))
-                mod = as.numeric(names(ta)[ta == tam])
+                mod <- as.numeric(names(ta)[ta == tam])
         else
-                mod = names(ta)[ta == tam]
+                mod <- names(ta)[ta == tam]
         return(mod)
 }
 #' filter data by average moving box
 #'
 #' @param x a vector
-#' @param n A number to indentify the size of the moving box.
+#' @param n A number to identify the size of the moving box.
 #' @return The filtered data
 #' @examples
 #' ma(rnorm(1000),5)
@@ -330,9 +330,9 @@ plotmz <- function(data, inscf = 5, ...) {
         mz <- as.numeric(rownames(data))
         rt <- as.numeric(colnames(data))
         z <- log10(data + 1)
-        cex = as.numeric(cut(z - inscf, breaks = c(0, 1, 2,
+        cex <- as.numeric(cut(z - inscf, breaks = c(0, 1, 2,
                                                    3, 4, Inf) / 2)) / 2
-        cexlab = c(
+        cexlab <- c(
                 paste0(inscf, "-", inscf + 0.5),
                 paste0(inscf +
                                0.5, "-", inscf + 1),
@@ -378,7 +378,7 @@ plotmz <- function(data, inscf = 5, ...) {
 #' plot GC-MS data as a heatmap for constant speed of temperature rising
 #' @param data imported data matrix of GC-MS
 #' @param log transform the intensity into log based 10
-#' @param temp temprature range for constant speed
+#' @param temp temperature range for constant speed
 #' @return heatmap
 #' @examples
 #' \dontrun{
@@ -489,7 +489,7 @@ plott <- function(data,
                        las = 2)
 }
 
-#' Plot the backgrond of data
+#' Plot the background of data
 #' @param data imported data matrix of GC-MS
 #' @return NULL
 #' @examples
@@ -538,7 +538,7 @@ plotrtms <- function(data, rt, ms, msp=F) {
         return(temp)
 }
 
-#' Plot EIC of certain m/z and return dataframe for intergration
+#' Plot EIC of certain m/z and return dataframe for integration
 #' @param data imported data matrix of GC-MS
 #' @param ms m/z to be extracted
 #' @param rt vector range of the retention time
@@ -595,13 +595,13 @@ plottic <- function(data, n = F) {
                 frame.plot = F
         )
 }
-#' plot the information of intergretion
-#' @param list list from getinteragtion
+#' plot the information of integration
+#' @param list list from getinteagtion
 #' @param name the title of the plot
 #' @return NULL
 #' @examples
 #' \dontrun{
-#' list <- getinteragtion(rawdata)
+#' list <- getinteagtion(rawdata)
 #' plotint(list)
 #' }
 #' @export
@@ -668,8 +668,8 @@ plotint <- function(list, name = NULL) {
                              format(sigpeak, digits = 2)),
                        col = "red")
 }
-#' plot the slope information of intergretion
-#' @param list list from getinteragtion
+#' plot the slope information of integration
+#' @param list list from getintegration
 #' @param name the title of the plot
 #' @return NULL
 #' @examples
@@ -716,7 +716,7 @@ plotintslope <- function(list, name = NULL) {
 #' find line of the regression model for GC-MS
 #' @param data imported data matrix of GC-MS
 #' @param threshold the threshold of the response (log based 10)
-#' @param temp the scale of the oven temprature(constant rate)
+#' @param temp the scale of the oven temperature (constant rate)
 #' @return list linear regression model for the matrix
 #' @examples
 #' \dontrun{
@@ -814,7 +814,7 @@ findline <- function(data,
 
 #' Plot the response group of GC-MS
 #' @param data imported data matrix of GC-MS
-#' @param threshold the threshold of the response (log based 10) to seperate the group
+#' @param threshold the threshold of the response (log based 10) to separate the group
 #' @return list linear regression model for the data matrix
 #' @examples
 #' \dontrun{
@@ -959,7 +959,7 @@ plotsms <- function(meanmatrix, rsdmatrix) {
         )
 }
 
-#' plot the density of the GC-MS data with EM algorithm to seperate the data into two log normal distribution.
+#' plot the density of the GC-MS data with EM algorithm to separate the data into two log normal distribution.
 #' @param data imported data matrix of GC-MS
 #' @return NULL
 #' @examples
@@ -969,8 +969,8 @@ plotsms <- function(meanmatrix, rsdmatrix) {
 #' }
 #' @export
 plothist <- function(data) {
-        data1 = sample(data, 1e+05)
-        mixmdl = mixtools::normalmixEM(log10(data1))
+        data1 <- sample(data, 1e+05)
+        mixmdl <- mixtools::normalmixEM(log10(data1))
         graphics::plot(mixmdl,
                        which = 2,
                        breaks = 100,
@@ -991,7 +991,7 @@ plothist <- function(data) {
         )
 }
 #' plot the calibration curve with error bar, r squared and equation.
-#' @param x concertration
+#' @param x concentration
 #' @param y response
 #' @param upper upper error bar
 #' @param lower lower error bar

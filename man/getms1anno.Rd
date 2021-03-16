@@ -13,7 +13,7 @@ getms1anno(pmd, mz, ppm = 10, db = NULL)
 
 \item{ppm}{mass accuracy}
 
-\item{db}{compounds database as dataframe. Two required columns are name and monisotopic molecular weight wiht colname of name and mass}
+\item{db}{compounds database as dataframe. Two required columns are name and monoisotopic molecular weight with column names of name and mass}
 }
 \value{
 list or data frame

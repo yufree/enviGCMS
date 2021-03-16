@@ -2,7 +2,7 @@
 % Please edit documentation in R/sccp.R
 \name{getarea}
 \alias{getarea}
-\title{Get the peak information from sampels for SCCPs detection}
+\title{Get the peak information from samples for SCCPs detection}
 \usage{
 getarea(data, ismz = 323, ppm = 5, rt = NULL, rts = NULL)
 }
@@ -21,7 +21,7 @@ getarea(data, ismz = 323, ppm = 5, rt = NULL, rts = NULL)
 list with peak information
 }
 \description{
-Get the peak information from sampels for SCCPs detection
+Get the peak information from samples for SCCPs detection
 }
 \seealso{
 \code{\link{getareastd}},\code{\link{getsccp}}

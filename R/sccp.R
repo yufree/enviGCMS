@@ -1,4 +1,4 @@
-#' Short-Chain Chlorinated Paraffins(SCCPs) peaks infomation for quantitative analysis
+#' Short-Chain Chlorinated Paraffins(SCCPs) peaks information for quantitative analysis
 #'
 #' A dataset containing the ions, formula, Cl%, peak abundances for all SCCPs compounds
 #' @docType data
@@ -88,7 +88,7 @@ getareastd <- function(data = NULL,
         )
         return(list)
 }
-#' Get the peak information from sampels for SCCPs detection
+#' Get the peak information from samples for SCCPs detection
 #' @param data list from `xcmsRaw` function
 #' @param ismz internal standards m/z
 #' @param ppm resolution of mass spectrum

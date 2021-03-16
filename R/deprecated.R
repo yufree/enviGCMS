@@ -109,11 +109,11 @@ gettimegrouprep <-
                 message("This function has been deprecated and you could use getdoe to process data.")
         }
 
-#' Plot the influnces of DoE and Batch effects on each peaks
+#' Plot the influences of DoE and Batch effects on each peaks
 #' @param df data output from `svacor` function
 #' @param dfsv data output from `svaplot` function for corrected data
 #' @param dfanova data output from `svaplot` function for raw data
-#' @return influnces plot
+#' @return influences plot
 #' @examples
 #' \dontrun{
 #' library(faahKO)
@@ -172,7 +172,7 @@ svacor <- function(xset,
 #' @param pqvalues method for ANOVA or SVA
 #' @param pt threshold for p value, default is 0.05
 #' @param qt threshold for q value, default is 0.05
-#' @return data, corrected data, mz and retention for fileted data
+#' @return data, corrected data, mz and retention for filerted data
 #' @examples
 #' \dontrun{
 #' library(faahKO)
@@ -263,7 +263,7 @@ svaplot <- function(list,
 #' Get the corrected data after SVA for metabolanalyst
 #' @param xset xcmsset object
 #' @param lv group information
-#' @return csv files for both raw and corrected data for metabolanalyst if SVA could be applied
+#' @return csv files for both raw and corrected data for metaboanalyst if SVA could be applied
 #' @examples
 #' \dontrun{
 #' library(faahKO)
@@ -287,7 +287,7 @@ svaupload <- function(xset, lv = NULL) {
 #' @param method parameter for groupval function
 #' @param value parameter for groupval function
 #' @param name file name
-#' @param type m means  Metaboanalyst, a means xMSannotator, o means full infomation csv
+#' @param type m means  Metaboanalyst, a means xMSannotator, o means full information csv
 #' @param mzdigit m/z digits of row names of data frame
 #' @param rtdigit retention time digits of row names of data frame
 #' @return dataframe with data needed for Metaboanalyst/xMSannotator/pmd if your want to perform local analysis.
@@ -353,7 +353,7 @@ getupload3 <- function(list, name = "Peaklist") {
 #' Get the mzrt profile and group information for batch correction and plot as a list for xcms 3 object
 #' @param xset a XCMSnExp object with processed data
 #' @param name file name for csv file, default NULL
-#' @return list with rtmz profile and group infomation
+#' @return list with rtmz profile and group information
 #' @examples
 #' \dontrun{
 #' library(faahKO)

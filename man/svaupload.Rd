@@ -12,7 +12,7 @@ svaupload(xset, lv = NULL)
 \item{lv}{group information}
 }
 \value{
-csv files for both raw and corrected data for metabolanalyst if SVA could be applied
+csv files for both raw and corrected data for metaboanalyst if SVA could be applied
 }
 \description{
 Get the corrected data after SVA for metabolanalyst

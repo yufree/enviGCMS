@@ -287,11 +287,11 @@ plotmr <- function(list,
                 )
 
                 for (i in 1:n) {
-                        cex = as.numeric(cut((log10(data[, i] + 1) -
+                        cex <- as.numeric(cut((log10(data[, i] + 1) -
                                                       inscf),
                                              breaks = c(0, 1, 2, 3, 4, Inf) / 2
                         )) / 2
-                        cexlab = c(
+                        cexlab <- c(
                                 paste0(inscf, "-", inscf + 0.5),
                                 paste0(inscf + 0.5, "-", inscf + 1),
                                 paste0(inscf +
@@ -361,12 +361,12 @@ plotmr <- function(list,
                         xlim = rt,
                         ...
                 )
-                cex = as.numeric(cut((log10(
+                cex <- as.numeric(cut((log10(
                         data + 1
                 ) -
                         inscf), breaks = c(0, 1, 2, 3, 4, Inf) /
                         2)) / 2
-                cexlab = c(
+                cexlab <- c(
                         paste0(inscf, "-", inscf + 0.5),
                         paste0(inscf + 0.5, "-", inscf + 1),
                         paste0(inscf +
@@ -481,15 +481,15 @@ plotmrc <- function(list,
                 name1 <- paste0(dataname[1], "-", dataname[2])
                 name2 <- paste0(dataname[2], "-", dataname[1])
 
-                cex1 = as.numeric(cut((log10(
+                cex1 <- as.numeric(cut((log10(
                         diff1 + 1
                 ) - inscf),
-                breaks = c(0, 1, 2, 3, 4, Inf) / 2)) / 2
-                cex2 = as.numeric(cut((log10(
+                breaks <- c(0, 1, 2, 3, 4, Inf) / 2)) / 2
+                cex2 <- as.numeric(cut((log10(
                         diff2 + 1
                 ) - inscf),
-                breaks = c(0, 1, 2, 3, 4, Inf) / 2)) / 2
-                cexlab = c(
+                breaks <- c(0, 1, 2, 3, 4, Inf) / 2)) / 2
+                cexlab <- c(
                         paste0(inscf, "-", inscf + 0.5),
                         paste0(inscf +
                                        0.5, "-", inscf + 1),
@@ -561,7 +561,7 @@ plotmrc <- function(list,
 
 }
 
-#' plot the rsd influnces of data in different groups
+#' plot the rsd influences of data in different groups
 #' @param list list with data as peaks list, mz, rt and group information
 #' @param ms the mass range to plot the data
 #' @param inscf Log intensity cutoff for peaks across samples. If any peaks show a intensity higher than the cutoff in any samples, this peaks would not be filtered. default 5
@@ -580,7 +580,7 @@ plotrsd <- function(list,
                     imputation = "l",
                     ...) {
         graphics::par(mar = c(5, 4.2, 6.1, 2.1), xpd = TRUE)
-        cexlab = c("<20%", "20-40%", "40-60%", "60-80%", ">80%")
+        cexlab <- c("<20%", "20-40%", "40-60%", "60-80%", ">80%")
         list <- getdoe(list,
                        rsdcf = rsdcf,
                        inscf = inscf,
@@ -597,7 +597,7 @@ plotrsd <- function(list,
         if (is.null(dim(rsd))) {
                 n <- 1
                 col <- grDevices::rainbow(1)
-                cex = as.numeric(cut(rsd, breaks = c(0, 20,
+                cex <- as.numeric(cut(rsd, breaks = c(0, 20,
                                                      40, 60, 80, Inf))) / 2
                 dataname <- unique(lif$group$sample_group)
                 graphics::plot(
@@ -652,7 +652,7 @@ plotrsd <- function(list,
                 )
 
                 for (i in 1:n) {
-                        cex = as.numeric(cut(rsd[, i], breaks = c(
+                        cex <- as.numeric(cut(rsd[, i], breaks = c(
                                 0, 20,
                                 40, 60, 80, Inf
                         ))) / 2
@@ -698,7 +698,7 @@ plotrsd <- function(list,
 #' @param scale parameters for scale
 #' @param xrange x axis range for return samples, default NULL
 #' @param yrange y axis range for return samples, default NULL
-#' @param pch deault pch would be the first charactor of group information or samples name
+#' @param pch default pch would be the first character of group information or samples name
 #' @param ... other parameters for `plot` function
 #' @return if xrange and yrange are not NULL, return file name of all selected samples on 2D score plot
 #' @examples
@@ -720,13 +720,13 @@ plotpca <- function(data,
         }
 
         if (is.null(lv)) {
-                pch0 = colnames(data)
+                pch0 <- colnames(data)
         } else {
-                pch0 = lv
+                pch0 <- lv
         }
         pcao <-
                 stats::prcomp(t(data), center = center, scale = scale)
-        pcaoVars = signif(((pcao$sdev) ^ 2) / (sum((pcao$sdev) ^ 2)),
+        pcaoVars <- signif(((pcao$sdev) ^ 2) / (sum((pcao$sdev) ^ 2)),
                           3) * 100
         if (!is.null(pch)) {
                 graphics::plot(
@@ -924,7 +924,7 @@ plotden <- function(data,
 }
 #' Relative Log Abundance (RLA) plots
 #' @param data data row as peaks and column as samples
-#' @param lv factor vector for the group infomation
+#' @param lv factor vector for the group information
 #' @param type 'g' means group median based, other means all samples median based.
 #' @param ... parameters for boxplot
 #' @return Relative Log Abundance (RLA) plots
@@ -936,7 +936,7 @@ plotrla <- function(data, lv, type = "g",...) {
         data <- as.matrix(data)
         data <- log(data)
         data[is.nan(data)|is.infinite(data)] <- 0
-        outmat = NULL
+        outmat <- NULL
 
         if (type == "g") {
                 for (lvi in levels(lv)) {
@@ -958,7 +958,7 @@ plotrla <- function(data, lv, type = "g",...) {
 
 #' Relative Log Abundance Ridge (RLAR) plots for samples or peaks
 #' @param data data row as peaks and column as samples
-#' @param lv factor vector for the group infomation of samples
+#' @param lv factor vector for the group information of samples
 #' @param type 'g' means group median based, other means all samples median based.
 #' @return Relative Log Abundance Ridge(RLA) plots
 #' @examples
@@ -969,7 +969,7 @@ plotridges <- function(data, lv, type = "g") {
         data <- as.matrix(data)
         data <- log(data)
         data[is.nan(data)|is.infinite(data)] <- 0
-        outmat = NULL
+        outmat <- NULL
 
         if (type == "g") {
                 for (lvi in levels(lv)) {
@@ -1040,7 +1040,7 @@ plotdwtus <- function(list, n = 512, ...) {
         }
 }
 
-#' plot scatter plot for rt-mz profile and output gif file for mutiple groups
+#' plot scatter plot for rt-mz profile and output gif file for multiple groups
 #' @param list list with data as peaks list, mz, rt and group information
 #' @param name file name for gif file, default test
 #' @param ms the mass range to plot the data
@@ -1072,7 +1072,7 @@ gifmr <- function(list,
         data <- lif$groupmean
         mz <- lif$mz
         rt <- lif$rt
-        filename = paste0(name, ".gif")
+        filename <- paste0(name, ".gif")
         mean <- apply(data, 1, mean)
 
         graphics::plot(

@@ -13,7 +13,7 @@ dotpanno(file, db = NULL, ppm = 10, prems = 1.1, binstep = 1, consinc = 0.6)
 
 \item{ppm}{mass accuracy, default 10}
 
-\item{prems}{precersor mass range, default 1.1 to include M+H or M-H}
+\item{prems}{precursor mass range, default 1.1 to include M+H or M-H}
 
 \item{binstep}{bin step for consin similarity}
 

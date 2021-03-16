@@ -33,7 +33,7 @@ getmr <-
 
 #' Covert the peaks list csv file into list
 #' @param path the path to your csv file
-#' @return list with rtmz profile and group infomation as the first row
+#' @return list with rtmz profile and group information as the first row
 #' @seealso \code{\link{getmzrt}}
 #' @export
 getmzrtcsv <- function(path) {

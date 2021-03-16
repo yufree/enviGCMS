@@ -2,21 +2,21 @@
 % Please edit documentation in R/general.R
 \name{plotint}
 \alias{plotint}
-\title{plot the information of intergretion}
+\title{plot the information of integration}
 \usage{
 plotint(list, name = NULL)
 }
 \arguments{
-\item{list}{list from getinteragtion}
+\item{list}{list from getinteagtion}
 
 \item{name}{the title of the plot}
 }
 \description{
-plot the information of intergretion
+plot the information of integration
 }
 \examples{
 \dontrun{
-list <- getinteragtion(rawdata)
+list <- getinteagtion(rawdata)
 plotint(list)
 }
 }

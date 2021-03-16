@@ -2,7 +2,7 @@
 % Please edit documentation in R/general.R
 \name{plotsub}
 \alias{plotsub}
-\title{Plot the backgrond of data}
+\title{Plot the background of data}
 \usage{
 plotsub(data)
 }
@@ -10,7 +10,7 @@ plotsub(data)
 \item{data}{imported data matrix of GC-MS}
 }
 \description{
-Plot the backgrond of data
+Plot the background of data
 }
 \examples{
 \dontrun{

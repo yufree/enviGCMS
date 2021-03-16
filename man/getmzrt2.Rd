@@ -12,7 +12,7 @@ getmzrt2(xset, name = NULL)
 \item{name}{file name for csv file, default NULL}
 }
 \value{
-list with rtmz profile and group infomation
+list with rtmz profile and group information
 }
 \description{
 Get the mzrt profile and group information for batch correction and plot as a list for xcms 3 object

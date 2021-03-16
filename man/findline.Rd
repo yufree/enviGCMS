@@ -11,7 +11,7 @@ findline(data, threshold = 2, temp = c(100, 320))
 
 \item{threshold}{the threshold of the response (log based 10)}
 
-\item{temp}{the scale of the oven temprature(constant rate)}
+\item{temp}{the scale of the oven temperature (constant rate)}
 }
 \value{
 list linear regression model for the matrix

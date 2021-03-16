@@ -15,7 +15,7 @@ getcsv(list, name, mzdigit = 4, rtdigit = 1, type = "o", target = FALSE, ...)
 
 \item{rtdigit}{retention time digits of row names of data frame, default 1}
 
-\item{type}{csv formate for furthor analysis, m means  Metaboanalyst, a means xMSannotator, p means Mummichog(NA values are imputed by `getimputation`, and F test is used here to generate stats and p vlaue), o means full infomation csv (for `pmd` package), default o. mapo could output all those format files.}
+\item{type}{csv format for further analysis, m means  Metaboanalyst, a means xMSannotator, p means Mummichog(NA values are imputed by `getimputation`, and F test is used here to generate stats and p value), o means full information csv (for `pmd` package), default o. mapo could output all those format files.}
 
 \item{target}{logical, preserve original rowname of data or not for target data, default FALSE.}
 

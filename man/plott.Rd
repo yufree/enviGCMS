@@ -11,7 +11,7 @@ plott(data, log = F, temp = c(100, 320))
 
 \item{log}{transform the intensity into log based 10}
 
-\item{temp}{temprature range for constant speed}
+\item{temp}{temperature range for constant speed}
 }
 \value{
 heatmap

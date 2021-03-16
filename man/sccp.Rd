@@ -3,7 +3,7 @@
 \docType{data}
 \name{sccp}
 \alias{sccp}
-\title{Short-Chain Chlorinated Paraffins(SCCPs) peaks infomation for quantitative analysis}
+\title{Short-Chain Chlorinated Paraffins(SCCPs) peaks information for quantitative analysis}
 \format{
 A data frame with 24 rows and 8 variables:
 \describe{

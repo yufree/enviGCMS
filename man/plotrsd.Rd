@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotmzrt.R
 \name{plotrsd}
 \alias{plotrsd}
-\title{plot the rsd influnces of data in different groups}
+\title{plot the rsd influences of data in different groups}
 \usage{
 plotrsd(list, ms = c(100, 800), inscf = 5, rsdcf = 100, imputation = "l", ...)
 }
@@ -20,7 +20,7 @@ plotrsd(list, ms = c(100, 800), inscf = 5, rsdcf = 100, imputation = "l", ...)
 \item{...}{other parameters for `plot` function}
 }
 \description{
-plot the rsd influnces of data in different groups
+plot the rsd influences of data in different groups
 }
 \examples{
 data(list)

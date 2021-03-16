@@ -2,7 +2,7 @@
 % Please edit documentation in R/general.R
 \name{plothist}
 \alias{plothist}
-\title{plot the density of the GC-MS data with EM algorithm to seperate the data into two log normal distribution.}
+\title{plot the density of the GC-MS data with EM algorithm to separate the data into two log normal distribution.}
 \usage{
 plothist(data)
 }
@@ -10,7 +10,7 @@ plothist(data)
 \item{data}{imported data matrix of GC-MS}
 }
 \description{
-plot the density of the GC-MS data with EM algorithm to seperate the data into two log normal distribution.
+plot the density of the GC-MS data with EM algorithm to separate the data into two log normal distribution.
 }
 \examples{
 \dontrun{

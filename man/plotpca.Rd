@@ -31,7 +31,7 @@ plotpca(
 
 \item{yrange}{y axis range for return samples, default NULL}
 
-\item{pch}{deault pch would be the first charactor of group information or samples name}
+\item{pch}{default pch would be the first character of group information or samples name}
 
 \item{...}{other parameters for `plot` function}
 }

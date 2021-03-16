@@ -115,7 +115,7 @@ getoverlappeak <- function(list1, list2) {
 #' @param pmd adducts formula or paired mass distance for ions
 #' @param mz unknown mass to charge ratios vector
 #' @param ppm mass accuracy
-#' @param db compounds database as dataframe. Two required columns are name and monisotopic molecular weight wiht colname of name and mass
+#' @param db compounds database as dataframe. Two required columns are name and monoisotopic molecular weight with column names of name and mass
 #' @return list or data frame
 #' @export
 getms1anno <- function(pmd,mz,ppm=10,db=NULL){
@@ -153,7 +153,7 @@ getms1anno <- function(pmd,mz,ppm=10,db=NULL){
 #' @param file mgf file generated from MS/MS data
 #' @param db database could be list object from `getMSP`
 #' @param ppm mass accuracy, default 10
-#' @param prems precersor mass range, default 1.1 to include M+H or M-H
+#' @param prems precursor mass range, default 1.1 to include M+H or M-H
 #' @param binstep bin step for consin similarity
 #' @param consinc consin similarity cutoff for annotation. Default 0.6.
 #' @return list with MSMS annotation results
@@ -173,7 +173,7 @@ dotpanno <- function(file,
         if (sum(idx) > 0) {
                 mz <- unlist(mz)[idx]
                 ins <- unlist(ins)[idx]
-                ins = ins / max(ins) * 100
+                ins <- ins / max(ins) * 100
                 mz2bin <-
                         cut(
                                 mz,
@@ -248,7 +248,7 @@ dotpanno <- function(file,
 #' @param file mgf file generated from MS/MS data
 #' @param db database could be list object from `getms2pmd`
 #' @param ppm mass accuracy, default 10
-#' @param prems precersor mass range, default 1.1 to include M+H or M-H
+#' @param prems precursor mass range, default 1.1 to include M+H or M-H
 #' @param intc intensity cutoff for peaks. Default 0.1
 #' @param quantile X rank quantiles cutoff for annotation. Default 0.75.
 #' @return list with MSMS annotation results
@@ -523,7 +523,7 @@ xrankanno <- function(file,
         if (sum(idx) > 0) {
                 mz <- unlist(mz)[idx]
                 ins <- unlist(ins)[idx]
-                ins = ins / max(ins) * 100
+                ins <- ins / max(ins) * 100
                 mzr <- mz[order(ins,decreasing = T)]
                 if(length(mzr)>30){
                         mzr <- mzr[1:30]
@@ -554,7 +554,7 @@ xrankanno <- function(file,
                                         }
                                         score <- rep(NA,length(mzr))
                                         for(i in 1:length(mzr)){
-                                                match = which.min(abs(mzrdb-mzr[i])/mzr[i]*1e06 < ppm)
+                                                match <- which.min(abs(mzrdb-mzr[i])/mzr[i]*1e06 < ppm)
                                                 if(length(match)>0){
                                                         match <-  match[which.min(abs(mzrdb-mzr[i])/mzr[i]*1e06 < ppm)]
                                                         score[i] <- xrankm[match,i]
@@ -565,7 +565,7 @@ xrankanno <- function(file,
                                         # reverse score
                                         score2 <- rep(NA,length(mzrdb))
                                         for(i in 1:length(mzrdb)){
-                                                match = which.min(abs(mzr-mzrdb[i])/mzrdb[i]*1e06 < ppm)
+                                                match <- which.min(abs(mzr-mzrdb[i])/mzrdb[i]*1e06 < ppm)
                                                 if(length(match)>0){
                                                         match <-  match[which.min(abs(mzr-mzrdb[i])/mzrdb[i]*1e06 < ppm)]
                                                         score2[i] <- xrankm[match,i]

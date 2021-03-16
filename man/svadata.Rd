@@ -16,7 +16,7 @@ svadata(list, pqvalues = "sv", pt = 0.05, qt = 0.05)
 \item{qt}{threshold for q value, default is 0.05}
 }
 \value{
-data, corrected data, mz and retention for fileted data
+data, corrected data, mz and retention for filerted data
 }
 \description{
 Filter the data with p value and q value

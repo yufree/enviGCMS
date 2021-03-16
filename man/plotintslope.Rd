@@ -2,17 +2,17 @@
 % Please edit documentation in R/general.R
 \name{plotintslope}
 \alias{plotintslope}
-\title{plot the slope information of intergretion}
+\title{plot the slope information of integration}
 \usage{
 plotintslope(list, name = NULL)
 }
 \arguments{
-\item{list}{list from getinteragtion}
+\item{list}{list from getintegration}
 
 \item{name}{the title of the plot}
 }
 \description{
-plot the slope information of intergretion
+plot the slope information of integration
 }
 \examples{
 \dontrun{

@@ -280,7 +280,7 @@ getdata2 <- function(path,
 
         fromPaths <- xcms::phenoDataFromPaths(files)
         n <- dim(fromPaths)[2]
-        sample_group = NULL
+        sample_group <- NULL
         if (n > 1) {
                 sample_group <- fromPaths[, 1]
                 for (i in 2:n) {
@@ -288,9 +288,9 @@ getdata2 <- function(path,
                                                                       i], sep = "_")
                 }
         } else {
-                sample_group = fromPaths[, 1]
+                sample_group <- fromPaths[, 1]
         }
-        sample_group = data.frame(sample_group)
+        sample_group <- data.frame(sample_group)
 
         if (is.null(snames)) {
                 snames <- rownames(fromPaths)

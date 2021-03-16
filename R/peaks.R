@@ -1,12 +1,12 @@
-#' Just intergrate data according to fixed rt and fixed noise area
+#' Just integrate data according to fixed rt and fixed noise area
 #' @param data file should be a dataframe with the first column RT and second column intensity of the SIM ions.
 #' @param rt a rough RT range contained only one peak to get the area
 #' @param brt a rough RT range contained only one peak and enough noises to get the area
 #' @param smoothit logical, if using an average smooth box or not. If using, n will be used
-#' @return area intergration data
+#' @return area integration data
 #' @examples
 #' \dontrun{
-#' area <- Intergration(data)
+#' area <- Integration(data)
 #' }
 #' @export
 Integration <- function(data,
@@ -41,7 +41,7 @@ Integration <- function(data,
         return(area)
 }
 
-#' GetIntegration was mainly used for get the intergration of certain ion's chromatogram data and plot the data
+#' GetIntegration was mainly used for get the integration of certain ion's chromatogram data and plot the data
 #' @param data file should be a dataframe with the first column RT and second column intensity of the SIM ions.
 #' @param rt a rough RT range contained only one peak to get the area
 #' @param n points in the moving average smooth box, default value is 5
@@ -50,11 +50,11 @@ Integration <- function(data,
 #' @param baseline numbers of the points for the baseline of the signal
 #' @param noslope logical, if using a horizon line to get area or not
 #' @param smoothit logical, if using an average smooth box or not. If using, n will be used
-#' @param half logical, if using the left half peak to caculate the area
-#' @return intergration data such as peak area, peak hight, signal and the slope data.
+#' @param half logical, if using the left half peak to calculate the area
+#' @return integration data such as peak area, peak height, signal and the slope data.
 #' @examples
 #' \dontrun{
-#' list <- GetIntergration(data)
+#' list <- GetIntegration(data)
 #' }
 #' @export
 GetIntegration <- function(data,

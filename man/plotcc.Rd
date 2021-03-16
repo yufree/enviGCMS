@@ -7,7 +7,7 @@
 plotcc(x, y, upper, lower = upper, ...)
 }
 \arguments{
-\item{x}{concertration}
+\item{x}{concentration}
 
 \item{y}{response}
 

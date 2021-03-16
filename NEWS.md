@@ -20,7 +20,7 @@
 # enviGCMS 0.6.5
 
 - change to formal group information for mzrt class
-- fix log infinate issue in plotridge
+- fix log infinite issue in plotridge
 - update list data
 
 # enviGCMS 0.6.4
@@ -119,7 +119,7 @@
 - use list to communicate results between function instead of xcms objects
 - getdoe function to handle data for various experimental design
 - add functions and shiny application for Short-Chain Chlorinated Paraffins analysis
-- update the visulization function
+- update the visualization function
 - support xcms 3 new objects
 
 # enviGCMS 0.4.5
@@ -147,7 +147,7 @@
 ## Minor changes
 
 - Add Mode function
-- reformate code by formatR package
+- reformat code by formatR package
 
 # enviGCMS 0.4.3
 
@@ -187,7 +187,7 @@
 - remove svadata and svaupload
 - add mzrtsim to simulate mzrt profile
 - add simmzrt to make simulation input data
-- add rlaplot and ridagesplot to show the distribution of the data
+- add rlaplot and ridgesplot to show the distribution of the data
 
 ## Minor changes
 

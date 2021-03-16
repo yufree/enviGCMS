@@ -9,7 +9,7 @@ plotgroup(data, threshold = 2)
 \arguments{
 \item{data}{imported data matrix of GC-MS}
 
-\item{threshold}{the threshold of the response (log based 10) to seperate the group}
+\item{threshold}{the threshold of the response (log based 10) to separate the group}
 }
 \value{
 list linear regression model for the data matrix

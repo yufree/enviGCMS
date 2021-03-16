@@ -33,7 +33,7 @@ findohc(
 
 \item{cutoffr}{the cutoff of [M] and [M+2] ratio, default 0.4}
 
-\item{clustercf}{the cutoff of cluster analysis to seperate two different ions groups for retention time, default 10}
+\item{clustercf}{the cutoff of cluster analysis to separate two different ions groups for retention time, default 10}
 }
 \value{
 list with filtered organohalogen compounds

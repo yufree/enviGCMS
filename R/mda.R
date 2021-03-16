@@ -325,7 +325,7 @@ getmdh <- function(mz,
 #' @param mzc threshold of lower mass and higher mass, default 700
 #' @param cutoffint the cutoff of intensity, default 1000
 #' @param cutoffr the cutoff of [M] and [M+2] ratio, default 0.4
-#' @param clustercf the cutoff of cluster analysis to seperate two different ions groups for retention time, default 10
+#' @param clustercf the cutoff of cluster analysis to separate two different ions groups for retention time, default 10
 #' @return list with filtered organohalogen compounds
 #' @references Identification of Novel Brominated Compounds in Flame Retarded Plastics Containing TBBPA by Combining Isotope Pattern and Mass Defect Cluster Analysis Ana Ballesteros-Gómez, Joaquín Ballesteros, Xavier Ortiz, Willem Jonker, Rick Helmus, Karl J. Jobst, John R. Parsons, and Eric J. Reiner Environmental Science & Technology 2017 51 (3), 1518-1526 DOI: 10.1021/acs.est.6b03294
 #' @export
@@ -359,9 +359,9 @@ findohc <-
 
                 result <- NULL
                 for (i in 1:length(smstep)) {
-                        mini = smstep[i] - smsd
-                        maxi = smstep[i] + smsd
-                        index = sd < maxi & sd > mini
+                        mini <- smstep[i] - smsd
+                        maxi <- smstep[i] + smsd
+                        index <- sd < maxi & sd > mini
 
                         li <- data[index & ins > cutoffint,]
                         mzt <- mzr[index & ins > cutoffint]

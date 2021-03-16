@@ -13,7 +13,7 @@ xrankanno(file, db = NULL, ppm = 10, prems = 1.1, intc = 0.1, quantile = 0.75)
 
 \item{ppm}{mass accuracy, default 10}
 
-\item{prems}{precersor mass range, default 1.1 to include M+H or M-H}
+\item{prems}{precursor mass range, default 1.1 to include M+H or M-H}
 
 \item{intc}{intensity cutoff for peaks. Default 0.1}
 

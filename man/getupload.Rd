@@ -23,7 +23,7 @@ getupload(
 
 \item{name}{file name}
 
-\item{type}{m means  Metaboanalyst, a means xMSannotator, o means full infomation csv}
+\item{type}{m means  Metaboanalyst, a means xMSannotator, o means full information csv}
 
 \item{mzdigit}{m/z digits of row names of data frame}
 

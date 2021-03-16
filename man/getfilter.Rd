@@ -15,7 +15,7 @@ getfilter(list, rowindex = T, colindex = T, name = NULL, type = "o", ...)
 
 \item{name}{file name for csv and/or eic file, default NULL}
 
-\item{type}{csv formate for furthor analysis, m means  Metaboanalyst, a means xMSannotator, p means Mummichog(NA values are imputed by `getimputation`, and F test is used here to generate stats and p vlaue), o means full infomation csv (for `pmd` package), default o. mapo could output all those format files.}
+\item{type}{csv format for further analysis, m means  Metaboanalyst, a means xMSannotator, p means Mummichog(NA values are imputed by `getimputation`, and F test is used here to generate stats and p value), o means full information csv (for `pmd` package), default o. mapo could output all those format files.}
 
 \item{...}{other parameters for `getcsv`}
 }

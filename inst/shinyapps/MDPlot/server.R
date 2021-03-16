@@ -452,7 +452,7 @@ shinyServer(function(input, output, session) {
                 })
 
                 # download the filtered data
-                output$x3 = downloadHandler(
+                output$x3 <- downloadHandler(
                         'MDplot-filtered.csv',
                         content = function(file) {
                                 s <- input$x1_rows_selected

@@ -1,5 +1,5 @@
 ---
-title: "Data analysis of GC-MS and LC-MS in Envrionmental Science"
+title: "Data analysis of GC-MS and LC-MS in Environmental Science"
 author: "Miao Yu"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -9,19 +9,19 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-Qualitative and quantitative analysis of contaminants are the core of the Environmental Science. GC/LC-MS might be one of the most popular instruments for such analytical methonds. Previous works such as `xcms` were devoloped for GC-MS data. However, such packages have limited functions for environmental analysis. In this package. I added functions for various GC/LC-MS data analysis purposes used in environmental analysis. Such feature could not only reveal certain problems, but also help the user find out the unknown patterns in the dataset of GC/LC-MS.
+Qualitative and quantitative analysis of contaminants are the core of the Environmental Science. GC/LC-MS might be one of the most popular instruments for such analytical methods. Previous works such as `xcms` were developed for GC-MS data. However, such packages have limited functions for environmental analysis. In this package. I added functions for various GC/LC-MS data analysis purposes used in environmental analysis. Such feature could not only reveal certain problems, but also help the user find out the unknown patterns in the dataset of GC/LC-MS.
 
 ## Data analysis for single sample
 
 ### Data structure of GC/LC-MS full scan mode
 
-GC/LC is used for separation and MS is used for detection in a GC/LC-MS system. The collected data are intensities of certain mass at different retention time. When we perform analysis on certain column in full scan mode, the counts of different mass were collected in each scan. The drwell time for each scan might only last for 500ms or less. Then the next scan begins with a different retention time. Here we could use a matrix to stand for those data. Each column stands for each mass and row stands for the retention time of that scan. Such matrix could be treated as time series data. In this package, we treat such data as `matrix` type. 
+GC/LC is used for separation and MS is used for detection in a GC/LC-MS system. The collected data are intensities of certain mass at different retention time. When we perform analysis on certain column in full scan mode, the counts of different mass were collected in each scan. The dwell time for each scan might only last for 500ms or less. Then the next scan begins with a different retention time. Here we could use a matrix to stand for those data. Each column stands for each mass and row stands for the retention time of that scan. Such matrix could be treated as time series data. In this package, we treat such data as `matrix` type. 
 
 For high-resolution MS, building such matrix is tricky. We might need to bin the RAW data to make alignment for different scans into a matrix. Such works could be done by `xcms`.
 
 ### Data structure of GC-MS SIM mode
 
-When you perform a selected ions monitor(SIM) mode analysis, only few mass data were collected and each mass would have counts and retention time as a time seris data. In this package, we treat such data as `data.frame` type.
+When you perform a selected ions monitor(SIM) mode analysis, only few mass data were collected and each mass would have counts and retention time as a time series data. In this package, we treat such data as `data.frame` type.
 
 ### Data input
 
@@ -43,7 +43,7 @@ You could also combined the mass full-scan data with the same range of retention
 data <- cbmd(data1,data2,data3)
 ```
 
-### Visulation of mass spectrum data
+### Visualization of mass spectrum data
 
 You could plot the Total Ion Chromatogram(TIC) for certain RT and mass range.
 
@@ -57,7 +57,7 @@ You could also plot the mass spectrum for certain RT range. You could use the re
 plotrtms(data,rt=c(3.1,25),ms=c(100,1000))
 ```
 
-The Extracted Ion Chromatogram(EIC) is also support by `enviGCMS` and the returned data could be analysised for molecular isotopes:
+The Extracted Ion Chromatogram(EIC) is also support by `enviGCMS` and the returned data could be analyzed for molecular isotopes:
 
 ```
 plotmsrt(data,ms=500,rt=c(3.1,25))
@@ -70,19 +70,19 @@ plotms(data)
 plotmz(data)
 ```
 
-You could change the retention time into the temprature if it is a constant speed of temperature rising process. But you need show the temprature range.
+You could change the retention time into the temperature if it is a constant speed of temperature rising process. But you need show the temperature range.
 
 ```
 plott(data,temp = c(100,320))
 ```
 
-### Data analysis for influnces from GC-MS
+### Data analysis for influence from GC-MS
 
-`enviGCMS` supplied many functions for decreasing the noise during the analysis process. `findline` could be used for find line of the boundary regression model for noise. `comparems` could be used to make a point-to-point data  subtraction of two full-scan mass spectrum data. `plotgroup` could be used convert the data matrix into a 0-1 heatmap according to threshold. `plotsub` could be used to show the self backgroud subtraction of full-scan data. `plotsms` shows the RSD of the intensity of full scan data. `plothist` could be used to find the data distribution of the histgram of the intensities of full scan data.
+`enviGCMS` supplied many functions for decreasing the noise during the analysis process. `findline` could be used for find line of the boundary regression model for noise. `comparems` could be used to make a point-to-point data  subtraction of two full-scan mass spectrum data. `plotgroup` could be used convert the data matrix into a 0-1 heatmap according to threshold. `plotsub` could be used to show the self background subtraction of full-scan data. `plotsms` shows the RSD of the intensity of full scan data. `plothist` could be used to find the data distribution of the histogram of the intensities of full scan data.
 
 ### Data analysis for molecular isotope ratio
 
-Some functions could be used to caculate the molecular isotope ratio. EIC data could be import into `GetIntergration` and return the infomation of found peaks. `Getisotoplogues` could be used to caculate the molecular isotope ratio of certain molecular. Some shortcut function such as `batch` and `qbatch` could be used to caculate molecular isotope ratio for mutiple and single molecular in EIC data. 
+Some functions could be used to calculate the molecular isotope ratio. EIC data could be import into `GetIntergration` and return the information of found peaks. `Getisotoplogues` could be used to calculate the molecular isotope ratio of certain molecular. Some shortcut function such as `batch` and `qbatch` could be used to calculate molecular isotope ratio for multiple and single molecular in EIC data. 
 
 ### Quantitative analysis for short-chain chlorinated paraffins(SCCPs)
 
@@ -92,7 +92,7 @@ If you want a graphical user interface for SCCPs analysis, a shiny application i
 
 ## Data analysis for multiple samples
 
-In environmetnal non-target analysis, when multiple samples are collected, problem will raise from the heterogeneity among samples. For example, retention time would shift due to the column. In those cases, `xcms` package could be used to get a peaks list across samples within certain retention time and m/z. `enviGCMS` package has some wrapped function to get the peaks list. Besides, some specific functions such as group comparision, batch correction and visulization are also included. 
+In environmental non-target analysis, when multiple samples are collected, problem will raise from the heterogeneity among samples. For example, retention time would shift due to the column. In those cases, `xcms` package could be used to get a peaks list across samples within certain retention time and m/z. `enviGCMS` package has some wrapped function to get the peaks list. Besides, some specific functions such as group comparison, batch correction and visualization are also included. 
 
 ### Wrap function for `xcms` package
 
@@ -108,7 +108,7 @@ In environmetnal non-target analysis, when multiple samples are collected, probl
 
 - `getimputation` could impute NA in the peaks list.
 
-- `getfilter` could filter the data based on row and colomn index.
+- `getfilter` could filter the data based on row and column index.
 
 - `getdoe` could filter the data based on rsd and intensity and generate group mean, standard deviation, and group rsd.
 
@@ -116,19 +116,19 @@ In environmetnal non-target analysis, when multiple samples are collected, probl
 
 - `getoverlappeak` could get the overlap peaks by mass and retention time range for two different list objects
 
-### Visulation of peaks list data
+### Visualization of peaks list data
 
 - `plotmr` could plot the scatter plot for peaks list with threshold
 
 - `plotmrc` could plot the differences as scatter plot for peaks list with threshold between two group of data
 
-- `plotrsd` could plot the rsd influnces of data in different groups
+- `plotrsd` could plot the rsd influences of data in different groups
 
-- `gifmr` could plot scatter plot for peaks list and output gif file for mutiple groups
+- `gifmr` could plot scatter plot for peaks list and output gif file for multiple groups
 
 - `plotpca` could plot pca score plot
 
-- `plothm` could plot heapmap
+- `plothm` could plot heatmap
 
 - `plotden` could plot density of multiple samples
 

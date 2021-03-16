@@ -9,7 +9,7 @@ plotrla(data, lv, type = "g", ...)
 \arguments{
 \item{data}{data row as peaks and column as samples}
 
-\item{lv}{factor vector for the group infomation}
+\item{lv}{factor vector for the group information}
 
 \item{type}{'g' means group median based, other means all samples median based.}
 

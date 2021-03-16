@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotmzrt.R
 \name{gifmr}
 \alias{gifmr}
-\title{plot scatter plot for rt-mz profile and output gif file for mutiple groups}
+\title{plot scatter plot for rt-mz profile and output gif file for multiple groups}
 \usage{
 gifmr(
   list,
@@ -33,7 +33,7 @@ gifmr(
 gif file
 }
 \description{
-plot scatter plot for rt-mz profile and output gif file for mutiple groups
+plot scatter plot for rt-mz profile and output gif file for multiple groups
 }
 \examples{
 \dontrun{

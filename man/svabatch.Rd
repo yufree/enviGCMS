@@ -2,7 +2,7 @@
 % Please edit documentation in R/deprecated.R
 \name{svabatch}
 \alias{svabatch}
-\title{Plot the influnces of DoE and Batch effects on each peaks}
+\title{Plot the influences of DoE and Batch effects on each peaks}
 \usage{
 svabatch(df, dfsv, dfanova)
 }
@@ -14,10 +14,10 @@ svabatch(df, dfsv, dfanova)
 \item{dfanova}{data output from `svaplot` function for raw data}
 }
 \value{
-influnces plot
+influences plot
 }
 \description{
-Plot the influnces of DoE and Batch effects on each peaks
+Plot the influences of DoE and Batch effects on each peaks
 }
 \examples{
 \dontrun{

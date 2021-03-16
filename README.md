@@ -23,7 +23,7 @@ remotes::install_github("yufree/enviGCMS")
 Usage
 -----
 
-Check this [vignette](http://yufree.github.io/enviGCMS/articles/GCMSDA.html) for Data analysis of GC-MS and LC-MS in Envrionmental Science.
+Check this [vignette](http://yufree.github.io/enviGCMS/articles/GCMSDA.html) for Data analysis of GC-MS and LC-MS in Environmental Science.
 
 Check this [vignette](http://yufree.github.io/enviGCMS/articles/PooledQC.html) for Pooled QC analysis in Environmental Science.
 

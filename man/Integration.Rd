@@ -2,7 +2,7 @@
 % Please edit documentation in R/peaks.R
 \name{Integration}
 \alias{Integration}
-\title{Just intergrate data according to fixed rt and fixed noise area}
+\title{Just integrate data according to fixed rt and fixed noise area}
 \usage{
 Integration(data, rt = c(8.3, 9), brt = c(8.3, 8.4), smoothit = T)
 }
@@ -16,13 +16,13 @@ Integration(data, rt = c(8.3, 9), brt = c(8.3, 8.4), smoothit = T)
 \item{smoothit}{logical, if using an average smooth box or not. If using, n will be used}
 }
 \value{
-area intergration data
+area integration data
 }
 \description{
-Just intergrate data according to fixed rt and fixed noise area
+Just integrate data according to fixed rt and fixed noise area
 }
 \examples{
 \dontrun{
-area <- Intergration(data)
+area <- Integration(data)
 }
 }

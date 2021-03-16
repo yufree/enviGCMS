@@ -89,7 +89,7 @@
 #' @param name result name for csv and/or eic file, default NULL
 #' @param mzdigit m/z digits of row names of data frame, default 4
 #' @param rtdigit retention time digits of row names of data frame, default 1
-#' @param type csv formate for furthor analysis, m means  Metaboanalyst, a means xMSannotator, p means Mummichog(NA values are imputed by `getimputation`, and F test is used here to generate stats and p vlaue), o means full infomation csv (for `pmd` package), default o. mapo could output all those format files.
+#' @param type csv format for further analysis, m means  Metaboanalyst, a means xMSannotator, p means Mummichog(NA values are imputed by `getimputation`, and F test is used here to generate stats and p value), o means full information csv (for `pmd` package), default o. mapo could output all those format files.
 #' @param target logical, preserve original rowname of data or not for target data, default FALSE.
 #' @param ... other parameters for `write.table`
 #' @return NULL, csv file
@@ -166,7 +166,7 @@ getcsv <-
                                               rt = list$rt,
                                               list$data)
                                 colname <- colnames(data)
-                                groupt = c('mz', 'rt', list$group[,-1])
+                                groupt <- c('mz', 'rt', list$group[,-1])
                                 data <- rbind(groupt, data)
                                 if(!target){
                                         rownames(data) <-
@@ -203,8 +203,8 @@ getrangecsv <- function(list,name,...){
 #' @param method parameter for groupval or featureDefinitions function, default medret
 #' @param value parameter for groupval or featureDefinitions function, default into
 #' @param eic logical, save xcmsSet and xcmsEIC objects for further investigation with the same name of files, you will need raw files in the same directory as defined in xcmsSet to extract the EIC based on the binned data. You could use `plot` to plot EIC for specific peaks. For example, `plot(xcmsEIC,xcmsSet,groupidx = 'M123.4567T278.9')` could show the EIC for certain peaks with m/z 206 and retention time 2789. default F
-#' @param type csv formate for furthor analysis, m means  Metaboanalyst, a means xMSannotator, p means Mummichog(NA values are imputed by `getimputation`, and F test is used here to generate stats and p vlaue), o means full infomation csv (for `pmd` package), default o. mapo could output all those format files.
-#' @return mzrt object, a list with mzrt profile and group infomation
+#' @param type csv format for further analysis, m means  Metaboanalyst, a means xMSannotator, p means Mummichog(NA values are imputed by `getimputation`, and F test is used here to generate stats and p value), o means full information csv (for `pmd` package), default o. mapo could output all those format files.
+#' @return mzrt object, a list with mzrt profile and group information
 #' @examples
 #' \dontrun{
 #' library(faahKO)
@@ -334,7 +334,7 @@ getimputation <- function(list, method = "l") {
 #' @param rowindex logical, row index to keep
 #' @param colindex logical, column index to keep
 #' @param name file name for csv and/or eic file, default NULL
-#' @param type csv formate for furthor analysis, m means  Metaboanalyst, a means xMSannotator, p means Mummichog(NA values are imputed by `getimputation`, and F test is used here to generate stats and p vlaue), o means full infomation csv (for `pmd` package), default o. mapo could output all those format files.
+#' @param type csv format for further analysis, m means  Metaboanalyst, a means xMSannotator, p means Mummichog(NA values are imputed by `getimputation`, and F test is used here to generate stats and p value), o means full information csv (for `pmd` package), default o. mapo could output all those format files.
 #' @param ... other parameters for `getcsv`
 #' @return list with remain peaks, and filtered peaks index
 #' @examples
@@ -636,7 +636,7 @@ getpqsi <- function(data, order, n=5){
 }
 
 #' Perform peaks list alignment and return features table
-#' @param list each element should be a data.frame with mz, rt and ins as m/z, retetion time in seconds and intensity of certain peaks.
+#' @param list each element should be a data.frame with mz, rt and ins as m/z, retention time in seconds and intensity of certain peaks.
 #' @param ts template sample index in the list, default 1
 #' @param ppm mass accuracy, default 10
 #' @param deltart retention time shift table, default 5 seconds
@@ -646,7 +646,7 @@ getpqsi <- function(data, order, n=5){
 getretcor <- function(list, ts=1, ppm=10, deltart=5, FUN){
         nli <- list[-ts]
         csd <- list[[ts]]
-        i=1
+        i <- 1
         df1 <- csd
         ins <- df1$ins
         while(i<=length(nli)){
@@ -666,7 +666,7 @@ getretcor <- function(list, ts=1, ppm=10, deltart=5, FUN){
                         insn <- ins[df$xid]
                         ins <- cbind.data.frame(ins1=insn[!duplicated(df$xid)],dfx$ins2)
                 }
-                i=i+1
+                i <- i+1
         }
         colnames(ins) <- paste0('ins',1:length(list))
         li <- list(data = ins, mz=df1[,1], rt=df1[,2])

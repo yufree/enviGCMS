@@ -7,7 +7,7 @@
 getretcor(list, ts = 1, ppm = 10, deltart = 5, FUN)
 }
 \arguments{
-\item{list}{each element should be a data.frame with mz, rt and ins as m/z, retetion time in seconds and intensity of certain peaks.}
+\item{list}{each element should be a data.frame with mz, rt and ins as m/z, retention time in seconds and intensity of certain peaks.}
 
 \item{ts}{template sample index in the list, default 1}
 

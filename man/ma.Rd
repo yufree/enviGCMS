@@ -9,7 +9,7 @@ ma(x, n)
 \arguments{
 \item{x}{a vector}
 
-\item{n}{A number to indentify the size of the moving box.}
+\item{n}{A number to identify the size of the moving box.}
 }
 \value{
 The filtered data

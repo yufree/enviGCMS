@@ -2,7 +2,7 @@
 % Please edit documentation in R/peaks.R
 \name{GetIntegration}
 \alias{GetIntegration}
-\title{GetIntegration was mainly used for get the intergration of certain ion's chromatogram data and plot the data}
+\title{GetIntegration was mainly used for get the integration of certain ion's chromatogram data and plot the data}
 \usage{
 GetIntegration(
   data,
@@ -33,16 +33,16 @@ GetIntegration(
 
 \item{smoothit}{logical, if using an average smooth box or not. If using, n will be used}
 
-\item{half}{logical, if using the left half peak to caculate the area}
+\item{half}{logical, if using the left half peak to calculate the area}
 }
 \value{
-intergration data such as peak area, peak hight, signal and the slope data.
+integration data such as peak area, peak height, signal and the slope data.
 }
 \description{
-GetIntegration was mainly used for get the intergration of certain ion's chromatogram data and plot the data
+GetIntegration was mainly used for get the integration of certain ion's chromatogram data and plot the data
 }
 \examples{
 \dontrun{
-list <- GetIntergration(data)
+list <- GetIntegration(data)
 }
 }
