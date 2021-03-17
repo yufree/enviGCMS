@@ -28,7 +28,7 @@ Mode <- function(x) {
 #' ma(rnorm(1000),5)
 #' @export
 ma <- function(x, n) {
-        stats::filter(x, rep(1 / n, n), circular = T)
+        stats::filter(x, rep(1 / n, n), circular = TRUE)
 }
 
 #' Import data and return the annotated matrix for GC/LC-MS by m/z range and retention time
@@ -46,8 +46,8 @@ ma <- function(x, n) {
 #' }
 getmd <- function(data,
                   mzstep = 0.1,
-                  mzrange = F,
-                  rtrange = F) {
+                  mzrange = FALSE,
+                  rtrange = FALSE) {
         data <- xcms::xcmsRaw(data, profstep = mzstep)
         pf <- xcms::profMat(data)
         rownames(pf) <- mz <- xcms::profMz(data)
@@ -184,7 +184,7 @@ submd <- function(data1,
 #' dev.off()
 #' }
 #' @export
-plotms <- function(data, log = F) {
+plotms <- function(data, log = FALSE) {
         # get the mz and rt range and rotate the matrix to
         # adapt the image function
         indmz <- as.numeric(rownames(data))
@@ -202,7 +202,7 @@ plotms <- function(data, log = F) {
         # show the intensity scale in log 10 based scale
         graphics::par(mar = c(2, 5, 1, 4), fig = c(0, 1, 0.9,
                                                    1))
-        zlim <- range(z, na.rm = T)
+        zlim <- range(z, na.rm = TRUE)
         breaks <- seq(zlim[1], zlim[2], round((zlim[2] - zlim[1]) / 10))
         poly <- vector(mode = "list", length(col))
         graphics::plot(
@@ -257,14 +257,14 @@ plotms <- function(data, log = F) {
                 mar = c(4, 5, 0, 4),
                 fig = c(0, 1, 0,
                         0.9),
-                new = T
+                new = TRUE
         )
         graphics::image(
                 z,
                 ylab = "",
-                axes = F,
+                axes = FALSE,
                 col = col,
-                useRaster = T
+                useRaster = TRUE
         )
         # display the m/z as y
         mzy <- seq(0, 1, length.out = length(indmz))
@@ -293,7 +293,7 @@ plotms <- function(data, log = F) {
                 mar = c(4, 5, 4, 4),
                 fig = c(0, 1, 0,
                         0.9),
-                new = T,
+                new = TRUE,
                 cex.lab = 1
         )
         data[is.na(data)] <- 0
@@ -303,7 +303,7 @@ plotms <- function(data, log = F) {
                 type = "l",
                 ylab = "intensity",
                 xlab = "retention time(s)",
-                frame.plot = F,
+                frame.plot = FALSE,
                 xaxs = "i",
                 yaxs = "i"
         )
@@ -367,7 +367,7 @@ plotmz <- function(data, inscf = 5, ...) {
                 pt.cex = c(1, 2, 3, 4, 5) / 2,
                 pch = 19,
                 bty = "n",
-                horiz = T,
+                horiz = TRUE,
                 cex = 0.7,
                 col = grDevices::rgb(0, 0,
                                      1, 0.1),
@@ -387,7 +387,7 @@ plotmz <- function(data, inscf = 5, ...) {
 #' }
 #' @export
 plott <- function(data,
-                  log = F,
+                  log = FALSE,
                   temp = c(100, 320)) {
         indmz <- as.numeric(rownames(data))
         indrt <- as.numeric(colnames(data))
@@ -405,10 +405,10 @@ plott <- function(data,
                 mar = c(2, 5, 1, 4),
                 fig = c(0, 1, 0.9,
                         1),
-                new = F
+                new = FALSE
         )
         # get the mz and rt range and rotate the matrix to
-        zlim <- range(z, na.rm = T)
+        zlim <- range(z, na.rm = TRUE)
         breaks <- seq(zlim[1], zlim[2], round((zlim[2] - zlim[1]) / 10))
         poly <- vector(mode = "list", length(col))
         graphics::plot(
@@ -463,16 +463,16 @@ plott <- function(data,
                 mar = c(4, 5, 0, 4),
                 fig = c(0, 1, 0,
                         0.9),
-                new = T
+                new = TRUE
         )
         graphics::image(
                 z,
                 xlab = expression("Temperature (" *
                                           degree * C * ")"),
                 ylab = "m/z",
-                axes = F,
+                axes = FALSE,
                 col = col,
-                useRaster = T
+                useRaster = TRUE
         )
         # display the temperature as x
         rtx <- seq(0, 1, length.out = length(indrt))
@@ -517,7 +517,7 @@ plotsub <- function(data) {
 #' plotrtms(matrix,rt = c(500,1000),ms = (300,500))
 #' }
 #' @export
-plotrtms <- function(data, rt, ms, msp=F) {
+plotrtms <- function(data, rt, ms, msp = FALSE) {
         data <- getmd(data, rt, ms)
         temp <- apply(data, 1, mean)
         graphics::plot(
@@ -528,7 +528,7 @@ plotrtms <- function(data, rt, ms, msp=F) {
                 ylab = "intensity",
                 xlab = "m/z",
                 xaxt = "n",
-                frame.plot = F
+                frame.plot = FALSE
         )
         mz <- as.numeric(names(temp))
         index <- seq(1, length(temp))
@@ -550,7 +550,7 @@ plotrtms <- function(data, rt, ms, msp=F) {
 #' plotmsrt(matrix,rt = c(500,1000),ms = 300)
 #' }
 #' @export
-plotmsrt <- function(data, ms, rt, n = F) {
+plotmsrt <- function(data, ms, rt, n = FALSE) {
         data <- getmd(data, rt, c(ms, ms + 1))[1,]
         if (n) {
                 data <- ma(data, n)
@@ -564,7 +564,7 @@ plotmsrt <- function(data, ms, rt, n = F) {
                 main = bquote("m/z = " ~ .(ms)),
                 ylab = "intensity",
                 xlab = "retention time(s)",
-                frame.plot = F
+                frame.plot = FALSE
         )
         data <- data.frame(x, data)
         colnames(data) <- c("RT", "Intensity")
@@ -581,7 +581,7 @@ plotmsrt <- function(data, ms, rt, n = F) {
 #' plottic(matrix)
 #' }
 #' @export
-plottic <- function(data, n = F) {
+plottic <- function(data, n = FALSE) {
         data <- apply(data, 2, sum)
         if (n) {
                 data <- ma(data, n)
@@ -592,7 +592,7 @@ plottic <- function(data, n = F) {
                 type = "l",
                 ylab = "intensity",
                 xlab = "retention time(s)",
-                frame.plot = F
+                frame.plot = FALSE
         )
 }
 #' plot the information of integration
@@ -754,7 +754,7 @@ findline <- function(data,
                 xaxt = "n",
                 yaxt = "n",
                 main = "",
-                frame.plot = F
+                frame.plot = FALSE
         )
         # display the temperature as x
         temp <- round(seq(temp[1], temp[2], length.out = length(x)))
@@ -853,9 +853,9 @@ plotgroup <- function(data, threshold = 2) {
                 t(group),
                 xlab = "retention time(min)",
                 ylab = "m/z",
-                axes = F,
+                axes = FALSE,
                 col = grDevices::heat.colors(2),
-                useRaster = T
+                useRaster = TRUE
         )
         indmz <- as.numeric(rownames(data))
         indrt <- as.numeric(colnames(data))
@@ -896,7 +896,7 @@ plotsms <- function(meanmatrix, rsdmatrix) {
                 mar = c(4.2, 4.2, 0, 1.5),
                 fig = c(0,
                         1, 0, 0.8),
-                new = F,
+                new = FALSE,
                 cex.axis = 1.5,
                 cex.lab = 1.5
         )
@@ -907,7 +907,7 @@ plotsms <- function(meanmatrix, rsdmatrix) {
                 xlab = "Intensity",
                 ylab = "Relative Standard Deviation(%)",
                 xaxt = "n",
-                frame.plot = F
+                frame.plot = FALSE
         )
         graphics::abline(h = 20,
                          lty = 2,
@@ -932,7 +932,7 @@ plotsms <- function(meanmatrix, rsdmatrix) {
                 oma = c(0, 0,
                         0, 0),
                 fig = c(0, 1, 0.8, 1),
-                new = T,
+                new = TRUE,
                 cex.axis = 1.5,
                 cex.lab = 1.5
         )

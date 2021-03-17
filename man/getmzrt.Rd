@@ -11,7 +11,7 @@ getmzrt(
   rtdigit = 1,
   method = "medret",
   value = "into",
-  eic = F,
+  eic = FALSE,
   type = "o"
 )
 }

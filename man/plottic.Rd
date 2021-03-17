@@ -4,7 +4,7 @@
 \alias{plottic}
 \title{Plot Total Ion Chromatogram (TIC)}
 \usage{
-plottic(data, n = F)
+plottic(data, n = FALSE)
 }
 \arguments{
 \item{data}{imported data matrix of GC-MS}

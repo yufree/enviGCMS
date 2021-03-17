@@ -6,7 +6,7 @@
 \usage{
 getdata2(
   path,
-  index = F,
+  index = FALSE,
   snames = NULL,
   sclass = NULL,
   phenoData = NULL,

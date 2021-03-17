@@ -4,7 +4,7 @@
 \alias{plotms}
 \title{plot GC/LC-MS data as a heatmap with TIC}
 \usage{
-plotms(data, log = F)
+plotms(data, log = FALSE)
 }
 \arguments{
 \item{data}{imported data matrix of GC-MS}

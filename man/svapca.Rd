@@ -4,7 +4,7 @@
 \alias{svapca}
 \title{Principal component analysis(PCA) for SVA corrected data and raw data}
 \usage{
-svapca(list, center = T, scale = T, lv = NULL)
+svapca(list, center = TRUE, scale = TRUE, lv = NULL)
 }
 \arguments{
 \item{list}{results from svacor function}

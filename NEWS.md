@@ -1,3 +1,11 @@
+# enviGCMS 0.6.9
+
+
+# enviGCMS 0.6.8
+
+- goodpractice check
+- spell check
+
 # enviGCMS 0.6.7
 
 - fix bug in getpower function

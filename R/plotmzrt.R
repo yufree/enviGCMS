@@ -31,7 +31,7 @@ plotpeak <- function(data,
         graphics::plot.window(xlim = c(1, nrow(data)), ylim = range(data))
         graphics::grid(nx = NA, ny = NULL)
         graphics::abline(
-                v = 1:nrow(data),
+                v = seq_len(nrow(data)),
                 col = "grey",
                 lwd = 5,
                 lty = "dotted"
@@ -45,7 +45,7 @@ plotpeak <- function(data,
                         col = unique(lv),
                         lwd = 3,
                         bty = 'n',
-                        horiz = T
+                        horiz = TRUE
                 )
         } else{
                 graphics::matlines(
@@ -64,7 +64,7 @@ plotpeak <- function(data,
         graphics::mtext(
                 stats::variable.names(t(data)),
                 3,
-                at = 1:nrow(data),
+                at = seq_len(nrow(data)),
                 line = 1,
                 col = "darkgrey"
         )
@@ -121,7 +121,7 @@ plotridge <- function(data,
                         col = col[unique(lv)],
                         lwd = 10,
                         bty = 'n',
-                        horiz = T
+                        horiz = TRUE
                 )
         } else{
                 Map(
@@ -187,7 +187,7 @@ plotrug <- function(data,
 
 
         len <- Map(length, rugs)
-        idx <- 1:length(rugs)
+        idx <- seq_along(rugs)
         yl <- Map(function(x, y)
                 rep(y - 0.3, x), len, idx)
         yh <- Map(function(x, y)
@@ -207,7 +207,7 @@ plotrug <- function(data,
                         col = unique(lv),
                         lwd = 3,
                         bty = 'n',
-                        horiz = T
+                        horiz = TRUE
 
                 )
         } else{
@@ -333,7 +333,7 @@ plotmr <- function(list,
                         legend = dataname,
                         col = col,
                         pch = 19,
-                        horiz = T,
+                        horiz = TRUE,
                         bty = "n",
                         inset = c(0,-0.25)
                 )
@@ -344,7 +344,7 @@ plotmr <- function(list,
                         pt.cex = c(1, 2, 3, 4, 5) / 4,
                         pch = 19,
                         bty = "n",
-                        horiz = T,
+                        horiz = TRUE,
                         cex = 0.7,
                         col = grDevices::rgb(0,
                                              0, 0, 0.318),
@@ -407,7 +407,7 @@ plotmr <- function(list,
                         legend = unique(list$group$sample_group),
                         col = col,
                         pch = 19,
-                        horiz = T,
+                        horiz = TRUE,
                         bty = "n",
                         inset = c(0,-0.25)
                 )
@@ -418,7 +418,7 @@ plotmr <- function(list,
                         pt.cex = c(1, 2, 3, 4, 5) / 4,
                         pch = 19,
                         bty = "n",
-                        horiz = T,
+                        horiz = TRUE,
                         cex = 0.7,
                         col = grDevices::rgb(0,
                                              0, 0, 0.318),
@@ -529,7 +529,7 @@ plotmrc <- function(list,
                         col = grDevices::rgb(0,
                                              0, 0, 0.618),
                         bty = "n",
-                        horiz = T,
+                        horiz = TRUE,
                         inset = c(0,-0.25)
                 )
                 graphics::legend(
@@ -543,7 +543,7 @@ plotmrc <- function(list,
                                 grDevices::rgb(1, 0, 0, 0.618)
                         ),
                         bty = "n",
-                        horiz = T,
+                        horiz = TRUE,
                         inset = c(0,-0.25)
                 )
         } else {
@@ -621,7 +621,7 @@ plotrsd <- function(list,
                         "topright",
                         legend = dataname,
                         col = col,
-                        horiz = T,
+                        horiz = TRUE,
                         pch = 19,
                         bty = "n",
                         inset = c(0,-0.25)
@@ -633,7 +633,7 @@ plotrsd <- function(list,
                                    2, 3, 4, 5) / 2,
                         pch = 19,
                         bty = "n",
-                        horiz = T,
+                        horiz = TRUE,
                         cex = 0.8,
                         col = grDevices::rgb(0, 0, 0, 0.318),
                         inset = c(0,-0.25)
@@ -669,7 +669,7 @@ plotrsd <- function(list,
                         "topright",
                         legend = dataname,
                         col = col,
-                        horiz = T,
+                        horiz = TRUE,
                         pch = 19,
                         bty = "n",
                         inset = c(0,-0.25)
@@ -681,7 +681,7 @@ plotrsd <- function(list,
                                    2, 3, 4, 5) / 2,
                         pch = 19,
                         bty = "n",
-                        horiz = T,
+                        horiz = TRUE,
                         cex = 0.8,
                         col = grDevices::rgb(0, 0, 0, 0.318),
                         inset = c(0,-0.25)
@@ -708,8 +708,8 @@ plotrsd <- function(list,
 plotpca <- function(data,
                     lv = NULL,
                     index = NULL,
-                    center = T,
-                    scale = T,
+                    center = TRUE,
+                    scale = TRUE,
                     xrange = NULL,
                     yrange = NULL,
                     pch = NULL,
@@ -801,7 +801,7 @@ plothm <- function(data, lv, index = NULL) {
                         yaxs = "i",
                         ylab = "",
                         xlab = "",
-                        frame.plot = F
+                        frame.plot = FALSE
                 )
                 graphics::axis(
                         4,
@@ -889,7 +889,7 @@ plotden <- function(data,
         if (!is.null(index)) {
                 data <- data[index,]
         }
-        xlim <- range(log10(data + 1), na.rm = T)
+        xlim <- range(log10(data + 1), na.rm = TRUE)
         if (is.null(lv)) {
                 col <- as.numeric(as.factor(colnames(data)))
                 coli <- unique(colnames(data))

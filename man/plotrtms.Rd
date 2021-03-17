@@ -4,7 +4,7 @@
 \alias{plotrtms}
 \title{Plot mass spectrum of certain retention time and return mass spectrum vector (MSP file) for NIST search}
 \usage{
-plotrtms(data, rt, ms, msp = F)
+plotrtms(data, rt, ms, msp = FALSE)
 }
 \arguments{
 \item{data}{imported data matrix of GC-MS}

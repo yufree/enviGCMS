@@ -10,7 +10,7 @@ getdoe(
   rsdcf = 100,
   rsdcft = 30,
   imputation = "l",
-  tr = F,
+  tr = FALSE,
   BPPARAM = BiocParallel::bpparam()
 )
 }

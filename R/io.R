@@ -15,7 +15,7 @@
 #' @seealso \code{\link{getdata}},\code{\link{getupload}}, \code{\link{getmzrt}}, \code{\link{getdoe}}
 getmr <-
         function(path,
-                 index = F,
+                 index = FALSE,
                  BPPARAM = BiocParallel::SnowParam(),
                  pmethod = "hplcorbitrap",
                  minfrac = 0.67,
@@ -44,7 +44,7 @@ getmzrtcsv <- function(path) {
         data <- dataraw[,-c(1:3)]
         colnames(data) <- sample_name
         sample_group <- c(t(utils::read.csv(path, nrows = 1)[-(1:3)]))
-        group <- cbind.data.frame(sample_name,sample_group,stringsAsFactors = F)
+        group <- cbind.data.frame(sample_name,sample_group,stringsAsFactors = FALSE)
         rownames(data) <- dataraw[, 1]
         re <- list(
                 data = data,
@@ -115,7 +115,7 @@ getMSP <- function(file){
         # remove empty lines
         msp <- msp[msp != '']
         ncomp <- grep('^NAME:', msp, ignore.case = TRUE)
-        splitFactorTmp <- rep(1:length(ncomp), diff(c(ncomp, length(msp) + 1)))
+        splitFactorTmp <- rep(seq_along(ncomp), diff(c(ncomp, length(msp) + 1)))
 
         li <- split(msp,f = splitFactorTmp)
         getmsp <- function(x){
@@ -198,10 +198,10 @@ getformula <-
                          S = c(0, 1)
                  )) {
                 list <- list()
-                for (i in 1:length(mz)) {
+                for (i in seq_along(mz)) {
                         element <- paste(names(elements), sep="", collapse="")
-                        minelement <- sapply(elements, function(x) x[1])
-                        maxelement <- sapply(elements, function(x) x[2])
+                        minelement <- vapply(elements, function(x) x[1],1)
+                        maxelement <- vapply(elements, function(x) x[2],1)
                         minelement2 <- paste(paste0(names(minelement),minelement), sep="", collapse="")
                         maxelement2 <- paste(paste0(names(maxelement),maxelement), sep="", collapse="")
                         mfSet <-

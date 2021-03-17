@@ -21,10 +21,10 @@ getalign <- function(mz1,mz2,rt1 = NULL,rt2 = NULL,ppm=10,deltart=10){
         overlapms <- data.table::foverlaps(mza, mzb, which = TRUE)
 
         overlapms$mz1 <- mz1[overlapms$xid]
-        overlapms$mz2 <- mz2[order(mz2,decreasing = F)][overlapms$yid]
+        overlapms$mz2 <- mz2[order(mz2,decreasing = FALSE)][overlapms$yid]
         if(!is.null(rt1)&!is.null(rt2)){
                 overlapms$rt1 <- rt1[overlapms$xid]
-                overlapms$rt2 <- rt2[order(mz2,decreasing = F)][overlapms$yid]
+                overlapms$rt2 <- rt2[order(mz2,decreasing = FALSE)][overlapms$yid]
                 drt <- abs(overlapms$rt1-overlapms$rt2)
                 overlapms <- overlapms[drt<deltart,-c(2)]
                 re <- data.frame(overlapms[!duplicated(overlapms)&stats::complete.cases(overlapms),])
@@ -73,10 +73,10 @@ getalign2 <- function(mz,rt,ppm=5,deltart=5){
         overlap1 <- overlapms[overlapms$xid==overlapms$yid,]
         overlap2 <- overlapms[overlapms$xid!=overlapms$yid,]
         overlap3 <- overlap1[!overlap1$xid%in%overlap2$xid,]
-        x <- igraph::graph_from_data_frame(overlap2,directed = F)
+        x <- igraph::graph_from_data_frame(overlap2,directed = FALSE)
         y <- names(igraph::components(x)$membership[!duplicated(igraph::components(x)$membership)])
         idx <- c(overlap3$xid,as.numeric(y))
-        idxx <- idx[order(idx,decreasing = F)]
+        idxx <- idx[order(idx,decreasing = FALSE)]
         if(length(idxx)>0){
                 return(idxx)
         }else{
@@ -130,7 +130,7 @@ getms1anno <- function(pmd,mz,ppm=10,db=NULL){
                 pmdmt <- outer(db$mass,pmds,'+')
                 rownames(pmdmt) <- db$name
                 li <- list()
-                for(i in 1:length(pmd)){
+                for(i in seq_along(pmd)){
                         re <- enviGCMS::getalign(pmdmt[,i],mz,ppm = ppm)
                         re2 <- db[re$xid,]
                         re3 <- cbind.data.frame(re[,-1],re2)
@@ -178,7 +178,7 @@ dotpanno <- function(file,
                         cut(
                                 mz,
                                 breaks = seq(min(mz), max(mz) + binstep, binstep),
-                                include.lowest = T
+                                include.lowest = TRUE
                         )
                 mz2bint <- stats::aggregate(ins, list(mz2bin), sum)
                 colnames(mz2bint) <- c('factor', 'ins')
@@ -205,7 +205,7 @@ dotpanno <- function(file,
                                                                 max(x[, 1]) + binstep,
                                                                 binstep
                                                         ),
-                                                        include.lowest = T
+                                                        include.lowest = TRUE
                                                 )
                                         ms2ins <-
                                                 stats::aggregate(x[, 2], list(ms2mz), sum)
@@ -217,7 +217,7 @@ dotpanno <- function(file,
                                                 crossprod(db$ins, db$insdb) / sqrt(crossprod(db$ins) * crossprod(db$insdb))
                                         return(cosscore)
                                 }
-                                ms2bin <- sapply(msmsraw, ms2bindb)
+                                ms2bin <- vapply(msmsraw, ms2bindb,1)
 
                                 t <-
                                         list(
@@ -524,7 +524,7 @@ xrankanno <- function(file,
                 mz <- unlist(mz)[idx]
                 ins <- unlist(ins)[idx]
                 ins <- ins / max(ins) * 100
-                mzr <- mz[order(ins,decreasing = T)]
+                mzr <- mz[order(ins,decreasing = TRUE)]
                 if(length(mzr)>30){
                         mzr <- mzr[1:30]
                 }
@@ -548,12 +548,12 @@ xrankanno <- function(file,
                                         idx <- (ins / max(ins)) > intc
                                         mz <- mz[idx]
                                         ins <- ins[idx]
-                                        mzrdb <- mz[order(ins,decreasing = T)]
+                                        mzrdb <- mz[order(ins,decreasing = TRUE)]
                                         if(length(mzrdb)>30){
                                                 mzrdb <- mzrdb[1:30]
                                         }
                                         score <- rep(NA,length(mzr))
-                                        for(i in 1:length(mzr)){
+                                        for(i in seq_along(mzr)){
                                                 match <- which.min(abs(mzrdb-mzr[i])/mzr[i]*1e06 < ppm)
                                                 if(length(match)>0){
                                                         match <-  match[which.min(abs(mzrdb-mzr[i])/mzr[i]*1e06 < ppm)]
@@ -564,7 +564,7 @@ xrankanno <- function(file,
                                         }
                                         # reverse score
                                         score2 <- rep(NA,length(mzrdb))
-                                        for(i in 1:length(mzrdb)){
+                                        for(i in seq_along(mzrdb)){
                                                 match <- which.min(abs(mzr-mzrdb[i])/mzrdb[i]*1e06 < ppm)
                                                 if(length(match)>0){
                                                         match <-  match[which.min(abs(mzr-mzrdb[i])/mzrdb[i]*1e06 < ppm)]
@@ -576,8 +576,8 @@ xrankanno <- function(file,
 
                                         return(mean(c(sum(score),sum(score2))))
                                 }
-                                ms2xr <- sapply(msmsraw, ms2rank)
-                                idx <- ms2xr/max(ms2xr,na.rm = T)>quantile
+                                ms2xr <- vapply(msmsraw, ms2rank,1)
+                                idx <- ms2xr/max(ms2xr,na.rm = TRUE)>quantile
 
                                 t <-
                                         list(
@@ -607,7 +607,7 @@ xrankanno <- function(file,
 #' @return NULL
 #' @export
 plotanno <- function(anno,...) {
-        for (i in 1:length(anno$name)) {
+        for (i in seq_along(anno$name)) {
                 graphics::plot(anno$msmsraw[[i]],
                                type = 'h',
                                main = anno$name[[i]],...)

@@ -4,7 +4,7 @@
 \alias{getmd}
 \title{Import data and return the annotated matrix for GC/LC-MS by m/z range and retention time}
 \usage{
-getmd(data, mzstep = 0.1, mzrange = F, rtrange = F)
+getmd(data, mzstep = 0.1, mzrange = FALSE, rtrange = FALSE)
 }
 \arguments{
 \item{data}{file type which xcmsRaw could handle}

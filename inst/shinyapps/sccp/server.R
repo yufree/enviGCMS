@@ -20,24 +20,24 @@ shinyServer(function(input, output) {
 
         output$reg <- renderTable({
                 li <- liststd()
-                pCl <- sapply(li,function(x) x$sumpCl)
-                rarea <- sapply(li,function(x) x$sumrarea)
+                pCl <- vapply(li,function(x) x$sumpCl,1)
+                rarea <- vapply(li,function(x) x$sumrarea,1)
                 t <- summary(lm(rarea~pCl))
                 t$coefficients
         })
 
         output$reg2 <- renderTable({
                 li <- liststd()
-                pCl <- sapply(li,function(x) x$sumpCl)
-                rarea <- sapply(li,function(x) x$sumrarea)
+                pCl <- vapply(li,function(x) x$sumpCl,1)
+                rarea <- vapply(li,function(x) x$sumrarea,,1)
                 t <- summary(lm(rarea~pCl))
                 t$coefficients
         })
 
         output$plotstd <- renderPlot({
                 li <- liststd()
-                pCl <- sapply(li,function(x) x$sumpCl)
-                rarea <- sapply(li,function(x) x$sumrarea)
+                pCl <- vapply(li,function(x) x$sumpCl,1)
+                rarea <- vapply(li,function(x) x$sumrarea,1)
                 plot(rarea~pCl,xlab = 'Chlorine content %', ylab = 'Response Factor', pch = 19)
         })
 
@@ -47,7 +47,7 @@ shinyServer(function(input, output) {
                 clcomp <- lapply(li,function(x) x$clcomp)
                 par(mfrow = c(length(ccomp),2),mar=c(1,1,1,1))
 
-                for(i in 1:length(ccomp)){
+                for(i in seq_along(ccomp)){
                         ccompi <- ccomp[[i]]
                         clcompi <- clcomp[[i]]
                         barplot(ccompi[,2],names.arg = ccompi[,1],main = paste0('Standard',i,"'s C Composition"))
@@ -74,7 +74,7 @@ shinyServer(function(input, output) {
                 clcomp <- lapply(li,function(x) x$clcomp)
                 par(mfrow = c(length(ccomp),2),mar=c(1,1,1,1))
 
-                for(i in 1:length(ccomp)){
+                for(i in seq_along(ccomp)){
                         ccompi <- ccomp[[i]]
                         clcompi <- clcomp[[i]]
                         barplot(ccompi[,2],names.arg = ccompi[,1],main = paste0('Sample',i,"'s C Composition"))
@@ -84,8 +84,8 @@ shinyServer(function(input, output) {
 
         output$results <- renderPrint({
                 li <- listsample()
-                pCl <- sapply(li,function(x) x$sumpCl)
-                rarea <- sapply(li,function(x) x$sumrarea)
+                pCl <- vapply(li,function(x) x$sumpCl,1)
+                rarea <- vapply(li,function(x) x$sumrarea,1)
                 if(input$log){
                         cons <- rarea/exp((pCl*input$slope+input$inc))
                 }else{

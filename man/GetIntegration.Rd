@@ -11,9 +11,9 @@ GetIntegration(
   m = 5,
   slope = c(2, 2),
   baseline = 10,
-  noslope = T,
-  smoothit = T,
-  half = F
+  noslope = TRUE,
+  smoothit = TRUE,
+  half = FALSE
 )
 }
 \arguments{

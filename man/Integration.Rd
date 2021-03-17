@@ -4,7 +4,7 @@
 \alias{Integration}
 \title{Just integrate data according to fixed rt and fixed noise area}
 \usage{
-Integration(data, rt = c(8.3, 9), brt = c(8.3, 8.4), smoothit = T)
+Integration(data, rt = c(8.3, 9), brt = c(8.3, 8.4), smoothit = TRUE)
 }
 \arguments{
 \item{data}{file should be a dataframe with the first column RT and second column intensity of the SIM ions.}

@@ -9,7 +9,7 @@
                  rtdigit = 1)
         {
                 data <- xcms::featureValues(XCMSnExp, value = value, missing = 0)
-                group <- data.frame(apply(XCMSnExp@phenoData@data, 2, as.character),stringsAsFactors = F)
+                group <- data.frame(apply(XCMSnExp@phenoData@data, 2, as.character),stringsAsFactors = FALSE)
 
                 # peaks info
                 peaks <- xcms::featureDefinitions(XCMSnExp)
@@ -149,15 +149,15 @@ getcsv <-
                                         cbind.data.frame(
                                                 m.z = list$mz,
                                                 rt = list$rt,
-                                                p.value = sapply(ar,function(x) x$`Pr(>F)`[1]),
-                                                t.score = sapply(ar,function(x) x$`F value`[1])
+                                                p.value = vapply(ar,function(x) x$`Pr(>F)`[1],1),
+                                                t.score = vapply(ar,function(x) x$`F value`[1],1)
                                         )
                                 filename <- paste0(name, 'mummichog.txt')
                                 utils::write.table(
                                         df,
                                         file = filename,
                                         sep = "\t",
-                                        row.names = F,
+                                        row.names = FALSE,
                                         ...
                                 )
                         }
@@ -224,7 +224,7 @@ getmzrt <-
                  rtdigit = 1,
                  method = "medret",
                  value = "into",
-                 eic = F,
+                 eic = FALSE,
                  type = 'o') {
                 if (class(xset) == 'xcmsSet') {
                         if (eic) {
@@ -232,7 +232,7 @@ getmzrt <-
                                         xcms::getEIC(
                                                 xset,
                                                 rt = "corrected",
-                                                groupidx = 1:nrow(xset@groups)
+                                                groupidx = seq_len(nrow(xset@groups))
                                         )
                                 eic@groupnames <-
                                         xcms::groupnames(xset,
@@ -261,7 +261,7 @@ getmzrt <-
                                         xcms::getEIC(
                                                 xset2,
                                                 rt = "corrected",
-                                                groupidx = 1:nrow(xset2@groups)
+                                                groupidx = seq_len(nrow(xset2@groups))
                                         )
                                 saveRDS(eic, file = paste0(name, 'eic.rds'))
                                 saveRDS(xset2, file = paste0(name, 'xset.rds'))
@@ -304,15 +304,15 @@ getimputation <- function(list, method = "l") {
                 mz <- mz[idx]
                 rt <- rt[idx]
         } else if (method == "l") {
-                impute <- min(data, na.rm = T) / 2
+                impute <- min(data, na.rm = TRUE) / 2
                 data[is.na(data)] <- impute
         } else if (method == "mean") {
-                for (i in 1:ncol(data)) {
+                for (i in seq_len(ncol(data))) {
                         data[is.na(data[, i]), i] <- mean(data[, i],
                                                           na.rm = TRUE)
                 }
         } else if (method == "median") {
-                for (i in 1:ncol(data)) {
+                for (i in seq_len(ncol(data))) {
                         data[is.na(data[, i]), i] <- stats::median(data[,
                                                                         i], na.rm = TRUE)
                 }
@@ -345,8 +345,8 @@ getimputation <- function(list, method = "l") {
 #' @seealso \code{\link{getdata2}},\code{\link{getdata}}, \code{\link{getmzrt}}, \code{\link{getimputation}}, \code{\link{getmr}}, \code{\link{getcsv}}
 getfilter <-
         function(list,
-                 rowindex = T,
-                 colindex = T,
+                 rowindex = TRUE,
+                 colindex = TRUE,
                  name = NULL,
                  type = 'o',
                  ...) {
@@ -401,7 +401,7 @@ getdoe <- function(list,
                    rsdcf = 100,
                    rsdcft = 30,
                    imputation = "l",
-                   tr = F, BPPARAM = BiocParallel::bpparam()) {
+                   tr = FALSE, BPPARAM = BiocParallel::bpparam()) {
         list <- getimputation(list, method = imputation)
         # remove the technical replicates and use biological
         # replicates instead
@@ -434,22 +434,22 @@ getdoe <- function(list,
                 list$data <- data
                 list$mz <- list$mz[indext]
                 list$rt <- list$rt[indext]
-                # get new group infomation
+                # get new group information
                 ng <- NULL
                 if (ncol(lv) > 1) {
                         for (i in 1:(ncol(lv) - 1)) {
-                                lvi <- sapply(strsplit(
+                                lvi <- vapply(strsplit(
                                         unique(mlv),
                                         split = " ",
                                         fixed = TRUE
                                 ),
                                 `[`,
-                                i)
+                                i,'g')
                                 ng <- cbind(ng, lvi)
                         }
-                        list$group <- cbind.data.frame(sample_name = unique(mlv),ng,stringsAsFactors = F)
+                        list$group <- cbind.data.frame(sample_name = unique(mlv), ng,stringsAsFactors = FALSE)
                 } else {
-                        list$group <- data.frame(sample_name = unique(mlv),sample_group = unique(mlv),stringsAsFactors = F)
+                        list$group <- data.frame(sample_name = unique(mlv),sample_group = unique(mlv),stringsAsFactors = FALSE)
                 }
                 # save the index
                 list$techindex <- indext
@@ -490,7 +490,7 @@ getdoe <- function(list,
                 list$groupmean <- mean
                 list$groupsd <- sd
                 list$grouprsd <- rsd
-                indexrsd[is.na(indexrsd)] <- F
+                indexrsd[is.na(indexrsd)] <- FALSE
                 list$rsdindex <- indexrsd
                 list$insindex <- indexins
                 return(list)
@@ -532,9 +532,9 @@ getpower <-
                 sd <- apply(list$groupsd, 1, mean)
                 if (ng == 2) {
                         ar <- apply(list$data, 1, function(x) stats::t.test(x~group))
-                        dm <- sapply(ar,function(x) x$estimate[1]-x$estimate[2])
+                        dm <- vapply(ar,function(x) x$estimate[1]-x$estimate[2],1)
                         m <- nrow(list$data)
-                        p <- sapply(ar,function(x) x$p.value)
+                        p <- vapply(ar,function(x) x$p.value,1)
                         q <- stats::p.adjust(p, method = "BH")
                         qc <- c(1:m) * pt / m
                         cf <- qc[match(order(qc), order(q))]
@@ -552,7 +552,7 @@ getpower <-
                                         sig.level = cf[i],
                                         power = powert
                                 ),
-                                silent = T)
+                                silent = TRUE)
                                 if (inherits(re2, "try-error"))
                                         n[i] <- NA
                                 else
@@ -565,7 +565,7 @@ getpower <-
                         sdg <- apply(list$groupmean, 1, function(x) stats::sd(x))
                         ar <-
                                 apply(list$data,1, function(x) stats::anova(stats::lm(x~group)))
-                        p <- sapply(ar,function(x) x$`Pr(>F)`[1])
+                        p <- vapply(ar,function(x) x$`Pr(>F)`[1],1)
                         m <- nrow(list$data)
                         q <- stats::p.adjust(p, method = "BH")
                         qc <- c(1:m) * pt / m
@@ -586,7 +586,7 @@ getpower <-
                                         sig.level = cf[i],
                                         power = powert
                                 ),
-                                silent = T)
+                                silent = TRUE)
                                 if (inherits(re2, "try-error"))
                                         n[i] <- NA
                                 else
@@ -608,7 +608,7 @@ getpower <-
 #' getdwtus(list$data[,1])
 #' @export
 #'
-getdwtus <- function(peak,n=512,log=F){
+getdwtus <- function(peak,n=512,log=FALSE){
         if(log){
                 peak <- log(peak+1)
         }
@@ -625,7 +625,7 @@ getdwtus <- function(peak,n=512,log=F){
 
 getpqsi <- function(data, order, n=5){
         data <- data[,order(order)]
-        porp <- 1:ncol(data)
+        porp <- seq_len(ncol(data))
         for(i in n:ncol(data)){
                 p <- apply(data[,c((i-n+1):i)],1,function(x) summary(stats::lm(x~c((i-n+1):i)))$coefficients[2,4])
                 # FDR control
@@ -668,7 +668,7 @@ getretcor <- function(list, ts=1, ppm=10, deltart=5, FUN){
                 }
                 i <- i+1
         }
-        colnames(ins) <- paste0('ins',1:length(list))
+        colnames(ins) <- paste0('ins',seq_along(list))
         li <- list(data = ins, mz=df1[,1], rt=df1[,2])
         return(li)
 }

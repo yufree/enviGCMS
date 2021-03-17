@@ -18,7 +18,7 @@
 #' @export
 getdata <-
         function(path,
-                 index = F,
+                 index = FALSE,
                  BPPARAM = BiocParallel::SnowParam(),
                  pmethod = "hplcorbitrap",
                  minfrac = 0.67,
@@ -254,7 +254,7 @@ getdata <-
 #' @seealso \code{\link{getdata}},\code{\link{getmzrt}}
 #' @export
 getdata2 <- function(path,
-                     index = F,
+                     index = FALSE,
                      snames = NULL,
                      sclass = NULL,
                      phenoData = NULL,

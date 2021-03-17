@@ -217,8 +217,8 @@ svadata <- function(list,
 #' }
 #' @seealso \code{\link{svacor}}, \code{\link{svaplot}}, \code{\link{svabatch}}
 svapca <- function(list,
-                   center = T,
-                   scale = T,
+                   center = TRUE,
+                   scale = TRUE,
                    lv = NULL) {
         .Deprecated()
         message(

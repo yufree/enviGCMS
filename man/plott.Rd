@@ -4,7 +4,7 @@
 \alias{plott}
 \title{plot GC-MS data as a heatmap for constant speed of temperature rising}
 \usage{
-plott(data, log = F, temp = c(100, 320))
+plott(data, log = FALSE, temp = c(100, 320))
 }
 \arguments{
 \item{data}{imported data matrix of GC-MS}

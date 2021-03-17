@@ -12,7 +12,7 @@ getsccp(
   con = 2000,
   rt = NULL,
   rts = NULL,
-  log = T
+  log = TRUE
 )
 }
 \arguments{

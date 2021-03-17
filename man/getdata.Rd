@@ -6,7 +6,7 @@
 \usage{
 getdata(
   path,
-  index = F,
+  index = FALSE,
   BPPARAM = BiocParallel::SnowParam(),
   pmethod = "hplcorbitrap",
   minfrac = 0.67,

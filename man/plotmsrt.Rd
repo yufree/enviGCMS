@@ -4,7 +4,7 @@
 \alias{plotmsrt}
 \title{Plot EIC of certain m/z and return dataframe for integration}
 \usage{
-plotmsrt(data, ms, rt, n = F)
+plotmsrt(data, ms, rt, n = FALSE)
 }
 \arguments{
 \item{data}{imported data matrix of GC-MS}

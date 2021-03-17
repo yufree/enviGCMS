@@ -115,7 +115,7 @@ getmdh <- function(mz,
         }
         temp <- getorder(cus)
         cus <- NULL
-        for (i in 1:length(temp)) {
+        for (i in seq_along(temp)) {
                 cus <- c(cus, getmass(temp[i]))
         }
         if (length(cus) == 2) {
@@ -340,7 +340,7 @@ findohc <-
                  cutoffr = 0.4,
                  clustercf = 10) {
                 mz <- list$mz
-                ins <- apply(list$data, 1, mean, na.rm = T)
+                ins <- apply(list$data, 1, mean, na.rm = TRUE)
                 rt <- list$rt
                 mzr <- round(mz)
                 sm <- mz * sf
@@ -358,7 +358,7 @@ findohc <-
                         )
 
                 result <- NULL
-                for (i in 1:length(smstep)) {
+                for (i in seq_along(smstep)) {
                         mini <- smstep[i] - smsd
                         maxi <- smstep[i] + smsd
                         index <- sd < maxi & sd > mini
@@ -376,7 +376,7 @@ findohc <-
                                 #
                                 # for (j in 1:cn) {
                                 lit <- cbind.data.frame(li, t, i)
-                                for (j in 1:length(unique(t))){
+                                for (j in seq_along(unique(t))){
                                         li2 <- lit[lit[, 7] == j,]
                                         mzt2 <-
                                                 lit$mzr[lit[, 7] == j]
@@ -419,7 +419,7 @@ findmet <-
 
                 if(length(mass)>1){
                         metindex <- NULL
-                        for(i in 1:length(mass)){
+                        for(i in seq_along(mass)){
                                 metindexi <- rmdall>rmd[i]-mdr & rmdall<rmd[i]+mdr
                                 metindex <- cbind(metindex,metindexi)
                         }

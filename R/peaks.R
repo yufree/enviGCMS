@@ -13,7 +13,7 @@ Integration <- function(data,
                         rt = c(8.3, 9),
                         brt = c(8.3,
                                 8.4),
-                        smoothit = T) {
+                        smoothit = TRUE) {
         # subset the data
         subdata <- data[data[, 1] > rt[2] & data[, 1] < rt[1],]
         # get the signal and the RT
@@ -63,9 +63,9 @@ GetIntegration <- function(data,
                            m = 5,
                            slope = c(2, 2),
                            baseline = 10,
-                           noslope = T,
-                           smoothit = T,
-                           half = F) {
+                           noslope = TRUE,
+                           smoothit = TRUE,
+                           half = FALSE) {
         # subset the data
         subdata <- data[data[, 1] > rt[1] & data[, 1] < rt[2],]
         # get the signal and the RT
@@ -145,7 +145,7 @@ GetIntegration <- function(data,
         scantime <- (RTrange[scanend] - RTrange[scanstart]) / (scanend -
                                                                        scanstart) * 60  # time per scan in second
         # when half peak
-        if (half == T) {
+        if (half == TRUE) {
                 for (i in scanstart:scanpeak)
                         area <- area + subsignal[i] *
                                 scantime
@@ -240,14 +240,14 @@ batch <- function(file, mz1, mz2) {
         plotint(xh, name2)
         plotintslope(xh, name2)
         list <- list(xl, xh)
-        area <- sapply(list, function(x)
-                x$area)
-        height <- sapply(list, function(x)
-                x$height)
+        area <- vapply(list, function(x)
+                x$area,1)
+        height <- vapply(list, function(x)
+                x$height,1)
         arearatio <- area[1] / area[2]
         heightratio <- height[1] / height[2]
-        points <- round(mean(sapply(list, function(x)
-                x$peakdata[12])))
+        points <- round(mean(vapply(list, function(x)
+                x$peakdata[12],1)))
         ratio <- c(arearatio, heightratio, points)
         names(ratio) <- c("area ratio", "height ratio", "points")
         return(ratio)
@@ -304,12 +304,12 @@ Getisotopologues <- function(formula = "C12OH6Br4",
         isotopes <- data.frame(t(formula$isotopes[[1]]))
         isotopes <- isotopes[isotopes[, 2]>0.1,]
         # order the intensity by the abandance
-        findpairs <- isotopes[order(isotopes[, 2], decreasing = T),]
+        findpairs <- isotopes[order(isotopes[, 2], decreasing = TRUE),]
         # find the most similar pairs with high abandance
         df <- outer(findpairs[, 1], findpairs[, 1], "/")
         rownames(df) <- colnames(df) <- findpairs[,1]
         diag(df) <- df[upper.tri(df)] <- 0
-        t <- which(df == max(df), arr.ind = T)
+        t <- which(df == max(df), arr.ind = TRUE)
         isotopologues1 <- as.numeric(rownames(df)[t[1]])
         isotopologues2 <- as.numeric(colnames(df)[t[2]])
         isotopologuesL <- min(isotopologues1, isotopologues2)

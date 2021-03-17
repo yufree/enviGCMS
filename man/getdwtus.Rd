@@ -4,7 +4,7 @@
 \alias{getdwtus}
 \title{Density weighted intensity for one sample}
 \usage{
-getdwtus(peak, n = 512, log = F)
+getdwtus(peak, n = 512, log = FALSE)
 }
 \arguments{
 \item{peak}{peaks intensity one sample}
