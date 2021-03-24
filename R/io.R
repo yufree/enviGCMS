@@ -59,6 +59,7 @@ getmzrtcsv <- function(path) {
 #' @param ins a intensity vector
 #' @param mz a vector for mass to charge ratio
 #' @param rt retention time
+#' @param rti retention time index
 #' @param name name of the compounds
 #' @param formula chemical formula
 #' @param ionmode ion mode, default positive
@@ -73,7 +74,7 @@ getmzrtcsv <- function(path) {
 #' writeMSP(ins,mz,'test')
 #' }
 #' @export
-writeMSP <- function(ins, mz, name='unknown',rt=NULL, formula=NULL, ionmode='positive', premz=NULL, ce=NULL, comment=NULL) {
+writeMSP <- function(ins, mz, name='unknown',rt=NULL, rti = NULL, formula=NULL, ionmode='positive', premz=NULL, ce=NULL, comment=NULL) {
         mz <- paste(mz, ins)
         dir.create("MSP")
         zz <- file(file.path("MSP", paste(name, ".msp",                                            sep = "")), "w")
@@ -82,6 +83,7 @@ writeMSP <- function(ins, mz, name='unknown',rt=NULL, formula=NULL, ionmode='pos
         cat(
                 paste("Name:", name),
                 paste("RetentionTime:",rt),
+                paste("RetentionIndex:",rti),
                 paste("Formula:", formula),
                 paste("IonMode:", ionmode),
                 paste("PrecursorMz:", premz),

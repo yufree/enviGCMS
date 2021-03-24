@@ -9,6 +9,7 @@ writeMSP(
   mz,
   name = "unknown",
   rt = NULL,
+  rti = NULL,
   formula = NULL,
   ionmode = "positive",
   premz = NULL,
@@ -24,6 +25,8 @@ writeMSP(
 \item{name}{name of the compounds}
 
 \item{rt}{retention time}
+
+\item{rti}{retention time index}
 
 \item{formula}{chemical formula}
 
