@@ -4,23 +4,47 @@
 \alias{writeMSP}
 \title{Write MSP files for NIST search}
 \usage{
-writeMSP(mz, outfilename = "unknown")
+writeMSP(
+  ins,
+  mz,
+  name = "unknown",
+  rt = NULL,
+  formula = NULL,
+  ionmode = "positive",
+  premz = NULL,
+  ce = NULL,
+  comment = NULL
+)
 }
 \arguments{
-\item{mz}{a intensity vector, who name is the mass in m/z}
+\item{ins}{a intensity vector}
 
-\item{outfilename}{the name of the MSP file, default is 'unknown'}
+\item{mz}{a vector for mass to charge ratio}
+
+\item{name}{name of the compounds}
+
+\item{rt}{retention time}
+
+\item{formula}{chemical formula}
+
+\item{ionmode}{ion mode, default positive}
+
+\item{premz}{precursor ion}
+
+\item{ce}{collision energy}
+
+\item{comment}{comments}
 }
 \value{
-none a MSP file will be created at the subfolder working dictionary with name 'MSP'
+none a MSP file will be created at the sub folder working dictionary with name 'MSP'
 }
 \description{
 Write MSP files for NIST search
 }
 \examples{
 \dontrun{
-mz <- c(10000,20000,10000,30000,5000)
-names(mz) <- c(101,143,189,221,234)
-writeMSP(mz,'test')
+ins <- c(10000,20000,10000,30000,5000)
+mz <- c(101,143,189,221,234)
+writeMSP(ins,mz,'test')
 }
 }

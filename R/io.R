@@ -56,48 +56,50 @@ getmzrtcsv <- function(path) {
         return(re)
 }
 #' Write MSP files for NIST search
-#' @param mz a intensity vector, who name is the mass in m/z
-#' @param outfilename the name of the MSP file, default is 'unknown'
-#' @return none a MSP file will be created at the subfolder working dictionary with name 'MSP'
+#' @param ins a intensity vector
+#' @param mz a vector for mass to charge ratio
+#' @param rt retention time
+#' @param name name of the compounds
+#' @param formula chemical formula
+#' @param ionmode ion mode, default positive
+#' @param premz precursor ion
+#' @param ce collision energy
+#' @param comment comments
+#' @return none a MSP file will be created at the sub folder working dictionary with name 'MSP'
 #' @examples
 #' \dontrun{
-#' mz <- c(10000,20000,10000,30000,5000)
-#' names(mz) <- c(101,143,189,221,234)
-#' writeMSP(mz,'test')
+#' ins <- c(10000,20000,10000,30000,5000)
+#' mz <- c(101,143,189,221,234)
+#' writeMSP(ins,mz,'test')
 #' }
 #' @export
-writeMSP <- function(mz, outfilename = "unknown") {
-        mz <- paste(names(mz), round(mz))
+writeMSP <- function(ins, mz, name='unknown',rt=NULL, formula=NULL, ionmode='positive', premz=NULL, ce=NULL, comment=NULL) {
+        mz <- paste(mz, ins)
         dir.create("MSP")
-        zz <- file(file.path("MSP", paste(outfilename, ".msp",
-                                          sep = "")), "w")
+        zz <- file(file.path("MSP", paste(name, ".msp",                                            sep = "")), "w")
+
         nPeaks <- length(mz)
         cat(
-                "Name: unknown",
-                paste("Num Peaks: ", nPeaks),
+                paste("Name:", name),
+                paste("RetentionTime:",rt),
+                paste("Formula:", formula),
+                paste("IonMode:", ionmode),
+                paste("PrecursorMz:", premz),
+                paste("Collision_energy:",ce),
+                paste("Num Peaks:", nPeaks),
+                paste("Comment:",comment),
                 file = zz,
                 sep = "\n"
         )
-        while (length(mz) >= 5) {
-                cat(paste(mz[1:5]),
-                    "",
-                    file = zz,
-                    sep = "; ")
-                cat(paste("\n"), file = zz)
-                mz <- mz[6:length(mz)]
-        }
-        if (!is.na(mz[1])) {
-                cat(paste(mz),
-                    "",
-                    file = zz,
-                    sep = "; ")
-                cat(paste("\n"), file = zz)
-        }
+        cat(paste(mz),
+            "",
+            file = zz,
+            sep = "\n")
         close(zz)
-        print(
+        message(
                 paste(
                         "A data file",
-                        outfilename,
+                        name,
                         ".MSP has been generated in the folder:",
                         "MSP",
                         cat("\n")

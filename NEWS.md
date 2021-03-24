@@ -1,5 +1,6 @@
 # enviGCMS 0.6.9
 
+- update writeMSP function
 
 # enviGCMS 0.6.8
 
