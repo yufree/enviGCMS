@@ -145,30 +145,68 @@
     <p>Write MSP files for NIST search</p>
     </div>
 
-    <pre class="usage"><span class='fu'>writeMSP</span><span class='op'>(</span><span class='va'>mz</span>, outfilename <span class='op'>=</span> <span class='st'>"unknown"</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>writeMSP</span><span class='op'>(</span>
+  <span class='va'>ins</span>,
+  <span class='va'>mz</span>,
+  name <span class='op'>=</span> <span class='st'>"unknown"</span>,
+  rt <span class='op'>=</span> <span class='cn'>NULL</span>,
+  formula <span class='op'>=</span> <span class='cn'>NULL</span>,
+  ionmode <span class='op'>=</span> <span class='st'>"positive"</span>,
+  premz <span class='op'>=</span> <span class='cn'>NULL</span>,
+  ce <span class='op'>=</span> <span class='cn'>NULL</span>,
+  comment <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>mz</th>
-      <td><p>a intensity vector, who name is the mass in m/z</p></td>
+      <th>ins</th>
+      <td><p>a intensity vector</p></td>
     </tr>
     <tr>
-      <th>outfilename</th>
-      <td><p>the name of the MSP file, default is 'unknown'</p></td>
+      <th>mz</th>
+      <td><p>a vector for mass to charge ratio</p></td>
+    </tr>
+    <tr>
+      <th>name</th>
+      <td><p>name of the compounds</p></td>
+    </tr>
+    <tr>
+      <th>rt</th>
+      <td><p>retention time</p></td>
+    </tr>
+    <tr>
+      <th>formula</th>
+      <td><p>chemical formula</p></td>
+    </tr>
+    <tr>
+      <th>ionmode</th>
+      <td><p>ion mode, default positive</p></td>
+    </tr>
+    <tr>
+      <th>premz</th>
+      <td><p>precursor ion</p></td>
+    </tr>
+    <tr>
+      <th>ce</th>
+      <td><p>collision energy</p></td>
+    </tr>
+    <tr>
+      <th>comment</th>
+      <td><p>comments</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>none a MSP file will be created at the subfolder working dictionary with name 'MSP'</p>
+    <p>none a MSP file will be created at the sub folder working dictionary with name 'MSP'</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='va'>mz</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>10000</span>,<span class='fl'>20000</span>,<span class='fl'>10000</span>,<span class='fl'>30000</span>,<span class='fl'>5000</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>mz</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>101</span>,<span class='fl'>143</span>,<span class='fl'>189</span>,<span class='fl'>221</span>,<span class='fl'>234</span><span class='op'>)</span>
-<span class='fu'>writeMSP</span><span class='op'>(</span><span class='va'>mz</span>,<span class='st'>'test'</span><span class='op'>)</span>
+<span class='va'>ins</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>10000</span>,<span class='fl'>20000</span>,<span class='fl'>10000</span>,<span class='fl'>30000</span>,<span class='fl'>5000</span><span class='op'>)</span>
+<span class='va'>mz</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>101</span>,<span class='fl'>143</span>,<span class='fl'>189</span>,<span class='fl'>221</span>,<span class='fl'>234</span><span class='op'>)</span>
+<span class='fu'>writeMSP</span><span class='op'>(</span><span class='va'>ins</span>,<span class='va'>mz</span>,<span class='st'>'test'</span><span class='op'>)</span>
 <span class='op'>}</span>
 </div></pre>
   </div>
