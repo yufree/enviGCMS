@@ -1,6 +1,7 @@
 # enviGCMS 0.6.9
 
 - update writeMSP function
+- add findpfc to find potential PFCs
 
 # enviGCMS 0.6.8
 
