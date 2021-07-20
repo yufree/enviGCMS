@@ -166,7 +166,12 @@ getcsv <-
                                               rt = list$rt,
                                               list$data)
                                 colname <- colnames(data)
-                                groupt <- c('mz', 'rt', list$group[,-1])
+                                groupz <- list$group[,-1]
+                                if(ncol(list$group)>2){
+                                        cols <- colnames(groupz)
+                                        groupz <- do.call(paste, c(groupz[cols],sep="_"))
+                                }
+                                groupt <- c('mz', 'rt', groupz)
                                 data <- rbind(groupt, data)
                                 if(!target){
                                         rownames(data) <-
