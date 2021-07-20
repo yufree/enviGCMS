@@ -602,7 +602,7 @@ xrankanno <- function(file,
 }
 
 #' Show MS/MS pmd annotation result
-#' @param anno list from MSmS anno function
+#' @param anno list from MSMS anno function
 #' @param ... other parameter for plot function
 #' @return NULL
 #' @export
