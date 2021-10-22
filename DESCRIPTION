@@ -42,4 +42,4 @@ Imports:
     mixtools,
     data.table,
     igraph
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2

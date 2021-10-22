@@ -472,7 +472,6 @@ findlipid <-
 
 #' Find PFCs based on mass defect analysis
 #' @param list list with data as peaks list, mz, rt and group information, retention time should be in seconds
-#' @param mode 'pos' for positive mode, 'neg' for negative mode and 'none' for neutral mass, only support [M+H] and [M-H] for each mode
 #' @return list list with potential PFCs compounds index
 #' @references Liu, Y.; D’Agostino, L. A.; Qu, G.; Jiang, G.; Martin, J. W. High-Resolution Mass Spectrometry (HRMS) Methods for Nontarget Discovery and Characterization of Poly- and per-Fluoroalkyl Substances (PFASs) in Environmental and Human Samples. TrAC Trends in Analytical Chemistry 2019, 121, 115420.
 #' @examples

@@ -382,7 +382,7 @@ getfilter <-
                         list$group <- list$group[colindex,]
                 }else{
                         list$group <- list$group[colindex]
-                        }
+                }
                 # list$colindex <- colindex
                 getcsv(list, name = name, type = type, ...)
                 return(list)
@@ -676,4 +676,50 @@ getretcor <- function(list, ts=1, ppm=10, deltart=5, FUN){
         colnames(ins) <- paste0('ins',seq_along(list))
         li <- list(data = ins, mz=df1[,1], rt=df1[,2])
         return(li)
+}
+
+#' Merge positive and negative mode data
+#' @param pos a list with mzrt profile collected from positive mode. The sample order should match the negative mode.
+#' @param neg a list with mzrt profile collected from negative mode.The sample order should match the positive mode.
+#' @param ppm pmd mass accuracy, default 5
+#' @param pmd numeric or numeric vector
+#' @param digits mass or mass to charge ratio accuracy for pmd, default 2
+#' @param cutoff correlation coefficients, default 0.9
+#' @return mzrt object with group information from pos mode
+#' @export
+getpn <- function(pos, neg, ppm=5, pmd=2.02, digits = 2,cutoff=0.9){
+        df <- NULL
+        x <- rep(NA,length(pos$mz))
+        for(i in seq_along(pos$mz)){
+                diff <- round((pos$mz[i]-neg$mz),digits)
+                mzr <- data.table::as.data.table(cbind.data.frame(mzmin=pmd*(1-ppm*10e-6),mzmax=pmd*(1+ppm*10e-6)))
+                colnames(mzr) <- c("min","max")
+                data.table::setkey(mzr, min, max)
+                diff <- data.table::data.table(min=diff,max=diff)
+                overlapms <- data.table::foverlaps(diff, mzr, type = 'within', nomatch = 0,which = TRUE)
+                if(nrow(overlapms)!= 0){
+                        if(nrow(overlapms)>1){
+                                cor <- apply(neg$data[overlapms$xid,],1,function(x) suppressWarnings(cor(as.numeric(x),as.numeric(pos$data[i,]))))
+                        }else{
+                                cor <- suppressWarnings(cor(as.numeric(pos$data[i,]),as.numeric(neg$data[overlapms$xid,])))
+                        }
+
+                        t <- cbind.data.frame(pos=pos$mz[i],rt = pos$rt[i],neg=neg$mz[overlapms$xid],rt=neg$rt[overlapms$xid],diffmz=pos$mz[i]-neg$mz[overlapms$xid],diffrt=pos$rt[i]-neg$rt[overlapms$xid],cor=cor)
+                        df <- rbind.data.frame(df,t)
+                }
+        }
+        merge2 <- df[df$cor>cutoff,]
+        idxp <- match(paste(merge2$pos,merge2[,2]),paste(pos$mz,pos$rt))
+        idxn <- match(paste(merge2$neg,merge2[,4]),paste(neg$mz,neg$rt))
+        pos$anno[idxp]
+        neg$anno[idxn]
+        colnames(neg$data) <- colnames(pos$data)
+
+
+        if(is.null(pos$anno)&is.null(neg$anno)){
+                meta <- list(data=rbind(pos$data[-idxp,],neg$data),group=pos$group,mz=c(pos$mz[-idxp],neg$mz),rt = c(pos$rt[-idxp],neg$rt),mname = c(paste0('P_',rownames(pos$data)[-idxp]),paste0('N_',rownames(neg$data))))
+        }else{
+                meta <- list(data=rbind(pos$data[-idxp,],neg$data),group=pos$group,mz=c(pos$mz[-idxp],neg$mz),rt = c(pos$rt[-idxp],neg$rt),mname = c(paste0('P_',rownames(pos$data)[-idxp]),paste0('N_',rownames(neg$data))),anno = c(pos$anno[-idxp],neg$anno))
+        }
+        return(meta)
 }

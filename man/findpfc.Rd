@@ -8,8 +8,6 @@ findpfc(list)
 }
 \arguments{
 \item{list}{list with data as peaks list, mz, rt and group information, retention time should be in seconds}
-
-\item{mode}{'pos' for positive mode, 'neg' for negative mode and 'none' for neutral mass, only support [M+H] and [M-H] for each mode}
 }
 \value{
 list list with potential PFCs compounds index

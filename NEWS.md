@@ -2,6 +2,7 @@
 
 - update writeMSP function
 - add findpfc to find potential PFCs
+- add getpn to connect pos and neg mode data and return mzrt object
 
 # enviGCMS 0.6.8
 
