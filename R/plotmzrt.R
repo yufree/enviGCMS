@@ -108,8 +108,9 @@ plotridge <- function(data,
                                                                  1.5))
         graphics::abline(h = length(ys):1, col = "grey")
 
-        if (!is.null(lv)) {
+        if (!is.null(lv)&nlevels(lv)!=1) {
                 col <- grDevices::hcl.colors(nlevels(lv), "Zissou", alpha = 0.8)
+
                 Map(graphics::polygon,
                     xs,
                     ys,
