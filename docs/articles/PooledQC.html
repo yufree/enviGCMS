@@ -25,6 +25,8 @@
 </script>
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -37,18 +39,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">enviGCMS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.9</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -73,7 +69,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/yufree/enviGCMS/">
+  <a href="https://github.com/yufree/enviGCMS/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -92,11 +88,11 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Pooled QC analysis</h1>
-                        <h4 class="author">Miao Yu</h4>
+                        <h4 data-toc-skip class="author">Miao Yu</h4>
             
-            <h4 class="date">2021-11-16</h4>
+            <h4 data-toc-skip class="date">2021-12-27</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/yufree/enviGCMS/blob/master/vignettes/PooledQC.Rmd"><code>vignettes/PooledQC.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/yufree/enviGCMS/blob/HEAD/vignettes/PooledQC.Rmd" class="external-link"><code>vignettes/PooledQC.Rmd</code></a></small>
       <div class="hidden name"><code>PooledQC.Rmd</code></div>
 
     </div>
@@ -104,66 +100,66 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/yufree/enviGCMS">enviGCMS</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/yufree/enviGCMS" class="external-link">enviGCMS</a></span><span class="op">)</span></code></pre></div>
 <p>Pooled QC samples within injection sequences are very important to control the quality of untargeted analysis. I added some functions in <code>enviGCMS</code> package to visualize or analysis Pooled QC samples or other untargeted peaks profile.</p>
-<div id="peaks-profile" class="section level2">
-<h2 class="hasAnchor">
-<a href="#peaks-profile" class="anchor"></a>Peaks profile</h2>
+<div class="section level2">
+<h2 id="peaks-profile">Peaks profile<a class="anchor" aria-label="anchor" href="#peaks-profile"></a>
+</h2>
 <p>We could check sample-wise changes of peaks.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/plotpeak.html">plotpeak</a></span><span class="op">(</span><span class="va">list</span><span class="op">$</span><span class="va">data</span>, lv <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">list</span><span class="op">$</span><span class="va">group</span><span class="op">$</span><span class="va">sample_group</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/plotpeak.html">plotpeak</a></span><span class="op">(</span><span class="va">list</span><span class="op">$</span><span class="va">data</span>, lv <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">list</span><span class="op">$</span><span class="va">group</span><span class="op">$</span><span class="va">sample_group</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="PooledQC_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
 <p>Or peak-wise changes of samples.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/plotpeak.html">plotpeak</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="va">list</span><span class="op">$</span><span class="va">data</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/plotpeak.html">plotpeak</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">list</span><span class="op">$</span><span class="va">data</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="PooledQC_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
 </div>
-<div id="density-distribution" class="section level2">
-<h2 class="hasAnchor">
-<a href="#density-distribution" class="anchor"></a>Density distribution</h2>
+<div class="section level2">
+<h2 id="density-distribution">Density distribution<a class="anchor" aria-label="anchor" href="#density-distribution"></a>
+</h2>
 <p>For each sample, the peaks’ density distribution will tell us if certain samples show large shift.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">list</span><span class="op">)</span>
-<span class="fu"><a href="../reference/plotden.html">plotden</a></span><span class="op">(</span><span class="va">list</span><span class="op">$</span><span class="va">data</span>,<span class="va">list</span><span class="op">$</span><span class="va">group</span><span class="op">$</span><span class="va">sample_group</span>,ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">list</span><span class="op">)</span>
+<span class="fu"><a href="../reference/plotden.html">plotden</a></span><span class="op">(</span><span class="va">list</span><span class="op">$</span><span class="va">data</span>,<span class="va">list</span><span class="op">$</span><span class="va">group</span><span class="op">$</span><span class="va">sample_group</span>,ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="PooledQC_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># 1-d density for multiple samples</span>
-<span class="fu"><a href="../reference/plotrug.html">plotrug</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">list</span><span class="op">$</span><span class="va">data</span><span class="op">)</span>, lv <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">list</span><span class="op">$</span><span class="va">group</span><span class="op">$</span><span class="va">sample_group</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="../reference/plotrug.html">plotrug</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">list</span><span class="op">$</span><span class="va">data</span><span class="op">)</span>, lv <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">list</span><span class="op">$</span><span class="va">group</span><span class="op">$</span><span class="va">sample_group</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="PooledQC_files/figure-html/unnamed-chunk-4-2.png" width="700"></p>
 </div>
-<div id="relative-log-abundance-rla-plots" class="section level2">
-<h2 class="hasAnchor">
-<a href="#relative-log-abundance-rla-plots" class="anchor"></a>Relative Log Abundance (RLA) plots</h2>
+<div class="section level2">
+<h2 id="relative-log-abundance-rla-plots">Relative Log Abundance (RLA) plots<a class="anchor" aria-label="anchor" href="#relative-log-abundance-rla-plots"></a>
+</h2>
 <p>Relative Log Abundance (RLA) plots could be another way to show the intensity shift.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">list</span><span class="op">)</span>
-<span class="fu"><a href="../reference/plotrla.html">plotrla</a></span><span class="op">(</span><span class="va">list</span><span class="op">$</span><span class="va">data</span>,<span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">list</span><span class="op">$</span><span class="va">group</span><span class="op">$</span><span class="va">sample_group</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">list</span><span class="op">)</span>
+<span class="fu"><a href="../reference/plotrla.html">plotrla</a></span><span class="op">(</span><span class="va">list</span><span class="op">$</span><span class="va">data</span>,<span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">list</span><span class="op">$</span><span class="va">group</span><span class="op">$</span><span class="va">sample_group</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="PooledQC_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 </div>
-<div id="relative-log-abundance-ridge-rlar-plots" class="section level2">
-<h2 class="hasAnchor">
-<a href="#relative-log-abundance-ridge-rlar-plots" class="anchor"></a>Relative Log Abundance Ridge (RLAR) plots</h2>
+<div class="section level2">
+<h2 id="relative-log-abundance-ridge-rlar-plots">Relative Log Abundance Ridge (RLAR) plots<a class="anchor" aria-label="anchor" href="#relative-log-abundance-ridge-rlar-plots"></a>
+</h2>
 <p>Relative Log Abundance Ridge (RLAR) plots could also be used to show the intensity shift.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">list</span><span class="op">)</span>
-<span class="fu"><a href="../reference/plotridges.html">plotridges</a></span><span class="op">(</span><span class="va">list</span><span class="op">$</span><span class="va">data</span>, <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">list</span><span class="op">$</span><span class="va">group</span><span class="op">$</span><span class="va">sample_group</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">list</span><span class="op">)</span>
+<span class="fu"><a href="../reference/plotridges.html">plotridges</a></span><span class="op">(</span><span class="va">list</span><span class="op">$</span><span class="va">data</span>, <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">list</span><span class="op">$</span><span class="va">group</span><span class="op">$</span><span class="va">sample_group</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="PooledQC_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># ridgeline density plot</span>
-<span class="fu"><a href="../reference/plotridge.html">plotridge</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="va">list</span><span class="op">$</span><span class="va">data</span><span class="op">)</span>,indexy<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span>,xlab <span class="op">=</span> <span class="st">'Intensity'</span>,ylab <span class="op">=</span> <span class="st">'peaks'</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="../reference/plotridge.html">plotridge</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">list</span><span class="op">$</span><span class="va">data</span><span class="op">)</span>,indexy<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span>,xlab <span class="op">=</span> <span class="st">'Intensity'</span>,ylab <span class="op">=</span> <span class="st">'peaks'</span><span class="op">)</span></code></pre></div>
 <p><img src="PooledQC_files/figure-html/unnamed-chunk-6-2.png" width="700"></p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/plotridge.html">plotridge</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">list</span><span class="op">$</span><span class="va">data</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">list</span><span class="op">$</span><span class="va">group</span><span class="op">$</span><span class="va">sample_group</span><span class="op">)</span>,xlab <span class="op">=</span> <span class="st">'Intensity'</span>,ylab <span class="op">=</span> <span class="st">'peaks'</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/plotridge.html">plotridge</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">list</span><span class="op">$</span><span class="va">data</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">list</span><span class="op">$</span><span class="va">group</span><span class="op">$</span><span class="va">sample_group</span><span class="op">)</span>,xlab <span class="op">=</span> <span class="st">'Intensity'</span>,ylab <span class="op">=</span> <span class="st">'peaks'</span><span class="op">)</span></code></pre></div>
 <p><img src="PooledQC_files/figure-html/unnamed-chunk-6-3.png" width="700"></p>
 </div>
-<div id="density-weighted-total-usable-signal" class="section level2">
-<h2 class="hasAnchor">
-<a href="#density-weighted-total-usable-signal" class="anchor"></a>Density Weighted Total Usable Signal</h2>
+<div class="section level2">
+<h2 id="density-weighted-total-usable-signal">Density Weighted Total Usable Signal<a class="anchor" aria-label="anchor" href="#density-weighted-total-usable-signal"></a>
+</h2>
 <p>The sum of all peaks’ intensity or total usable signal(TUS) could show the general trends for each sample while peaks with lower ionization energy will dominated such value. Here I introduced a density weighted TUS to make the values robust to low frequency high intensity peaks. You could use <code>getdwtus</code> to calculate DWTUS for samples.</p>
 <p><span class="math display">\[DWTUS = \sum peak\ intensity * peak\ density\]</span></p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">list</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">list</span><span class="op">$</span><span class="va">data</span>,<span class="fl">2</span>,<span class="va">getdwtus</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">list</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">list</span><span class="op">$</span><span class="va">data</span>,<span class="fl">2</span>,<span class="va">getdwtus</span><span class="op">)</span>
 <span class="co">#&gt;     ko15     ko16     ko18     ko19     ko21     ko22     wt15     wt16 </span>
 <span class="co">#&gt; 27.63040 29.95684 29.47828 28.80768 28.55539 29.62787 26.01125 26.66868 </span>
 <span class="co">#&gt;     wt18     wt19     wt21     wt22 </span>
@@ -171,9 +167,9 @@
 <span class="fu"><a href="../reference/plotdwtus.html">plotdwtus</a></span><span class="op">(</span><span class="va">list</span><span class="op">)</span></code></pre></div>
 <p><img src="PooledQC_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
 </div>
-<div id="run-order-effect-analysis" class="section level2">
-<h2 class="hasAnchor">
-<a href="#run-order-effect-analysis" class="anchor"></a>Run order effect analysis</h2>
+<div class="section level2">
+<h2 id="run-order-effect-analysis">Run order effect analysis<a class="anchor" aria-label="anchor" href="#run-order-effect-analysis"></a>
+</h2>
 <p>For LC/GC-MS analysis, the run order will affect the intensity of single peak until the instrument is stable. The intensity will decrease/increase with initial run order and researcher need to evaluate how many samples are enough to eliminated run order effects. Here I introduced a pooled QC linear index to show such trends in the sequence.</p>
 <div class="figure">
 <img src="https://yufree.github.io/presentation/figure/pooledQC.png" alt=""><p class="caption">pqsi</p>
@@ -184,7 +180,7 @@
 <span class="co"># n means how many points to build a linear regression model</span>
 <span class="va">n</span> <span class="op">=</span> <span class="fl">5</span>
 <span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getpqsi.html">getpqsi</a></span><span class="op">(</span><span class="va">list</span><span class="op">$</span><span class="va">data</span>,<span class="va">order</span>,n <span class="op">=</span> <span class="va">n</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">idx</span><span class="op">~</span><span class="va">order</span><span class="op">[</span><span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="va">n</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">]</span>,pch<span class="op">=</span><span class="fl">19</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">idx</span><span class="op">~</span><span class="va">order</span><span class="op">[</span><span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="va">n</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">]</span>,pch<span class="op">=</span><span class="fl">19</span><span class="op">)</span></code></pre></div>
 <p><img src="PooledQC_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
 <p>In this case, we could see at 5th sample, 30% peaks show correlation with the run order. However, ever since 6th sample, the run order effects could be ignore.</p>
 </div>
@@ -201,11 +197,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Miao YU.</p>
+  <p></p>
+<p>Developed by Miao YU.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -213,6 +211,8 @@
 
   
 
+
+  
 
   </body>
 </html>
