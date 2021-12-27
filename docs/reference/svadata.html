@@ -173,19 +173,19 @@
     <p>data, corrected data, mz and retention for filerted data</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>faahKO</span><span class='op'>)</span>
-<span class='va'>cdfpath</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"cdf"</span>, package <span class='op'>=</span> <span class='st'>"faahKO"</span><span class='op'>)</span>
-<span class='va'>cdffiles</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.files.html'>list.files</a></span><span class='op'>(</span><span class='va'>cdfpath</span>, recursive <span class='op'>=</span> <span class='cn'>TRUE</span>, full.names <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-<span class='va'>xset</span> <span class='op'>&lt;-</span> <span class='fu'>xcmsSet</span><span class='op'>(</span><span class='va'>cdffiles</span><span class='op'>)</span>
-<span class='va'>xset</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/grDevices/plotmath.html'>group</a></span><span class='op'>(</span><span class='va'>xset</span><span class='op'>)</span>
-<span class='va'>xset2</span> <span class='op'>&lt;-</span> <span class='fu'>retcor</span><span class='op'>(</span><span class='va'>xset</span>, family <span class='op'>=</span> <span class='st'>"symmetric"</span>, plottype <span class='op'>=</span> <span class='st'>"mdevden"</span><span class='op'>)</span>
-<span class='va'>xset2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/grDevices/plotmath.html'>group</a></span><span class='op'>(</span><span class='va'>xset2</span>, bw <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span>
-<span class='va'>xset3</span> <span class='op'>&lt;-</span> <span class='fu'>fillPeaks</span><span class='op'>(</span><span class='va'>xset2</span><span class='op'>)</span>
-<span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='svacor.html'>svacor</a></span><span class='op'>(</span><span class='va'>xset3</span><span class='op'>)</span>
-<span class='fu'>svadata</span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span>
-<span class='op'>}</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>faahKO</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>cdfpath</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"cdf"</span>, package <span class='op'>=</span> <span class='st'>"faahKO"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>cdffiles</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.files.html'>list.files</a></span><span class='op'>(</span><span class='va'>cdfpath</span>, recursive <span class='op'>=</span> <span class='cn'>TRUE</span>, full.names <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>xset</span> <span class='op'>&lt;-</span> <span class='fu'>xcmsSet</span><span class='op'>(</span><span class='va'>cdffiles</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>xset</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/grDevices/plotmath.html'>group</a></span><span class='op'>(</span><span class='va'>xset</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>xset2</span> <span class='op'>&lt;-</span> <span class='fu'>retcor</span><span class='op'>(</span><span class='va'>xset</span>, family <span class='op'>=</span> <span class='st'>"symmetric"</span>, plottype <span class='op'>=</span> <span class='st'>"mdevden"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>xset2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/grDevices/plotmath.html'>group</a></span><span class='op'>(</span><span class='va'>xset2</span>, bw <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>xset3</span> <span class='op'>&lt;-</span> <span class='fu'>fillPeaks</span><span class='op'>(</span><span class='va'>xset2</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='svacor.html'>svacor</a></span><span class='op'>(</span><span class='va'>xset3</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>svadata</span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

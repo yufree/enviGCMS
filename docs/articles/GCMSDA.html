@@ -94,7 +94,7 @@
       <h1 data-toc-skip>Data analysis of GC-MS and LC-MS in Environmental Science</h1>
                         <h4 class="author">Miao Yu</h4>
             
-            <h4 class="date">2021-10-22</h4>
+            <h4 class="date">2021-11-16</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/yufree/enviGCMS/blob/master/vignettes/GCMSDA.Rmd"><code>vignettes/GCMSDA.Rmd</code></a></small>
       <div class="hidden name"><code>GCMSDA.Rmd</code></div>
@@ -132,16 +132,16 @@
 <h3 class="hasAnchor">
 <a href="#visualization-of-mass-spectrum-data" class="anchor"></a>Visualization of mass spectrum data</h3>
 <p>You could plot the Total Ion Chromatogram(TIC) for certain RT and mass range.</p>
-<pre><code><a href="../reference/plottic.html">plottic(data,rt=c(3.1,25),ms=c(100,1000))</a></code></pre>
+<pre><code>plottic(data,rt=c(3.1,25),ms=c(100,1000))</code></pre>
 <p>You could also plot the mass spectrum for certain RT range. You could use the returned MSP files for NIST search:</p>
-<pre><code><a href="../reference/plotrtms.html">plotrtms(data,rt=c(3.1,25),ms=c(100,1000))</a></code></pre>
+<pre><code>plotrtms(data,rt=c(3.1,25),ms=c(100,1000))</code></pre>
 <p>The Extracted Ion Chromatogram(EIC) is also support by <code>enviGCMS</code> and the returned data could be analyzed for molecular isotopes:</p>
-<pre><code><a href="../reference/plotmsrt.html">plotmsrt(data,ms=500,rt=c(3.1,25))</a></code></pre>
+<pre><code>plotmsrt(data,ms=500,rt=c(3.1,25))</code></pre>
 <p>You could use <code>plotms</code> or <code>plotmz</code> to show the heatmap or scatter plot for LC/GC-MS data, which is very useful for exploratory data analysis.</p>
-<pre><code><a href="../reference/plotms.html">plotms(data)
-plotmz(data)</a></code></pre>
+<pre><code>plotms(data)
+plotmz(data)</code></pre>
 <p>You could change the retention time into the temperature if it is a constant speed of temperature rising process. But you need show the temperature range.</p>
-<pre><code><a href="../reference/plott.html">plott(data,temp = c(100,320))</a></code></pre>
+<pre><code>plott(data,temp = c(100,320))</code></pre>
 </div>
 <div id="data-analysis-for-influence-from-gc-ms" class="section level3">
 <h3 class="hasAnchor">

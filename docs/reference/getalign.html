@@ -181,13 +181,14 @@
     <p>data frame with aligned peaks table</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>mz1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>221.1171</span>, <span class='fl'>227.1390</span>, <span class='fl'>229.1546</span>, <span class='fl'>233.1497</span>, <span class='fl'>271.0790</span> <span class='op'>)</span>
-<span class='va'>mz2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>282.279</span>, <span class='fl'>281.113</span>, <span class='fl'>227.139</span>, <span class='fl'>227.139</span>, <span class='fl'>302.207</span><span class='op'>)</span>
-<span class='va'>rt1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>590.8710</span>, <span class='fl'>251.3820</span>, <span class='fl'>102.9230</span>, <span class='fl'>85.8850</span>, <span class='fl'>313.8240</span><span class='op'>)</span>
-<span class='va'>rt2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>787.08</span>, <span class='fl'>160.02</span>, <span class='fl'>251.76</span>, <span class='fl'>251.76</span>, <span class='fl'>220.26</span><span class='op'>)</span>
-<span class='fu'>getalign</span><span class='op'>(</span><span class='va'>mz1</span>,<span class='va'>mz2</span>,<span class='va'>rt1</span>,<span class='va'>rt2</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   xid     mz1     mz2     rt1    rt2
-#&gt; 1   2 227.139 227.139 251.382 251.76</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>mz1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>221.1171</span>, <span class='fl'>227.1390</span>, <span class='fl'>229.1546</span>, <span class='fl'>233.1497</span>, <span class='fl'>271.0790</span> <span class='op'>)</span></span>
+<span class='r-in'><span class='va'>mz2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>282.279</span>, <span class='fl'>281.113</span>, <span class='fl'>227.139</span>, <span class='fl'>227.139</span>, <span class='fl'>302.207</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>rt1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>590.8710</span>, <span class='fl'>251.3820</span>, <span class='fl'>102.9230</span>, <span class='fl'>85.8850</span>, <span class='fl'>313.8240</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>rt2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>787.08</span>, <span class='fl'>160.02</span>, <span class='fl'>251.76</span>, <span class='fl'>251.76</span>, <span class='fl'>220.26</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>getalign</span><span class='op'>(</span><span class='va'>mz1</span>,<span class='va'>mz2</span>,<span class='va'>rt1</span>,<span class='va'>rt2</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   xid     mz1     mz2     rt1    rt2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1   2 227.139 227.139 251.382 251.76</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
