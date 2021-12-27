@@ -3,6 +3,7 @@
 - update writeMSP function
 - add findpfc to find potential PFCs
 - add getpn to connect pos and neg mode data and return mzrt object
+- add support for xcms 3 EIC extraction
 
 # enviGCMS 0.6.8
 

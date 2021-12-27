@@ -260,16 +260,10 @@ getmzrt <-
                                 )
                 }
                 else if (class(xset) == 'XCMSnExp') {
-                        xset2 <- methods::as(xset, 'xcmsSet')
+
                         if (eic) {
-                                eic <-
-                                        xcms::getEIC(
-                                                xset2,
-                                                rt = "corrected",
-                                                groupidx = seq_len(nrow(xset2@groups))
-                                        )
-                                saveRDS(eic, file = paste0(name, 'eic.rds'))
-                                saveRDS(xset2, file = paste0(name, 'xset.rds'))
+                                feature_chroms <- xcms::featureChromatograms(xset, features = rep(T,length(xcms::quantify(xset)@NAMES)))
+                                saveRDS(feature_chroms, file = paste0(name, 'eic.rds'))
                         }
                         result <-
                                 .XCMSnExp2mzrt(
