@@ -25,6 +25,8 @@
 </script>
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -37,18 +39,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">enviGCMS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.9</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -73,7 +69,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/yufree/enviGCMS/">
+  <a href="https://github.com/yufree/enviGCMS/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -92,11 +88,11 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Data analysis of GC-MS and LC-MS in Environmental Science</h1>
-                        <h4 class="author">Miao Yu</h4>
+                        <h4 data-toc-skip class="author">Miao Yu</h4>
             
-            <h4 class="date">2021-11-16</h4>
+            <h4 data-toc-skip class="date">2021-12-27</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/yufree/enviGCMS/blob/master/vignettes/GCMSDA.Rmd"><code>vignettes/GCMSDA.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/yufree/enviGCMS/blob/HEAD/vignettes/GCMSDA.Rmd" class="external-link"><code>vignettes/GCMSDA.Rmd</code></a></small>
       <div class="hidden name"><code>GCMSDA.Rmd</code></div>
 
     </div>
@@ -104,69 +100,69 @@
     
     
 <p>Qualitative and quantitative analysis of contaminants are the core of the Environmental Science. GC/LC-MS might be one of the most popular instruments for such analytical methods. Previous works such as <code>xcms</code> were developed for GC-MS data. However, such packages have limited functions for environmental analysis. In this package. I added functions for various GC/LC-MS data analysis purposes used in environmental analysis. Such feature could not only reveal certain problems, but also help the user find out the unknown patterns in the dataset of GC/LC-MS.</p>
-<div id="data-analysis-for-single-sample" class="section level2">
-<h2 class="hasAnchor">
-<a href="#data-analysis-for-single-sample" class="anchor"></a>Data analysis for single sample</h2>
-<div id="data-structure-of-gclc-ms-full-scan-mode" class="section level3">
-<h3 class="hasAnchor">
-<a href="#data-structure-of-gclc-ms-full-scan-mode" class="anchor"></a>Data structure of GC/LC-MS full scan mode</h3>
+<div class="section level2">
+<h2 id="data-analysis-for-single-sample">Data analysis for single sample<a class="anchor" aria-label="anchor" href="#data-analysis-for-single-sample"></a>
+</h2>
+<div class="section level3">
+<h3 id="data-structure-of-gclc-ms-full-scan-mode">Data structure of GC/LC-MS full scan mode<a class="anchor" aria-label="anchor" href="#data-structure-of-gclc-ms-full-scan-mode"></a>
+</h3>
 <p>GC/LC is used for separation and MS is used for detection in a GC/LC-MS system. The collected data are intensities of certain mass at different retention time. When we perform analysis on certain column in full scan mode, the counts of different mass were collected in each scan. The dwell time for each scan might only last for 500ms or less. Then the next scan begins with a different retention time. Here we could use a matrix to stand for those data. Each column stands for each mass and row stands for the retention time of that scan. Such matrix could be treated as time series data. In this package, we treat such data as <code>matrix</code> type.</p>
 <p>For high-resolution MS, building such matrix is tricky. We might need to bin the RAW data to make alignment for different scans into a matrix. Such works could be done by <code>xcms</code>.</p>
 </div>
-<div id="data-structure-of-gc-ms-sim-mode" class="section level3">
-<h3 class="hasAnchor">
-<a href="#data-structure-of-gc-ms-sim-mode" class="anchor"></a>Data structure of GC-MS SIM mode</h3>
+<div class="section level3">
+<h3 id="data-structure-of-gc-ms-sim-mode">Data structure of GC-MS SIM mode<a class="anchor" aria-label="anchor" href="#data-structure-of-gc-ms-sim-mode"></a>
+</h3>
 <p>When you perform a selected ions monitor(SIM) mode analysis, only few mass data were collected and each mass would have counts and retention time as a time series data. In this package, we treat such data as <code>data.frame</code> type.</p>
 </div>
-<div id="data-input" class="section level3">
-<h3 class="hasAnchor">
-<a href="#data-input" class="anchor"></a>Data input</h3>
+<div class="section level3">
+<h3 id="data-input">Data input<a class="anchor" aria-label="anchor" href="#data-input"></a>
+</h3>
 <p>You could use <code>getmd</code> to import the mass spectrum data as supported by <code>xcms</code> and get the profile of GC-MS data matrix. <code>mzstep</code> is the bin step for mass:</p>
-<pre><code>data &lt;- enviGCMS:::getmd('data/data1.CDF', mzstep = 0.1)</code></pre>
+<pre><code><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">enviGCMS</span><span class="fu">:::</span><span class="fu"><a href="../reference/getmd.html">getmd</a></span><span class="op">(</span><span class="st">'data/data1.CDF'</span>, mzstep <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></code></pre>
 <p>You could also subset the data by the mass(m/z 100-1000) or retention time range(40-100s) in <code>getmd</code> function:</p>
-<pre><code>data &lt;- enviGCMS:::getmd(data,mzrange=c(100,1000),rtrange=c(40,100))</code></pre>
+<pre><code><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">enviGCMS</span><span class="fu">:::</span><span class="fu"><a href="../reference/getmd.html">getmd</a></span><span class="op">(</span><span class="va">data</span>,mzrange<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>,<span class="fl">1000</span><span class="op">)</span>,rtrange<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">40</span>,<span class="fl">100</span><span class="op">)</span><span class="op">)</span></code></pre>
 <p>You could also combined the mass full-scan data with the same range of retention time by <code>cbmd</code>:</p>
-<pre><code>data &lt;- cbmd(data1,data2,data3)</code></pre>
+<pre><code><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cbmd.html">cbmd</a></span><span class="op">(</span><span class="va">data1</span>,<span class="va">data2</span>,<span class="va">data3</span><span class="op">)</span></code></pre>
 </div>
-<div id="visualization-of-mass-spectrum-data" class="section level3">
-<h3 class="hasAnchor">
-<a href="#visualization-of-mass-spectrum-data" class="anchor"></a>Visualization of mass spectrum data</h3>
+<div class="section level3">
+<h3 id="visualization-of-mass-spectrum-data">Visualization of mass spectrum data<a class="anchor" aria-label="anchor" href="#visualization-of-mass-spectrum-data"></a>
+</h3>
 <p>You could plot the Total Ion Chromatogram(TIC) for certain RT and mass range.</p>
-<pre><code>plottic(data,rt=c(3.1,25),ms=c(100,1000))</code></pre>
+<pre><code><span class="fu"><a href="../reference/plottic.html">plottic</a></span><span class="op">(</span><span class="va">data</span>,rt<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.1</span>,<span class="fl">25</span><span class="op">)</span>,ms<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>,<span class="fl">1000</span><span class="op">)</span><span class="op">)</span></code></pre>
 <p>You could also plot the mass spectrum for certain RT range. You could use the returned MSP files for NIST search:</p>
-<pre><code>plotrtms(data,rt=c(3.1,25),ms=c(100,1000))</code></pre>
+<pre><code><span class="fu"><a href="../reference/plotrtms.html">plotrtms</a></span><span class="op">(</span><span class="va">data</span>,rt<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.1</span>,<span class="fl">25</span><span class="op">)</span>,ms<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>,<span class="fl">1000</span><span class="op">)</span><span class="op">)</span></code></pre>
 <p>The Extracted Ion Chromatogram(EIC) is also support by <code>enviGCMS</code> and the returned data could be analyzed for molecular isotopes:</p>
-<pre><code>plotmsrt(data,ms=500,rt=c(3.1,25))</code></pre>
+<pre><code><span class="fu"><a href="../reference/plotmsrt.html">plotmsrt</a></span><span class="op">(</span><span class="va">data</span>,ms<span class="op">=</span><span class="fl">500</span>,rt<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.1</span>,<span class="fl">25</span><span class="op">)</span><span class="op">)</span></code></pre>
 <p>You could use <code>plotms</code> or <code>plotmz</code> to show the heatmap or scatter plot for LC/GC-MS data, which is very useful for exploratory data analysis.</p>
-<pre><code>plotms(data)
-plotmz(data)</code></pre>
+<pre><code><span class="fu"><a href="../reference/plotms.html">plotms</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span>
+<span class="fu"><a href="../reference/plotmz.html">plotmz</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></code></pre>
 <p>You could change the retention time into the temperature if it is a constant speed of temperature rising process. But you need show the temperature range.</p>
-<pre><code>plott(data,temp = c(100,320))</code></pre>
+<pre><code><span class="fu"><a href="../reference/plott.html">plott</a></span><span class="op">(</span><span class="va">data</span>,temp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>,<span class="fl">320</span><span class="op">)</span><span class="op">)</span></code></pre>
 </div>
-<div id="data-analysis-for-influence-from-gc-ms" class="section level3">
-<h3 class="hasAnchor">
-<a href="#data-analysis-for-influence-from-gc-ms" class="anchor"></a>Data analysis for influence from GC-MS</h3>
+<div class="section level3">
+<h3 id="data-analysis-for-influence-from-gc-ms">Data analysis for influence from GC-MS<a class="anchor" aria-label="anchor" href="#data-analysis-for-influence-from-gc-ms"></a>
+</h3>
 <p><code>enviGCMS</code> supplied many functions for decreasing the noise during the analysis process. <code>findline</code> could be used for find line of the boundary regression model for noise. <code>comparems</code> could be used to make a point-to-point data subtraction of two full-scan mass spectrum data. <code>plotgroup</code> could be used convert the data matrix into a 0-1 heatmap according to threshold. <code>plotsub</code> could be used to show the self background subtraction of full-scan data. <code>plotsms</code> shows the RSD of the intensity of full scan data. <code>plothist</code> could be used to find the data distribution of the histogram of the intensities of full scan data.</p>
 </div>
-<div id="data-analysis-for-molecular-isotope-ratio" class="section level3">
-<h3 class="hasAnchor">
-<a href="#data-analysis-for-molecular-isotope-ratio" class="anchor"></a>Data analysis for molecular isotope ratio</h3>
+<div class="section level3">
+<h3 id="data-analysis-for-molecular-isotope-ratio">Data analysis for molecular isotope ratio<a class="anchor" aria-label="anchor" href="#data-analysis-for-molecular-isotope-ratio"></a>
+</h3>
 <p>Some functions could be used to calculate the molecular isotope ratio. EIC data could be import into <code>GetIntergration</code> and return the information of found peaks. <code>Getisotoplogues</code> could be used to calculate the molecular isotope ratio of certain molecular. Some shortcut function such as <code>batch</code> and <code>qbatch</code> could be used to calculate molecular isotope ratio for multiple and single molecular in EIC data.</p>
 </div>
-<div id="quantitative-analysis-for-short-chain-chlorinated-paraffinssccps" class="section level3">
-<h3 class="hasAnchor">
-<a href="#quantitative-analysis-for-short-chain-chlorinated-paraffinssccps" class="anchor"></a>Quantitative analysis for short-chain chlorinated paraffins(SCCPs)</h3>
+<div class="section level3">
+<h3 id="quantitative-analysis-for-short-chain-chlorinated-paraffinssccps">Quantitative analysis for short-chain chlorinated paraffins(SCCPs)<a class="anchor" aria-label="anchor" href="#quantitative-analysis-for-short-chain-chlorinated-paraffinssccps"></a>
+</h3>
 <p><code>enviGCMS</code> supply function to perform Quantitative analysis for short-chain chlorinated paraffins(SCCPs) with Q-tof data. Use <code>getsccp</code> to make Quantitative analysis for SCCPs.</p>
 <p>If you want a graphical user interface for SCCPs analysis, a shiny application is developed in this package. You could use <code><a href="../reference/runsccp.html">runsccp()</a></code> to power on the application in a browser.</p>
 </div>
 </div>
-<div id="data-analysis-for-multiple-samples" class="section level2">
-<h2 class="hasAnchor">
-<a href="#data-analysis-for-multiple-samples" class="anchor"></a>Data analysis for multiple samples</h2>
+<div class="section level2">
+<h2 id="data-analysis-for-multiple-samples">Data analysis for multiple samples<a class="anchor" aria-label="anchor" href="#data-analysis-for-multiple-samples"></a>
+</h2>
 <p>In environmental non-target analysis, when multiple samples are collected, problem will raise from the heterogeneity among samples. For example, retention time would shift due to the column. In those cases, <code>xcms</code> package could be used to get a peaks list across samples within certain retention time and m/z. <code>enviGCMS</code> package has some wrapped function to get the peaks list. Besides, some specific functions such as group comparison, batch correction and visualization are also included.</p>
-<div id="wrap-function-for-xcms-package" class="section level3">
-<h3 class="hasAnchor">
-<a href="#wrap-function-for-xcms-package" class="anchor"></a>Wrap function for <code>xcms</code> package</h3>
+<div class="section level3">
+<h3 id="wrap-function-for-xcms-package">Wrap function for <code>xcms</code> package<a class="anchor" aria-label="anchor" href="#wrap-function-for-xcms-package"></a>
+</h3>
 <ul>
 <li><p><code>getdata</code> could be used to get the <code>xcmsSet</code> object in one step with optimized methods</p></li>
 <li><p><code>getdata2</code> could be used to get the <code>XCMSnExp</code> object in one step with optimized methods</p></li>
@@ -174,9 +170,9 @@ plotmz(data)</code></pre>
 <li><p><code>getmzrtcsv</code> could read in the csv files and return a list for peaks list as <code>mzrt</code> object</p></li>
 </ul>
 </div>
-<div id="data-imputation-and-filtering" class="section level3">
-<h3 class="hasAnchor">
-<a href="#data-imputation-and-filtering" class="anchor"></a>Data imputation and filtering</h3>
+<div class="section level3">
+<h3 id="data-imputation-and-filtering">Data imputation and filtering<a class="anchor" aria-label="anchor" href="#data-imputation-and-filtering"></a>
+</h3>
 <ul>
 <li><p><code>getimputation</code> could impute NA in the peaks list.</p></li>
 <li><p><code>getfilter</code> could filter the data based on row and column index.</p></li>
@@ -185,9 +181,9 @@ plotmz(data)</code></pre>
 <li><p><code>getoverlappeak</code> could get the overlap peaks by mass and retention time range for two different list objects</p></li>
 </ul>
 </div>
-<div id="visualization-of-peaks-list-data" class="section level3">
-<h3 class="hasAnchor">
-<a href="#visualization-of-peaks-list-data" class="anchor"></a>Visualization of peaks list data</h3>
+<div class="section level3">
+<h3 id="visualization-of-peaks-list-data">Visualization of peaks list data<a class="anchor" aria-label="anchor" href="#visualization-of-peaks-list-data"></a>
+</h3>
 <ul>
 <li><p><code>plotmr</code> could plot the scatter plot for peaks list with threshold</p></li>
 <li><p><code>plotmrc</code> could plot the differences as scatter plot for peaks list with threshold between two group of data</p></li>
@@ -201,9 +197,9 @@ plotmz(data)</code></pre>
 </ul>
 </div>
 </div>
-<div id="summary" class="section level2">
-<h2 class="hasAnchor">
-<a href="#summary" class="anchor"></a>Summary</h2>
+<div class="section level2">
+<h2 id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
+</h2>
 <p>In general, <code>enviGCMS</code> could be used to explore single data or peaks list from GC/LC-MS and extract certain patterns in the data with various purposes.</p>
 </div>
   </div>
@@ -219,11 +215,13 @@ plotmz(data)</code></pre>
 
 
       <footer><div class="copyright">
-  <p>Developed by Miao YU.</p>
+  <p></p>
+<p>Developed by Miao YU.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -231,6 +229,8 @@ plotmz(data)</code></pre>
 
   
 
+
+  
 
   </body>
 </html>
