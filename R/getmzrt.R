@@ -249,7 +249,7 @@ getmzrt <-
                                                          ))
                                 saveRDS(eic, file = paste0(name, 'eic.rds'))
                         } else {
-                                saveRDS(xset, file = paste0(name, 'xset.rds')
+                                saveRDS(xset, file = paste0(name, 'xset.rds'))
                         }
                         result <-
                                 .xcmsSet2mzrt(
@@ -266,10 +266,10 @@ getmzrt <-
                                 feature_chroms <- xcms::featureChromatograms(xset, features = rep(T,length(xcms::quantify(xset)@NAMES)))
                                 saveRDS(feature_chroms, file = paste0(name, 'eic.rds'))
                         } else {
-                                if(is.null(name)){
+                                if(!is.null(name)){
                                         xset <- as(xset,"xcmsSet")
                                         saveRDS(xset, file = paste0(name, 'xset.rds'))
-                        }
+                        }}
                         result <-
                                 .XCMSnExp2mzrt(
                                         xset,
