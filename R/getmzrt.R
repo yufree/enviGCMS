@@ -83,7 +83,28 @@
                 class(mzrt) <- "mzrt"
                 return(mzrt)
         }
-
+#' Check class
+#'
+#' @noRd
+is.mzrt <- function(x) inherits(x, "mzrt")
+#' c method for mzrt object
+#'
+#' @noRd
+c.mzrt <- function(x, ...){
+        li <- list(x, ...)
+        re <- list()
+        re$mz <- do.call(c,lapply(li,function(x) x$mz))
+        re$rt <- do.call(c,lapply(li,function(x) x$rt))
+        re$data <- do.call(rbind,lapply(li,function(x) x$data))
+        re$mzrange <- do.call(rbind,lapply(li,function(x) x$mzrange))
+        re$rtrange <- do.call(rbind,lapply(li,function(x) x$rtrange))
+        re$groupmean <-  do.call(rbind,lapply(li,function(x) x$groupmean))
+        re$groupsd <-  do.call(rbind,lapply(li,function(x) x$groupsd))
+        re$grouprsd <-  do.call(rbind,lapply(li,function(x) x$grouprsd))
+        re$group <- x$group
+        class(re) <- "mzrt"
+        return(re)
+}
 #' Convert an list object to csv file.
 #' @param list list with data as peaks list, mz, rt and group information
 #' @param name result name for csv and/or eic file, default NULL
@@ -384,6 +405,7 @@ getfilter <-
                 }
                 # list$colindex <- colindex
                 getcsv(list, name = name, type = type, ...)
+                class(list) <- 'mzrt'
                 return(list)
         }
 #' Generate the group level rsd and average intensity based on DoE,
@@ -721,4 +743,44 @@ getpn <- function(pos, neg, ppm=5, pmd=2.02, digits = 2,cutoff=0.9){
                 meta <- list(data=rbind(pos$data[-idxp,],neg$data),group=pos$group,mz=c(pos$mz[-idxp],neg$mz),rt = c(pos$rt[-idxp],neg$rt),mname = c(paste0('P_',rownames(pos$data)[-idxp]),paste0('N_',rownames(neg$data))),anno = c(pos$anno[-idxp],neg$anno))
         }
         return(meta)
+}
+
+#' Align multiple peaks list to one peak list
+#' @param ... peaks list, mzrt objects
+#' @param index numeric, the index of reference peaks.
+#' @param ppm pmd mass accuracy, default 5
+#' @param deltart retention time shift table, default 10 seconds
+#' @return list object with aligned mzrt objects
+#' @export
+getcompare <- function(...,
+                       index = 1,
+                       ppm = 5,
+                       deltart = 5) {
+        li <- list(...)
+        ref <- li[[index]]
+        lire <- li[-index]
+        z <- lapply(lire, function(x) {
+                over <-
+                        enviGCMS::getalign(mz1 = x$mz,
+                                           mz2 = ref$mz,
+                                           rt1 = x$rt,
+                                           rt2 = ref$rt,
+                                           ppm = ppm,
+                                           deltart = deltart)
+                over2 <-
+                        enviGCMS::getalign(mz1 = ref$mz,
+                                           mz2 = x$mz,
+                                           rt1 = ref$rt,
+                                           rt2 = x$rt,
+                                           ppm = ppm,
+                                           deltart = deltart)
+                refi <-
+                        enviGCMS::getfilter(x, rowindex = -unique(over$xid))
+                refo <-
+                        enviGCMS::getfilter(ref, rowindex = unique(over2$xid))
+                ni <- c(refi, refo)
+                return(ni)
+        })
+        re <- append(list(ref),z)
+        return(re)
 }

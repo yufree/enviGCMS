@@ -4,6 +4,7 @@
 - add findpfc to find potential PFCs
 - add getpn to connect pos and neg mode data and return mzrt object
 - add support for xcms 3 EIC extraction
+- add getcompare to align multiple mzrt objects
 
 # enviGCMS 0.6.8
 
