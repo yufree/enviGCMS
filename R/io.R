@@ -55,58 +55,66 @@ getmzrtcsv <- function(path) {
         class(re) <- "mzrt"
         return(re)
 }
-#' Write MSP files for NIST search
-#' @param ins a intensity vector
-#' @param mz a vector for mass to charge ratio
-#' @param rt retention time
-#' @param rti retention time index
+#' Write MSP file for NIST search
+#' @param list a list with spectra information
 #' @param name name of the compounds
-#' @param formula chemical formula
-#' @param ionmode ion mode, default positive
-#' @param premz precursor ion
-#' @param ce collision energy
-#' @param comment comments
-#' @return none a MSP file will be created at the sub folder working dictionary with name 'MSP'
+#' @param sep numeric or logical the numbers of spectra in each file and FALSE to include all of the spectra in one msp file
+#' @return none a MSP file will be created.
 #' @examples
 #' \dontrun{
 #' ins <- c(10000,20000,10000,30000,5000)
 #' mz <- c(101,143,189,221,234)
-#' writeMSP(ins,mz,'test')
+#' writeMSP(list(list(spectra = cbind.data.frame(mz,ins))), name = 'test')
 #' }
 #' @export
-writeMSP <- function(ins, mz, name='unknown',rt=NULL, rti = NULL, formula=NULL, ionmode='positive', premz=NULL, ce=NULL, comment=NULL) {
-        mz <- paste(mz, ins)
-        dir.create("MSP")
-        zz <- file(file.path("MSP", paste(name, ".msp",                                            sep = "")), "w")
-
-        nPeaks <- length(mz)
-        cat(
-                paste("Name:", name),
-                paste("RetentionTime:",rt),
-                paste("RetentionIndex:",rti),
-                paste("Formula:", formula),
-                paste("IonMode:", ionmode),
-                paste("PrecursorMz:", premz),
-                paste("Collision_energy:",ce),
-                paste("Num Peaks:", nPeaks),
-                paste("Comment:",comment),
-                file = zz,
-                sep = "\n"
-        )
-        cat(paste(mz),
-            "",
-            file = zz,
-            sep = "\n")
-        close(zz)
-        message(
-                paste(
-                        "A data file",
-                        name,
-                        ".MSP has been generated in the folder:",
-                        "MSP",
-                        cat("\n")
+writeMSP <- function(list, name='unknown', sep = FALSE) {
+        writemsp <- function(list){
+                mz <- paste(list$spectra$mz, list$spectra$ins)
+                nPeaks <- length(mz)
+                cat(
+                        "BEGIN IONS",
+                        paste("Name:", list$name),
+                        paste("RetentionIndex:",list$rti),
+                        paste("Formula:", list$formula),
+                        paste("IonMode:", list$ionmode),
+                        paste("CHARGE:",list$charge),
+                        paste("PrecursorMz:", list$prec),
+                        paste("Collision_energy:",list$ce),
+                        paste("Num Peaks:", nPeaks),
+                        paste("Instrument_type:",list$instr),
+                        paste("Spectrum_type:",list$msm),
+                        paste(mz),
+                        "END IONS",
+                        file = zz,
+                        sep = "\n"
                 )
-        )
+        }
+        if(sep){
+                for (i in 1:floor(length(list)/sep)){
+                        zz <- file(file.path(paste(name,i, ".msp",                                            sep = "")), "w")
+                        idx <- c(1:sep)+sep*(i-1)
+                        sapply(list[idx],writemsp)
+                        close(zz)
+                }
+                zz <- file(file.path(paste(name,ceiling(length(list)/sep), ".msp",                                            sep = "")), "w")
+                idx <- sep*floor(length(list)/sep)+1:length(list)
+                sapply(list[idx],writemsp)
+                close(zz)
+                message(
+                        paste0(
+                                "MSP files have been generated."
+                        ))
+        }else{
+                zz <- file(file.path(paste(name, ".msp",                                            sep = "")), "w")
+                sapply(list,writemsp)
+                close(zz)
+                message(
+                        paste0(
+                                "A data file ",
+                                name,
+                                ".MSP has been generated."
+                        ))
+        }
 }
 
 #' read in MSP file as list for ms/ms or ms(EI) annotation
@@ -118,30 +126,32 @@ getMSP <- function(file){
         msp <- readLines(file)
         # remove empty lines
         msp <- msp[msp != '']
-        ncomp <- grep('^NAME:', msp, ignore.case = TRUE)
+        ncomp <- grep('^BEGIN IONS', msp, ignore.case = TRUE)
         splitFactorTmp <- rep(seq_along(ncomp), diff(c(ncomp, length(msp) + 1)))
 
         li <- split(msp,f = splitFactorTmp)
         getmsp <- function(x){
-                namet <- x[grep('^NAME:',x, ignore.case=TRUE)]
-                name <- gsub('^NAME: ','',namet, ignore.case=TRUE)
+                namet <- x[grep('^NAME: |^TITLE=',x, ignore.case=TRUE)]
+                name <- gsub('^NAME: |^TITLE=','',namet, ignore.case=TRUE)
+                charget <- x[grep('^CHARGE=',x, ignore.case=TRUE)]
+                charge <- gsub('^CHARGE=','',charget, ignore.case=TRUE)
                 ionmodet <- x[grep('^ION MODE:|^MODE:|^IONMODE:|^Ion_mode:',x, ignore.case=TRUE)]
                 ionmode <- gsub('^ION MODE: |^MODE: |^IONMODE: |^Ion_mode: ','',ionmodet, ignore.case=TRUE)
-                prect <- x[grep('^PRECURSORMZ: |^PRECURSOR M/Z: |^PRECURSOR MZ: |^PEPMASS: |^PrecursorMZ: ',x, ignore.case=TRUE)]
-                prec <- as.numeric(gsub('^PRECURSORMZ: |^PRECURSOR M/Z: |^PRECURSOR MZ: |^PEPMASS: |^PrecursorMZ: ','',prect, ignore.case=TRUE))
+                prect <- x[grep('^PRECURSORMZ: |^PRECURSOR M/Z: |^PRECURSOR MZ: |^PEPMASS: |^PrecursorMZ: |^PEPMASS=',x, ignore.case=TRUE)]
+                prec <- as.numeric(gsub('^PRECURSORMZ: |^PRECURSOR M/Z: |^PRECURSOR MZ: |^PEPMASS: |^PrecursorMZ: |^PEPMASS=','',prect, ignore.case=TRUE))
                 formt <- x[grep('^FORMULA: |^Formula: ',x, ignore.case=TRUE)]
                 formula <- gsub('^FORMULA: |^Formula: ','',formt,ignore.case = TRUE)
                 npt <- x[grep('^Num Peaks: ',x, ignore.case=TRUE)]
                 np <- gsub('^Num Peaks: ','',npt,ignore.case = TRUE)
                 cet <- x[grep('COLLISIONENERGY: |Collision_energy: ',x,ignore.case=TRUE)]
                 ce <- gsub('COLLISIONENERGY: |Collision_energy: ','',cet,ignore.case=TRUE)
-                rtt <- x[grep('RETENTIONINDEX: ',x,ignore.case = TRUE)]
-                rt <- gsub('RETENTIONINDEX: ','',rtt,ignore.case=TRUE)
+                rtt <- x[grep('RETENTIONINDEX: |RTINSECONDS: |RTINSECONDS=',x,ignore.case = TRUE)]
+                rt <- as.numeric(gsub('RETENTIONINDEX: |RTINSECONDS: |RTINSECONDS=','',rtt,ignore.case=TRUE))
                 instrt <- x[grep('Instrument_type: ',x,ignore.case = TRUE)]
                 instr <- gsub('Instrument_type: ','',instrt,ignore.case = TRUE)
                 msmt <- x[grep('Spectrum_type: ',x,ignore.case = TRUE)]
                 msm <- gsub('Spectrum_type: ','',msmt,ignore.case = TRUE)
-                if(as.numeric(np)>0){
+                if(sum(grepl('^Num Peaks: ',x, ignore.case=TRUE))==0){
                         # matrix of masses and intensities
                         massIntIndx <- which(grepl('^[0-9]', x) & !grepl(': ', x))
                         massesInts <- unlist(strsplit(x[massIntIndx], '\t| '))
@@ -151,9 +161,21 @@ getMSP <- function(file){
                         ins <-  massesInts[seq(2, length(massesInts), 2)]
                         ins <- ins/max(ins)*100
                         spectra <- cbind.data.frame(mz=mz,ins=ins)
-                        return(list(name=name,ionmode=ionmode,prec=prec,formula=formula,np = np,rti=rt,ce=ce,instr=instr, msm = msm, spectra=spectra))
-                }else{
-                        return(list(name=name,ionmode=ionmode,prec=prec,formula=formula,np = np,rti=rt,ce=ce,instr=instr,msm = msm))
+                        return(list(name=name,ionmode=ionmode,charge = charge,prec=prec,formula=formula,np = np,rti=rt,ce=ce,instr=instr, msm = msm, spectra=spectra))
+                }else if(as.numeric(np)>0){
+                        # matrix of masses and intensities
+                        massIntIndx <- which(grepl('^[0-9]', x) & !grepl(': ', x))
+                        massesInts <- unlist(strsplit(x[massIntIndx], '\t| '))
+                        massesInts <- as.numeric(massesInts[grep('^[0-9].*[0-9]$|^[0-9]$', massesInts)])
+                        # if any NAs remove from indx
+                        mz <-  massesInts[seq(1, length(massesInts), 2)]
+                        ins <-  massesInts[seq(2, length(massesInts), 2)]
+                        ins <- ins/max(ins)*100
+                        spectra <- cbind.data.frame(mz=mz,ins=ins)
+                        return(list(name=name,ionmode=ionmode,charge = charge,prec=prec,formula=formula,np = np,rti=rt,ce=ce,instr=instr, msm = msm, spectra=spectra))
+                }
+                   else     {
+                        return(list(name=name,ionmode=ionmode,charge = charge,prec=prec,formula=formula,np = np,rti=rt,ce=ce,instr=instr,msm = msm))
                 }
 
         }
