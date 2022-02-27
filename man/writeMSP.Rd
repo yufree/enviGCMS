@@ -2,52 +2,27 @@
 % Please edit documentation in R/io.R
 \name{writeMSP}
 \alias{writeMSP}
-\title{Write MSP files for NIST search}
+\title{Write MSP file for NIST search}
 \usage{
-writeMSP(
-  ins,
-  mz,
-  name = "unknown",
-  rt = NULL,
-  rti = NULL,
-  formula = NULL,
-  ionmode = "positive",
-  premz = NULL,
-  ce = NULL,
-  comment = NULL
-)
+writeMSP(list, name = "unknown", sep = FALSE)
 }
 \arguments{
-\item{ins}{a intensity vector}
-
-\item{mz}{a vector for mass to charge ratio}
+\item{list}{a list with spectra information}
 
 \item{name}{name of the compounds}
 
-\item{rt}{retention time}
-
-\item{rti}{retention time index}
-
-\item{formula}{chemical formula}
-
-\item{ionmode}{ion mode, default positive}
-
-\item{premz}{precursor ion}
-
-\item{ce}{collision energy}
-
-\item{comment}{comments}
+\item{sep}{numeric or logical the numbers of spectra in each file and FALSE to include all of the spectra in one msp file}
 }
 \value{
-none a MSP file will be created at the sub folder working dictionary with name 'MSP'
+none a MSP file will be created.
 }
 \description{
-Write MSP files for NIST search
+Write MSP file for NIST search
 }
 \examples{
 \dontrun{
 ins <- c(10000,20000,10000,30000,5000)
 mz <- c(101,143,189,221,234)
-writeMSP(ins,mz,'test')
+writeMSP(list(list(spectra = cbind.data.frame(mz,ins))), name = 'test')
 }
 }

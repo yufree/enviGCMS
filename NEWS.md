@@ -1,3 +1,7 @@
+# enviGCMS 0.7.0
+
+- update MDplotR shiny documents
+
 # enviGCMS 0.6.9
 
 - update writeMSP function

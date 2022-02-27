@@ -1,0 +1,650 @@
+---
+title: "MDPlotR: interactive mass defect plots"
+output: 
+  flexdashboard::flex_dashboard:
+    social: menu
+    source_code: embed
+    vertical_layout: fill
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(shiny)
+library(DT)
+library(plotly)
+library(crosstalk)
+library(enviGCMS)
+```
+
+Instruction {data-orientation=rows}
+===================================================
+
+#### File input
+
+The input data of the features from processed mass spectrometric data should be in a “.csv” file format. The uploaded csv file have to contain three obligatory columns with the exact names: mz,rt and intensity. These correspond to the mass to charge (m/z), retention time and intensity of the features. Direct infusion experiments without retention time data can use dummy numeric input such as 1 in the rt column. Note that the column names cannot not contain any spaces. Here is the screenshot of a demo csv file:
+
+![](csvdemo.png) 
+
+However, besides the three compulsory columns, the user can freely input their own variables in the csv file. This could further exploit the powerful features of the MDPlotR and also allows the users to tailor their input data from their needs and available information. The user can freely name these variables but these should comply with the naming requirement of R, i.e variable names must start with a letter, and can only contain “letters”, “numbers”, “ _ “ (snake case) and “ . ” (dot). 
+
+Examples could be chemical_formula for those features that have been assigned a chemical formula, chemical_group to group different identified compounds into different classes, e.g. PAHs, PCBs, fatty acids, steroids, etc. You should keep the names short in order avoid long columns that takes up space in your datatable.
+
+After uploading the csv data, input the mass defect (MD) base in the input box(es) and click plot to show the MD plots. You can input two different MD bases that will be calculated separately and shown as “MD1” and “MD2” in the variable selection and in the datatable. 
+
+To input a second order base, insert a comma directly after the first base without any space. Examples are given below. If you input a second order MD base, then the output variables will be “MD1” for the first order base and “MD2” for the second order base.
+
+When you make changes on the left panel, you need to click the Plot button to update the plots and datatable. You should now be able to freely explore your dataset interactively using the input MD bases together with the plots and datatable.
+
+#### Issues
+
+A known issue is about selection. When you select points in the plot, you could get the filtered data table. However, if you go on to select the filtered data table. The points on the plot would not be right. In this case, we suggest to download the filtered data table and upload again to make further visualization.
+
+#### Equation
+
+- Mass Defect:
+
+$$Mass\ defect = round(measured\ mass) - measured\ mass$$
+
+- Relative Mass Defect
+
+$$Relative\ Mass\ defect = (round(measured\ mass) - measured\ mass )/measured\ mass * 10^6$$
+
+- Unit based first order mass defect
+
+$$ Unit\ based\ first\ order\ mass = measured\ mass * round(first\ order\ unit\ exact\ mass)/first\ order\ unit\ exact\ mass $$
+
+$$ First\ order\ mass\ defect = round(Unit\ based\ first\ order\ mass) - Unit\ based\ first\ order\ mass$$
+
+- Unit based second order mass defect
+
+$$ Unit\ based\ second\ order\ mass = First\ order\ mass\ defect (unit 1\ based\ peaks)/First\ order\ mass\ defect (unit 1\ based\ unit 2) $$
+
+$$ Second\ order\ mass\ defect = round(Unit\ based\ second\ order\ mass) - Unit\ based\ second\ order\ mass $$
+
+- Unit based third order mass defect
+
+$$ Unit\ based\ third\ order\ mass = Unit\ based\ second\ order\ mass (unit 1, unit 2\ based\ peaks)/Unit\ based\ second\ order\ mass(unit 1, unit 2\ based\ unit3) $$
+
+$$ Third\ order\ mass\ defect = round(Unit\ based\ third\ order\ mass) - Unit\ based\ third\ order\ mass$$
+
+Examples of chemical formula in the MD formula insert box:
+
+- $CH_2$:  corresponds to one MD base unit, in this case a methylene unit, corresponding to the exact mass of 14.01565.
+
+- $Cl-H$: calculates the addition of one Cl atom and subtraction of one H atom, corresponding to the exact mass of 33.96103. Use the minus sign “-“ to separate the base units. This app only support two different unit.
+
+- $CH_2,O$: specifies that $CH_2$ is the first-order MD unit and $O$ is the second-order MD unit, use comma without blank space to separate them. This app only support at most three-order mass defect units.
+
+- $CH_2,Cl-H$:  specifies that $CH_2$ is the first-order MD unit and $Cl-H$ is the second-order MD unit. Use comma without blank space to separate the units.
+
+#### Useful links
+
+- [Norman Massbank](https://massbank.eu/MassBank/QuickSearch.html)
+- [EnviHomolog](http://www.envihomolog.eawag.ch)
+- [EnviPat](http://www.envipat.eawag.ch)
+- [ChemSpider](http://www.chemspider.com/FullSearch.aspx)
+- [Chemistry Dashboard](https://comptox.epa.gov/dashboard/dsstoxdb/advanced_search)     
+
+Get started {data-orientation=rows}
+===========================================================
+
+Input {.sidebar}
+-----------------------------------------------------------------------
+
+```{r}
+MD_data <- reactive({
+        #  require that the input is available
+        req(input$file1)
+        df <- read.csv(input$file1$datapath)
+        df$RMD <-
+                round((round(df$mz) - df$mz) / df$mz * 10 ^ 6)
+        df$DeltaM <- round(abs(round(df$mz) - df$mz) - abs(round(input$cus0) - as.numeric(input$cus0)),3)
+        # high order mass defect computation
+        
+        mdh1 <- getmdh(df$mz, cus = input$cus1)
+        mdh2 <- getmdh(df$mz, cus = input$cus2)
+        # change column name
+        name1 <- paste0(colnames(mdh1), '_p1')
+        name2 <- paste0(colnames(mdh2), '_p2')
+        mdh <- cbind(mdh1[, -1], mdh2[, -1])
+        colnames(mdh) <- c(name1[-1], name2[-1])
+        
+        df <- cbind(df, mdh)
+        
+})
+# Filtering the intensity, mz, and rt
+output$slide1 <- renderUI({
+        minZ <- min(MD_data()$intensity)
+        maxZ <- max(MD_data()$intensity)
+        
+        sliderInput(
+                "slide1",
+                "Intensity range filter",
+                min = round(minZ)-1,
+                max = round(maxZ)+1,
+                value = c(minZ, maxZ)
+        )
+})
+output$slide2 <- renderUI({
+        minZ <- min(MD_data()$mz)
+        maxZ <- max(MD_data()$mz)
+        
+        sliderInput(
+                "slide2",
+                "mass to charge ratio range",
+                min = round(minZ)-1,
+                max = round(maxZ)+1,
+                value = c(minZ, maxZ)
+        )
+})
+output$slide3 <- renderUI({
+        minZ <- min(MD_data()$rt)
+        maxZ <- max(MD_data()$rt)
+        
+        sliderInput(
+                "slide3",
+                "retention time range",
+                min = round(minZ)-1,
+                max = round(maxZ)+1,
+                value = c(minZ, maxZ)
+        )
+})
+## for plot control ##
+output$plot <- renderUI({
+        if (input$single == "Single") {
+                plotlyOutput("DTPlot1")
+        } else{
+                fluidRow(column(6, plotlyOutput("DTPlot1")),
+                         column(6, plotlyOutput("DTPlot2")))
+        }
+})
+output$plotctr <- renderUI({
+        if (input$single == "Single") {
+                fluidRow(
+                        h4("Plot controls"),
+                        tags$br(),
+                        column(
+                                6,
+                                selectInput(
+                                        inputId = 'xvar1',
+                                        label = 'X variable for plot',
+                                        choices = names(MD_data())
+                                )
+                        ),
+                        column(
+                                6,
+                                selectInput(
+                                        inputId = 'yvar1',
+                                        label = 'Y variable for plot',
+                                        choices = names(MD_data())
+                                )
+                        ),
+                        column(
+                                12,
+                                selectInput(
+                                        inputId = 'zvar1',
+                                        label = 'Symbol variable for plot',
+                                        choices = list(
+                                                `NULL` = 'NA',
+                                                `Variable` = names(MD_data())
+                                        )
+                                        ,
+                                        selected = 'NULL'
+                                )
+                        )
+                )
+                
+        } else{
+                fluidRow(
+                        h4("Plot controls"),
+                        tags$br(),
+                        column(
+                                6,
+                                selectInput(
+                                        inputId = 'xvar1',
+                                        label = 'X variable for Plot 1',
+                                        choices = names(MD_data()),
+                                        selected = names(MD_data())[1]
+                                )
+                        ),
+                        column(
+                                6,
+                                selectInput(
+                                        inputId = 'yvar1',
+                                        label = 'Y variable for Plot 1',
+                                        choices = names(MD_data()),
+                                        selected = names(MD_data())[4]
+                                )
+                        ),
+                        column(
+                                6,
+                                selectInput(
+                                        inputId = 'xvar2',
+                                        label = 'X variable for Plot 2',
+                                        choices = names(MD_data()),
+                                        selected = names(MD_data())[1]
+                                )
+                        ),
+                        column(
+                                6,
+                                selectInput(
+                                        inputId = 'yvar2',
+                                        label = 'Y variable for Plot 2',
+                                        choices = names(MD_data()),
+                                        selected = names(MD_data())[4]
+                                )
+                        ),
+                        column(
+                                6,
+                                selectInput(
+                                        inputId = 'zvar1',
+                                        label = 'Symbol variable for plot',
+                                        choices = list(
+                                                `NULL` = 'NA',
+                                                `Variable` = names(MD_data())
+                                        ),
+                                        selected = 'NULL'
+                                )
+                        ),
+                        column(
+                                6,
+                                selectInput(
+                                        inputId = 'zvar2',
+                                        label = 'Symbol variable for plot 2',
+                                        choices = list(
+                                                `NULL` = 'NA',
+                                                `Variable` = names(MD_data())
+                                        ),
+                                        selected = 'NULL'
+                                )
+                        )
+                )
+        }
+})
+output$plotctr2 <- renderUI({
+        if (input$single == "Single") {
+                fluidRow(
+                        column(12,
+                               tags$br(),
+                               textInput('x1', 'x axis label', input$xvar1),
+                               textInput('y1', 'y axis label', input$yvar1)
+                        ))
+        } else{
+                fluidRow(column(12,
+                                tags$br(),
+                                textInput('x1',
+                                          'x axis label for plot 1',
+                                          input$xvar1),
+                                textInput('y1',
+                                          'y axis label for plot 1',
+                                          input$yvar1),
+                                textInput('x2',
+                                          'x axis label for plot 2',
+                                          input$xvar2),
+                                textInput('y2',
+                                          'y axis label for plot 2',
+                                          input$yvar2)
+                ))
+        }
+        
+})
+#### For MD Plot Panel ####
+observeEvent(input$go, {
+        m <- MD_data()
+        m <-
+                m[m$intensity >= input$slide1[1] &
+                          m$intensity <= input$slide1[2] &
+                          m$mz >= input$slide2[1] &
+                          m$mz <= input$slide2[2] &
+                          m$rt >= input$slide3[1] &
+                          m$rt <= input$slide3[2],]
+        d <- SharedData$new(m)
+        
+        MDplot_y1 <-
+                m[, input$yvar1]
+        
+        MDplot_x1 <-
+                m[, input$xvar1]
+        
+        if(input$zvar1 == 'NA'){
+                MDplot_z1 <- 1
+        }else{
+                MDplot_z1 <- m[, input$zvar1]
+        }
+        
+        # Checkbox option for size of markers by intensity
+        if (input$ins) {
+                intensity <- m$intensity
+        } else{
+                intensity <- NULL
+        }
+        
+        if (input$single == "Double") {
+                MDplot_x2 <-
+                        m[, input$xvar2]
+                
+                MDplot_y2 <-
+                        m[, input$yvar2]
+                
+                if(input$zvar2 == 'NA'){
+                        MDplot_z2 <- 1
+                }else{
+                        MDplot_z2 <- m[, input$zvar2]
+                }
+                
+        }
+        
+        # highlight selected rows in the scatterplot
+        output$DTPlot1 <- renderPlotly({
+                s <- input$x1_rows_selected
+                if (!length(s)) {
+                        p <- d %>%
+                                plot_ly(
+                                        x = MDplot_x1,
+                                        y = MDplot_y1,
+                                        symbol = MDplot_z1,
+                                        showlegend = input$show_leg,
+                                        type = "scatter",
+                                        size = intensity,
+                                        mode = "markers",
+                                        marker = list(
+                                                line = list(
+                                                        width = 1,
+                                                        color = '#FFFFFF'
+                                                )
+                                        ),
+                                        color = I('black'),
+                                        name = 'Unfiltered'
+                                ) %>%
+                                layout(
+                                        legend = list(
+                                                orientation = "h",
+                                                xanchor = "center",
+                                                x = 0.5,
+                                                y = 100
+                                        ),
+                                        showlegend = T,
+                                        xaxis = list(title = input$x1),
+                                        yaxis = list(title = input$y1)
+                                ) %>%
+                                highlight(
+                                        "plotly_selected",
+                                        color = I('red'),
+                                        selected = attrs_selected(name = 'Filtered')
+                                )
+                } else if (length(s)) {
+                        pp <- m %>%
+                                plot_ly() %>%
+                                add_trace(
+                                        x = MDplot_x1,
+                                        y = MDplot_y1,
+                                        symbol = MDplot_z1,
+                                        type = "scatter",
+                                        size = intensity,
+                                        mode = "markers",
+                                        marker = list(
+                                                line = list(
+                                                        width = 1,
+                                                        color = '#FFFFFF'
+                                                )
+                                        ),
+                                        color = I('black'),
+                                        name = 'Unfiltered'
+                                ) %>%
+                                layout(
+                                        legend = list(
+                                                orientation = "h",
+                                                xanchor = "center",
+                                                x = 0.5,
+                                                y = 100
+                                        ),
+                                        showlegend = T,
+                                        xaxis = list(title = input$x1),
+                                        yaxis = list(title = input$y1)
+                                )
+                        
+                        # selected data
+                        pp <-
+                                add_trace(
+                                        pp,
+                                        data = m[s, , drop = F],
+                                        x = MDplot_x1[s],
+                                        y = MDplot_y1[s],
+                                        type = "scatter",
+                                        size = intensity[s],
+                                        mode = "markers",
+                                        marker = list(
+                                                line = list(
+                                                        width = 1,
+                                                        color = '#FFFFFF'
+                                                )
+                                        ),
+                                        color = I('red'),
+                                        name = 'Filtered'
+                                )
+                }
+                
+        })
+        
+        # Plot 2
+        if (input$single == "Double") {
+                output$DTPlot2 <- renderPlotly({
+                        t <- input$x1_rows_selected
+                        
+                        if (!length(t)) {
+                                p <- d %>%
+                                        plot_ly(
+                                                x = MDplot_x2,
+                                                y = MDplot_y2,
+                                                symbol = MDplot_z2,
+                                                showlegend = input$show_leg,
+                                                type = "scatter",
+                                                size = intensity,
+                                                mode = "markers",
+                                                marker = list(
+                                                        line = list(
+                                                                width = 1,
+                                                                color = '#FFFFFF'
+                                                        )
+                                                ),
+                                                color = I('black'),
+                                                name = 'Unfiltered'
+                                        ) %>%
+                                        layout(
+                                                legend = list(
+                                                        orientation = "h",
+                                                        xanchor = "center",
+                                                        x = 0.5,
+                                                        y = 100
+                                                ),
+                                                showlegend = T,
+                                                xaxis = list(title = input$x2),
+                                                yaxis = list(title = input$y2)
+                                        ) %>%
+                                        highlight(
+                                                "plotly_selected",
+                                                color = I('red'),
+                                                selected = attrs_selected(name = 'Filtered')
+                                        )
+                        } else if (length(t)) {
+                                pp <- m %>%
+                                        plot_ly() %>%
+                                        add_trace(
+                                                x = MDplot_x2,
+                                                y = MDplot_y2,
+                                                symbol = MDplot_z2,
+                                                type = "scatter",
+                                                size = intensity,
+                                                mode = "markers",
+                                                marker = list(
+                                                        line = list(
+                                                                width = 1,
+                                                                color = '#FFFFFF'
+                                                        )
+                                                ),
+                                                color = I('black'),
+                                                name = 'Unfiltered'
+                                        ) %>%
+                                        layout(
+                                                legend = list(
+                                                        orientation = "h",
+                                                        xanchor = "center",
+                                                        x = 0.5,
+                                                        y = 100
+                                                ),
+                                                showlegend = T,
+                                                xaxis = list(title = input$x2),
+                                                yaxis = list(title = input$y2)
+                                        )
+                                
+                                
+                                # selected data
+                                pp <-
+                                        add_trace(
+                                                pp,
+                                                data = m[t, , drop = F],
+                                                x = MDplot_x2[t],
+                                                y = MDplot_y2[t],
+                                                type = "scatter",
+                                                size = intensity[t],
+                                                mode = "markers",
+                                                marker = list(
+                                                        line = list(
+                                                                width = 1,
+                                                                color = '#FFFFFF'
+                                                        )
+                                                ),
+                                                color = I('red'),
+                                                name = 'Filtered'
+                                        )
+                        }
+                        
+                })
+        }
+        # highlight selected rows in the table
+        output$x1 <- renderDT({
+                dt <-
+                        DT::datatable(
+                                m,
+                                editable = TRUE,
+                                rownames = FALSE,
+                                filter = "top",
+                                options = list(
+                                        scrollX = '1000px',
+                                        scrollY = '300px',
+                                        dom = 't',
+                                        pageLength=-1,
+                                        scrollCollapse = T)
+                        )
+                dt2 <- DT::datatable(
+                                m[d$selection(), ],
+                                editable = TRUE,
+                                rownames = FALSE,
+                                filter = "top",
+                                options = list(
+                                        scrollX = '1000px',
+                                        scrollY = '300px',
+                                        dom = 't',
+                                        pageLength=-1,
+                                        scrollCollapse = T)
+                        )
+                if (NROW(m[d$selection(), ]) == 0) {
+                        dt
+                } else {
+                        dt2
+                }
+        })
+        
+        # download the filtered data
+        output$x3 <- renderUI({downloadHandler(
+                'MDplot-filtered.csv',
+                content = function(file) {
+                        s <- input$x1_rows_selected
+                        if (length(s)) {
+                                write.csv(m[s, , drop = FALSE], file)
+                        } else if (!length(s)) {
+                                write.csv(m[d$selection(), ], file)
+                        }
+                }
+        )})
+})
+```
+
+
+```{r}
+fileInput(
+        'file1',
+        'Choose CSV File',
+        accept = c('text/csv',
+                   'text/comma-separated-values,text/plain',
+                   '.csv')
+)
+fluidRow(column(12,
+                numericInput("cus0", "Parent compound", value = '638.5485')))
+fluidRow(column(12,
+                textInput("cus1", "MD formula 1", value = 'CH2,O')))
+
+fluidRow(column(12,
+                textInput("cus2", "MD formula 2", value = 'Cl-H')))
+actionButton('go', 'Plot', width = '100%')
+radioButtons(
+        inputId = "single",
+        label = "Single or Double plots",
+        choices = c("Single", "Double"),
+        selected = "Single",
+        inline = TRUE
+)
+checkboxInput('ins', 'Show intensity as size', F)
+checkboxInput("show_leg", "Show plot legends", T)
+uiOutput("plotctr")
+uiOutput("plotctr2")
+uiOutput("slide1")
+uiOutput("slide2")
+uiOutput("slide3")
+uiOutput('x3')
+```
+
+Row
+-----------------------------------------------------------------------
+
+### Figure 
+
+```{r}
+uiOutput("plot",width = 'auto',height = 'auto')
+```
+
+Row
+-----------------------------------------------------------------------
+
+### Table
+
+```{r}
+DTOutput("x1")
+```
+
+```{r eval=FALSE}
+MTBLS90mzrt <- enviGCMS::getmzrtcsv(system.file("demodata/target/", "MTBLS90mzrt.csv", package = "rmwf"))
+MTBLS90meta <- read.csv(system.file("demodata/target/", "MTBLS90meta.csv", package = "rmwf"))
+intensity <- apply(MTBLS90mzrt$data,1,mean)
+MTBLS90 <- cbind.data.frame(mz=MTBLS90mzrt$mz,intensity = intensity, rt=MTBLS90mzrt$rt,MTBLS90meta)
+write.csv(MTBLS90, 'MTBLS90.csv', row.names = F)
+uhmdb <- read.csv('urinehmdb.csv')
+uhmdb <- uhmdb[complete.cases(uhmdb[,c(1:7)]),]
+uhmdb <- cbind.data.frame(mz=uhmdb$monisotopic_molecular_weight,rt=runif(2784,1,1000),intensity = runif(2784,1,1000000),uhmdb)
+write.csv(uhmdb,'uhmdb.csv',row.names = F)
+up <- read.csv('urinephmdb.csv')
+up2 <- up[up$accession %in% uhmdb$accession,]
+
+up3 <- t(apply(up2,1,function(x) gsub( "^\\[|]$", "", as.character(x))))
+up3 <- as.data.frame(up3)
+colnames(up3) <- colnames(up2)
+g <- strsplit(as.character(up3$keggmap), ",")
+keggmap <- data.frame(accession = rep(up3$accession, lapply(g, length)), keggmap = unlist(g))
+keggmap$keggmap <- gsub( "'| ", "", as.character(keggmap$keggmap))
+table(keggmap$keggmap)[order(table(keggmap$keggmap),decreasing = T)][1:10]
+map00250 <- keggmap[keggmap$keggmap=='map00250',]
+uhmdb2 <- uhmdb[uhmdb$accession%in%map00250$accession,]
+write.csv(uhmdb2,'uhmdb2.csv',row.names = F)
+```
+

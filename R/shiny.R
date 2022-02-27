@@ -12,11 +12,11 @@ runsccp <- function() {
 #' Shiny application for interactive mass defect plots analysis
 #' @export
 runMDPlot <- function() {
-        file <- system.file("shinyapps", "MDPlot",
+        file <- system.file("shinyapps", "MDPlot.rmd",
                             package = "enviGCMS")
         if (file == "") {
                 stop("Could not find directory. Try re-installing `enviGCMS`.",
                      call. = FALSE)
         }
-        shiny::runApp(file)
+        rmarkdown::run(file)
 }
