@@ -41,8 +41,4 @@ Imports:
     mixtools,
     data.table,
     igraph
-<<<<<<< HEAD
-RoxygenNote: 7.1.2
-=======
 RoxygenNote: 7.2.1
->>>>>>> 3056ccf (update)
