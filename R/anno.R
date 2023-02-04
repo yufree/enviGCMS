@@ -182,8 +182,7 @@ dotpanno <- function(file,
                         )
                 mz2bint <- stats::aggregate(ins, list(mz2bin), sum)
                 colnames(mz2bint) <- c('factor', 'ins')
-
-                if (class(db) == "list") {
+                if (inherits(db,'list')) {
                         range <- cbind(db$mz - prems, db$mz + prems)
                         idxmz <-
                                 enviGCMS::getalign(range, matrix(
@@ -528,8 +527,7 @@ xrankanno <- function(file,
                 if(length(mzr)>30){
                         mzr <- mzr[1:30]
                 }
-
-                if (class(db) == "list") {
+                if (inherits(db,'list')) {
                         range <- cbind(db$mz - prems, db$mz + prems)
                         idxmz <-
                                 enviGCMS::getalign(range, matrix(

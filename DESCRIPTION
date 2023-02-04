@@ -10,7 +10,6 @@ Authors@R: c(person(given = "Miao", family = "YU",
         role = c("ctb"), 
         email = "Thanh.Wang@oru.se",
         comment = c(ORCID = "0000-0002-5729-1908")))
-Maintainer: Miao YU <yufreecas@gmail.com>
 Description: Gas/Liquid Chromatography-Mass Spectrometer(GC/LC-MS) Data Analysis for Environmental Science. This package covered topics such molecular isotope ratio, matrix effects and Short-Chain Chlorinated Paraffins analysis etc. in environmental analysis.
 URL: https://github.com/yufree/enviGCMS
 BugReports: https://github.com/yufree/enviGCMS/issues
@@ -42,4 +41,8 @@ Imports:
     mixtools,
     data.table,
     igraph
+<<<<<<< HEAD
 RoxygenNote: 7.1.2
+=======
+RoxygenNote: 7.2.1
+>>>>>>> 3056ccf (update)

@@ -305,10 +305,10 @@ getdata2 <- function(path,
                         pdata <- methods::new("NAnnotatedDataFrame",
                                               sample_group)
         } else {
-                if (class(pdata) == "data.frame")
+                if (inherits(pdata,"data.frame"))
                         pdata <- methods::new("NAnnotatedDataFrame",
                                               sample_group)
-                if (class(pdata) != "NAnnotatedDataFrame")
+                if (!inherits(pdata, "NAnnotatedDataFrame"))
                         stop("phenoData has to be a data.frame or NAnnotatedDataFrame!")
         }
         raw_data <- MSnbase::readMSData(files, pdata = pdata,

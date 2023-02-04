@@ -4,5 +4,9 @@ pkgdown_sha: ~
 articles:
   GCMSDA: GCMSDA.html
   PooledQC: PooledQC.html
+<<<<<<< HEAD
 last_built: 2022-02-27T23:23Z
+=======
+last_built: 2022-01-24T21:50Z
+>>>>>>> 3056ccf (update)
 

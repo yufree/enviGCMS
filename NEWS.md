@@ -1,6 +1,8 @@
 # enviGCMS 0.7.0
 
 - update MDplotR shiny documents
+- change class to inherits
+- fix save issue
 
 # enviGCMS 0.6.9
 

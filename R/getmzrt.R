@@ -280,7 +280,7 @@ getmzrt <-
                  value = "into",
                  eic = FALSE,
                  type = 'o') {
-                if (class(xset) == 'xcmsSet') {
+                if (inherits(xset,'xcmsSet')) {
                         if (eic) {
                                 eic <-
                                         xcms::getEIC(xset,
@@ -311,7 +311,7 @@ getmzrt <-
                                         value = value
                                 )
                 }
-                else if (class(xset) == 'XCMSnExp') {
+                else if (inherits(xset,'XCMSnExp')) {
                         if (eic) {
                                 feature_chroms <-
                                         xcms::featureChromatograms(xset, features = rep(T, length(
@@ -321,9 +321,8 @@ getmzrt <-
                                         file = paste0(name, 'eic.rds'))
                         } else {
                                 if (!is.null(name)) {
-                                        xset <- methods::as(xset, "xcmsSet")
-                                        saveRDS(xset,
-                                                file = paste0(name, 'xset.rds'))
+                                        xset2 <- methods::as(xset, "xcmsSet")
+                                        saveRDS(xset2,                                                file = paste0(name, 'xset.rds'))
                                 }
                         }
                         result <-
