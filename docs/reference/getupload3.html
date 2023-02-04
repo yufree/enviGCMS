@@ -23,11 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">enviGCMS</a>
-<<<<<<< HEAD
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
-=======
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.9</span>
->>>>>>> 3056ccf (update)
       </span>
     </div>
 
@@ -36,7 +32,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -76,19 +72,24 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">getupload3</span><span class="op">(</span><span class="va">list</span>, name <span class="op">=</span> <span class="st">"Peaklist"</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">getupload3</span><span class="op">(</span><span class="va">list</span>, name <span class="op">=</span> <span class="st">"Peaklist"</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>list</dt>
 <dd><p>list with data as peaks list, mz, rt and group information</p></dd>
+
+
 <dt>name</dt>
 <dd><p>file name</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>dataframe with data needed for Metaboanalyst if your want to perform local analysis.</p>
+    
+
+<p>dataframe with data needed for Metaboanalyst if your want to perform local analysis.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -97,16 +98,16 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">faahKO</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">cdfpath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">'cdf'</span>, package <span class="op">=</span> <span class="st">'faahKO'</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">xset</span> <span class="op">&lt;-</span> <span class="fu"><a href="getdata2.html">getdata2</a></span><span class="op">(</span><span class="va">cdfpath</span>,</span>
-<span class="r-in">ppp <span class="op">=</span> <span class="fu">xcms</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/xcms/man/findChromPeaks-matchedFilter.html" class="external-link">MatchedFilterParam</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span class="r-in">rtp <span class="op">=</span> <span class="fu">xcms</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/xcms/man/adjustRtime-obiwarp.html" class="external-link">ObiwarpParam</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span class="r-in">gpp <span class="op">=</span> <span class="fu">xcms</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/xcms/man/groupChromPeaks-density.html" class="external-link">PeakDensityParam</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">xset</span> <span class="op">&lt;-</span> <span class="fu">enviGCMS</span><span class="fu">::</span><span class="fu"><a href="getmzrt2.html">getmzrt2</a></span><span class="op">(</span><span class="va">xset</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">getupload3</span><span class="op">(</span><span class="va">xset</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">faahKO</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">cdfpath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">'cdf'</span>, package <span class="op">=</span> <span class="st">'faahKO'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">xset</span> <span class="op">&lt;-</span> <span class="fu"><a href="getdata2.html">getdata2</a></span><span class="op">(</span><span class="va">cdfpath</span>,</span></span>
+<span class="r-in"><span>ppp <span class="op">=</span> <span class="fu">xcms</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/xcms/man/findChromPeaks-matchedFilter.html" class="external-link">MatchedFilterParam</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>rtp <span class="op">=</span> <span class="fu">xcms</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/xcms/man/adjustRtime-obiwarp.html" class="external-link">ObiwarpParam</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>gpp <span class="op">=</span> <span class="fu">xcms</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/xcms/man/groupChromPeaks-density.html" class="external-link">PeakDensityParam</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">xset</span> <span class="op">&lt;-</span> <span class="fu">enviGCMS</span><span class="fu">::</span><span class="fu"><a href="getmzrt2.html">getmzrt2</a></span><span class="op">(</span><span class="va">xset</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">getupload3</span><span class="op">(</span><span class="va">xset</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -121,7 +122,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

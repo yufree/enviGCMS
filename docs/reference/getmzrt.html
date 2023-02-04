@@ -23,11 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">enviGCMS</a>
-<<<<<<< HEAD
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
-=======
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.9</span>
->>>>>>> 3056ccf (update)
       </span>
     </div>
 
@@ -36,7 +32,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -76,40 +72,57 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">getmzrt</span><span class="op">(</span>
-  <span class="va">xset</span>,
-  name <span class="op">=</span> <span class="cn">NULL</span>,
-  mzdigit <span class="op">=</span> <span class="fl">4</span>,
-  rtdigit <span class="op">=</span> <span class="fl">1</span>,
-  method <span class="op">=</span> <span class="st">"medret"</span>,
-  value <span class="op">=</span> <span class="st">"into"</span>,
-  eic <span class="op">=</span> <span class="cn">FALSE</span>,
-  type <span class="op">=</span> <span class="st">"o"</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">getmzrt</span><span class="op">(</span></span>
+<span>  <span class="va">xset</span>,</span>
+<span>  name <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  mzdigit <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  rtdigit <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  method <span class="op">=</span> <span class="st">"medret"</span>,</span>
+<span>  value <span class="op">=</span> <span class="st">"into"</span>,</span>
+<span>  eic <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  type <span class="op">=</span> <span class="st">"o"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>xset</dt>
 <dd><p>xcmsSet/XCMSnExp objects</p></dd>
+
+
 <dt>name</dt>
 <dd><p>file name for csv and/or eic file, default NULL</p></dd>
+
+
 <dt>mzdigit</dt>
 <dd><p>m/z digits of row names of data frame, default 4</p></dd>
+
+
 <dt>rtdigit</dt>
 <dd><p>retention time digits of row names of data frame, default 1</p></dd>
+
+
 <dt>method</dt>
 <dd><p>parameter for groupval or featureDefinitions function, default medret</p></dd>
+
+
 <dt>value</dt>
 <dd><p>parameter for groupval or featureDefinitions function, default into</p></dd>
+
+
 <dt>eic</dt>
 <dd><p>logical, save xcmsSet and xcmsEIC objects for further investigation with the same name of files, you will need raw files in the same directory as defined in xcmsSet to extract the EIC based on the binned data. You could use `plot` to plot EIC for specific peaks. For example, `plot(xcmsEIC,xcmsSet,groupidx = 'M123.4567T278.9')` could show the EIC for certain peaks with m/z 206 and retention time 2789. default F</p></dd>
+
+
 <dt>type</dt>
 <dd><p>csv format for further analysis, m means  Metaboanalyst, a means xMSannotator, p means Mummichog(NA values are imputed by `getimputation`, and F test is used here to generate stats and p value), o means full information csv (for `pmd` package), default o. mapo could output all those format files.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>mzrt object, a list with mzrt profile and group information</p>
+    
+
+<p>mzrt object, a list with mzrt profile and group information</p>
     </div>
     <div id="references">
     <h2>References</h2>
@@ -122,12 +135,12 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">faahKO</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">cdfpath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">'cdf'</span>, package <span class="op">=</span> <span class="st">'faahKO'</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">xset</span> <span class="op">&lt;-</span> <span class="fu"><a href="getdata.html">getdata</a></span><span class="op">(</span><span class="va">cdfpath</span>, pmethod <span class="op">=</span> <span class="st">' '</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">getmzrt</span><span class="op">(</span><span class="va">xset</span>, name <span class="op">=</span> <span class="st">'demo'</span>, type <span class="op">=</span> <span class="st">'mapo'</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">faahKO</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">cdfpath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">'cdf'</span>, package <span class="op">=</span> <span class="st">'faahKO'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">xset</span> <span class="op">&lt;-</span> <span class="fu"><a href="getdata.html">getdata</a></span><span class="op">(</span><span class="va">cdfpath</span>, pmethod <span class="op">=</span> <span class="st">' '</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">getmzrt</span><span class="op">(</span><span class="va">xset</span>, name <span class="op">=</span> <span class="st">'demo'</span>, type <span class="op">=</span> <span class="st">'mapo'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -142,7 +155,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

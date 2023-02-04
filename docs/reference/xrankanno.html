@@ -23,11 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">enviGCMS</a>
-<<<<<<< HEAD
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
-=======
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.9</span>
->>>>>>> 3056ccf (update)
       </span>
     </div>
 
@@ -36,7 +32,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -76,27 +72,40 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">xrankanno</span><span class="op">(</span><span class="va">file</span>, db <span class="op">=</span> <span class="cn">NULL</span>, ppm <span class="op">=</span> <span class="fl">10</span>, prems <span class="op">=</span> <span class="fl">1.1</span>, intc <span class="op">=</span> <span class="fl">0.1</span>, quantile <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">xrankanno</span><span class="op">(</span><span class="va">file</span>, db <span class="op">=</span> <span class="cn">NULL</span>, ppm <span class="op">=</span> <span class="fl">10</span>, prems <span class="op">=</span> <span class="fl">1.1</span>, intc <span class="op">=</span> <span class="fl">0.1</span>, quantile <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>file</dt>
 <dd><p>mgf file generated from MS/MS data</p></dd>
+
+
 <dt>db</dt>
 <dd><p>database could be list object from `getms2pmd`</p></dd>
+
+
 <dt>ppm</dt>
 <dd><p>mass accuracy, default 10</p></dd>
+
+
 <dt>prems</dt>
 <dd><p>precursor mass range, default 1.1 to include M+H or M-H</p></dd>
+
+
 <dt>intc</dt>
 <dd><p>intensity cutoff for peaks. Default 0.1</p></dd>
+
+
 <dt>quantile</dt>
 <dd><p>X rank quantiles cutoff for annotation. Default 0.75.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>list with MSMS annotation results</p>
+    
+
+<p>list with MSMS annotation results</p>
     </div>
 
   </div>
@@ -111,7 +120,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

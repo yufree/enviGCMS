@@ -23,11 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">enviGCMS</a>
-<<<<<<< HEAD
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
-=======
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.9</span>
->>>>>>> 3056ccf (update)
       </span>
     </div>
 
@@ -36,7 +32,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -76,21 +72,28 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">svabatch</span><span class="op">(</span><span class="va">df</span>, <span class="va">dfsv</span>, <span class="va">dfanova</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">svabatch</span><span class="op">(</span><span class="va">df</span>, <span class="va">dfsv</span>, <span class="va">dfanova</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>df</dt>
 <dd><p>data output from `svacor` function</p></dd>
+
+
 <dt>dfsv</dt>
 <dd><p>data output from `svaplot` function for corrected data</p></dd>
+
+
 <dt>dfanova</dt>
 <dd><p>data output from `svaplot` function for raw data</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>influences plot</p>
+    
+
+<p>influences plot</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -99,20 +102,20 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">faahKO</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">cdfpath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"cdf"</span>, package <span class="op">=</span> <span class="st">"faahKO"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">cdffiles</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">cdfpath</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">xset</span> <span class="op">&lt;-</span> <span class="fu">xcmsSet</span><span class="op">(</span><span class="va">cdffiles</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">xset</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/plotmath.html" class="external-link">group</a></span><span class="op">(</span><span class="va">xset</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">xset2</span> <span class="op">&lt;-</span> <span class="fu">retcor</span><span class="op">(</span><span class="va">xset</span>, family <span class="op">=</span> <span class="st">"symmetric"</span>, plottype <span class="op">=</span> <span class="st">"mdevden"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">xset2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/plotmath.html" class="external-link">group</a></span><span class="op">(</span><span class="va">xset2</span>, bw <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">xset3</span> <span class="op">&lt;-</span> <span class="fu">fillPeaks</span><span class="op">(</span><span class="va">xset2</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="svacor.html">svacor</a></span><span class="op">(</span><span class="va">xset3</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">dfsv</span> <span class="op">&lt;-</span> <span class="fu"><a href="svaplot.html">svaplot</a></span><span class="op">(</span><span class="va">xset3</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">dfanova</span> <span class="op">&lt;-</span> <span class="fu"><a href="svaplot.html">svaplot</a></span><span class="op">(</span><span class="va">xset3</span>, pqvalues <span class="op">=</span> <span class="st">"anova"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">svabatch</span><span class="op">(</span><span class="va">df</span>,<span class="va">dfsv</span>,<span class="va">dfanova</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">faahKO</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">cdfpath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"cdf"</span>, package <span class="op">=</span> <span class="st">"faahKO"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">cdffiles</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">cdfpath</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">xset</span> <span class="op">&lt;-</span> <span class="fu">xcmsSet</span><span class="op">(</span><span class="va">cdffiles</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">xset</span> <span class="op">&lt;-</span> <span class="fu">group</span><span class="op">(</span><span class="va">xset</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">xset2</span> <span class="op">&lt;-</span> <span class="fu">retcor</span><span class="op">(</span><span class="va">xset</span>, family <span class="op">=</span> <span class="st">"symmetric"</span>, plottype <span class="op">=</span> <span class="st">"mdevden"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">xset2</span> <span class="op">&lt;-</span> <span class="fu">group</span><span class="op">(</span><span class="va">xset2</span>, bw <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">xset3</span> <span class="op">&lt;-</span> <span class="fu">fillPeaks</span><span class="op">(</span><span class="va">xset2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="svacor.html">svacor</a></span><span class="op">(</span><span class="va">xset3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dfsv</span> <span class="op">&lt;-</span> <span class="fu"><a href="svaplot.html">svaplot</a></span><span class="op">(</span><span class="va">xset3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dfanova</span> <span class="op">&lt;-</span> <span class="fu"><a href="svaplot.html">svaplot</a></span><span class="op">(</span><span class="va">xset3</span>, pqvalues <span class="op">=</span> <span class="st">"anova"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">svabatch</span><span class="op">(</span><span class="va">df</span>,<span class="va">dfsv</span>,<span class="va">dfanova</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -127,7 +130,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

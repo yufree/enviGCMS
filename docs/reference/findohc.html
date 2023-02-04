@@ -23,11 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">enviGCMS</a>
-<<<<<<< HEAD
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
-=======
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.9</span>
->>>>>>> 3056ccf (update)
       </span>
     </div>
 
@@ -36,7 +32,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -76,43 +72,62 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">findohc</span><span class="op">(</span>
-  <span class="va">list</span>,
-  sf <span class="op">=</span> <span class="fl">78</span><span class="op">/</span><span class="fl">77.91051</span>,
-  step <span class="op">=</span> <span class="fl">0.001</span>,
-  stepsd1 <span class="op">=</span> <span class="fl">0.003</span>,
-  stepsd2 <span class="op">=</span> <span class="fl">0.005</span>,
-  mzc <span class="op">=</span> <span class="fl">700</span>,
-  cutoffint <span class="op">=</span> <span class="fl">1000</span>,
-  cutoffr <span class="op">=</span> <span class="fl">0.4</span>,
-  clustercf <span class="op">=</span> <span class="fl">10</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">findohc</span><span class="op">(</span></span>
+<span>  <span class="va">list</span>,</span>
+<span>  sf <span class="op">=</span> <span class="fl">78</span><span class="op">/</span><span class="fl">77.91051</span>,</span>
+<span>  step <span class="op">=</span> <span class="fl">0.001</span>,</span>
+<span>  stepsd1 <span class="op">=</span> <span class="fl">0.003</span>,</span>
+<span>  stepsd2 <span class="op">=</span> <span class="fl">0.005</span>,</span>
+<span>  mzc <span class="op">=</span> <span class="fl">700</span>,</span>
+<span>  cutoffint <span class="op">=</span> <span class="fl">1000</span>,</span>
+<span>  cutoffr <span class="op">=</span> <span class="fl">0.4</span>,</span>
+<span>  clustercf <span class="op">=</span> <span class="fl">10</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>list</dt>
 <dd><p>list with data as peaks list, mz, rt and group information, retention time should be in seconds</p></dd>
+
+
 <dt>sf</dt>
 <dd><p>scale factor, default 78/77.91051(Br)</p></dd>
+
+
 <dt>step</dt>
 <dd><p>mass defect step, default 0.001</p></dd>
+
+
 <dt>stepsd1</dt>
 <dd><p>mass defect uncertainty for lower mass, default 0.003</p></dd>
+
+
 <dt>stepsd2</dt>
 <dd><p>mass defect uncertainty for higher mass, default 0.005</p></dd>
+
+
 <dt>mzc</dt>
 <dd><p>threshold of lower mass and higher mass, default 700</p></dd>
+
+
 <dt>cutoffint</dt>
 <dd><p>the cutoff of intensity, default 1000</p></dd>
+
+
 <dt>cutoffr</dt>
 <dd><p>the cutoff of [M] and [M+2] ratio, default 0.4</p></dd>
+
+
 <dt>clustercf</dt>
 <dd><p>the cutoff of cluster analysis to separate two different ions groups for retention time, default 10</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>list with filtered organohalogen compounds</p>
+    
+
+<p>list with filtered organohalogen compounds</p>
     </div>
     <div id="references">
     <h2>References</h2>
@@ -131,7 +146,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

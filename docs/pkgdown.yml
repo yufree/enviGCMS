@@ -1,12 +1,8 @@
 pandoc: 2.7.3
-pkgdown: 2.0.2
+pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   GCMSDA: GCMSDA.html
   PooledQC: PooledQC.html
-<<<<<<< HEAD
-last_built: 2022-02-27T23:23Z
-=======
-last_built: 2022-01-24T21:50Z
->>>>>>> 3056ccf (update)
+last_built: 2023-02-04T21:36Z
 

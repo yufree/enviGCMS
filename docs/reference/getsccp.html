@@ -23,11 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">enviGCMS</a>
-<<<<<<< HEAD
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
-=======
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.9</span>
->>>>>>> 3056ccf (update)
       </span>
     </div>
 
@@ -36,7 +32,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -76,40 +72,57 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">getsccp</span><span class="op">(</span>
-  <span class="va">pathstds</span>,
-  <span class="va">pathsample</span>,
-  ismz <span class="op">=</span> <span class="fl">323</span>,
-  ppm <span class="op">=</span> <span class="fl">5</span>,
-  con <span class="op">=</span> <span class="fl">2000</span>,
-  rt <span class="op">=</span> <span class="cn">NULL</span>,
-  rts <span class="op">=</span> <span class="cn">NULL</span>,
-  log <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">getsccp</span><span class="op">(</span></span>
+<span>  <span class="va">pathstds</span>,</span>
+<span>  <span class="va">pathsample</span>,</span>
+<span>  ismz <span class="op">=</span> <span class="fl">323</span>,</span>
+<span>  ppm <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  con <span class="op">=</span> <span class="fl">2000</span>,</span>
+<span>  rt <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  rts <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  log <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>pathstds</dt>
 <dd><p>mzxml file path for SCCPs standards</p></dd>
+
+
 <dt>pathsample</dt>
 <dd><p>mzxml file path for samples</p></dd>
+
+
 <dt>ismz</dt>
 <dd><p>internal standards m/z</p></dd>
+
+
 <dt>ppm</dt>
 <dd><p>resolution of mass spectrum</p></dd>
+
+
 <dt>con</dt>
 <dd><p>concentration of standards</p></dd>
+
+
 <dt>rt</dt>
 <dd><p>retention time range of sccps</p></dd>
+
+
 <dt>rts</dt>
 <dd><p>retention time range of internal standards</p></dd>
+
+
 <dt>log</dt>
 <dd><p>log transformation for response factor</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>list with peak information</p>
+    
+
+<p>list with peak information</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -128,7 +141,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

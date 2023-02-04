@@ -23,11 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">enviGCMS</a>
-<<<<<<< HEAD
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
-=======
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.9</span>
->>>>>>> 3056ccf (update)
       </span>
     </div>
 
@@ -36,7 +32,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -76,23 +72,28 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">Getisotopologues</span><span class="op">(</span>formula <span class="op">=</span> <span class="st">"C12OH6Br4"</span>, charge <span class="op">=</span> <span class="fl">1</span>, width <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Getisotopologues</span><span class="op">(</span>formula <span class="op">=</span> <span class="st">"C12OH6Br4"</span>, charge <span class="op">=</span> <span class="fl">1</span>, width <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>formula</dt>
 <dd><p>the molecular formula. C12OH6Br4 means BDE-47 as default</p></dd>
+
+
 <dt>charge</dt>
 <dd><p>the charge of that molecular. 1 in EI mode as default</p></dd>
+
+
 <dt>width</dt>
 <dd><p>the width of the peak width on mass spectrum. 0.3 as default for low resolution mass spectrum.</p></dd>
+
 </dl></div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># show isotopologues for BDE-47</span></span>
-<span class="r-in"><span class="fu">Getisotopologues</span><span class="op">(</span>formula <span class="op">=</span> <span class="st">'C12OH6Br4'</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># show isotopologues for BDE-47</span></span></span>
+<span class="r-in"><span><span class="fu">Getisotopologues</span><span class="op">(</span>formula <span class="op">=</span> <span class="st">'C12OH6Br4'</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                         peak</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> light isotopologue 483.71318</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> high isotopologue  487.70920</span>
@@ -111,7 +112,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

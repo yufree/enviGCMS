@@ -23,11 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">enviGCMS</a>
-<<<<<<< HEAD
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
-=======
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.9</span>
->>>>>>> 3056ccf (update)
       </span>
     </div>
 
@@ -36,7 +32,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -76,25 +72,36 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">getretcor</span><span class="op">(</span><span class="va">list</span>, ts <span class="op">=</span> <span class="fl">1</span>, ppm <span class="op">=</span> <span class="fl">10</span>, deltart <span class="op">=</span> <span class="fl">5</span>, <span class="va">FUN</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">getretcor</span><span class="op">(</span><span class="va">list</span>, ts <span class="op">=</span> <span class="fl">1</span>, ppm <span class="op">=</span> <span class="fl">10</span>, deltart <span class="op">=</span> <span class="fl">5</span>, <span class="va">FUN</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>list</dt>
 <dd><p>each element should be a data.frame with mz, rt and ins as m/z, retention time in seconds and intensity of certain peaks.</p></dd>
+
+
 <dt>ts</dt>
 <dd><p>template sample index in the list, default 1</p></dd>
+
+
 <dt>ppm</dt>
 <dd><p>mass accuracy, default 10</p></dd>
+
+
 <dt>deltart</dt>
 <dd><p>retention time shift table, default 5 seconds</p></dd>
+
+
 <dt>FUN</dt>
 <dd><p>function to deal with multiple aligned peaks from one sample</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>mzrt object without group information</p>
+    
+
+<p>mzrt object without group information</p>
     </div>
 
   </div>
@@ -109,7 +116,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

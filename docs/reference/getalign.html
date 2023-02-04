@@ -23,11 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">enviGCMS</a>
-<<<<<<< HEAD
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
-=======
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.9</span>
->>>>>>> 3056ccf (update)
       </span>
     </div>
 
@@ -36,7 +32,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -76,36 +72,49 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">getalign</span><span class="op">(</span><span class="va">mz1</span>, <span class="va">mz2</span>, rt1 <span class="op">=</span> <span class="cn">NULL</span>, rt2 <span class="op">=</span> <span class="cn">NULL</span>, ppm <span class="op">=</span> <span class="fl">10</span>, deltart <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">getalign</span><span class="op">(</span><span class="va">mz1</span>, <span class="va">mz2</span>, rt1 <span class="op">=</span> <span class="cn">NULL</span>, rt2 <span class="op">=</span> <span class="cn">NULL</span>, ppm <span class="op">=</span> <span class="fl">10</span>, deltart <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>mz1</dt>
 <dd><p>the mass to charge of reference peaks</p></dd>
+
+
 <dt>mz2</dt>
 <dd><p>the mass to charge of peaks to be aligned</p></dd>
+
+
 <dt>rt1</dt>
 <dd><p>retention time of reference peaks</p></dd>
+
+
 <dt>rt2</dt>
 <dd><p>retention time of peaks to be aligned</p></dd>
+
+
 <dt>ppm</dt>
 <dd><p>mass accuracy, default 10</p></dd>
+
+
 <dt>deltart</dt>
 <dd><p>retention time shift table, default 10 seconds</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>data frame with aligned peaks table</p>
+    
+
+<p>data frame with aligned peaks table</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">mz1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">221.1171</span>, <span class="fl">227.1390</span>, <span class="fl">229.1546</span>, <span class="fl">233.1497</span>, <span class="fl">271.0790</span> <span class="op">)</span></span>
-<span class="r-in"><span class="va">mz2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">282.279</span>, <span class="fl">281.113</span>, <span class="fl">227.139</span>, <span class="fl">227.139</span>, <span class="fl">302.207</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">rt1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">590.8710</span>, <span class="fl">251.3820</span>, <span class="fl">102.9230</span>, <span class="fl">85.8850</span>, <span class="fl">313.8240</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">rt2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">787.08</span>, <span class="fl">160.02</span>, <span class="fl">251.76</span>, <span class="fl">251.76</span>, <span class="fl">220.26</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">getalign</span><span class="op">(</span><span class="va">mz1</span>,<span class="va">mz2</span>,<span class="va">rt1</span>,<span class="va">rt2</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">mz1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">221.1171</span>, <span class="fl">227.1390</span>, <span class="fl">229.1546</span>, <span class="fl">233.1497</span>, <span class="fl">271.0790</span> <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">mz2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">282.279</span>, <span class="fl">281.113</span>, <span class="fl">227.139</span>, <span class="fl">227.139</span>, <span class="fl">302.207</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">rt1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">590.8710</span>, <span class="fl">251.3820</span>, <span class="fl">102.9230</span>, <span class="fl">85.8850</span>, <span class="fl">313.8240</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">rt2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">787.08</span>, <span class="fl">160.02</span>, <span class="fl">251.76</span>, <span class="fl">251.76</span>, <span class="fl">220.26</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">getalign</span><span class="op">(</span><span class="va">mz1</span>,<span class="va">mz2</span>,<span class="va">rt1</span>,<span class="va">rt2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   xid     mz1     mz2     rt1    rt2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1   2 227.139 227.139 251.382 251.76</span>
 </code></pre></div>
@@ -122,7 +131,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

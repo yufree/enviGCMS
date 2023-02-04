@@ -23,11 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">enviGCMS</a>
-<<<<<<< HEAD
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
-=======
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.9</span>
->>>>>>> 3056ccf (update)
       </span>
     </div>
 
@@ -36,7 +32,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -76,34 +72,47 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">getdata</span><span class="op">(</span>
-  <span class="va">path</span>,
-  index <span class="op">=</span> <span class="cn">FALSE</span>,
-  BPPARAM <span class="op">=</span> <span class="fu">BiocParallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/SnowParam-class.html" class="external-link">SnowParam</a></span><span class="op">(</span><span class="op">)</span>,
-  pmethod <span class="op">=</span> <span class="st">"hplcorbitrap"</span>,
-  minfrac <span class="op">=</span> <span class="fl">0.67</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">getdata</span><span class="op">(</span></span>
+<span>  <span class="va">path</span>,</span>
+<span>  index <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  BPPARAM <span class="op">=</span> <span class="fu">BiocParallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/SnowParam-class.html" class="external-link">SnowParam</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  pmethod <span class="op">=</span> <span class="st">"hplcorbitrap"</span>,</span>
+<span>  minfrac <span class="op">=</span> <span class="fl">0.67</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>path</dt>
 <dd><p>the path to your data</p></dd>
+
+
 <dt>index</dt>
 <dd><p>the index of the files</p></dd>
+
+
 <dt>BPPARAM</dt>
 <dd><p>used for BiocParallel package</p></dd>
+
+
 <dt>pmethod</dt>
 <dd><p>parameters used for different instrumentals such as 'hplcorbitrap', 'uplcorbitrap', 'hplcqtof', 'hplchqtof', 'uplcqtof', 'uplchqtof'. The parameters were from the reference</p></dd>
+
+
 <dt>minfrac</dt>
 <dd><p>minimum fraction of samples necessary in at least one of the sample groups for it to be a valid group, default 0.67</p></dd>
+
+
 <dt>...</dt>
 <dd><p>arguments for xcmsSet function</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a xcmsset object for that path or selected samples</p>
+    
+
+<p>a xcmsset object for that path or selected samples</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -120,11 +129,11 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">faahKO</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">cdfpath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">'cdf'</span>, package <span class="op">=</span> <span class="st">'faahKO'</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">xset</span> <span class="op">&lt;-</span> <span class="fu">getdata</span><span class="op">(</span><span class="va">cdfpath</span>, pmethod <span class="op">=</span> <span class="st">' '</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">faahKO</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">cdfpath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">'cdf'</span>, package <span class="op">=</span> <span class="st">'faahKO'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">xset</span> <span class="op">&lt;-</span> <span class="fu">getdata</span><span class="op">(</span><span class="va">cdfpath</span>, pmethod <span class="op">=</span> <span class="st">' '</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -139,7 +148,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

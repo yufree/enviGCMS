@@ -39,11 +39,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">enviGCMS</a>
-<<<<<<< HEAD
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
-=======
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.9</span>
->>>>>>> 3056ccf (update)
       </span>
     </div>
 
@@ -53,7 +49,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -94,11 +90,7 @@
       <h1 data-toc-skip>Data analysis of GC-MS and LC-MS in Environmental Science</h1>
                         <h4 data-toc-skip class="author">Miao Yu</h4>
             
-<<<<<<< HEAD
-            <h4 data-toc-skip class="date">2022-02-27</h4>
-=======
-            <h4 data-toc-skip class="date">2022-01-24</h4>
->>>>>>> 3056ccf (update)
+            <h4 data-toc-skip class="date">2023-02-04</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/yufree/enviGCMS/blob/HEAD/vignettes/GCMSDA.Rmd" class="external-link"><code>vignettes/GCMSDA.Rmd</code></a></small>
       <div class="hidden name"><code>GCMSDA.Rmd</code></div>
@@ -126,26 +118,26 @@
 <h3 id="data-input">Data input<a class="anchor" aria-label="anchor" href="#data-input"></a>
 </h3>
 <p>You could use <code>getmd</code> to import the mass spectrum data as supported by <code>xcms</code> and get the profile of GC-MS data matrix. <code>mzstep</code> is the bin step for mass:</p>
-<pre><code><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">enviGCMS</span><span class="fu">:::</span><span class="fu"><a href="../reference/getmd.html">getmd</a></span><span class="op">(</span><span class="st">'data/data1.CDF'</span>, mzstep <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></code></pre>
+<pre><code><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">enviGCMS</span><span class="fu">:::</span><span class="fu"><a href="../reference/getmd.html">getmd</a></span><span class="op">(</span><span class="st">'data/data1.CDF'</span>, mzstep <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span></code></pre>
 <p>You could also subset the data by the mass(m/z 100-1000) or retention time range(40-100s) in <code>getmd</code> function:</p>
-<pre><code><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">enviGCMS</span><span class="fu">:::</span><span class="fu"><a href="../reference/getmd.html">getmd</a></span><span class="op">(</span><span class="va">data</span>,mzrange<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>,<span class="fl">1000</span><span class="op">)</span>,rtrange<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">40</span>,<span class="fl">100</span><span class="op">)</span><span class="op">)</span></code></pre>
+<pre><code><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">enviGCMS</span><span class="fu">:::</span><span class="fu"><a href="../reference/getmd.html">getmd</a></span><span class="op">(</span><span class="va">data</span>,mzrange<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>,<span class="fl">1000</span><span class="op">)</span>,rtrange<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">40</span>,<span class="fl">100</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 <p>You could also combined the mass full-scan data with the same range of retention time by <code>cbmd</code>:</p>
-<pre><code><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cbmd.html">cbmd</a></span><span class="op">(</span><span class="va">data1</span>,<span class="va">data2</span>,<span class="va">data3</span><span class="op">)</span></code></pre>
+<pre><code><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cbmd.html">cbmd</a></span><span class="op">(</span><span class="va">data1</span>,<span class="va">data2</span>,<span class="va">data3</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="visualization-of-mass-spectrum-data">Visualization of mass spectrum data<a class="anchor" aria-label="anchor" href="#visualization-of-mass-spectrum-data"></a>
 </h3>
 <p>You could plot the Total Ion Chromatogram(TIC) for certain RT and mass range.</p>
-<pre><code><span class="fu"><a href="../reference/plottic.html">plottic</a></span><span class="op">(</span><span class="va">data</span>,rt<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.1</span>,<span class="fl">25</span><span class="op">)</span>,ms<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>,<span class="fl">1000</span><span class="op">)</span><span class="op">)</span></code></pre>
+<pre><code><span><span class="fu"><a href="../reference/plottic.html">plottic</a></span><span class="op">(</span><span class="va">data</span>,rt<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.1</span>,<span class="fl">25</span><span class="op">)</span>,ms<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>,<span class="fl">1000</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 <p>You could also plot the mass spectrum for certain RT range. You could use the returned MSP files for NIST search:</p>
-<pre><code><span class="fu"><a href="../reference/plotrtms.html">plotrtms</a></span><span class="op">(</span><span class="va">data</span>,rt<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.1</span>,<span class="fl">25</span><span class="op">)</span>,ms<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>,<span class="fl">1000</span><span class="op">)</span><span class="op">)</span></code></pre>
+<pre><code><span><span class="fu"><a href="../reference/plotrtms.html">plotrtms</a></span><span class="op">(</span><span class="va">data</span>,rt<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.1</span>,<span class="fl">25</span><span class="op">)</span>,ms<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>,<span class="fl">1000</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 <p>The Extracted Ion Chromatogram(EIC) is also support by <code>enviGCMS</code> and the returned data could be analyzed for molecular isotopes:</p>
-<pre><code><span class="fu"><a href="../reference/plotmsrt.html">plotmsrt</a></span><span class="op">(</span><span class="va">data</span>,ms<span class="op">=</span><span class="fl">500</span>,rt<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.1</span>,<span class="fl">25</span><span class="op">)</span><span class="op">)</span></code></pre>
+<pre><code><span><span class="fu"><a href="../reference/plotmsrt.html">plotmsrt</a></span><span class="op">(</span><span class="va">data</span>,ms<span class="op">=</span><span class="fl">500</span>,rt<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.1</span>,<span class="fl">25</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 <p>You could use <code>plotms</code> or <code>plotmz</code> to show the heatmap or scatter plot for LC/GC-MS data, which is very useful for exploratory data analysis.</p>
-<pre><code><span class="fu"><a href="../reference/plotms.html">plotms</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span>
-<span class="fu"><a href="../reference/plotmz.html">plotmz</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></code></pre>
+<pre><code><span><span class="fu"><a href="../reference/plotms.html">plotms</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/plotmz.html">plotmz</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></code></pre>
 <p>You could change the retention time into the temperature if it is a constant speed of temperature rising process. But you need show the temperature range.</p>
-<pre><code><span class="fu"><a href="../reference/plott.html">plott</a></span><span class="op">(</span><span class="va">data</span>,temp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>,<span class="fl">320</span><span class="op">)</span><span class="op">)</span></code></pre>
+<pre><code><span><span class="fu"><a href="../reference/plott.html">plott</a></span><span class="op">(</span><span class="va">data</span>,temp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>,<span class="fl">320</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="data-analysis-for-influence-from-gc-ms">Data analysis for influence from GC-MS<a class="anchor" aria-label="anchor" href="#data-analysis-for-influence-from-gc-ms"></a>
@@ -229,7 +221,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>

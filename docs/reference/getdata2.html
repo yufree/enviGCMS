@@ -23,11 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">enviGCMS</a>
-<<<<<<< HEAD
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
-=======
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.9</span>
->>>>>>> 3056ccf (update)
       </span>
     </div>
 
@@ -36,7 +32,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -76,50 +72,73 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">getdata2</span><span class="op">(</span>
-  <span class="va">path</span>,
-  index <span class="op">=</span> <span class="cn">FALSE</span>,
-  snames <span class="op">=</span> <span class="cn">NULL</span>,
-  sclass <span class="op">=</span> <span class="cn">NULL</span>,
-  phenoData <span class="op">=</span> <span class="cn">NULL</span>,
-  BPPARAM <span class="op">=</span> <span class="fu">BiocParallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/SnowParam-class.html" class="external-link">SnowParam</a></span><span class="op">(</span><span class="op">)</span>,
-  mode <span class="op">=</span> <span class="st">"onDisk"</span>,
-  ppp <span class="op">=</span> <span class="fu">xcms</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/xcms/man/findChromPeaks-centWave.html" class="external-link">CentWaveParam</a></span><span class="op">(</span>ppm <span class="op">=</span> <span class="fl">5</span>, peakwidth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">25</span><span class="op">)</span>, prefilter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">5000</span><span class="op">)</span><span class="op">)</span>,
-  rtp <span class="op">=</span> <span class="fu">xcms</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/xcms/man/adjustRtime-obiwarp.html" class="external-link">ObiwarpParam</a></span><span class="op">(</span>binSize <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,
-  gpp <span class="op">=</span> <span class="fu">xcms</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/xcms/man/groupChromPeaks-density.html" class="external-link">PeakDensityParam</a></span><span class="op">(</span>sampleGroups <span class="op">=</span> <span class="fl">1</span>, minFraction <span class="op">=</span> <span class="fl">0.67</span>, bw <span class="op">=</span> <span class="fl">2</span>, binSize <span class="op">=</span>
-    <span class="fl">0.025</span><span class="op">)</span>,
-  fpp <span class="op">=</span> <span class="fu">xcms</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/xcms/man/fillChromPeaks.html" class="external-link">FillChromPeaksParam</a></span><span class="op">(</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">getdata2</span><span class="op">(</span></span>
+<span>  <span class="va">path</span>,</span>
+<span>  index <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  snames <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  sclass <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  phenoData <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  BPPARAM <span class="op">=</span> <span class="fu">BiocParallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/SnowParam-class.html" class="external-link">SnowParam</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  mode <span class="op">=</span> <span class="st">"onDisk"</span>,</span>
+<span>  ppp <span class="op">=</span> <span class="fu">xcms</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/xcms/man/findChromPeaks-centWave.html" class="external-link">CentWaveParam</a></span><span class="op">(</span>ppm <span class="op">=</span> <span class="fl">5</span>, peakwidth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">25</span><span class="op">)</span>, prefilter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">5000</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  rtp <span class="op">=</span> <span class="fu">xcms</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/xcms/man/adjustRtime-obiwarp.html" class="external-link">ObiwarpParam</a></span><span class="op">(</span>binSize <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  gpp <span class="op">=</span> <span class="fu">xcms</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/xcms/man/groupChromPeaks-density.html" class="external-link">PeakDensityParam</a></span><span class="op">(</span>sampleGroups <span class="op">=</span> <span class="fl">1</span>, minFraction <span class="op">=</span> <span class="fl">0.67</span>, bw <span class="op">=</span> <span class="fl">2</span>, binSize <span class="op">=</span></span>
+<span>    <span class="fl">0.025</span><span class="op">)</span>,</span>
+<span>  fpp <span class="op">=</span> <span class="fu">xcms</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/xcms/man/fillChromPeaks.html" class="external-link">FillChromPeaksParam</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>path</dt>
 <dd><p>the path to your data</p></dd>
+
+
 <dt>index</dt>
 <dd><p>the index of the files</p></dd>
+
+
 <dt>snames</dt>
 <dd><p>sample names. By default the file name without extension is used</p></dd>
+
+
 <dt>sclass</dt>
 <dd><p>sample classes.</p></dd>
+
+
 <dt>phenoData</dt>
 <dd><p>data.frame or NAnnotatedDataFrame defining the sample names and classes and other sample related properties. If not provided, the argument sclass or the subdirectories in which the samples are stored will be used to specify sample grouping.</p></dd>
+
+
 <dt>BPPARAM</dt>
 <dd><p>used for BiocParallel package</p></dd>
+
+
 <dt>mode</dt>
 <dd><p>'inMemory' or 'onDisk' see `?MSnbase::readMSData` for details, default 'onDisk'</p></dd>
+
+
 <dt>ppp</dt>
 <dd><p>parameters for peaks picking, e.g. xcms::CentWaveParam()</p></dd>
+
+
 <dt>rtp</dt>
 <dd><p>parameters for retention time correction, e.g. xcms::ObiwarpParam()</p></dd>
+
+
 <dt>gpp</dt>
 <dd><p>parameters for peaks grouping, e.g. xcms::PeakDensityParam()</p></dd>
+
+
 <dt>fpp</dt>
 <dd><p>parameters for peaks filling, e.g. xcms::FillChromPeaksParam(), PeakGroupsParam()</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a XCMSnExp object with processed data</p>
+    
+
+<p>a XCMSnExp object with processed data</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -142,7 +161,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>
