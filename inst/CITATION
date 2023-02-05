@@ -1,22 +1,12 @@
-citHeader("To cite the enviGCMS package in publications use:")
-
-citEntry(
-        entry="article",
-	title = "Evaluation and reduction of the analytical uncertainties in GC-MS analysis using a boundary regression model",
-	journal = "Talanta",
-	volume = "164",
-	pages = "141 - 147",
-	year = "2017",
-	issn = "0039-9140",
-	doi = "10.1016/j.talanta.2016.11.046",
-	url = "https://www.sciencedirect.com/science/article/pii/S0039914016309298",
-	author = "Miao Yu and Xingwang Hou and Qian Liu and Yawei Wang and Jiyan Liu and Guibin Jiang",
-	keywords = c("Data visualization","GC-MS","Environmental analysis", "Regression model"),
-	textVersion = paste("Miao Yu, Xingwang Hou, Qian Liu, Yawei Wang, Jiyan Liu, Guibin Jiang:",
-	"2017",
-	"Evaluation and reduction of the analytical uncertainties in GC-MS analysis using a boundary regression model",
-	"Talanta, 164, 141-147."))
-
-citFooter(paste("Some functions (e.g. getmd use xcms",
-                 "party algorithms, see manpages and related packages",
-	         "for respective citations."))
+bibentry(
+  "Article",
+  title    = "Evaluation and reduction of the analytical uncertainties in GC-MS analysis using a boundary regression model",
+  author   = as.person("Miao Yu,Xingwang Hou,Qian Liu,Yawei Wang,Jiyan Liu,Guibin Jiang"),
+  journal  = "Talanta",
+  year     = "2017",
+  volume   = "164",
+  pages    = "141-147",
+  url      = "https://www.sciencedirect.com/science/article/pii/S0039914016309298",
+  doi      = "10.1016/j.talanta.2016.11.046"
+  )
+)
