@@ -178,7 +178,7 @@
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">order</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">12</span></span>
 <span><span class="co"># n means how many points to build a linear regression model</span></span>
-<span><span class="va">n</span> <span class="op">=</span> <span class="fl">5</span></span>
+<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">5</span></span>
 <span><span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getpqsi.html">getpqsi</a></span><span class="op">(</span><span class="va">list</span><span class="op">$</span><span class="va">data</span>,<span class="va">order</span>,n <span class="op">=</span> <span class="va">n</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">idx</span><span class="op">~</span><span class="va">order</span><span class="op">[</span><span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="va">n</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">]</span>,pch<span class="op">=</span><span class="fl">19</span><span class="op">)</span></span></code></pre></div>
 <p><img src="PooledQC_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
