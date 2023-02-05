@@ -1,3 +1,7 @@
+# enviGCMS 0.7.1
+
+- CRAN
+
 # enviGCMS 0.7.0
 
 - update MDplotR shiny documents
