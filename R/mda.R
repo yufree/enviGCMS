@@ -52,25 +52,26 @@ plotkms <- function(data, cutoff = 1000) {
 getmass <- function(data) {
         if (grepl('-', data)) {
                 name <- unlist(strsplit(data, '-'))
-                if(name[1]==''){
+                if (name[1] == '') {
                         table2 <- Rdisop::getMolecule(name[2])$isotopes[[1]]
                         iso2 <-
-                                table2[1,which.max(table2[2,])]
-                        iso <- 0-iso2
-                }else{
+                                table2[1, which.max(table2[2, ])]
+                        iso <- 0 - iso2
+                } else{
                         table1 <- Rdisop::getMolecule(name[1])$isotopes[[1]]
                         iso1 <-
-                                table1[1,which.max(table1[2,])]
-                        table2 <- Rdisop::getMolecule(name[2])$isotopes[[1]]
+                                table1[1, which.max(table1[2, ])]
+                        table2 <-
+                                Rdisop::getMolecule(name[2])$isotopes[[1]]
                         iso2 <-
-                                table2[1,which.max(table2[2,])]
+                                table2[1, which.max(table2[2, ])]
                         iso <-
                                 iso1 - iso2
                 }
 
         } else{
                 table <- Rdisop::getMolecule(data)$isotopes[[1]]
-                iso <- table[1,which.max(table[2,])]
+                iso <- table[1, which.max(table[2, ])]
         }
         return(iso)
 }
@@ -363,21 +364,22 @@ findohc <-
                         maxi <- smstep[i] + smsd
                         index <- sd < maxi & sd > mini
 
-                        li <- data[index & ins > cutoffint,]
+                        li <- data[index & ins > cutoffint, ]
                         mzt <- mzr[index & ins > cutoffint]
                         rtt <- rt[index & ins > cutoffint]
                         #dist(mzt) <-
                         if (length(mzt) >= 2) {
                                 #c <- stats::cutree(stats::hclust(stats::dist(mzt)), h = clustercf)
-                                t <- stats::cutree(stats::hclust(stats::dist(rtt)), h = clustercf)
+                                t <-
+                                        stats::cutree(stats::hclust(stats::dist(rtt)), h = clustercf)
                                 # u <- paste0(c, t)
                                 # cn <- length(unique(u))
                                 # lit <- cbind.data.frame(li, u, i)
                                 #
                                 # for (j in 1:cn) {
                                 lit <- cbind.data.frame(li, t, i)
-                                for (j in seq_along(unique(t))){
-                                        li2 <- lit[lit[, 7] == j,]
+                                for (j in seq_along(unique(t))) {
+                                        li2 <- lit[lit[, 7] == j, ]
                                         mzt2 <-
                                                 lit$mzr[lit[, 7] == j]
                                         if (length(mzt2) >= 2) {
@@ -401,7 +403,7 @@ findohc <-
                                 }
                         }
                 }
-                list$ohc <- result[!duplicated(result$mz), ]
+                list$ohc <- result[!duplicated(result$mz),]
                 return(list)
         }
 
@@ -412,22 +414,22 @@ findohc <-
 #' @return list with filtered metabolites mass to charge index of certain compound
 #' @export
 findmet <-
-        function(list, mass, mdr = 50){
+        function(list, mass, mdr = 50) {
+                rmd <- (round(mass) - mass) * 1000
+                rmdall <- (round(list$mz) - list$mz) * 1000
 
-                rmd <- (round(mass) - mass)*1000
-                rmdall <-(round(list$mz) - list$mz)*1000
-
-                if(length(mass)>1){
+                if (length(mass) > 1) {
                         metindex <- NULL
-                        for(i in seq_along(mass)){
-                                metindexi <- rmdall>rmd[i]-mdr & rmdall<rmd[i]+mdr
-                                metindex <- cbind(metindex,metindexi)
+                        for (i in seq_along(mass)) {
+                                metindexi <- rmdall > rmd[i] - mdr & rmdall < rmd[i] + mdr
+                                metindex <-
+                                        cbind(metindex, metindexi)
                         }
                         colnames(metindex) <- mass
                         list$metindex <- metindex
                         return(list)
-                }else{
-                        list$metindex <- rmdall>rmd-mdr & rmdall<rmd+mdr
+                } else{
+                        list$metindex <- rmdall > rmd - mdr & rmdall < rmd + mdr
                         return(list)
                 }
 
@@ -443,12 +445,15 @@ findmet <-
 #' RKMD <- findlipid(list)
 #' @export
 findlipid <-
-        function(list,mode='pos'){
-                if(mode=='pos'|mode=='neg'){
-                        km <- (list$mz * 14 / 14.01565-floor(list$mz * 14 / 14.01565))/0.0134
-                }else{
-                        adduct <- ifelse(mode=='pos',1.008,-1.008)
-                        km <- (((list$mz+adduct) * 14 / 14.01565)-floor((list$mz+adduct) * 14 / 14.01565))/0.0134
+        function(list, mode = 'pos') {
+                if (mode == 'pos' | mode == 'neg') {
+                        km <-
+                                (list$mz * 14 / 14.01565 - floor(list$mz * 14 / 14.01565)) / 0.0134
+                } else{
+                        adduct <- ifelse(mode == 'pos', 1.008, -1.008)
+                        km <-
+                                (((list$mz + adduct) * 14 / 14.01565) - floor((list$mz + adduct) * 14 / 14.01565)) /
+                                0.0134
                 }
                 TAG <- 0.8355
                 DAG <- 0.8719
@@ -459,14 +464,37 @@ findlipid <-
                 PI <- 0.6141
                 PtdG <- 0.6963
                 PtdH <- 0.7422
-                class <- c(TAG,DAG,MAG,PC,PE,PS,PI,PtdG,PtdH)/0.0134
-                t <- as.data.frame(outer(km,class,`-`))
-                s <- t-floor(t)
-                c <- apply(s, 2, function(x) round(x%%1,digits=2) == 0)
-                colnames(t) <- c('TAG_RKMD','DAG_RKMD','MAG_RKMD','PC_RKMD','PE_RKMD','PS_RKMD','PI_RKMD','PtdG_RKMD','PtdH_RKMD')
-                colnames(c) <- c('TAG','DAG','MAG','PC','PE','PS','PI','PtdG','PtdH')
+                class <- c(TAG, DAG, MAG, PC, PE, PS, PI, PtdG, PtdH) /
+                        0.0134
+                t <- as.data.frame(outer(km, class, `-`))
+                s <- t - floor(t)
+                c <-
+                        apply(s, 2, function(x)
+                                round(x %% 1, digits = 2) == 0)
+                colnames(t) <-
+                        c(
+                                'TAG_RKMD',
+                                'DAG_RKMD',
+                                'MAG_RKMD',
+                                'PC_RKMD',
+                                'PE_RKMD',
+                                'PS_RKMD',
+                                'PI_RKMD',
+                                'PtdG_RKMD',
+                                'PtdH_RKMD'
+                        )
+                colnames(c) <-
+                        c('TAG',
+                          'DAG',
+                          'MAG',
+                          'PC',
+                          'PE',
+                          'PS',
+                          'PI',
+                          'PtdG',
+                          'PtdH')
                 t$mz <- list$mz
-                list$RKMD <- cbind.data.frame(t,c)
+                list$RKMD <- cbind.data.frame(t, c)
                 return(list)
         }
 
@@ -478,8 +506,8 @@ findlipid <-
 #' data(list)
 #' pfc <- findpfc(list)
 #' @export
-findpfc <- function(list){
-        md <- list$mz-round(list$mz)
+findpfc <- function(list) {
+        md <- list$mz - round(list$mz)
         # mass defect -0.1 to 0.15
         list$pfc <- md > -0.1 & md < 0.15
         return(list)

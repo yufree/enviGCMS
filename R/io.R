@@ -38,13 +38,16 @@ getmr <-
 #' @export
 getmzrtcsv <- function(path) {
         dataraw <- utils::read.csv(path, skip = 1)
-        sample_name <- names(utils::read.csv(path, nrows = 1)[-(1:3)])
+        sample_name <-
+                names(utils::read.csv(path, nrows = 1)[-(1:3)])
         mz <- dataraw[, 2]
         rt <- dataraw[, 3]
-        data <- dataraw[,-c(1:3)]
+        data <- dataraw[, -c(1:3)]
         colnames(data) <- sample_name
-        sample_group <- c(t(utils::read.csv(path, nrows = 1)[-(1:3)]))
-        group <- cbind.data.frame(sample_name,sample_group,stringsAsFactors = FALSE)
+        sample_group <-
+                c(t(utils::read.csv(path, nrows = 1)[-(1:3)]))
+        group <-
+                cbind.data.frame(sample_name, sample_group, stringsAsFactors = FALSE)
         rownames(data) <- dataraw[, 1]
         re <- list(
                 data = data,
@@ -67,53 +70,54 @@ getmzrtcsv <- function(path) {
 #' writeMSP(list(list(spectra = cbind.data.frame(mz,ins))), name = 'test')
 #' }
 #' @export
-writeMSP <- function(list, name='unknown', sep = FALSE) {
-        writemsp <- function(list){
+writeMSP <- function(list, name = 'unknown', sep = FALSE) {
+        writemsp <- function(list) {
                 mz <- paste(list$spectra$mz, list$spectra$ins)
                 nPeaks <- length(mz)
                 cat(
                         "BEGIN IONS",
                         paste("Name:", list$name),
-                        paste("RetentionIndex:",list$rti),
+                        paste("RetentionIndex:", list$rti),
                         paste("Formula:", list$formula),
                         paste("IonMode:", list$ionmode),
-                        paste("CHARGE:",list$charge),
+                        paste("CHARGE:", list$charge),
                         paste("PrecursorMz:", list$prec),
-                        paste("Collision_energy:",list$ce),
+                        paste("Collision_energy:", list$ce),
                         paste("Num Peaks:", nPeaks),
-                        paste("Instrument_type:",list$instr),
-                        paste("Spectrum_type:",list$msm),
+                        paste("Instrument_type:", list$instr),
+                        paste("Spectrum_type:", list$msm),
                         paste(mz),
                         "END IONS",
                         file = zz,
                         sep = "\n"
                 )
         }
-        if(sep){
-                for (i in 1:floor(length(list)/sep)){
-                        zz <- file(file.path(paste(name,i, ".msp",                                            sep = "")), "w")
-                        idx <- c(1:sep)+sep*(i-1)
-                        sapply(list[idx],writemsp)
+        if (sep) {
+                for (i in 1:floor(length(list) / sep)) {
+                        zz <-
+                                file(file.path(paste(
+                                        name, i, ".msp",                                            sep = ""
+                                )), "w")
+                        idx <- c(1:sep) + sep * (i - 1)
+                        sapply(list[idx], writemsp)
                         close(zz)
                 }
-                zz <- file(file.path(paste(name,ceiling(length(list)/sep), ".msp",                                            sep = "")), "w")
-                idx <- sep*floor(length(list)/sep)+1:length(list)
-                sapply(list[idx],writemsp)
+                zz <-
+                        file(file.path(paste(
+                                name, ceiling(length(list) / sep), ".msp",                                            sep = ""
+                        )), "w")
+                idx <- sep * floor(length(list) / sep) + 1:length(list)
+                sapply(list[idx], writemsp)
                 close(zz)
-                message(
-                        paste0(
-                                "MSP files have been generated."
-                        ))
-        }else{
-                zz <- file(file.path(paste(name, ".msp",                                            sep = "")), "w")
-                sapply(list,writemsp)
+                message(paste0("MSP files have been generated."))
+        } else{
+                zz <-
+                        file(file.path(paste(name, ".msp",                                            sep = "")), "w")
+                sapply(list, writemsp)
                 close(zz)
-                message(
-                        paste0(
-                                "A data file ",
-                                name,
-                                ".MSP has been generated."
-                        ))
+                message(paste0("A data file ",
+                               name,
+                               ".MSP has been generated."))
         }
 }
 
@@ -121,65 +125,171 @@ writeMSP <- function(list, name='unknown', sep = FALSE) {
 #' @param file the path to your MSP file
 #' @return list a list with MSP information for annotation
 #' @export
-getMSP <- function(file){
+getMSP <- function(file) {
         # this part is modified from compMS2Miner's code: https://github.com/WMBEdmands/compMS2Miner/blob/ee20d3d632b11729d6bbb5b5b93cd468b097251d/R/metID.matchSpectralDB.R
         msp <- readLines(file)
         # remove empty lines
         msp <- msp[msp != '']
         ncomp <- grep('^BEGIN IONS', msp, ignore.case = TRUE)
-        splitFactorTmp <- rep(seq_along(ncomp), diff(c(ncomp, length(msp) + 1)))
+        splitFactorTmp <-
+                rep(seq_along(ncomp), diff(c(ncomp, length(msp) + 1)))
 
-        li <- split(msp,f = splitFactorTmp)
-        getmsp <- function(x){
-                namet <- x[grep('^NAME: |^TITLE=',x, ignore.case=TRUE)]
-                name <- gsub('^NAME: |^TITLE=','',namet, ignore.case=TRUE)
-                charget <- x[grep('^CHARGE=',x, ignore.case=TRUE)]
-                charge <- gsub('^CHARGE=','',charget, ignore.case=TRUE)
-                ionmodet <- x[grep('^ION MODE:|^MODE:|^IONMODE:|^Ion_mode:',x, ignore.case=TRUE)]
-                ionmode <- gsub('^ION MODE: |^MODE: |^IONMODE: |^Ion_mode: ','',ionmodet, ignore.case=TRUE)
-                prect <- x[grep('^PRECURSORMZ: |^PRECURSOR M/Z: |^PRECURSOR MZ: |^PEPMASS: |^PrecursorMZ: |^PEPMASS=',x, ignore.case=TRUE)]
-                prec <- as.numeric(gsub('^PRECURSORMZ: |^PRECURSOR M/Z: |^PRECURSOR MZ: |^PEPMASS: |^PrecursorMZ: |^PEPMASS=','',prect, ignore.case=TRUE))
-                formt <- x[grep('^FORMULA: |^Formula: ',x, ignore.case=TRUE)]
-                formula <- gsub('^FORMULA: |^Formula: ','',formt,ignore.case = TRUE)
-                npt <- x[grep('^Num Peaks: ',x, ignore.case=TRUE)]
-                np <- gsub('^Num Peaks: ','',npt,ignore.case = TRUE)
-                cet <- x[grep('COLLISIONENERGY: |Collision_energy: ',x,ignore.case=TRUE)]
-                ce <- gsub('COLLISIONENERGY: |Collision_energy: ','',cet,ignore.case=TRUE)
-                rtt <- x[grep('RETENTIONINDEX: |RTINSECONDS: |RTINSECONDS=',x,ignore.case = TRUE)]
-                rt <- as.numeric(gsub('RETENTIONINDEX: |RTINSECONDS: |RTINSECONDS=','',rtt,ignore.case=TRUE))
-                instrt <- x[grep('Instrument_type: ',x,ignore.case = TRUE)]
-                instr <- gsub('Instrument_type: ','',instrt,ignore.case = TRUE)
-                msmt <- x[grep('Spectrum_type: ',x,ignore.case = TRUE)]
-                msm <- gsub('Spectrum_type: ','',msmt,ignore.case = TRUE)
-                if(sum(grepl('^Num Peaks: ',x, ignore.case=TRUE))==0){
+        li <- split(msp, f = splitFactorTmp)
+        getmsp <- function(x) {
+                namet <- x[grep('^NAME: |^TITLE=', x, ignore.case = TRUE)]
+                name <-
+                        gsub('^NAME: |^TITLE=', '', namet, ignore.case = TRUE)
+                charget <- x[grep('^CHARGE=', x, ignore.case = TRUE)]
+                charge <-
+                        gsub('^CHARGE=', '', charget, ignore.case = TRUE)
+                ionmodet <-
+                        x[grep('^ION MODE:|^MODE:|^IONMODE:|^Ion_mode:',
+                               x,
+                               ignore.case = TRUE)]
+                ionmode <-
+                        gsub(
+                                '^ION MODE: |^MODE: |^IONMODE: |^Ion_mode: ',
+                                '',
+                                ionmodet,
+                                ignore.case = TRUE
+                        )
+                prect <-
+                        x[grep(
+                                '^PRECURSORMZ: |^PRECURSOR M/Z: |^PRECURSOR MZ: |^PEPMASS: |^PrecursorMZ: |^PEPMASS=',
+                                x,
+                                ignore.case = TRUE
+                        )]
+                prec <-
+                        as.numeric(
+                                gsub(
+                                        '^PRECURSORMZ: |^PRECURSOR M/Z: |^PRECURSOR MZ: |^PEPMASS: |^PrecursorMZ: |^PEPMASS=',
+                                        '',
+                                        prect,
+                                        ignore.case = TRUE
+                                )
+                        )
+                formt <-
+                        x[grep('^FORMULA: |^Formula: ', x, ignore.case = TRUE)]
+                formula <-
+                        gsub('^FORMULA: |^Formula: ',
+                             '',
+                             formt,
+                             ignore.case = TRUE)
+                npt <- x[grep('^Num Peaks: ', x, ignore.case = TRUE)]
+                np <- gsub('^Num Peaks: ', '', npt, ignore.case = TRUE)
+                cet <-
+                        x[grep('COLLISIONENERGY: |Collision_energy: ',
+                               x,
+                               ignore.case = TRUE)]
+                ce <-
+                        gsub('COLLISIONENERGY: |Collision_energy: ',
+                             '',
+                             cet,
+                             ignore.case = TRUE)
+                rtt <-
+                        x[grep('RETENTIONINDEX: |RTINSECONDS: |RTINSECONDS=',
+                               x,
+                               ignore.case = TRUE)]
+                rt <-
+                        as.numeric(
+                                gsub(
+                                        'RETENTIONINDEX: |RTINSECONDS: |RTINSECONDS=',
+                                        '',
+                                        rtt,
+                                        ignore.case = TRUE
+                                )
+                        )
+                instrt <-
+                        x[grep('Instrument_type: ', x, ignore.case = TRUE)]
+                instr <-
+                        gsub('Instrument_type: ', '', instrt, ignore.case = TRUE)
+                msmt <-
+                        x[grep('Spectrum_type: ', x, ignore.case = TRUE)]
+                msm <-
+                        gsub('Spectrum_type: ', '', msmt, ignore.case = TRUE)
+                if (sum(grepl('^Num Peaks: ', x, ignore.case = TRUE)) ==
+                    0) {
                         # matrix of masses and intensities
-                        massIntIndx <- which(grepl('^[0-9]', x) & !grepl(': ', x))
-                        massesInts <- unlist(strsplit(x[massIntIndx], '\t| '))
-                        massesInts <- as.numeric(massesInts[grep('^[0-9].*[0-9]$|^[0-9]$', massesInts)])
+                        massIntIndx <-
+                                which(grepl('^[0-9]', x) & !grepl(': ', x))
+                        massesInts <-
+                                unlist(strsplit(x[massIntIndx], '\t| '))
+                        massesInts <-
+                                as.numeric(massesInts[grep('^[0-9].*[0-9]$|^[0-9]$',
+                                                           massesInts)])
                         # if any NAs remove from indx
-                        mz <-  massesInts[seq(1, length(massesInts), 2)]
-                        ins <-  massesInts[seq(2, length(massesInts), 2)]
-                        ins <- ins/max(ins)*100
-                        spectra <- cbind.data.frame(mz=mz,ins=ins)
-                        return(list(name=name,ionmode=ionmode,charge = charge,prec=prec,formula=formula,np = np,rti=rt,ce=ce,instr=instr, msm = msm, spectra=spectra))
-                }else if(as.numeric(np)>0){
+                        mz <-
+                                massesInts[seq(1, length(massesInts), 2)]
+                        ins <-
+                                massesInts[seq(2, length(massesInts), 2)]
+                        ins <- ins / max(ins) * 100
+                        spectra <- cbind.data.frame(mz = mz, ins = ins)
+                        return(
+                                list(
+                                        name = name,
+                                        ionmode = ionmode,
+                                        charge = charge,
+                                        prec = prec,
+                                        formula = formula,
+                                        np = np,
+                                        rti = rt,
+                                        ce = ce,
+                                        instr = instr,
+                                        msm = msm,
+                                        spectra = spectra
+                                )
+                        )
+                } else if (as.numeric(np) > 0) {
                         # matrix of masses and intensities
-                        massIntIndx <- which(grepl('^[0-9]', x) & !grepl(': ', x))
-                        massesInts <- unlist(strsplit(x[massIntIndx], '\t| '))
-                        massesInts <- as.numeric(massesInts[grep('^[0-9].*[0-9]$|^[0-9]$', massesInts)])
+                        massIntIndx <-
+                                which(grepl('^[0-9]', x) & !grepl(': ', x))
+                        massesInts <-
+                                unlist(strsplit(x[massIntIndx], '\t| '))
+                        massesInts <-
+                                as.numeric(massesInts[grep('^[0-9].*[0-9]$|^[0-9]$',
+                                                           massesInts)])
                         # if any NAs remove from indx
-                        mz <-  massesInts[seq(1, length(massesInts), 2)]
-                        ins <-  massesInts[seq(2, length(massesInts), 2)]
-                        ins <- ins/max(ins)*100
-                        spectra <- cbind.data.frame(mz=mz,ins=ins)
-                        return(list(name=name,ionmode=ionmode,charge = charge,prec=prec,formula=formula,np = np,rti=rt,ce=ce,instr=instr, msm = msm, spectra=spectra))
+                        mz <-
+                                massesInts[seq(1, length(massesInts), 2)]
+                        ins <-
+                                massesInts[seq(2, length(massesInts), 2)]
+                        ins <- ins / max(ins) * 100
+                        spectra <- cbind.data.frame(mz = mz, ins = ins)
+                        return(
+                                list(
+                                        name = name,
+                                        ionmode = ionmode,
+                                        charge = charge,
+                                        prec = prec,
+                                        formula = formula,
+                                        np = np,
+                                        rti = rt,
+                                        ce = ce,
+                                        instr = instr,
+                                        msm = msm,
+                                        spectra = spectra
+                                )
+                        )
                 }
-                   else     {
-                        return(list(name=name,ionmode=ionmode,charge = charge,prec=prec,formula=formula,np = np,rti=rt,ce=ce,instr=instr,msm = msm))
+                else     {
+                        return(
+                                list(
+                                        name = name,
+                                        ionmode = ionmode,
+                                        charge = charge,
+                                        prec = prec,
+                                        formula = formula,
+                                        np = np,
+                                        rti = rt,
+                                        ce = ce,
+                                        instr = instr,
+                                        msm = msm
+                                )
+                        )
                 }
 
         }
-        li <- lapply(li,getmsp)
+        li <- lapply(li, getmsp)
         return(li)
 }
 
@@ -225,22 +335,36 @@ getformula <-
                  )) {
                 list <- list()
                 for (i in seq_along(mz)) {
-                        element <- paste(names(elements), sep="", collapse="")
-                        minelement <- vapply(elements, function(x) x[1],1)
-                        maxelement <- vapply(elements, function(x) x[2],1)
-                        minelement2 <- paste(paste0(names(minelement),minelement), sep="", collapse="")
-                        maxelement2 <- paste(paste0(names(maxelement),maxelement), sep="", collapse="")
+                        element <- paste(names(elements),
+                                         sep = "",
+                                         collapse = "")
+                        minelement <-
+                                vapply(elements, function(x)
+                                        x[1], 1)
+                        maxelement <-
+                                vapply(elements, function(x)
+                                        x[2], 1)
+                        minelement2 <-
+                                paste(paste0(names(minelement), minelement),
+                                      sep = "",
+                                      collapse = "")
+                        maxelement2 <-
+                                paste(paste0(names(maxelement), maxelement),
+                                      sep = "",
+                                      collapse = "")
                         mfSet <-
-                                Rdisop::decomposeMass(mz[i],mzabs = window,z = charge, elements = element, minElements = minelement2, maxElements = maxelement2)
+                                Rdisop::decomposeMass(
+                                        mz[i],
+                                        mzabs = window,
+                                        z = charge,
+                                        elements = element,
+                                        minElements = minelement2,
+                                        maxElements = maxelement2
+                                )
                         formula <- mfSet$formula
                         valid <- mfSet$valid
-                        list[[i]] <- formula[valid=='Valid']
+                        list[[i]] <- formula[valid == 'Valid']
 
                 }
                 return(list)
         }
-
-
-
-
-

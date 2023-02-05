@@ -46,7 +46,8 @@ getareastd <- function(data = NULL,
         } else {
                 eicis <- xcms::getEIC(data, mz = c(mzhis, mzlis))
                 dfis <- eicis@eic$xcmsRaw[[1]]
-                dfis <- dfis[dfis[, 1] > rts[1] & dfis[, 1] < rts[2],]
+                dfis <-
+                        dfis[dfis[, 1] > rts[1] & dfis[, 1] < rts[2], ]
                 areais <- sum(diff(dfis[, 1]) * dfis[-1, 2])
         }
 
@@ -61,7 +62,7 @@ getareastd <- function(data = NULL,
                 for (i in seq_along(mz)) {
                         eici <- xcms::getEIC(data, mz = c(mzh[i], mzl[i]))
                         df <- eici@eic$xcmsRaw[[1]]
-                        df <- df[df[, 1] > rt[1] & df[, 1] < rt[2],]
+                        df <- df[df[, 1] > rt[1] & df[, 1] < rt[2], ]
                         area[i] <- sum(diff(df[, 1]) * df[-1, 2])
                 }
         }
@@ -115,7 +116,8 @@ getarea <- function(data,
         } else {
                 eicis <- xcms::getEIC(data, mz = c(mzhis, mzlis))
                 dfis <- eicis@eic$xcmsRaw[[1]]
-                dfis <- dfis[dfis[, 1] > rts[1] & dfis[, 1] < rts[2],]
+                dfis <-
+                        dfis[dfis[, 1] > rts[1] & dfis[, 1] < rts[2], ]
                 areais <- sum(diff(dfis[, 1]) * dfis[-1, 2])
         }
 
@@ -130,7 +132,7 @@ getarea <- function(data,
                 for (i in seq_along(mz)) {
                         eici <- xcms::getEIC(data, mz = c(mzh[i], mzl[i]))
                         df <- eici@eic$xcmsRaw[[1]]
-                        df <- df[df[, 1] > rt[1] & df[, 1] < rt[2],]
+                        df <- df[df[, 1] > rt[1] & df[, 1] < rt[2], ]
                         area[i] <- sum(diff(df[, 1]) * df[-1, 2])
                 }
         }
@@ -199,9 +201,9 @@ getsccp <- function(pathstds,
                 )
         }
         pCl <- vapply(liststd, function(x)
-                x$sumpCl,1)
+                x$sumpCl, 1)
         rarea <- vapply(liststd, function(x)
-                x$sumrarea,1)
+                x$sumrarea, 1)
 
         # get the slope and intercept
         if (log) {
@@ -226,9 +228,9 @@ getsccp <- function(pathstds,
         }
 
         pCls <- vapply(listsamp, function(x)
-                x$sumpCl,1)
+                x$sumpCl, 1)
         rareas <- vapply(listsamp, function(x)
-                x$sumrarea,1)
+                x$sumrarea, 1)
         # get the concentration
         if (log) {
                 rareasc <- exp(pCls * slope + intercept)

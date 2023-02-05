@@ -152,7 +152,7 @@ getcsv <-
                  ...) {
                 if (!is.null(name)) {
                         if (grepl('m', type)) {
-                                sample_group <- list$group[, -1]
+                                sample_group <- list$group[,-1]
                                 data <-
                                         rbind(sample_group, list$data)
                                 rownames(data) <-
@@ -183,7 +183,7 @@ getcsv <-
                                 utils::write.csv(data, file = filename, ...)
                         }
                         if (grepl('p', type)) {
-                                lv <- list$group[, -1]
+                                lv <- list$group[,-1]
                                 lif <-
                                         getimputation(list, method = "l")
                                 ar <-
@@ -214,7 +214,7 @@ getcsv <-
                                               rt = list$rt,
                                               list$data)
                                 colname <- colnames(data)
-                                groupz <- list$group[, -1]
+                                groupz <- list$group[,-1]
                                 if (ncol(list$group) > 2) {
                                         cols <- colnames(groupz)
                                         groupz <-
@@ -280,7 +280,7 @@ getmzrt <-
                  value = "into",
                  eic = FALSE,
                  type = 'o') {
-                if (inherits(xset,'xcmsSet')) {
+                if (inherits(xset, 'xcmsSet')) {
                         if (eic) {
                                 eic <-
                                         xcms::getEIC(xset,
@@ -311,7 +311,7 @@ getmzrt <-
                                         value = value
                                 )
                 }
-                else if (inherits(xset,'XCMSnExp')) {
+                else if (inherits(xset, 'XCMSnExp')) {
                         if (eic) {
                                 feature_chroms <-
                                         xcms::featureChromatograms(xset, features = rep(T, length(
@@ -322,7 +322,8 @@ getmzrt <-
                         } else {
                                 if (!is.null(name)) {
                                         xset2 <- methods::as(xset, "xcmsSet")
-                                        saveRDS(xset2,                                                file = paste0(name, 'xset.rds'))
+                                        saveRDS(xset2,
+                                                file = paste0(name, 'xset.rds'))
                                 }
                         }
                         result <-
@@ -359,7 +360,7 @@ getimputation <- function(list, method = "l") {
 
         if (method == "r") {
                 idx <- stats::complete.cases(data)
-                data <- data[idx, ]
+                data <- data[idx,]
                 mz <- mz[idx]
                 rt <- rt[idx]
         } else if (method == "l") {
@@ -416,14 +417,14 @@ getfilter <-
                          !is.null(list$rowindex)) {
                         rowindex <- list$rowindex
                 }
-                list$data <- list$data[rowindex,]
+                list$data <- list$data[rowindex, ]
                 list$mz <- list$mz[rowindex]
                 list$rt <- list$rt[rowindex]
-                list$mzrange <- list$mzrange[rowindex,]
-                list$rtrange <- list$rtrange[rowindex,]
-                list$groupmean <- list$groupmean[rowindex,]
-                list$groupsd <- list$groupsd[rowindex,]
-                list$grouprsd <- list$grouprsd[rowindex,]
+                list$mzrange <- list$mzrange[rowindex, ]
+                list$rtrange <- list$rtrange[rowindex, ]
+                list$groupmean <- list$groupmean[rowindex, ]
+                list$groupsd <- list$groupsd[rowindex, ]
+                list$grouprsd <- list$grouprsd[rowindex, ]
                 # list$rowindex <- rowindex
 
                 if (!is.null(colindex) & !is.null(list$colindex)) {
@@ -435,7 +436,7 @@ getfilter <-
                 }
                 list$data <- list$data[, colindex]
                 if (NCOL(list$group) > 1) {
-                        list$group <- list$group[colindex, ]
+                        list$group <- list$group[colindex,]
                 } else{
                         list$group <- list$group[colindex]
                 }
@@ -470,7 +471,7 @@ getdoe <- function(list,
         # replicates instead
         if (tr) {
                 data <- list$data
-                lv <- list$group[, -1, drop = FALSE]
+                lv <- list$group[,-1, drop = FALSE]
                 # group base on levels
                 cols <- colnames(lv)
                 mlv <- do.call(paste, c(lv[cols]))
@@ -478,14 +479,14 @@ getdoe <- function(list,
                 meant <-
                         BiocParallel::bpaggregate(t(data), list(mlv),  mean, BPPARAM = BPPARAM)
                 idx <- match(unique(mlv), meant[, 1])
-                meant <- meant[idx, ]
+                meant <- meant[idx,]
                 sdt <-
                         BiocParallel::bpaggregate(t(data), list(mlv), stats::sd, BPPARAM = BPPARAM)
                 idx <- match(unique(mlv), sdt[, 1])
-                sdt <- sdt[idx, ]
-                suppressWarnings(rsd <- sdt[, -1] / meant[, -1] *
+                sdt <- sdt[idx,]
+                suppressWarnings(rsd <- sdt[,-1] / meant[,-1] *
                                          100)
-                data <- t(meant[, -1])
+                data <- t(meant[,-1])
                 colnames(data) <- unique(mlv)
                 rsd <- t(rsd)
                 # filter the data based on rsd of the technical
@@ -494,7 +495,7 @@ getdoe <- function(list,
                         all(x <
                                     rsdcft)))
                 indext <- indext & (!is.na(indext))
-                data <- data[indext, ]
+                data <- data[indext,]
                 # data with mean of the technical replicates
                 list$data <- data
                 list$mz <- list$mz[indext]
@@ -535,7 +536,7 @@ getdoe <- function(list,
 
         # filter the data based on rsd/intensity
         data <- list$data
-        lv <- list$group[, -1, drop = FALSE]
+        lv <- list$group[,-1, drop = FALSE]
         cols <- colnames(lv)
         # one peak for metabolomics is hard to happen
         if (sum(NROW(lv) > 1) != 0) {
@@ -547,14 +548,14 @@ getdoe <- function(list,
                 mean <-
                         BiocParallel::bpaggregate(t(data), list(mlv), mean, BPPARAM = BPPARAM)
                 idx <- match(unique(mlv), mean[, 1])
-                mean <- mean[idx, ]
+                mean <- mean[idx,]
                 sd <-
                         BiocParallel::bpaggregate(t(data), list(mlv), stats::sd, BPPARAM = BPPARAM)
                 idx <- match(unique(mlv), sd[, 1])
-                sd <- sd[idx, ]
-                suppressWarnings(rsd <- sd[, -1] / mean[, -1] * 100)
-                mean <- t(mean[, -1])
-                sd <- t(sd[, -1])
+                sd <- sd[idx,]
+                suppressWarnings(rsd <- sd[,-1] / mean[,-1] * 100)
+                mean <- t(mean[,-1])
+                sd <- t(sd[,-1])
                 rsd <- t(rsd)
                 colnames(rsd) <-
                         colnames(sd) <-
@@ -604,7 +605,7 @@ getpower <-
                  qt = 0.05,
                  powert = 0.8,
                  imputation = "l") {
-                group <- as.factor(list$group[, -1])
+                group <- as.factor(list$group[,-1])
                 g <- unique(group)
                 ng <- length(g)
                 n <- min(table(group))
@@ -758,14 +759,14 @@ getretcor <- function(list,
                 mrx <- paste0(df$mz2, '@', df$rt2)
 
                 df$ins2 <- df2$ins[match(mrx, mr2)]
-                dfx <- df[!duplicated(df$xid), ]
+                dfx <- df[!duplicated(df$xid),]
                 dfx$ins2 <-
                         stats::aggregate(df$ins2, by = list(df$xid), FUN)[, 2]
                 df1 <- cbind.data.frame(mz = dfx$mz1, rt = dfx$rt1)
                 if (length(dim(ins)) > 1) {
-                        insn <- ins[df$xid, ]
+                        insn <- ins[df$xid,]
                         ins <-
-                                cbind.data.frame(insn[!duplicated(df$xid), ], dfx$ins2)
+                                cbind.data.frame(insn[!duplicated(df$xid),], dfx$ins2)
                 } else{
                         insn <- ins[df$xid]
                         ins <-
@@ -806,7 +807,8 @@ getpn <- function(pos,
                         ))
                 colnames(mzr) <- c("min", "max")
                 data.table::setkey(mzr, min, max)
-                diff <- data.table::data.table(min = diff, max = diff)
+                diff <-
+                        data.table::data.table(min = diff, max = diff)
                 overlapms <-
                         data.table::foverlaps(
                                 diff,
@@ -818,18 +820,18 @@ getpn <- function(pos,
                 if (nrow(overlapms) != 0) {
                         if (nrow(overlapms) > 1) {
                                 cor <-
-                                        apply(neg$data[overlapms$xid, ], 1, function(x)
+                                        apply(neg$data[overlapms$xid,], 1, function(x)
                                                 suppressWarnings(
                                                         cor(
                                                                 as.numeric(x),
-                                                                as.numeric(pos$data[i, ])
+                                                                as.numeric(pos$data[i,])
                                                         )
                                                 ))
                         } else{
                                 cor <-
                                         suppressWarnings(cor(
-                                                as.numeric(pos$data[i, ]),
-                                                as.numeric(neg$data[overlapms$xid, ])
+                                                as.numeric(pos$data[i,]),
+                                                as.numeric(neg$data[overlapms$xid,])
                                         ))
                         }
 
@@ -846,7 +848,7 @@ getpn <- function(pos,
                         df <- rbind.data.frame(df, t)
                 }
         }
-        merge2 <- df[df$cor > cutoff, ]
+        merge2 <- df[df$cor > cutoff,]
         idxp <-
                 match(paste(merge2$pos, merge2[, 2]), paste(pos$mz, pos$rt))
         idxn <-
@@ -859,7 +861,7 @@ getpn <- function(pos,
         if (is.null(pos$anno) & is.null(neg$anno)) {
                 meta <-
                         list(
-                                data = rbind(pos$data[-idxp, ], neg$data),
+                                data = rbind(pos$data[-idxp,], neg$data),
                                 group = pos$group,
                                 mz = c(pos$mz[-idxp], neg$mz),
                                 rt = c(pos$rt[-idxp], neg$rt),
@@ -871,7 +873,7 @@ getpn <- function(pos,
         } else{
                 meta <-
                         list(
-                                data = rbind(pos$data[-idxp, ], neg$data),
+                                data = rbind(pos$data[-idxp,], neg$data),
                                 group = pos$group,
                                 mz = c(pos$mz[-idxp], neg$mz),
                                 rt = c(pos$rt[-idxp], neg$rt),

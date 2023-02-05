@@ -86,7 +86,8 @@ GetIntegration <- function(data,
                                                                               back + 1):(i + forth)] ~ RTrangemsec[(i -
                                                                                                                             back + 1):(i + forth)]))[2]
                 }
-                slopedata[1:back] <- slopedata[back + 1]  # first few points
+                slopedata[1:back] <-
+                        slopedata[back + 1]  # first few points
                 slopedata[(length(signal) - forth - 1):length(signal)] <-
                         slopedata[(length(signal) -
                                            forth)]  # last few points
@@ -133,8 +134,9 @@ GetIntegration <- function(data,
         background <- signal
         for (i in scanstart:scanend) {
                 # get background
-                background[i] <- sigstart + (sigend - sigstart) / (scanend -
-                                                                           scanstart) * (i - scanstart)
+                background[i] <-
+                        sigstart + (sigend - sigstart) / (scanend -
+                                                                  scanstart) * (i - scanstart)
         }
         subsignal <- signal - background
         # get the length of the signal
@@ -142,8 +144,9 @@ GetIntegration <- function(data,
         # calculate area; using a Riemann integral (dimension:
         # intensity x min)
         area <- 0
-        scantime <- (RTrange[scanend] - RTrange[scanstart]) / (scanend -
-                                                                       scanstart) * 60  # time per scan in second
+        scantime <-
+                (RTrange[scanend] - RTrange[scanstart]) / (scanend -
+                                                                   scanstart) * 60  # time per scan in second
         # when half peak
         if (half == TRUE) {
                 for (i in scanstart:scanpeak)
@@ -241,13 +244,13 @@ batch <- function(file, mz1, mz2) {
         plotintslope(xh, name2)
         list <- list(xl, xh)
         area <- vapply(list, function(x)
-                x$area,1)
+                x$area, 1)
         height <- vapply(list, function(x)
-                x$height,1)
+                x$height, 1)
         arearatio <- area[1] / area[2]
         heightratio <- height[1] / height[2]
         points <- round(mean(vapply(list, function(x)
-                x$peakdata[12],1)))
+                x$peakdata[12], 1)))
         ratio <- c(arearatio, heightratio, points)
         names(ratio) <- c("area ratio", "height ratio", "points")
         return(ratio)
@@ -302,12 +305,13 @@ Getisotopologues <- function(formula = "C12OH6Br4",
         # abandances. Here we suggest more than 10% abundance
         # of your base peak would meet the SNR
         isotopes <- data.frame(t(formula$isotopes[[1]]))
-        isotopes <- isotopes[isotopes[, 2]>0.1,]
+        isotopes <- isotopes[isotopes[, 2] > 0.1,]
         # order the intensity by the abandance
-        findpairs <- isotopes[order(isotopes[, 2], decreasing = TRUE),]
+        findpairs <-
+                isotopes[order(isotopes[, 2], decreasing = TRUE),]
         # find the most similar pairs with high abandance
         df <- outer(findpairs[, 1], findpairs[, 1], "/")
-        rownames(df) <- colnames(df) <- findpairs[,1]
+        rownames(df) <- colnames(df) <- findpairs[, 1]
         diag(df) <- df[upper.tri(df)] <- 0
         t <- which(df == max(df), arr.ind = TRUE)
         isotopologues1 <- as.numeric(rownames(df)[t[1]])
@@ -318,9 +322,11 @@ Getisotopologues <- function(formula = "C12OH6Br4",
         isotopes2 <-
                 data.frame(t(formula$isotopes[[1]]))
         ratio <- sum(isotopes2[isotopes2[, 1] > isotopologuesL -
-                                       width & isotopes2[, 1] < isotopologuesL + width,
+                                       width &
+                                       isotopes2[, 1] < isotopologuesL + width,
                                2]) / sum(isotopes2[isotopes2[, 1] > isotopologuesH -
-                                                           width & isotopes2[, 1] < isotopologuesH + width,
+                                                           width &
+                                                           isotopes2[, 1] < isotopologuesH + width,
                                                    2])
         peak <-
                 c(

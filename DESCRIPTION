@@ -41,4 +41,4 @@ Imports:
     mixtools,
     data.table,
     igraph
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3

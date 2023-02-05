@@ -108,7 +108,7 @@ plotridge <- function(data,
                                                                  1.5))
         graphics::abline(h = length(ys):1, col = "grey")
 
-        if (!is.null(lv)&nlevels(lv)!=1) {
+        if (!is.null(lv) & nlevels(lv) != 1) {
                 col <- grDevices::hcl.colors(nlevels(lv), "Zissou", alpha = 0.8)
 
                 Map(graphics::polygon,
@@ -177,10 +177,12 @@ plotrug <- function(data,
                 lv <- lv[indexy]
         }
 
-        rugs <- apply(data, 2, function(x) x[order(x)])
+        rugs <- apply(data, 2, function(x)
+                x[order(x)])
 
         rugs <- as.list(as.data.frame(rugs))
-        rugs <- lapply(rugs, function(x) x[is.finite(x)])
+        rugs <- lapply(rugs, function(x)
+                x[is.finite(x)])
 
         graphics::plot.new()
         graphics::plot.window(xlim = range(rugs), ylim = c(1, length(rugs) +
@@ -289,8 +291,8 @@ plotmr <- function(list,
 
                 for (i in 1:n) {
                         cex <- as.numeric(cut((log10(data[, i] + 1) -
-                                                      inscf),
-                                             breaks = c(0, 1, 2, 3, 4, Inf) / 2
+                                                       inscf),
+                                              breaks = c(0, 1, 2, 3, 4, Inf) / 2
                         )) / 2
                         cexlab <- c(
                                 paste0(inscf, "-", inscf + 0.5),
@@ -599,7 +601,7 @@ plotrsd <- function(list,
                 n <- 1
                 col <- grDevices::rainbow(1)
                 cex <- as.numeric(cut(rsd, breaks = c(0, 20,
-                                                     40, 60, 80, Inf))) / 2
+                                                      40, 60, 80, Inf))) / 2
                 dataname <- unique(lif$group$sample_group)
                 graphics::plot(
                         mz ~ rt,
@@ -727,8 +729,9 @@ plotpca <- function(data,
         }
         pcao <-
                 stats::prcomp(t(data), center = center, scale = scale)
-        pcaoVars <- signif(((pcao$sdev) ^ 2) / (sum((pcao$sdev) ^ 2)),
-                          3) * 100
+        pcaoVars <-
+                signif(((pcao$sdev) ^ 2) / (sum((pcao$sdev) ^ 2)),
+                       3) * 100
         if (!is.null(pch)) {
                 graphics::plot(
                         pcao$x[, 1],
@@ -933,10 +936,10 @@ plotden <- function(data,
 #' data(list)
 #' plotrla(list$data, as.factor(list$group$sample_group))
 #' @export
-plotrla <- function(data, lv, type = "g",...) {
+plotrla <- function(data, lv, type = "g", ...) {
         data <- as.matrix(data)
         data <- log(data)
-        data[is.nan(data)|is.infinite(data)] <- 0
+        data[is.nan(data) | is.infinite(data)] <- 0
         outmat <- NULL
 
         if (type == "g") {
@@ -953,7 +956,7 @@ plotrla <- function(data, lv, type = "g",...) {
         }
 
         outmat <- outmat[, order(lv)]
-        graphics::boxplot(outmat,...)
+        graphics::boxplot(outmat, ...)
         graphics::abline(h = 0)
 }
 
@@ -969,18 +972,19 @@ plotrla <- function(data, lv, type = "g",...) {
 plotridges <- function(data, lv, type = "g") {
         data <- as.matrix(data)
         data <- log(data)
-        data[is.nan(data)|is.infinite(data)] <- 0
+        data[is.nan(data) | is.infinite(data)] <- 0
         outmat <- NULL
 
         if (type == "g") {
                 for (lvi in levels(lv)) {
                         submat <- data[, lv == lvi]
-                        if(is.null(dim(submat))){
+                        if (is.null(dim(submat))) {
                                 tempmat <- submat
 
-                        }else{
+                        } else{
                                 median <- apply(submat, 1, median)
-                                tempmat <- sweep(submat, 1, median, "-")
+                                tempmat <-
+                                        sweep(submat, 1, median, "-")
                         }
 
                         outmat <- cbind(outmat, tempmat)
@@ -1009,32 +1013,38 @@ plotdwtus <- function(list, n = 512, ...) {
                         dwtus ~ as.numeric(list$order),
                         xlab = 'Run order',
                         ylab = 'DWTUS',
-                        col = as.numeric(as.factor(list$group$sample_group)),
+                        col = as.numeric(as.factor(
+                                list$group$sample_group
+                        )),
                         ...
                 )
                 graphics::legend(
                         'topright',
                         legend = unique(list$group$sample_group),
-                        col = unique(as.numeric(as.factor(
-                                list$group$sample_group
-                        ))),
+                        col = unique(as.numeric(
+                                as.factor(list$group$sample_group)
+                        )),
                         pch = 19,
                         bty = 'n'
                 )
         } else{
                 graphics::plot(
-                        dwtus ~ as.numeric(as.factor(list$group$sample_group)),
+                        dwtus ~ as.numeric(as.factor(
+                                list$group$sample_group
+                        )),
                         xlab = 'Group',
                         ylab = 'DWTUS',
-                        col = as.numeric(as.factor(list$group$sample_group)),
+                        col = as.numeric(as.factor(
+                                list$group$sample_group
+                        )),
                         ...
                 )
                 graphics::legend(
                         'topright',
                         legend = unique(list$group$sample_group),
-                        col = unique(as.numeric(as.factor(
-                                list$group$sample_group
-                        ))),
+                        col = unique(as.numeric(
+                                as.factor(list$group$sample_group)
+                        )),
                         pch = 19,
                         bty = 'n'
                 )
