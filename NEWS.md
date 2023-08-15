@@ -1,3 +1,7 @@
+# enviGCMS 0.7.2
+
+- adope MoNA msp format for getMSP
+
 # enviGCMS 0.7.1
 
 - CRAN

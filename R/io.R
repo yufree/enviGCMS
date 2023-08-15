@@ -131,6 +131,9 @@ getMSP <- function(file) {
         # remove empty lines
         msp <- msp[msp != '']
         ncomp <- grep('^BEGIN IONS', msp, ignore.case = TRUE)
+        if(length(ncomp)==0){
+                ncomp <- grep("^Name", msp, ignore.case = TRUE)
+        }
         splitFactorTmp <-
                 rep(seq_along(ncomp), diff(c(ncomp, length(msp) + 1)))
 
