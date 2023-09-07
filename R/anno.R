@@ -22,13 +22,13 @@ getalign <-
                  deltart = 10) {
                 mza <-
                         data.table::as.data.table(cbind.data.frame(
-                                mzmin = mz1 * (1 - ppm * 10e-6),
-                                mzmax = mz1 * (1 + ppm * 10e-6)
+                                mzmin = mz1 * (1 - ppm * 1e-6),
+                                mzmax = mz1 * (1 + ppm * 1e-6)
                         ))
                 mzb <-
                         data.table::as.data.table(cbind.data.frame(
-                                mzmin = mz2 * (1 - ppm * 10e-6),
-                                mzmax = mz2 * (1 + ppm * 10e-6)
+                                mzmin = mz2 * (1 - ppm * 1e-6),
+                                mzmax = mz2 * (1 + ppm * 1e-6)
                         ))
                 colnames(mza) <- colnames(mzb) <- c("min", "max")
                 data.table::setkey(mzb, min, max)
