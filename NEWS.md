@@ -1,6 +1,7 @@
 # enviGCMS 0.7.2
 
 - adope MoNA msp format for getMSP
+- fix getalign2 to accept mz vector without ordering
 
 # enviGCMS 0.7.1
 

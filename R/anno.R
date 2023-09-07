@@ -77,40 +77,49 @@ getalign <-
 #' rt <- c(590.8710, 587.3820, 102.9230, 85.8850, 313.8240)
 #' getalign2(mz,rt)
 #' @export
-getalign2 <- function(mz,
-                      rt,
-                      ppm = 5,
-                      deltart = 5) {
-        mzr <-
-                data.table::as.data.table(cbind.data.frame(
-                        mzmin = mz * (1 - ppm * 10e-6),
-                        mzmax = mz * (1 + ppm * 10e-6)
-                ))
-        colnames(mzr) <- c("min", "max")
-        data.table::setkey(mzr, min, max)
-        overlapms <- data.table::foverlaps(mzr, mzr, which = TRUE)
-        overlapms$mz1 <- mz[overlapms$xid]
-        overlapms$rt1 <- rt[overlapms$xid]
-        overlapms$mz2 <- mz[overlapms$yid]
-        overlapms$rt2 <- rt[overlapms$yid]
-        drt <- abs(overlapms$rt1 - overlapms$rt2)
-        overlapms <- overlapms[drt < deltart, ]
-
-        overlap1 <- overlapms[overlapms$xid == overlapms$yid, ]
-        overlap2 <- overlapms[overlapms$xid != overlapms$yid, ]
-        overlap3 <- overlap1[!overlap1$xid %in% overlap2$xid, ]
-        x <-
-                igraph::graph_from_data_frame(overlap2, directed = FALSE)
-        y <-
-                names(igraph::components(x)$membership[!duplicated(igraph::components(x)$membership)])
-        idx <- c(overlap3$xid, as.numeric(y))
-        idxx <- idx[order(idx, decreasing = FALSE)]
-        if (length(idxx) > 0) {
-                return(idxx)
-        } else{
-                message('No result could be found.')
+getalign2 <-
+        function (mz,
+                  rt,
+                  ppm = 5,
+                  deltart = 5) {
+                yyy <- paste0(mz, rt)
+                mzn <- mz[!duplicated(yyy)]
+                rtn <- rt[!duplicated(yyy)]
+                mzr <-
+                        data.table::as.data.table(cbind.data.frame(
+                                mzmin = mzn *         (1 - ppm * 1e-05),
+                                mzmax = mzn * (1 + ppm * 1e-05),
+                                mz = mzn,
+                                rt = rtn
+                        ))
+                colnames(mzr) <- c("min", "max", "mz", "rt")
+                data.table::setkey(mzr, min, max)
+                overlapms <- data.table::foverlaps(mzr, mzr, which = TRUE)
+                overlapms$mz1 <- mzr$mz[overlapms$xid]
+                overlapms$rt1 <- mzr$rt[overlapms$xid]
+                overlapms$mz2 <- mzr$mz[overlapms$yid]
+                overlapms$rt2 <- mzr$rt[overlapms$yid]
+                overlapms$drt <- abs(overlapms$rt1 - overlapms$rt2)
+                overlapms <- overlapms[drt < deltart,]
+                overlap1 <- overlapms[overlapms$xid == overlapms$yid,]
+                overlap2 <- overlapms[overlapms$xid != overlapms$yid,]
+                overlap3 <- overlap1[!overlap1$xid %in% overlap2$xid,]
+                x <- igraph::graph_from_data_frame(overlap2, directed = FALSE)
+                y <-
+                        names(igraph::components(x)$membership[!duplicated(igraph::components(x)$membership)])
+                idx <- c(overlap3$xid, as.numeric(y))
+                idxx <- idx[order(idx, decreasing = FALSE)]
+                if (length(idxx) > 0) {
+                        mzu <- mzr$mz[idxx]
+                        rtu <- mzr$rt[idxx]
+                        xxx <- paste0(mzu, rtu)
+                        idxx <- which(yyy %in% xxx & !duplicated(yyy))
+                        return(idxx)
+                } else {
+                        message("No result could be found.")
+                }
         }
-}
+
 #' Get the overlap peaks by mass and retention time range
 #' @param list1 list with data as peaks list, mz, rt, mzrange, rtrange and group information to be overlapped
 #' @param list2 list with data as peaks list, mz, rt, mzrange, rtrange and group information to overlap
