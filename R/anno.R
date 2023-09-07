@@ -100,7 +100,7 @@ getalign2 <-
                 overlapms$mz2 <- mzr$mz[overlapms$yid]
                 overlapms$rt2 <- mzr$rt[overlapms$yid]
                 overlapms$drt <- abs(overlapms$rt1 - overlapms$rt2)
-                overlapms <- overlapms[drt < deltart,]
+                overlapms <- overlapms[overlapms$drt < deltart,]
                 overlap1 <- overlapms[overlapms$xid == overlapms$yid,]
                 overlap2 <- overlapms[overlapms$xid != overlapms$yid,]
                 overlap3 <- overlap1[!overlap1$xid %in% overlap2$xid,]
