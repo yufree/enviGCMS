@@ -87,8 +87,8 @@ getalign2 <-
                 rtn <- rt[!duplicated(yyy)]
                 mzr <-
                         data.table::as.data.table(cbind.data.frame(
-                                mzmin = mzn *         (1 - ppm * 1e-05),
-                                mzmax = mzn * (1 + ppm * 1e-05),
+                                mzmin = mzn *         (1 - ppm * 1e-06),
+                                mzmax = mzn * (1 + ppm * 1e-06),
                                 mz = mzn,
                                 rt = rtn
                         ))
