@@ -288,26 +288,28 @@ qbatch <- function(file,
 }
 
 #' Get the selected isotopologues at certain MS data
-#' @param formula the molecular formula.
+#' @param formula the molecular formula. C12OH6Br4 means BDE-47 as default
 #' @param charge the charge of that molecular. 1 in EI mode as default
 #' @param width the width of the peak width on mass spectrum. 0.3 as default for low resolution mass spectrum.
 #' @examples
-#' Getisotopologues(formula = 'C12OH10')
+#' # show isotopologues for BDE-47
+#' Getisotopologues(formula = 'C12OH6Br4')
 #' @export
-Getisotopologues <- function(formula = "C12OH10",
+Getisotopologues <- function(formula = "C12OH6Br4",
                              charge = 1,
                              width = 0.3) {
-        # input the forlmula and charge for your molecular
-        formula <-  Rdisop::getMolecule(formula, z = charge)
+        # input the formula and charge for your molecular,
+        # this demo was for BDE-47, add maxisotope for potential natural compounds
+        formula <-  Rdisop::getMolecule(formula, z = charge, maxisotopes = 20)
         # get the isotopes pattern of your molecular with high
-        # abandances. Here we suggest more than 10% abundance
+        # abundances. Here we suggest more than 10% abundance
         # of your base peak would meet the SNR
         isotopes <- data.frame(t(formula$isotopes[[1]]))
         isotopes <- isotopes[isotopes[, 2] > 0.1,]
-        # order the intensity by the abandance
+        # order the intensity by the abundance
         findpairs <-
                 isotopes[order(isotopes[, 2], decreasing = TRUE),]
-        # find the most similar pairs with high abandance
+        # find the most similar pairs with high abundance
         df <- outer(findpairs[, 1], findpairs[, 1], "/")
         rownames(df) <- colnames(df) <- findpairs[, 1]
         diag(df) <- df[upper.tri(df)] <- 0
