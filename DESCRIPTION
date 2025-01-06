@@ -1,7 +1,7 @@
 Package: enviGCMS
 Type: Package
 Title: GC/LC-MS Data Analysis for Environmental Science
-Version: 0.7.3
+Version: 0.7.4
 Authors@R: c(person(given = "Miao", family = "YU",
         role = c("aut", "cre"), 
         email = "yufreecas@gmail.com",
@@ -41,4 +41,4 @@ Imports:
     mixtools,
     data.table,
     igraph
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2

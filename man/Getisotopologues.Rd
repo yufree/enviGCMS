@@ -17,6 +17,8 @@ Getisotopologues(formula = "C12OH6Br4", charge = 1, width = 0.3)
 Get the selected isotopologues at certain MS data
 }
 \examples{
+\dontrun{
 # show isotopologues for BDE-47
 Getisotopologues(formula = 'C12OH6Br4')
+}
 }

@@ -292,8 +292,10 @@ qbatch <- function(file,
 #' @param charge the charge of that molecular. 1 in EI mode as default
 #' @param width the width of the peak width on mass spectrum. 0.3 as default for low resolution mass spectrum.
 #' @examples
+#' \dontrun{
 #' # show isotopologues for BDE-47
 #' Getisotopologues(formula = 'C12OH6Br4')
+#' }
 #' @export
 Getisotopologues <- function(formula = "C12OH6Br4",
                              charge = 1,

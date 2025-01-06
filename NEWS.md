@@ -1,3 +1,8 @@
+# enviGCMS 0.7.4
+
+- CRAN
+- skip rdisop example
+
 # enviGCMS 0.7.3
 
 - fix getalign2 to accept mz vector without ordering
