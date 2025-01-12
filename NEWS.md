@@ -2,6 +2,7 @@
 
 - CRAN
 - change rdisop related example
+- update citation
 
 # enviGCMS 0.7.3
 
