@@ -4,10 +4,10 @@
 \alias{Getisotopologues}
 \title{Get the selected isotopologues at certain MS data}
 \usage{
-Getisotopologues(formula = "C12OH6Br4", charge = 1, width = 0.3)
+Getisotopologues(formula = "C6H11O6", charge = 1, width = 0.3)
 }
 \arguments{
-\item{formula}{the molecular formula. C12OH6Br4 means BDE-47 as default}
+\item{formula}{the molecular formula.}
 
 \item{charge}{the charge of that molecular. 1 in EI mode as default}
 
@@ -17,6 +17,6 @@ Getisotopologues(formula = "C12OH6Br4", charge = 1, width = 0.3)
 Get the selected isotopologues at certain MS data
 }
 \examples{
-# show isotopologues for BDE-47
-Getisotopologues(formula = 'C12OH6Br4')
+# show isotopologues
+Getisotopologues(formula = 'C6H11O6', charge = 1, width = 0.3)
 }

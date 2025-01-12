@@ -288,18 +288,17 @@ qbatch <- function(file,
 }
 
 #' Get the selected isotopologues at certain MS data
-#' @param formula the molecular formula. C12OH6Br4 means BDE-47 as default
+#' @param formula the molecular formula.
 #' @param charge the charge of that molecular. 1 in EI mode as default
 #' @param width the width of the peak width on mass spectrum. 0.3 as default for low resolution mass spectrum.
 #' @examples
-#' # show isotopologues for BDE-47
-#' Getisotopologues(formula = 'C12OH6Br4')
+#' # show isotopologues
+#' Getisotopologues(formula = 'C6H11O6', charge = 1, width = 0.3)
 #' @export
-Getisotopologues <- function(formula = "C12OH6Br4",
+Getisotopologues <- function(formula = "C6H11O6",
                              charge = 1,
                              width = 0.3) {
         # input the formula and charge for your molecular,
-        # this demo was for BDE-47, add maxisotope for potential natural compounds
         formula <-  Rdisop::getMolecule(formula, z = charge, maxisotopes = 20)
         # get the isotopes pattern of your molecular with high
         # abundances. Here we suggest more than 10% abundance

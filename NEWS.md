@@ -1,7 +1,7 @@
 # enviGCMS 0.7.4
 
 - CRAN
-- fix rdisop example issue with specific parameter
+- change rdisop related example
 
 # enviGCMS 0.7.3
 
