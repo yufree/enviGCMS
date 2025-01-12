@@ -80,5 +80,5 @@ plotmz(data)
 findline(data)
 ~~~
 
-Detailed usage of those functions in Environmental analysis could be found in this [paper](https://www.sciencedirect.com/science/article/pii/S0039914016309298) and the vignettes in this package.
+Detailed usage of those functions in Environmental analysis could be found in this [paper](https://doi.org/10.1016/j.talanta.2016.11.046) and the vignettes in this package.
 
