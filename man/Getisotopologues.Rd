@@ -17,6 +17,8 @@ Getisotopologues(formula = "C6H11O6", charge = 1, width = 0.3)
 Get the selected isotopologues at certain MS data
 }
 \examples{
+\dontrun{
 # show isotopologues
 Getisotopologues(formula = 'C6H11O6', charge = 1, width = 0.3)
+}
 }

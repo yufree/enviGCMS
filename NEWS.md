@@ -1,7 +1,7 @@
 # enviGCMS 0.7.4
 
 - CRAN
-- change rdisop related example
+- remove rdisop related example
 - update citation
 
 # enviGCMS 0.7.3
