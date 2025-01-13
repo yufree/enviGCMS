@@ -99,7 +99,9 @@ getmdr <- function(mz) {
 #' @param method you could use `round`, `floor` or `ceiling`
 #' @return high order Mass Defect with details
 #' @examples
-#' getmdh(28.0313)
+#' \dontrun{
+#' getmdh(getmass('C2H4')))
+#' }
 #' @export
 getmdh <- function(mz,
                    cus = c('CH2,H2'),
