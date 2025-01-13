@@ -16,5 +16,5 @@ Relative Mass Defect
 Get the Relative Mass Defect
 }
 \examples{
-getrmd(getmass('C2H4'))
+getrmd(28.0313)
 }

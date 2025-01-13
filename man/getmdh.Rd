@@ -20,5 +20,5 @@ high order Mass Defect with details
 Get the high order unit based Mass Defect
 }
 \examples{
-getmdh(getmass('C2H4'))
+getmdh(28.0313)
 }

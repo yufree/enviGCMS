@@ -16,5 +16,5 @@ raw Mass Defect
 Get the raw Mass Defect
 }
 \examples{
-getmdr(getmass('C2H4'))
+getmdr(28.0313)
 }

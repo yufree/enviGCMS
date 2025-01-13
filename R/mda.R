@@ -46,8 +46,6 @@ plotkms <- function(data, cutoff = 1000) {
 #' Get the exact mass of the isotopologues from a chemical formula or reaction's isotope patterns with the highest abundances
 #' @param data a chemical formula or reaction e.g. 'Cl-H', 'C2H4'
 #' @return numerical vector
-#' @examples
-#' getmass('CH2')
 #' @export
 getmass <- function(data) {
         if (grepl('-', data)) {
@@ -79,7 +77,7 @@ getmass <- function(data) {
 #' @param mz numeric vector for exact mass
 #' @return Relative Mass Defect
 #' @examples
-#' getrmd(getmass('C2H4'))
+#' getrmd(28.0313)
 #' @export
 getrmd <- function(mz) {
         rmd <- round((round(mz) - mz) / mz * 10 ^ 6)
@@ -89,7 +87,7 @@ getrmd <- function(mz) {
 #' @param mz numeric vector for exact mass
 #' @return raw Mass Defect
 #' @examples
-#' getmdr(getmass('C2H4'))
+#' getmdr(28.0313)
 #' @export
 getmdr <- function(mz) {
         md <- round((round(mz) - mz) * 10 ^ 3)
@@ -101,7 +99,7 @@ getmdr <- function(mz) {
 #' @param method you could use `round`, `floor` or `ceiling`
 #' @return high order Mass Defect with details
 #' @examples
-#' getmdh(getmass('C2H4'))
+#' getmdh(28.0313)
 #' @export
 getmdh <- function(mz,
                    cus = c('CH2,H2'),
