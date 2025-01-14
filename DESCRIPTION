@@ -1,0 +1,42 @@
+Package: enviGCMS
+Type: Package
+Title: GC/LC-MS Data Analysis for Environmental Science
+Version: 0.8.0
+Authors@R: c(person(given = "Miao", family = "YU",
+        role = c("aut", "cre"), 
+        email = "yufreecas@gmail.com",
+        comment = c(ORCID = "0000-0002-2804-6014")),
+        person(given = "Thanh", family = "Wang",
+        role = c("ctb"), 
+        email = "Thanh.Wang@oru.se",
+        comment = c(ORCID = "0000-0002-5729-1908")))
+Description: Gas/Liquid Chromatography-Mass Spectrometer(GC/LC-MS) Data Analysis for Environmental Science. This package covered topics such molecular isotope ratio, matrix effects and Short-Chain Chlorinated Paraffins analysis etc. in environmental analysis.
+URL: https://yufree.github.io/enviGCMS/
+BugReports: https://github.com/yufree/enviGCMS/issues
+License: GPL-2
+Encoding: UTF-8
+LazyData: true
+Suggests: knitr,
+    testthat,
+    plotly,
+    shiny,
+    rmarkdown,
+    DT,
+    crosstalk
+VignetteBuilder: knitr
+biocViews:
+Depends: 
+    R (>= 3.5)
+Imports: 
+    Rdisop,
+    BiocParallel,
+    grDevices, 
+    graphics, 
+    stats, 
+    utils,
+    animation (>= 2.2.3),
+    RColorBrewer,
+    mixtools,
+    data.table,
+    igraph
+RoxygenNote: 7.3.2
