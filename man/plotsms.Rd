@@ -16,14 +16,6 @@ Plot the intensity distribution of GC-MS
 }
 \examples{
 \dontrun{
-data1 <- getmd(‘sample1-1’)
-data2 <- getmd(‘sample1-2’)
-data3 <- getmd(‘sample1-3’)
-data4 <- getmd(‘sample1-4’)
-data5 <- getmd(‘sample1-5’)
-data <- (data1+data2+data3+data4+data5)/5
-datasd <- sqrt(((data1-data)^2+(data2-data)^2+(data3-data)^2+(data4-data)^2+(data5-data)^2)/4)
-databrsd <- datasd/data
 plotsms(meanmatrix,rsdmatrix)
 }
 }

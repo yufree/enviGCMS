@@ -19,10 +19,6 @@ plot GC/LC-MS data as a heatmap with TIC
 }
 \examples{
 \dontrun{
-library(faahKO)
-cdfpath <- system.file('cdf', package = 'faahKO')
-cdffiles <- list.files(cdfpath, recursive = TRUE, full.names = TRUE)
-matrix <- getmd(cdffiles[1])
 png('test.png')
 plotms(matrix)
 dev.off()

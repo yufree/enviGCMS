@@ -21,7 +21,7 @@ find line of the regression model for GC-MS
 }
 \examples{
 \dontrun{
-data <- getmd(rawdata)
-findline(data)
+data(matrix)
+findline(matrix)
 }
 }

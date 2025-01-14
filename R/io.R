@@ -1,36 +1,3 @@
-#' Get the mzrt profile and group information for batch correction and plot as a list directly from path with default setting
-#' @param path the path to your data
-#' @param index the index of the files
-#' @param BPPARAM used for BiocParallel package
-#' @param pmethod parameters used for different instrumentals such as 'hplcorbitrap', 'uplcorbitrap', 'hplcqtof', 'hplchqtof', 'uplcqtof', 'uplchqtof'. The parameters were from the references
-#' @param minfrac minimum fraction of samples necessary in at least one of the sample groups for it to be a valid group, default 0.67
-#' @param ... arguments for xcmsSet function
-#' @return list with rtmz profile and group infomation
-#' @examples
-#' \dontrun{
-#' library(faahKO)
-#' cdfpath <- system.file('cdf', package = 'faahKO')
-#' list <- getmr(cdfpath, pmethod = ' ')
-#' }
-#' @seealso \code{\link{getdata}},\code{\link{getupload}}, \code{\link{getmzrt}}, \code{\link{getdoe}}
-getmr <-
-        function(path,
-                 index = FALSE,
-                 BPPARAM = BiocParallel::SnowParam(),
-                 pmethod = "hplcorbitrap",
-                 minfrac = 0.67,
-                 ...) {
-                xset <- getdata(
-                        path = path,
-                        index = index,
-                        BPPARAM = BPPARAM,
-                        pmethod = pmethod,
-                        minfrac = minfrac
-                )
-                list <- getmzrt(xset, ...)
-                return(list)
-        }
-
 #' Covert the peaks list csv file into list
 #' @param path the path to your csv file
 #' @return list with rtmz profile and group information as the first row
@@ -294,27 +261,6 @@ getMSP <- function(file) {
         }
         li <- lapply(li, getmsp)
         return(li)
-}
-
-#' get the data of QC compound for a group of data
-#' @param path data path for your QC samples
-#' @param mzrange mass of the QC compound
-#' @param rtrange retention time of the QC compound
-#' @param index index of the files contained QC compounds, default is all of the compounds
-#' @return number vector, each number indicate the peak area of that mass and retention time range
-getQCraw <- function(path, mzrange, rtrange, index = NULL) {
-        cdffiles <- list.files(path, recursive = TRUE, full.names = TRUE)
-        if (index) {
-                cdffiles <- cdffiles[index]
-        }
-        nsamples <- length(cdffiles)
-        area <- numeric()
-        for (i in 1:nsamples) {
-                RAW <- xcms::xcmsRaw(cdffiles[i])
-                peak <- xcms::rawEIC(RAW, mzrange, rtrange)
-                area[i] <- sum(peak$intensity)
-        }
-        return(area)
 }
 
 #' Get chemical formula for mass to charge ratio.

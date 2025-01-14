@@ -22,5 +22,5 @@ data(list)
 getimputation(list)
 }
 \seealso{
-\code{\link{getdata2}},\code{\link{getdata}}, \code{\link{getmzrt}},\code{\link{getdoe}}, \code{\link{getmr}}
+\code{\link{getdoe}}
 }

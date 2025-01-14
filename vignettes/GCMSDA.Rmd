@@ -25,6 +25,8 @@ When you perform a selected ions monitor(SIM) mode analysis, only few mass data 
 
 ### Data input
 
+*Since version 0.7.4, those functions have been removed from the package. *
+
 You could use `getmd` to import the mass spectrum data as supported by `xcms` and get the profile of GC-MS data matrix. `mzstep` is the bin step for mass:
 
 ```
@@ -49,18 +51,6 @@ You could plot the Total Ion Chromatogram(TIC) for certain RT and mass range.
 
 ```
 plottic(data,rt=c(3.1,25),ms=c(100,1000))
-```
-
-You could also plot the mass spectrum for certain RT range. You could use the returned MSP files for NIST search:
-
-```
-plotrtms(data,rt=c(3.1,25),ms=c(100,1000))
-```
-
-The Extracted Ion Chromatogram(EIC) is also support by `enviGCMS` and the returned data could be analyzed for molecular isotopes:
-
-```
-plotmsrt(data,ms=500,rt=c(3.1,25))
 ```
 
 You could use `plotms` or `plotmz` to show the heatmap or scatter plot for LC/GC-MS data, which is very useful for exploratory data analysis.
@@ -95,6 +85,8 @@ If you want a graphical user interface for SCCPs analysis, a shiny application i
 In environmental non-target analysis, when multiple samples are collected, problem will raise from the heterogeneity among samples. For example, retention time would shift due to the column. In those cases, `xcms` package could be used to get a peaks list across samples within certain retention time and m/z. `enviGCMS` package has some wrapped function to get the peaks list. Besides, some specific functions such as group comparison, batch correction and visualization are also included. 
 
 ### Wrap function for `xcms` package
+
+*Since version 0.7.4, those functions have been removed from the package. *
 
 - `getdata` could be used to get the `xcmsSet` object in one step with optimized methods 
 

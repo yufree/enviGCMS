@@ -28,5 +28,5 @@ data(list)
 getpower(list)
 }
 \seealso{
-\code{\link{getdata2}},\code{\link{getdata}}, \code{\link{getmzrt}}, \code{\link{getimputation}}, \code{\link{getmr}},\code{\link{getdoe}}
+\code{\link{getimputation}}, \code{\link{getdoe}}
 }

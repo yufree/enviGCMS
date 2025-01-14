@@ -1,8 +1,14 @@
 #' Demo data
 #' @docType data
 #' @usage data(list)
-#' @format A list object with data, mass to charge ratio, retention time and group information. The list is generated from faahKO package by `getmr` function.
+#' @format A list object with data, mass to charge ratio, retention time and group information. The list is generated from faahKO package.
 "list"
+
+#' Demo raw data matrix
+#' @docType data
+#' @usage data(matrix)
+#' @format A matrix object from raw mass spectrometry data. The list is generated from faahKO package.
+"matrix"
 
 #' define the Mode function
 #' @param x vector
@@ -19,6 +25,7 @@ Mode <- function(x) {
                 mod <- names(ta)[ta == tam]
         return(mod)
 }
+
 #' filter data by average moving box
 #'
 #' @param x a vector
@@ -31,143 +38,6 @@ ma <- function(x, n) {
         stats::filter(x, rep(1 / n, n), circular = TRUE)
 }
 
-#' Import data and return the annotated matrix for GC/LC-MS by m/z range and retention time
-#' @param data file type which xcmsRaw could handle
-#' @param mzstep the m/z step for generating matrix data from raw mass spectral data
-#' @param mzrange vector range of the m/z, default all
-#' @param rtrange vector range of the retention time, default all
-#' @return matrix with the row as increasing m/z second and column as increasing scantime
-#' @examples
-#' \dontrun{
-#' library(faahKO)
-#' cdfpath <- system.file('cdf', package = 'faahKO')
-#' cdffiles <- list.files(cdfpath, recursive = TRUE, full.names = TRUE)
-#' matrix <- getmd(cdffiles[1])
-#' }
-getmd <- function(data,
-                  mzstep = 0.1,
-                  mzrange = FALSE,
-                  rtrange = FALSE) {
-        data <- xcms::xcmsRaw(data, profstep = mzstep)
-        pf <- xcms::profMat(data)
-        rownames(pf) <- mz <- xcms::profMz(data)
-        colnames(pf) <- rt <- data@scantime
-        if (mzrange[1]) {
-                pf <- pf[mz > mzrange[1] & mz < mzrange[2],]
-        }
-        if (rtrange[1]) {
-                pf <- pf[, rt > rtrange[1] & rt < rtrange[2]]
-        }
-        return(pf)
-}
-
-#' Combine two data with similar retention time while different mass range
-#'
-#' @param data1 data file path of lower mass range
-#' @param data2 data file path of higher mass range
-#' @param mzstep the m/z step for generating matrix data from raw mass spectral data
-#' @param rtstep the alignment accuracy of retention time, e.g. 0.01 means the retention times of combined data should be the same at the accuracy 0.01s. Higher rtstep would return less scans for combined data
-#' @return matrix with the row as scantime in second and column as m/z
-#' @examples
-#' \dontrun{
-#' # mz100_200 and mz201_300 were the path to the raw data
-#' matrix <- getmd(mz100_200,mz201_300)
-#' }
-#' @export
-cbmd <- function(data1,
-                 data2,
-                 mzstep = 0.1,
-                 rtstep = 0.01) {
-        z1 <- getmd(data1, mzstep = mzstep)
-        z2 <- getmd(data2, mzstep = mzstep)
-        roundrt <- -log10(rtstep)
-        z <- rbind(z1[, which(round(as.numeric(colnames(z1)),
-                                    roundrt) %in% round(as.numeric(colnames(z2)), roundrt))],
-                   z2[, which(round(as.numeric(colnames(z2)), roundrt) %in%
-                                      round(as.numeric(colnames(z1)), roundrt))])
-        rownames(z) <- c(rownames(z1), rownames(z2))
-        colnames(z) <- intersect(round(as.numeric(colnames(z1)),
-                                       roundrt),
-                                 round(as.numeric(colnames(z2)), roundrt))
-        return(z)
-}
-
-#' Get the differences of two GC/LC-MS data
-#'
-#' @param data1 data file path of first data
-#' @param data2 data file path of second data
-#' @param mzstep the m/z step for generating matrix data from raw mass spectral data
-#' @param rtstep the alignment accuracy of retention time, e.g. 0.01 means the retention times of combined data should be the same at the accuracy 0.01s. Higher rtstep would return less scans for combined data
-#' @return list four matrix with the row as scantime in second and column as m/z, the first matrix refer to data 1, the second matrix refer to data 2, the third matrix refer to data1 - data2 while the fourth refer to data2 - data1, minus values are imputed by 0
-#' @examples
-#' \dontrun{
-#' library(faahKO)
-#' cdfpath <- system.file('cdf', package = 'faahKO')
-#' cdffiles <- list.files(cdfpath, recursive = TRUE, full.names = TRUE)
-#' matrix <- submd(cdffiles[1],cdffiles[7])
-#' }
-#' @export
-submd <- function(data1,
-                  data2,
-                  mzstep = 0.1,
-                  rtstep = 0.01) {
-        z1 <- getmd(data1, mzstep = mzstep)
-        z2 <- getmd(data2, mzstep = mzstep)
-        roundmz <- -log10(mzstep)
-        roundrt <- -log10(rtstep)
-
-        z10 <- z1[which(round(as.numeric(rownames(z1)), roundmz) %in%
-                                round(as.numeric(rownames(z2)), roundmz)), which(round(as.numeric(colnames(z1)),
-                                                                                       roundrt) %in% round(as.numeric(colnames(z2)), roundrt))]
-        z20 <- z2[which(round(as.numeric(rownames(z2)), roundmz) %in%
-                                round(as.numeric(rownames(z1)), roundmz)), which(round(as.numeric(colnames(z2)),
-                                                                                       roundrt) %in% round(as.numeric(colnames(z1)), roundrt))]
-
-        z <- z10 - z20
-        z[z < 0] <- 0
-        z0 <- z20 - z10
-        z0[z0 < 0] <- 0
-
-        rownames(z0) <-
-                rownames(z) <- intersect(round(as.numeric(rownames(z1)),
-                                               roundmz),
-                                         round(as.numeric(rownames(z2)), roundmz))
-        colnames(z0) <-
-                colnames(z) <- intersect(round(as.numeric(colnames(z1)),
-                                               roundrt),
-                                         round(as.numeric(colnames(z2)), roundrt))
-        xlim <- range(as.numeric(colnames(z)))
-        ylim <- range(as.numeric(rownames(z)))
-
-        graphics::par(mfrow = c(2, 2))
-
-        plotmz(z10,
-               main = "data 1",
-               xlim = xlim,
-               ylim = ylim)
-        plotmz(z20,
-               main = "data 2",
-               xlim = xlim,
-               ylim = ylim)
-        plotmz(z,
-               main = "data1 - data2",
-               xlim = xlim,
-               ylim = ylim)
-        plotmz(z0,
-               main = "data2 - data1",
-               xlim = xlim,
-               ylim = ylim)
-
-        li <- list(
-                data1 = z10,
-                data2 = z20,
-                data1s2 = z,
-                data2s1 = z0
-        )
-        return(li)
-}
-
-
 #' plot GC/LC-MS data as a heatmap with TIC
 #'
 #' @param data imported data matrix of GC-MS
@@ -175,10 +45,6 @@ submd <- function(data1,
 #' @return heatmap
 #' @examples
 #' \dontrun{
-#' library(faahKO)
-#' cdfpath <- system.file('cdf', package = 'faahKO')
-#' cdffiles <- list.files(cdfpath, recursive = TRUE, full.names = TRUE)
-#' matrix <- getmd(cdffiles[1])
 #' png('test.png')
 #' plotms(matrix)
 #' dev.off()
@@ -312,26 +178,23 @@ plotms <- function(data, log = FALSE) {
 #' plot GC/LC-MS data as scatter plot
 #'
 #' @param data imported data matrix of GC-MS
-#' @param inscf Log intensity cutoff for peaks, default 5
+#' @param inscf Log intensity cutoff for peaks, default 3.5
 #' @param ... parameters for `plot` function
 #' @return scatter plot
 #' @examples
 #' \dontrun{
-#' library(faahKO)
-#' cdfpath <- system.file('cdf', package = 'faahKO')
-#' cdffiles <- list.files(cdfpath, recursive = TRUE, full.names = TRUE)
-#' matrix <- getmd(cdffiles[1])
+#' data(matrix)
 #' png('test.png')
 #' plotmz(matrix)
 #' dev.off()
 #' }
 #' @export
-plotmz <- function(data, inscf = 5, ...) {
+plotmz <- function(data, inscf = 3.5, ...) {
         mz <- as.numeric(rownames(data))
         rt <- as.numeric(colnames(data))
         z <- log10(data + 1)
         cex <- as.numeric(cut(z - inscf, breaks = c(0, 1, 2,
-                                                   3, 4, Inf) / 2)) / 2
+                                                    3, 4, Inf) / 2)) / 2
         cexlab <- c(
                 paste0(inscf, "-", inscf + 0.5),
                 paste0(inscf +
@@ -382,7 +245,6 @@ plotmz <- function(data, inscf = 5, ...) {
 #' @return heatmap
 #' @examples
 #' \dontrun{
-#' matrix <- getmd(rawdata)
 #' plott(matrix)
 #' }
 #' @export
@@ -488,13 +350,11 @@ plott <- function(data,
                                               0],
                        las = 2)
 }
-
 #' Plot the background of data
 #' @param data imported data matrix of GC-MS
 #' @return NULL
 #' @examples
 #' \dontrun{
-#' matrix <- getmd(rawdata)
 #' plotsub(matrix)
 #' }
 #' @export
@@ -504,80 +364,12 @@ plotsub <- function(data) {
         datan <- t(datan)
         plotms(datan)
 }
-
-#' Plot mass spectrum of certain retention time and return mass spectrum vector (MSP file) for NIST search
-#' @param data imported data matrix of GC-MS
-#' @param rt vector range of the retention time
-#' @param ms vector range of the m/z
-#' @param msp logical, return MSP files or not, default False
-#' @return plot, vector and MSP files for NIST search
-#' @examples
-#' \dontrun{
-#' matrix <- getmd(rawdata)
-#' plotrtms(matrix,rt = c(500,1000),ms = (300,500))
-#' }
-#' @export
-plotrtms <- function(data, rt, ms, msp = FALSE) {
-        data <- getmd(data, rt, ms)
-        temp <- apply(data, 1, mean)
-        graphics::plot(
-                temp,
-                xaxs = "i",
-                yaxs = "i",
-                type = "h",
-                ylab = "intensity",
-                xlab = "m/z",
-                xaxt = "n",
-                frame.plot = FALSE
-        )
-        mz <- as.numeric(names(temp))
-        index <- seq(1, length(temp))
-        graphics::axis(1, at = index[mz %% 100 == 0], labels = mz[mz %% 100 ==
-                                                                          0])
-        if(msp) writeMSP(temp)
-        return(temp)
-}
-
-#' Plot EIC of certain m/z and return dataframe for integration
-#' @param data imported data matrix of GC-MS
-#' @param ms m/z to be extracted
-#' @param rt vector range of the retention time
-#' @param n logical smooth or not
-#' @return dataframe with  with the first column RT and second column intensity of the SIM ions.
-#' @examples
-#' \dontrun{
-#' matrix <- getmd(rawdata)
-#' plotmsrt(matrix,rt = c(500,1000),ms = 300)
-#' }
-#' @export
-plotmsrt <- function(data, ms, rt, n = FALSE) {
-        data <- getmd(data, rt, c(ms, ms + 1))[1,]
-        if (n) {
-                data <- ma(data, n)
-        }
-        x <- as.numeric(names(data))
-        graphics::plot(
-                data ~ x,
-                type = "l",
-                xaxs = "i",
-                yaxs = "i",
-                main = bquote("m/z = " ~ .(ms)),
-                ylab = "intensity",
-                xlab = "retention time(s)",
-                frame.plot = FALSE
-        )
-        data <- data.frame(x, data)
-        colnames(data) <- c("RT", "Intensity")
-        return(data)
-}
-
 #' Plot Total Ion Chromatogram (TIC)
 #' @param data imported data matrix of GC-MS
 #' @param n logical smooth or not
 #' @return plot
 #' @examples
 #' \dontrun{
-#' matrix <- getmd(rawdata)
 #' plottic(matrix)
 #' }
 #' @export
@@ -720,8 +512,8 @@ plotintslope <- function(list, name = NULL) {
 #' @return list linear regression model for the matrix
 #' @examples
 #' \dontrun{
-#' data <- getmd(rawdata)
-#' findline(data)
+#' data(matrix)
+#' findline(matrix)
 #' }
 #' @export
 findline <- function(data,
@@ -818,8 +610,8 @@ findline <- function(data,
 #' @return list linear regression model for the data matrix
 #' @examples
 #' \dontrun{
-#' data <- getmd(rawdata)
-#' plotgroup(data)
+#' data(matrix)
+#' plotgroup(matrix)
 #' }
 #' @export
 plotgroup <- function(data, threshold = 2) {
@@ -880,14 +672,6 @@ plotgroup <- function(data, threshold = 2) {
 #' @return NULL
 #' @examples
 #' \dontrun{
-#' data1 <- getmd(‘sample1-1’)
-#' data2 <- getmd(‘sample1-2’)
-#' data3 <- getmd(‘sample1-3’)
-#' data4 <- getmd(‘sample1-4’)
-#' data5 <- getmd(‘sample1-5’)
-#' data <- (data1+data2+data3+data4+data5)/5
-#' datasd <- sqrt(((data1-data)^2+(data2-data)^2+(data3-data)^2+(data4-data)^2+(data5-data)^2)/4)
-#' databrsd <- datasd/data
 #' plotsms(meanmatrix,rsdmatrix)
 #' }
 #' @export
@@ -964,7 +748,7 @@ plotsms <- function(meanmatrix, rsdmatrix) {
 #' @return NULL
 #' @examples
 #' \dontrun{
-#' matrix <- getmd(rawdata)
+#' # generate a matrix from raw data with row as m/z and column as retention time
 #' plothist(matrix)
 #' }
 #' @export
@@ -1025,4 +809,271 @@ plotcc <- function(x, y, upper, lower = upper, ...) {
                 round(m1$coefficients[1], 2)
         ),
         adj = 1)
+}
+#' Just integrate data according to fixed rt and fixed noise area
+#' @param data file should be a dataframe with the first column RT and second column intensity of the SIM ions.
+#' @param rt a rough RT range contained only one peak to get the area
+#' @param brt a rough RT range contained only one peak and enough noises to get the area
+#' @param smoothit logical, if using an average smooth box or not. If using, n will be used
+#' @return area integration data
+#' @examples
+#' \dontrun{
+#' area <- Integration(data)
+#' }
+#' @export
+Integration <- function(data,
+                        rt = c(8.3, 9),
+                        brt = c(8.3,
+                                8.4),
+                        smoothit = TRUE) {
+        # subset the data
+        subdata <- data[data[, 1] > rt[2] & data[, 1] < rt[1],]
+        # get the signal and the RT
+        RTrange <- subdata[, 1]
+        signal <- subdata[, 2]
+        # subset the noise
+        subnoise <- data[data[, 1] > brt[2] & data[, 1] < brt[1],]
+        # get the noise and the RT
+        RTrange2 <- subnoise[, 1]
+        noise <- subnoise[, 2]
+        # data smooth
+        if (smoothit) {
+                signal <- ma(signal, n = 5)
+                noise <- ma(noise, n = 5)
+        }
+        baseline <- mean(noise)
+        signaln <- signal - baseline
+        area <- 0
+        # calculate area; using a Riemann integral (dimension:
+        # intensity x delta time)
+        for (i in 1:(length(RTrange) - 1)) {
+                area <- area + signaln[i] * (RTrange[i + 1] - RTrange[i]) *
+                        60
+        }
+        return(area)
+}
+
+#' GetIntegration was mainly used for get the integration of certain ion's chromatogram data and plot the data
+#' @param data file should be a dataframe with the first column RT and second column intensity of the SIM ions.
+#' @param rt a rough RT range contained only one peak to get the area
+#' @param n points in the moving average smooth box, default value is 5
+#' @param m numbers of points for regression to get the slope
+#' @param slope the threshold value for start/stop peak as percentage of max slope
+#' @param baseline numbers of the points for the baseline of the signal
+#' @param noslope logical, if using a horizon line to get area or not
+#' @param smoothit logical, if using an average smooth box or not. If using, n will be used
+#' @param half logical, if using the left half peak to calculate the area
+#' @return integration data such as peak area, peak height, signal and the slope data.
+#' @examples
+#' \dontrun{
+#' list <- GetIntegration(data)
+#' }
+#' @export
+GetIntegration <- function(data,
+                           rt = c(8.3, 9),
+                           n = 5,
+                           m = 5,
+                           slope = c(2, 2),
+                           baseline = 10,
+                           noslope = TRUE,
+                           smoothit = TRUE,
+                           half = FALSE) {
+        # subset the data
+        subdata <- data[data[, 1] > rt[1] & data[, 1] < rt[2],]
+        # get the signal and the RT
+        RTrange <- subdata[, 1]
+        signal <- subdata[, 2]
+        # data smooth
+        if (smoothit) {
+                signal <- ma(signal, n)
+        }
+        # get the slope data
+        RTrangemsec <- RTrange * 60 * 1000
+        slopedata <- signal
+        back <- round(m / 2)
+        forth <- m - back
+        if (m > 2) {
+                for (i in (back + 1):(length(signal) - forth)) {
+                        slopedata[i] <- stats::coef(stats::lm(signal[(i -
+                                                                              back + 1):(i + forth)] ~ RTrangemsec[(i -
+                                                                                                                            back + 1):(i + forth)]))[2]
+                }
+                slopedata[1:back] <-
+                        slopedata[back + 1]  # first few points
+                slopedata[(length(signal) - forth - 1):length(signal)] <-
+                        slopedata[(length(signal) -
+                                           forth)]  # last few points
+        } else {
+                # for n = 2 points; without linear regression (much
+                # faster) time per scan in millisec
+                delta_t <-
+                        (t[length(RTrangemsec)] - RTrangemsec[1] / (length(RTrangemsec) -
+                                                                            1))
+                for (i in 2:length(signal)) {
+                        slopedata[i] <- (signal[i] - signal[i - 1]) / delta_t
+                }
+                slopedata[1] <- 0
+        }
+        # search for peak start
+        i <- baseline
+        while ((slopedata[i] <= (slope[1] / 100 * max(slopedata))) &
+               (i < length(signal)))
+                i <- i + 1
+        rtstart <- RTrange[i]  # peak start found
+        scanstart <- i  # (slope > threshold)
+        sigstart <-
+                mean(signal[(i - baseline + 1):i])  # baseline intensity found
+        # search for peak top
+        i <- which.max(slopedata)  # jump to slope max.
+        while ((slopedata[i] >= 0) & (i < (length(signal) -
+                                           baseline)))
+                i <- i + 1
+        rtpeak <- RTrange[i]  # peak top found
+        scanpeak <- i  # (slope = 0)
+        sigpeak <- signal[i]
+        # search for peak end
+        i <- which.min(slopedata)  # jump to slope min.
+        while ((slopedata[i] <= -(slope[2] / 100 * max(slopedata))) &
+               (i < (length(signal) - baseline)))
+                i <- i + 1
+        rtend <- RTrange[i]  # peak end found
+        scanend <- i  # (-slope < threshold)
+        sigend <- mean(signal[i:(i + baseline - 1)])
+        # if background without slope
+        if (!noslope)
+                sigend <- sigstart
+        # subtract background from signal
+        background <- signal
+        for (i in scanstart:scanend) {
+                # get background
+                background[i] <-
+                        sigstart + (sigend - sigstart) / (scanend -
+                                                                  scanstart) * (i - scanstart)
+        }
+        subsignal <- signal - background
+        # get the length of the signal
+        lengthsig <- length(scanstart:scanend)
+        # calculate area; using a Riemann integral (dimension:
+        # intensity x min)
+        area <- 0
+        scantime <-
+                (RTrange[scanend] - RTrange[scanstart]) / (scanend -
+                                                                   scanstart) * 60  # time per scan in second
+        # when half peak
+        if (half == TRUE) {
+                for (i in scanstart:scanpeak)
+                        area <- area + subsignal[i] *
+                                scantime
+        } else {
+                for (i in scanstart:scanend)
+                        area <- area + subsignal[i] *
+                                scantime
+        }
+        bgstart <- RTrange[scanstart - baseline + 1]
+        bgend <- RTrange[scanend + baseline - 1]
+        # calculate height
+        sigpeakbase <- sigstart + (sigend - sigstart) / (scanend -
+                                                                 scanstart) * (scanpeak - scanstart)
+        height <- sigpeak - sigpeakbase
+        # SNR
+        snrnoise <- abs(diff(range(signal[(scanstart - baseline +
+                                                   1):scanstart])))
+        SNR <- height / snrnoise
+        # collect the data for plot peak and slope
+        peakdata <- c(
+                baseline,
+                rtstart,
+                rtend,
+                rtpeak,
+                scanstart,
+                scanend,
+                scanpeak,
+                sigstart,
+                sigend,
+                sigpeak,
+                sigpeakbase,
+                lengthsig,
+                SNR
+        )
+        names(peakdata) <- c(
+                "baseline",
+                "peak start RT",
+                "peak end RT",
+                "peak RT",
+                "baseline start RT ID",
+                "baseline end RT ID",
+                "baseline peak RT ID",
+                "start RT intensity",
+                "end RT intensity",
+                "peak RT intensity",
+                "peak baseline",
+                "points",
+                "SNR"
+        )
+        # return the result as a list
+        list <- list(
+                area = area,
+                height = height,
+                peakdata = peakdata,
+                RTrange = RTrange,
+                signal = signal,
+                slopedata = slopedata
+        )
+        return(list)
+}
+
+#' Get the selected isotopologues at certain MS data
+#' @param formula the molecular formula.
+#' @param charge the charge of that molecular. 1 in EI mode as default
+#' @param width the width of the peak width on mass spectrum. 0.3 as default for low resolution mass spectrum.
+#' @examples
+#' \dontrun{
+#' # show isotopologues
+#' Getisotopologues(formula = 'C6H11O6', charge = 1, width = 0.3)
+#' }
+#' @export
+Getisotopologues <- function(formula = "C6H11O6",
+                             charge = 1,
+                             width = 0.3) {
+        # input the formula and charge for your molecular,
+        formula <-  Rdisop::getMolecule(formula, z = charge, maxisotopes = 20)
+        # get the isotopes pattern of your molecular with high
+        # abundances. Here we suggest more than 10% abundance
+        # of your base peak would meet the SNR
+        isotopes <- data.frame(t(formula$isotopes[[1]]))
+        isotopes <- isotopes[isotopes[, 2] > 0.1,]
+        # order the intensity by the abundance
+        findpairs <-
+                isotopes[order(isotopes[, 2], decreasing = TRUE),]
+        # find the most similar pairs with high abundance
+        df <- outer(findpairs[, 1], findpairs[, 1], "/")
+        rownames(df) <- colnames(df) <- findpairs[, 1]
+        diag(df) <- df[upper.tri(df)] <- 0
+        t <- which(df == max(df), arr.ind = TRUE)
+        isotopologues1 <- as.numeric(rownames(df)[t[1]])
+        isotopologues2 <- as.numeric(colnames(df)[t[2]])
+        isotopologuesL <- min(isotopologues1, isotopologues2)
+        isotopologuesH <- max(isotopologues1, isotopologues2)
+        # get the caculated ratio at certain resolution
+        isotopes2 <-
+                data.frame(t(formula$isotopes[[1]]))
+        ratio <- sum(isotopes2[isotopes2[, 1] > isotopologuesL -
+                                       width &
+                                       isotopes2[, 1] < isotopologuesL + width,
+                               2]) / sum(isotopes2[isotopes2[, 1] > isotopologuesH -
+                                                           width &
+                                                           isotopes2[, 1] < isotopologuesH + width,
+                                                   2])
+        peak <-
+                c(
+                        round(isotopologuesL, digits = 5),
+                        round(isotopologuesH,
+                              digits = 5),
+                        round(ratio, digits = 5)
+                )
+        # peak <- as.character(peak)
+        names(peak) <- c("light isotopologue",
+                         "high isotopologue",
+                         "caculated ratio")
+        return(data.frame(peak))
 }

@@ -1,8 +1,14 @@
+# enviGCMS 0.8.0
+
+- remove the dependency of xcms package
+
 # enviGCMS 0.7.4
 
 - CRAN
 - remove rdisop related example
 - update citation
+- remove dependency of xcms and msnbase
+- add onAttach message for bioc packages
 
 # enviGCMS 0.7.3
 

@@ -20,6 +20,8 @@ or the current development snapshot from this GitHub repository:
 remotes::install_github("yufree/enviGCMS")
 ```
 
+This package has removed the depends/suggests on xcms package as it is a package with too many unstable depends. If you need to use the functions in xcms, please find the release version of enviGCMS 0.7.4.
+
 Usage
 -----
 
@@ -27,58 +29,5 @@ Check this [vignette](http://yufree.github.io/enviGCMS/articles/GCMSDA.html) for
 
 Check this [vignette](http://yufree.github.io/enviGCMS/articles/PooledQC.html) for Pooled QC analysis in Environmental Science.
 
-- get the mean and RSD of one sample for 5 technique replicate
-
-~~~
-# enviGCMS use functions in xcms to import the data, just type the path to your single sample
-data1 <- enviGCMS:::getmd(‘sample1-1’)
-data2 <- enviGCMS:::getmd(‘sample1-2’)
-data3 <- enviGCMS:::getmd(‘sample1-3’)
-data4 <- enviGCMS:::getmd(‘sample1-4’)
-data5 <- enviGCMS:::getmd(‘sample1-5’)
-~~~
-
-- get the mean
-
-~~~
-data <- (data1+data2+data3+data4+data5)/5
-~~~
-
-- get the standard deviation
-
-~~~
-datasd <- sqrt(((data1-data)^2+(data2-data)^2+(data3-data)^2+(data4-data)^2+(data5-data)^2)/4)
-~~~
-
-- get the RSD
-
-~~~
-databrsd <- datasd/data
-~~~
-
-- plot the smooth scatter
-
-~~~
-plotsms(datarsd)
-~~~
-
-- plot the heatmap
-
-~~~
-plotms(data)
-~~~
-
-- plot the mz-rt scatter plot
-
-~~~
-plotmz(data)
-~~~
-
-- plot the boundary model
-
-~~~
-findline(data)
-~~~
-
-Detailed usage of those functions in Environmental analysis could be found in this [paper](https://doi.org/10.1016/j.talanta.2016.11.046) and the vignettes in this package.
+Detailed usage of functions in Environmental analysis could be found in this [paper](https://doi.org/10.1016/j.talanta.2016.11.046) and the vignettes in this package.
 

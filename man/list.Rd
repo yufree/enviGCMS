@@ -5,7 +5,7 @@
 \alias{list}
 \title{Demo data}
 \format{
-A list object with data, mass to charge ratio, retention time and group information. The list is generated from faahKO package by `getmr` function.
+A list object with data, mass to charge ratio, retention time and group information. The list is generated from faahKO package.
 }
 \usage{
 data(list)

@@ -1,94 +1,3 @@
-#' Convert an XCMSnExp object to an mzrt S3 object.
-#'
-#' @noRd
-.XCMSnExp2mzrt <-
-        function(XCMSnExp,
-                 method = "medret",
-                 value = "into",
-                 mzdigit = 4,
-                 rtdigit = 1)
-        {
-                data <- xcms::featureValues(XCMSnExp, value = value, missing = 0)
-                group <-
-                        data.frame(apply(XCMSnExp@phenoData@data, 2, as.character),
-                                   stringsAsFactors = FALSE)
-
-                # peaks info
-                peaks <- xcms::featureDefinitions(XCMSnExp)
-                mz <- peaks$mzmed
-                rt <- peaks$rtmed
-                mzrange <- peaks[, c("mzmin", "mzmax")]
-                rtrange <- peaks[, c("rtmin", "rtmax")]
-                rownames(data) <-
-                        paste0("M", round(mz, mzdigit), "T", round(rt, rtdigit))
-                mzrt <-
-                        list(
-                                data = data,
-                                group = group,
-                                mz = mz,
-                                rt = rt,
-                                mzrange = mzrange,
-                                rtrange = rtrange
-                        )
-                class(mzrt) <- "mzrt"
-                return(mzrt)
-        }
-#' Convert an xcmsSet object to an mzrt S3 object.
-#'
-#' @noRd
-.xcmsSet2mzrt <-
-        function(xcmsSet,
-                 method = "medret",
-                 value = "into",
-                 mzdigit = 4,
-                 rtdigit = 1)
-        {
-                data <- xcms::groupval(xcmsSet, method = method,
-                                       value = value)
-                rownames(data) <- xcms::groupnames(xcmsSet,
-                                                   template = paste0('M.',
-                                                                     10 ^ (mzdigit - 1),
-                                                                     'T.',
-                                                                     10 ^ (rtdigit - 1)))
-                # peaks info
-                peaks <- as.data.frame(xcms::groups(xcmsSet))
-                mz <- peaks$mzmed
-                rt <- peaks$rtmed
-                if (dim(xcms::phenoData(xcmsSet))[2] > 1) {
-                        if (sum(grepl('sample_name', colnames(
-                                xcms::phenoData(xcmsSet)
-                        ))) > 0) {
-                                group <- xcms::phenoData(xcmsSet)
-                                colnames(data) <- group$sample_name
-                        } else{
-                                sample_name <- rownames(xcms::phenoData(xcmsSet))
-                                sample_group <-
-                                        xcms::phenoData(xcmsSet)
-                                group <-
-                                        cbind.data.frame(sample_name, sample_group)
-                        }
-                } else{
-                        sample_name <- rownames(xcms::phenoData(xcmsSet))
-                        sample_group <-
-                                as.character(xcms::phenoData(xcmsSet)$class)
-                        group <-
-                                cbind.data.frame(sample_name, sample_group)
-                }
-
-                mzrange <- peaks[, c("mzmin", "mzmax")]
-                rtrange <- peaks[, c("rtmin", "rtmax")]
-                mzrt <-
-                        list(
-                                data = data,
-                                group = group,
-                                mz = mz,
-                                rt = rt,
-                                mzrange = mzrange,
-                                rtrange = rtrange
-                        )
-                class(mzrt) <- "mzrt"
-                return(mzrt)
-        }
 #' Check class
 #'
 #' @noRd
@@ -249,101 +158,7 @@ getrangecsv <- function(list, name, ...) {
         filename <- paste0(name, "mzrtrange.csv")
         utils::write.csv(df, file = filename, ...)
 }
-#' Get the mzrt profile and group information as a mzrt list and/or save them as csv or rds for further analysis.
-#' @param xset xcmsSet/XCMSnExp objects
-#' @param name file name for csv and/or eic file, default NULL
-#' @param mzdigit m/z digits of row names of data frame, default 4
-#' @param rtdigit retention time digits of row names of data frame, default 1
-#' @param method parameter for groupval or featureDefinitions function, default medret
-#' @param value parameter for groupval or featureDefinitions function, default into
-#' @param eic logical, save xcmsSet and xcmsEIC objects for further investigation with the same name of files, you will need raw files in the same directory as defined in xcmsSet to extract the EIC based on the binned data. You could use `plot` to plot EIC for specific peaks. For example, `plot(xcmsEIC,xcmsSet,groupidx = 'M123.4567T278.9')` could show the EIC for certain peaks with m/z 206 and retention time 2789. default F
-#' @param type csv format for further analysis, m means  Metaboanalyst, a means xMSannotator, p means Mummichog(NA values are imputed by `getimputation`, and F test is used here to generate stats and p value), o means full information csv (for `pmd` package), default o. mapo could output all those format files.
-#' @return mzrt object, a list with mzrt profile and group information
-#' @examples
-#' \dontrun{
-#' library(faahKO)
-#' cdfpath <- system.file('cdf', package = 'faahKO')
-#' xset <- getdata(cdfpath, pmethod = ' ')
-#' getmzrt(xset, name = 'demo', type = 'mapo')
-#' }
-#' @seealso \code{\link{getdata}},\code{\link{getdata2}}, \code{\link{getdoe}}, \code{\link{getcsv}}, \code{\link{getfilter}}
-#' @references
-#' Smith, C.A., Want, E.J., O’Maille, G., Abagyan, R., Siuzdak, G., 2006. XCMS: Processing Mass Spectrometry Data for Metabolite Profiling Using Nonlinear Peak Alignment, Matching, and Identification. Anal. Chem. 78, 779–787.
-#' @export
 
-getmzrt <-
-        function(xset,
-                 name = NULL,
-                 mzdigit = 4,
-                 rtdigit = 1,
-                 method = "medret",
-                 value = "into",
-                 eic = FALSE,
-                 type = 'o') {
-                if (inherits(xset, 'xcmsSet')) {
-                        if (eic) {
-                                eic <-
-                                        xcms::getEIC(xset,
-                                                     rt = "corrected",
-                                                     groupidx = seq_len(nrow(xset@groups)))
-                                eic@groupnames <-
-                                        xcms::groupnames(xset,
-                                                         template = paste0(
-                                                                 'M.',
-                                                                 10 ^ (mzdigit - 1),
-                                                                 'T.',
-                                                                 10 ^ (rtdigit - 1)
-                                                         ))
-                                saveRDS(eic, file = paste0(name, 'eic.rds'))
-                        } else {
-                                if (!is.null(name)) {
-                                        saveRDS(xset,
-                                                file = paste0(name, 'xset.rds'))
-                                }
-
-                        }
-                        result <-
-                                .xcmsSet2mzrt(
-                                        xset,
-                                        mzdigit = mzdigit,
-                                        rtdigit = rtdigit,
-                                        method = method,
-                                        value = value
-                                )
-                }
-                else if (inherits(xset, 'XCMSnExp')) {
-                        if (eic) {
-                                feature_chroms <-
-                                        xcms::featureChromatograms(xset, features = rep(T, length(
-                                                xcms::quantify(xset)@NAMES
-                                        )))
-                                saveRDS(feature_chroms,
-                                        file = paste0(name, 'eic.rds'))
-                        } else {
-                                if (!is.null(name)) {
-                                        xset2 <- methods::as(xset, "xcmsSet")
-                                        saveRDS(xset2,
-                                                file = paste0(name, 'xset.rds'))
-                                }
-                        }
-                        result <-
-                                .XCMSnExp2mzrt(
-                                        xset,
-                                        mzdigit = mzdigit,
-                                        rtdigit = rtdigit,
-                                        method = method,
-                                        value = value
-                                )
-                }
-                getcsv(
-                        list = result,
-                        name = name,
-                        mzdigit = mzdigit,
-                        rtdigit = rtdigit,
-                        type = type
-                )
-                return(result)
-        }
 #' Impute the peaks list data
 #' @param list list with data as peaks list, mz, rt and group information
 #' @param method 'r' means remove, 'l' means use half the minimum of the values across the peaks list, 'mean' means mean of the values across the samples, 'median' means median of the values across the samples, '0' means 0, '1' means 1. Default 'l'.
@@ -352,7 +167,7 @@ getmzrt <-
 #' data(list)
 #' getimputation(list)
 #' @export
-#' @seealso \code{\link{getdata2}},\code{\link{getdata}}, \code{\link{getmzrt}},\code{\link{getdoe}}, \code{\link{getmr}}
+#' @seealso \code{\link{getdoe}}
 getimputation <- function(list, method = "l") {
         data <- list$data
         mz <- list$mz
@@ -402,7 +217,7 @@ getimputation <- function(list, method = "l") {
 #' li <- getdoe(list)
 #' lif <- getfilter(li,rowindex = li$rsdindex)
 #' @export
-#' @seealso \code{\link{getdata2}},\code{\link{getdata}}, \code{\link{getmzrt}}, \code{\link{getimputation}}, \code{\link{getmr}}, \code{\link{getcsv}}
+#' @seealso \code{\link{getimputation}}, \code{\link{getcsv}}
 getfilter <-
         function(list,
                  rowindex = TRUE,
@@ -458,7 +273,7 @@ getfilter <-
 #' data(list)
 #' getdoe(list)
 #' @export
-#' @seealso \code{\link{getdata2}},\code{\link{getdata}}, \code{\link{getmzrt}}, \code{\link{getimputation}}, \code{\link{getmr}},\code{\link{getpower}}
+#' @seealso \code{\link{getimputation}}, \code{\link{getpower}}
 getdoe <- function(list,
                    inscf = 5,
                    rsdcf = 100,
@@ -598,7 +413,7 @@ getdoe <- function(list,
 #' data(list)
 #' getpower(list)
 #' @export
-#' @seealso \code{\link{getdata2}},\code{\link{getdata}}, \code{\link{getmzrt}}, \code{\link{getimputation}}, \code{\link{getmr}},\code{\link{getdoe}}
+#' @seealso \code{\link{getimputation}}, \code{\link{getdoe}}
 getpower <-
         function(list,
                  pt = 0.05,

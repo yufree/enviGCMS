@@ -14,7 +14,6 @@ Plot the background of data
 }
 \examples{
 \dontrun{
-matrix <- getmd(rawdata)
 plotsub(matrix)
 }
 }

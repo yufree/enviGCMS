@@ -4,12 +4,12 @@
 \alias{plotmz}
 \title{plot GC/LC-MS data as scatter plot}
 \usage{
-plotmz(data, inscf = 5, ...)
+plotmz(data, inscf = 3.5, ...)
 }
 \arguments{
 \item{data}{imported data matrix of GC-MS}
 
-\item{inscf}{Log intensity cutoff for peaks, default 5}
+\item{inscf}{Log intensity cutoff for peaks, default 3.5}
 
 \item{...}{parameters for `plot` function}
 }
@@ -21,10 +21,7 @@ plot GC/LC-MS data as scatter plot
 }
 \examples{
 \dontrun{
-library(faahKO)
-cdfpath <- system.file('cdf', package = 'faahKO')
-cdffiles <- list.files(cdfpath, recursive = TRUE, full.names = TRUE)
-matrix <- getmd(cdffiles[1])
+data(matrix)
 png('test.png')
 plotmz(matrix)
 dev.off()

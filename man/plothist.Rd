@@ -14,7 +14,7 @@ plot the density of the GC-MS data with EM algorithm to separate the data into t
 }
 \examples{
 \dontrun{
-matrix <- getmd(rawdata)
+# generate a matrix from raw data with row as m/z and column as retention time
 plothist(matrix)
 }
 }

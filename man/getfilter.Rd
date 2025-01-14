@@ -31,5 +31,5 @@ li <- getdoe(list)
 lif <- getfilter(li,rowindex = li$rsdindex)
 }
 \seealso{
-\code{\link{getdata2}},\code{\link{getdata}}, \code{\link{getmzrt}}, \code{\link{getimputation}}, \code{\link{getmr}}, \code{\link{getcsv}}
+\code{\link{getimputation}}, \code{\link{getcsv}}
 }

@@ -19,7 +19,7 @@ Plot the response group of GC-MS
 }
 \examples{
 \dontrun{
-data <- getmd(rawdata)
-plotgroup(data)
+data(matrix)
+plotgroup(matrix)
 }
 }
