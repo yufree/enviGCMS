@@ -20,7 +20,7 @@ or the current development snapshot from this GitHub repository:
 remotes::install_github("yufree/enviGCMS")
 ```
 
-This package has removed the depends/suggests on xcms package as it is a package with too many unstable depends. If you need to use the functions in xcms, please find the release version of enviGCMS 0.7.4.
+This package has removed the depends/suggests on xcms package as it is a package with too many unstable depends. If you need to use the functions with xcms, please find the release version of enviGCMS 0.7.4 or install [rmwf](https://github.com/yufree/rmwf) package from github, which adopted most of those functions.
 
 Usage
 -----
