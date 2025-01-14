@@ -464,7 +464,6 @@ getfeaturesanova <- function(list,
 #' xset <- getdata(cdfpath, pmethod = ' ')
 #' }
 #' @seealso \code{\link{getdata2}}, \code{\link{getmzrt}}
-#' @export
 getdata <-
         function(path,
                  index = FALSE,
@@ -496,7 +495,6 @@ getdata <-
 #' @details This is a wrap function for metabolomics data process for xcms 3.
 #' @return a XCMSnExp object with processed data
 #' @seealso \code{\link{getdata}},\code{\link{getmzrt}}
-#' @export
 getdata2 <- function(path,
                      index = FALSE,
                      snames = NULL,
@@ -590,7 +588,6 @@ getmd <- function(data,
 #' cdffiles <- list.files(cdfpath, recursive = TRUE, full.names = TRUE)
 #' matrix <- submd(cdffiles[1],cdffiles[7])
 #' }
-#' @export
 submd <- function(data1,
                   data2,
                   mzstep = 0.1,
@@ -611,7 +608,6 @@ submd <- function(data1,
 #' \dontrun{
 #' plotrtms(matrix,rt = c(500,1000),ms = c(300,500))
 #' }
-#' @export
 plotrtms <- function(data, rt, ms, msp = FALSE) {
         .Deprecated()
         message(
@@ -629,7 +625,6 @@ plotrtms <- function(data, rt, ms, msp = FALSE) {
 #' matrix <- getmd(rawdata)
 #' plotmsrt(matrix,rt = c(500,1000),ms = 300)
 #' }
-#' @export
 plotmsrt <- function(data, ms, rt, n = FALSE) {
         .Deprecated()
         message(
@@ -649,7 +644,6 @@ plotmsrt <- function(data, ms, rt, n = FALSE) {
 #' # mz100_200 and mz201_300 were the path to the raw data
 #' matrix <- getmd(mz100_200,mz201_300)
 #' }
-#' @export
 cbmd <- function(data1,
                  data2,
                  mzstep = 0.1,
@@ -668,7 +662,6 @@ cbmd <- function(data1,
 #' \dontrun{
 #' mr <- batch(data,mz1 = 79, mz2 = 81)
 #' }
-#' @export
 batch <- function(file, mz1, mz2) {
         .Deprecated()
         message(
@@ -687,7 +680,6 @@ batch <- function(file, mz1, mz2) {
 #' \dontrun{
 #' arearatio <- qbatch(datafile)
 #' }
-#' @export
 qbatch <- function(file,
                    mz1,
                    mz2,
@@ -751,8 +743,6 @@ qbatch <- function(file,
 #' @seealso \code{\link{getdata}},\code{\link{getdata2}}, \code{\link{getdoe}}, \code{\link{getcsv}}, \code{\link{getfilter}}
 #' @references
 #' Smith, C.A., Want, E.J., O’Maille, G., Abagyan, R., Siuzdak, G., 2006. XCMS: Processing Mass Spectrometry Data for Metabolite Profiling Using Nonlinear Peak Alignment, Matching, and Identification. Anal. Chem. 78, 779–787.
-#' @export
-
 getmzrt <-
         function(xset,
                  name = NULL,
@@ -775,7 +765,6 @@ getmzrt <-
 #' @param binstep bin step for consin similarity
 #' @param consinc consin similarity cutoff for annotation. Default 0.6.
 #' @return list with MSMS annotation results
-#' @export
 dotpanno <- function(file,
                      db = NULL,
                      ppm = 10,
@@ -796,7 +785,6 @@ dotpanno <- function(file,
 #' @param intc intensity cutoff for peaks. Default 0.1
 #' @param quantile X rank quantiles cutoff for annotation. Default 0.75.
 #' @return list with MSMS annotation results
-#' @export
 xrankanno <- function(file,
                       db = NULL,
                       ppm = 10,
@@ -813,7 +801,6 @@ xrankanno <- function(file,
 #' @param anno list from MSMS anno function
 #' @param ... other parameter for plot function
 #' @return NULL
-#' @export
 plotanno <- function(anno, ...) {
         .Deprecated()
         message(
