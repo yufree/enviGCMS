@@ -1,0 +1,10 @@
+url: https://yufree.github.io/enviGCMS/
+home:
+  title: enviGCMS
+  description: Gas/Liquid Chromatography-Mass Spectrometer(GC/LC-MS) Data Analysis for Environmental Science. This package covered topics such molecular isotope ratio, matrix effects and Short-Chain Chlorinated Paraffins analysis etc. in environmental analysis.
+template:
+  bootstrap: 5
+  params:
+    ganalytics: UA-58201304-1
+    bootswatch: journal
+

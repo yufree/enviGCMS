@@ -1,0 +1,10 @@
+bibentry(
+  "Article",
+  title    = "Evaluation and reduction of the analytical uncertainties in GC-MS analysis using a boundary regression model",
+  author   = as.person("Miao Yu,Xingwang Hou,Qian Liu,Yawei Wang,Jiyan Liu,Guibin Jiang"),
+  journal  = "Talanta",
+  year     = "2017",
+  volume   = "164",
+  pages    = "141-147",
+  doi      = "10.1016/j.talanta.2016.11.046"
+  )
