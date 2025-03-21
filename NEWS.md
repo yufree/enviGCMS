@@ -1,6 +1,7 @@
 # enviGCMS 0.8.0
 
 - remove the dependency of xcms package
+- fix ppm issue in getpn
 
 # enviGCMS 0.7.4
 

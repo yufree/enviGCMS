@@ -617,8 +617,8 @@ getpn <- function(pos,
                 diff <- round((pos$mz[i] - neg$mz), digits)
                 mzr <-
                         data.table::as.data.table(cbind.data.frame(
-                                mzmin = pmd * (1 - ppm * 10e-6),
-                                mzmax = pmd * (1 + ppm * 10e-6)
+                                mzmin = pmd * (1 - ppm * 1e-6),
+                                mzmax = pmd * (1 + ppm * 1e-6)
                         ))
                 colnames(mzr) <- c("min", "max")
                 data.table::setkey(mzr, min, max)
