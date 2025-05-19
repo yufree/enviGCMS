@@ -114,8 +114,8 @@ getMSP <- function(file) {
         inchikey = '^InChIKey: ',
         np = '^Num Peaks: ',
         ce = 'COLLISIONENERGY: |Collision_energy: ',
-        rt = 'RETENTIONINDEX: |RTINSECONDS: |RTINSECONDS=|"retention time=',
-        column = '"column=',
+        rt = 'RETENTIONINDEX: |RTINSECONDS: |RTINSECONDS=|retention time\\s*=[\\d.]+',
+        column = 'column\\s*=\\s*[^\\\"]+',
         instr = 'Instrument_type: ',
         msm = 'Spectrum_type: '
     )
@@ -133,7 +133,7 @@ getMSP <- function(file) {
         
         # Parse numeric fields
         fields["prec"] <- as.numeric(fields["prec"])
-        fields["rt"] <- as.numeric(fields["rt"])
+        fields["rt"] <- as.numeric(sub(".*=\\s*","",fields["rt"]))
         fields["exactmass"] <- as.numeric(fields["exactmass"])
         np_val <- as.numeric(fields["np"])
         
