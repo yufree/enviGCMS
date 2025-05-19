@@ -119,39 +119,102 @@ getMSP <- function(file) {
         instr = 'Instrument_type: ',
         msm = 'Spectrum_type: '
     )
-    
-    getmsp <- function(x) {
-        # Extract all fields in one pass
-        fields <- vapply(names(patterns), function(nm) {
-            idx <- grep(patterns[[nm]], x, ignore.case = TRUE)
-            if(length(idx)) {
-                gsub(patterns[[nm]], '', x[idx[1]], ignore.case = TRUE)
-            } else {
-                NA_character_
-            }
-        }, character(1))
+process_single_entry <- function(entry_lines, patterns) {
+        extracted_values <- character(length(patterns))
+        names(extracted_values) <- names(patterns)
+        for(nm in names(patterns)) extracted_values[nm] <- NA_character_
+        for (nm in names(patterns)) {
+        pattern_to_search <- patterns[[nm]]
+        idx_matches <- grep(pattern_to_search, entry_lines, ignore.case = TRUE, perl = TRUE)
         
-        # Parse numeric fields
-        fields["prec"] <- as.numeric(fields["prec"])
-        fields["rt"] <- as.numeric(sub(".*=\\s*","",fields["rt"]))
-        fields["exactmass"] <- as.numeric(fields["exactmass"])
-        np_val <- as.numeric(fields["np"])
-        
-        # Get masses and intensities efficiently
-        massIntIndx <- which(grepl('^[0-9]', x) & !grepl(': ', x))
-        if(length(massIntIndx) && (!is.na(np_val) && np_val > 0 || all(is.na(fields["np"])))) {
-            massesInts <- as.numeric(unlist(strsplit(x[massIntIndx], '[ \t]+')))
-            mz <- massesInts[seq(1, length(massesInts), 2)]
-            ins <- massesInts[seq(2, length(massesInts), 2)]
-            ins <- ins / max(ins) * 100
-            spectra <- data.frame(mz = mz, ins = ins)
-            fields <- c(fields, list(spectra = spectra))
+        if (!length(idx_matches)) {
+            next 
         }
-        return(fields)
+        
+        line_content <- entry_lines[idx_matches[1]]
+        val <- NA_character_ # Initialize value for current field
+        
+        if (nm == "rt") {
+            rt_match_comment <- regexpr('retention time\\s*=\\s*([\\d.]+)', line_content, ignore.case = TRUE, perl = TRUE)
+            if (rt_match_comment != -1 && attr(rt_match_comment, "capture.start")[1] >= 1) {
+                start_cap <- attr(rt_match_comment, "capture.start")[1]
+                length_cap <- attr(rt_match_comment, "capture.length")[1]
+                val <- substring(line_content, start_cap, start_cap + length_cap - 1)
+            } else {
+                if (grepl("^(RETENTIONINDEX:|RTINSECONDS:|RTINSECONDS=)", line_content, ignore.case = TRUE)) {
+                    temp_val <- gsub("^(RETENTIONINDEX:|RTINSECONDS:|RTINSECONDS=)\\s*", "", line_content, ignore.case = TRUE)
+                    temp_val <- gsub("\\s*(s(ec|econds)?|m(in)?)$", "", temp_val, ignore.case = TRUE) 
+                    val <- temp_val
+                }
+            }
+        } else if (nm == "column") {
+            col_match_obj <- regexpr(pattern_to_search, line_content, ignore.case = TRUE, perl = TRUE)
+            if (col_match_obj != -1) {
+                matched_text_list <- regmatches(line_content, col_match_obj)
+                if (length(matched_text_list) > 0 && length(matched_text_list[[1]]) > 0) {
+                     actual_match <- matched_text_list[[1]][1]
+                    val <- sub('^column\\s*=\\s*', '', actual_match, ignore.case = TRUE)
+                }
+            }
+        } else {
+            temp_val <- gsub(pattern_to_search, '', line_content, ignore.case = TRUE)
+            if (nm == "prec" && !is.na(temp_val)) {
+                val <- strsplit(trimws(temp_val), "[ \t]+")[[1]][1]
+            } else {
+                val <- temp_val
+            }
+        }
+        # Store the extracted (and possibly trimmed) value
+        if(!is.null(val) && length(val) > 0 && !is.na(val)) {
+            extracted_values[nm] <- trimws(val)
+        }
     }
     
-    li <- bplapply(li, getmsp, BPPARAM = BiocParallel::bpparam())
-    return(li)
+    final_fields <- as.list(extracted_values)
+    
+    # Parse specific fields to numeric after initial character extraction
+    final_fields$prec       <- suppressWarnings(as.numeric(final_fields$prec))
+    final_fields$rt         <- suppressWarnings(as.numeric(final_fields$rt))
+    final_fields$exactmass  <- suppressWarnings(as.numeric(final_fields$exactmass))
+    np_val                  <- suppressWarnings(as.numeric(final_fields$np)) 
+        
+    # Get masses and intensities
+    massIntIndx <- which(grepl('^[0-9]', entry_lines) & !grepl(': ', entry_lines))
+    
+    process_peaks_flag <- (length(massIntIndx) > 0) &&
+                          ( (!is.na(np_val) && np_val > 0) || is.na(np_val) ) # Process if NumPeaks > 0 or if NumPeaks is unknown
+
+    if(process_peaks_flag) {
+        peak_lines <- entry_lines[massIntIndx]
+        # Robustly split by space, tab, or semicolon, and handle potential annotations
+        massesInts_str <- unlist(strsplit(peak_lines, '[ \t;]+')) 
+        massesInts <- suppressWarnings(as.numeric(massesInts_str))
+        massesInts <- massesInts[!is.na(massesInts)] # Remove NAs from non-numeric parts
+
+        if(length(massesInts) > 0 && (length(massesInts) %% 2 == 0)) { # Ensure pairs and non-empty
+            mz <- massesInts[seq(1, length(massesInts), by = 2)]
+            ins <- massesInts[seq(2, length(massesInts), by = 2)]
+            
+            if(length(ins) > 0 && any(ins > 0, na.rm = TRUE) && (max(ins, na.rm = TRUE) > 0) ) { # Check max(ins) > 0 before division
+                ins <- ins / max(ins, na.rm = TRUE) * 100
+            } else if (length(ins) > 0) { # All intensities are zero, NA, or max is 0
+                ins <- rep(0, length(ins))
+            } else { 
+                mz <- numeric(0) # Ensure consistency if ins is empty
+            }
+            final_fields$spectra <- data.frame(mz = mz, ins = ins)
+        } else {
+            # If parsing m/z and intensity fails (e.g. odd number of values)
+            final_fields$spectra <- data.frame(mz=numeric(0), ins=numeric(0))
+        }
+    } else {
+        final_fields$spectra <- data.frame(mz=numeric(0), ins=numeric(0)) # Empty spectra if no peaks
+    }
+    
+    return(final_fields)
+}
+    li_processed <- BiocParallel::bplapply(li, FUN = process_single_entry, patterns = patterns, BPPARAM = BiocParallel::bpparam())
+    return(li_processed)
 }
 
 #' Get chemical formula for mass to charge ratio.
