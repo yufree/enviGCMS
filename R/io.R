@@ -110,7 +110,7 @@ getMSP <- function(file) {
         ionmode = '^ION MODE:|^MODE:|^IONMODE:|^Ion_mode:',
         prec = '^PRECURSORMZ: |^PRECURSOR M/Z: |^PRECURSOR MZ: |^PEPMASS: |^PrecursorMZ: |^PEPMASS=',
         formula = '^FORMULA: |^Formula: ',
-        exactmass = '^ExactMass: '
+        exactmass = '^ExactMass: ',
         inchikey = '^InChIKey: ',
         np = '^Num Peaks: ',
         ce = 'COLLISIONENERGY: |Collision_energy: ',
