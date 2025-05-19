@@ -148,7 +148,7 @@ getMSP <- function(file) {
         return(fields)
     }
     
-    li <- lapply(li, getmsp)
+    li <- bplapply(li, getmsp, BPPARAM = BiocParallel::bpparam())
     return(li)
 }
 
