@@ -110,11 +110,12 @@ getMSP <- function(file) {
         ionmode = '^ION MODE:|^MODE:|^IONMODE:|^Ion_mode:',
         prec = '^PRECURSORMZ: |^PRECURSOR M/Z: |^PRECURSOR MZ: |^PEPMASS: |^PrecursorMZ: |^PEPMASS=',
         formula = '^FORMULA: |^Formula: ',
+        exactmass = '^ExactMass: '
         inchikey = '^InChIKey: ',
         np = '^Num Peaks: ',
         ce = 'COLLISIONENERGY: |Collision_energy: ',
-        rt = 'RETENTIONINDEX: |RTINSECONDS: |RTINSECONDS=|retention time=',
-        column = 'column=',
+        rt = 'RETENTIONINDEX: |RTINSECONDS: |RTINSECONDS=|"retention time=',
+        column = '"column=',
         instr = 'Instrument_type: ',
         msm = 'Spectrum_type: '
     )
@@ -133,6 +134,7 @@ getMSP <- function(file) {
         # Parse numeric fields
         fields["prec"] <- as.numeric(fields["prec"])
         fields["rt"] <- as.numeric(fields["rt"])
+        fields["exactmass"] <- as.numeric(fields["exactmass"])
         np_val <- as.numeric(fields["np"])
         
         # Get masses and intensities efficiently
