@@ -93,128 +93,173 @@ writeMSP <- function(list, name = 'unknown', sep = FALSE) {
 #' @return list a list with MSP information for annotation
 #' @export
 getMSP <- function(file) {
-    msp <- readLines(file, warn = FALSE)
-    msp <- msp[msp != ""]
-    
-    ncomp <- grep('^BEGIN IONS', msp, ignore.case = TRUE)
-    if(length(ncomp) == 0) {
-        ncomp <- grep("^Name", msp, ignore.case = TRUE)
-    }
-    splitFactorTmp <- rep(seq_along(ncomp), diff(c(ncomp, length(msp) + 1)))
-    li <- split(msp, f = splitFactorTmp)
-    
-    # Precompile regex patterns for speed
-    patterns <- list(
-        name = '^NAME: |^TITLE=',
-        charge = '^CHARGE=',
-        ionmode = '^ION MODE:|^MODE:|^IONMODE:|^Ion_mode:',
-        prec = '^PRECURSORMZ: |^PRECURSOR M/Z: |^PRECURSOR MZ: |^PEPMASS: |^PrecursorMZ: |^PEPMASS=',
-        formula = '^FORMULA: |^Formula: ',
-        exactmass = '^ExactMass: ',
-        inchikey = '^InChIKey: ',
-        np = '^Num Peaks: ',
-        ce = 'COLLISIONENERGY: |Collision_energy: ',
-        rt = 'RETENTIONINDEX: |RTINSECONDS: |RTINSECONDS=|retention time\\s*=[\\d.]+',
-        column = 'column\\s*=\\s*[^\\\"]+',
-        instr = 'Instrument_type: ',
-        msm = 'Spectrum_type: '
-    )
-process_single_entry <- function(entry_lines, patterns) {
-        extracted_values <- character(length(patterns))
-        names(extracted_values) <- names(patterns)
-        for(nm in names(patterns)) extracted_values[nm] <- NA_character_
-        for (nm in names(patterns)) {
-        pattern_to_search <- patterns[[nm]]
-        idx_matches <- grep(pattern_to_search, entry_lines, ignore.case = TRUE, perl = TRUE)
-        
-        if (!length(idx_matches)) {
-            next 
+  msp <- readLines(file, warn = FALSE)
+  msp <- msp[msp != ""]
+  
+  ncomp <- grep('^BEGIN IONS', msp, ignore.case = TRUE)
+  if (length(ncomp) == 0) {
+    ncomp <- grep("^Name", msp, ignore.case = TRUE)
+  }
+  splitFactorTmp <- rep(seq_along(ncomp), diff(c(ncomp, length(msp) + 1)))
+  li <- split(msp, f = splitFactorTmp)
+  
+  # Precompile regex patterns for speed
+  patterns <- list(
+    name = '^NAME: |^TITLE=',
+    charge = '^CHARGE=',
+    ionmode = '^ION MODE:|^MODE:|^IONMODE:|^Ion_mode:',
+    prec = '^PRECURSORMZ: |^PRECURSOR M/Z: |^PRECURSOR MZ: |^PEPMASS: |^PrecursorMZ: |^PEPMASS=',
+    formula = '^FORMULA: |^Formula: ',
+    exactmass = '^ExactMass: ',
+    inchikey = '^InChIKey: ',
+    np = '^Num Peaks: ',
+    ce = 'COLLISIONENERGY: |Collision_energy: ',
+    rt = 'RETENTIONINDEX: |RTINSECONDS: |RTINSECONDS=|retention time\\s*=\\s*[^\\\"]+',
+    column = 'column\\s*=\\s*[^\\\"]+',
+    instr = 'Instrument_type: ',
+    msm = 'Spectrum_type: '
+  )
+  process_single_entry <- function(entry_lines, patterns) {
+    extracted_values <- character(length(patterns))
+    names(extracted_values) <- names(patterns)
+    for (nm in names(patterns)) {
+      pattern_to_search <- patterns[[nm]]
+      idx_matches <- grep(pattern_to_search,
+                          entry_lines,
+                          ignore.case = TRUE,
+                          perl = TRUE)
+      
+      if (!length(idx_matches)) {
+        next
+      }
+      
+      line_content <- entry_lines[idx_matches[1]]
+      val <- NA_character_
+      
+      if (nm == "rt") {
+        rt_match_comment <- regexpr(
+          'retention time\\s*=\\s*[^\\\"]+',
+          line_content,
+          ignore.case = TRUE,
+          perl = TRUE
+        )
+        if (grepl(
+          "^(RETENTIONINDEX:|RTINSECONDS:|RTINSECONDS=)",
+          line_content,
+          ignore.case = TRUE
+        )) {
+          temp_val <- gsub(
+            "^(RETENTIONINDEX:|RTINSECONDS:|RTINSECONDS=)\\s*",
+            "",
+            line_content,
+            ignore.case = TRUE
+          )
+          val <- temp_val
+        } else if (rt_match_comment != -1) {
+          matched_text_list <- regmatches(line_content, rt_match_comment)
+          actual_match <- matched_text_list[[1]]
+          temp_val <- gsub("^retention time\\s*=",
+                           "",
+                           actual_match,
+                           ignore.case = TRUE)
+          x <- sapply(strsplit(temp_val, '\\ '), function (x)
+            x[2])
+          v <- sapply(strsplit(temp_val, '\\ '), function (x)
+            as.numeric(x[1]))
+          if (!is.na(x)&(x == 'min' | x == 'minute')) {
+            val <- v * 60
+          } else if (!is.na(x)&(x == 's' | x == 'sec')) {
+            val <- v
+          } else{
+            val <- NA
+          }
         }
-        
-        line_content <- entry_lines[idx_matches[1]]
-        val <- NA_character_ # Initialize value for current field
-        
-        if (nm == "rt") {
-            rt_match_comment <- regexpr('retention time\\s*=\\s*([\\d.]+)', line_content, ignore.case = TRUE, perl = TRUE)
-            if (rt_match_comment != -1 && attr(rt_match_comment, "capture.start")[1] >= 1) {
-                start_cap <- attr(rt_match_comment, "capture.start")[1]
-                length_cap <- attr(rt_match_comment, "capture.length")[1]
-                val <- substring(line_content, start_cap, start_cap + length_cap - 1)
-            } else {
-                if (grepl("^(RETENTIONINDEX:|RTINSECONDS:|RTINSECONDS=)", line_content, ignore.case = TRUE)) {
-                    temp_val <- gsub("^(RETENTIONINDEX:|RTINSECONDS:|RTINSECONDS=)\\s*", "", line_content, ignore.case = TRUE)
-                    temp_val <- gsub("\\s*(s(ec|econds)?|m(in)?)$", "", temp_val, ignore.case = TRUE) 
-                    val <- temp_val
-                }
-            }
-        } else if (nm == "column") {
-            col_match_obj <- regexpr(pattern_to_search, line_content, ignore.case = TRUE, perl = TRUE)
-            if (col_match_obj != -1) {
-                matched_text_list <- regmatches(line_content, col_match_obj)
-                if (length(matched_text_list) > 0 && length(matched_text_list[[1]]) > 0) {
-                     actual_match <- matched_text_list[[1]][1]
-                    val <- sub('^column\\s*=\\s*', '', actual_match, ignore.case = TRUE)
-                }
-            }
+      } else if (nm == "column") {
+        col_match_obj <- regexpr(pattern_to_search,
+                                 line_content,
+                                 ignore.case = TRUE,
+                                 perl = TRUE)
+        if (col_match_obj != -1) {
+          matched_text_list <- regmatches(line_content, col_match_obj)
+          if (length(matched_text_list) > 0 &&
+              length(matched_text_list[[1]]) > 0) {
+            actual_match <- matched_text_list[[1]]
+            val <- sub('^column\\s*=\\s*',
+                       '',
+                       actual_match,
+                       ignore.case = TRUE)
+          }
+        }
+      } else {
+        temp_val <- gsub(pattern_to_search, '', line_content, ignore.case = TRUE)
+        if (nm == "prec" && !is.na(temp_val)) {
+          val <- strsplit(trimws(temp_val), "[ \t]+")[[1]][1]
         } else {
-            temp_val <- gsub(pattern_to_search, '', line_content, ignore.case = TRUE)
-            if (nm == "prec" && !is.na(temp_val)) {
-                val <- strsplit(trimws(temp_val), "[ \t]+")[[1]][1]
-            } else {
-                val <- temp_val
-            }
+          val <- temp_val
         }
-        # Store the extracted (and possibly trimmed) value
-        if(!is.null(val) && length(val) > 0 && !is.na(val)) {
-            extracted_values[nm] <- trimws(val)
-        }
+      }
+      if (!is.null(val) && length(val) > 0 && !is.na(val)) {
+        extracted_values[nm] <- trimws(val)
+      }
     }
-    
     final_fields <- as.list(extracted_values)
     
     # Parse specific fields to numeric after initial character extraction
     final_fields$prec       <- suppressWarnings(as.numeric(final_fields$prec))
-    final_fields$rt         <- suppressWarnings(as.numeric(final_fields$rt))
     final_fields$exactmass  <- suppressWarnings(as.numeric(final_fields$exactmass))
-    np_val                  <- suppressWarnings(as.numeric(final_fields$np)) 
-        
+    final_fields$rt  <- suppressWarnings(as.numeric(final_fields$rt))
+    np_val                  <- suppressWarnings(as.numeric(final_fields$np))
+    
     # Get masses and intensities
-    massIntIndx <- which(grepl('^[0-9]', entry_lines) & !grepl(': ', entry_lines))
+    massIntIndx <- which(grepl('^[0-9]', entry_lines) &
+                           !grepl(': ', entry_lines))
     
     process_peaks_flag <- (length(massIntIndx) > 0) &&
-                          ( (!is.na(np_val) && np_val > 0) || is.na(np_val) ) # Process if NumPeaks > 0 or if NumPeaks is unknown
-
-    if(process_peaks_flag) {
-        peak_lines <- entry_lines[massIntIndx]
-        # Robustly split by space, tab, or semicolon, and handle potential annotations
-        massesInts_str <- unlist(strsplit(peak_lines, '[ \t;]+')) 
-        massesInts <- suppressWarnings(as.numeric(massesInts_str))
-        massesInts <- massesInts[!is.na(massesInts)] # Remove NAs from non-numeric parts
-
-        if(length(massesInts) > 0 && (length(massesInts) %% 2 == 0)) { # Ensure pairs and non-empty
-            mz <- massesInts[seq(1, length(massesInts), by = 2)]
-            ins <- massesInts[seq(2, length(massesInts), by = 2)]
-            
-            if(length(ins) > 0 && any(ins > 0, na.rm = TRUE) && (max(ins, na.rm = TRUE) > 0) ) { # Check max(ins) > 0 before division
-                ins <- ins / max(ins, na.rm = TRUE) * 100
-            } else if (length(ins) > 0) { # All intensities are zero, NA, or max is 0
-                ins <- rep(0, length(ins))
-            } else { 
-                mz <- numeric(0) # Ensure consistency if ins is empty
-            }
-            final_fields$spectra <- data.frame(mz = mz, ins = ins)
-        } else {
-            # If parsing m/z and intensity fails (e.g. odd number of values)
-            final_fields$spectra <- data.frame(mz=numeric(0), ins=numeric(0))
-        }
-    } else {
-        final_fields$spectra <- data.frame(mz=numeric(0), ins=numeric(0)) # Empty spectra if no peaks
-    }
+      ((!is.na(np_val) &&
+          np_val > 0) ||
+         is.na(np_val)) # Process if NumPeaks > 0 or if NumPeaks is unknown
     
+    if (process_peaks_flag) {
+      peak_lines <- entry_lines[massIntIndx]
+      # Robustly split by space, tab, or semicolon, and handle potential annotations
+      massesInts_str <- unlist(strsplit(peak_lines, '[ \t;]+'))
+      massesInts <- suppressWarnings(as.numeric(massesInts_str))
+      massesInts <- massesInts[!is.na(massesInts)] # Remove NAs from non-numeric parts
+      
+      if (length(massesInts) > 0 &&
+          (length(massesInts) %% 2 == 0)) {
+        # Ensure pairs and non-empty
+        mz <- massesInts[seq(1, length(massesInts), by = 2)]
+        ins <- massesInts[seq(2, length(massesInts), by = 2)]
+        
+        if (length(ins) > 0 &&
+            any(ins > 0, na.rm = TRUE) &&
+            (max(ins, na.rm = TRUE) > 0)) {
+          # Check max(ins) > 0 before division
+          ins <- ins / max(ins, na.rm = TRUE) * 100
+        } else if (length(ins) > 0) {
+          # All intensities are zero, NA, or max is 0
+          ins <- rep(0, length(ins))
+        } else {
+          mz <- numeric(0) # Ensure consistency if ins is empty
+        }
+        final_fields$spectra <- data.frame(mz = mz, ins = ins)
+      } else {
+        # If parsing m/z and intensity fails (e.g. odd number of values)
+        final_fields$spectra <- data.frame(mz = numeric(0), ins = numeric(0))
+      }
+    } else {
+      final_fields$spectra <- data.frame(mz = numeric(0), ins = numeric(0)) # Empty spectra if no peaks
+    }
     return(final_fields)
-}
-    li_processed <- BiocParallel::bplapply(li, FUN = process_single_entry, patterns = patterns, BPPARAM = BiocParallel::bpparam())
-    return(li_processed)
+  }
+  li_processed <- BiocParallel::bplapply(
+    li,
+    FUN = process_single_entry,
+    patterns = patterns,
+    BPPARAM = BiocParallel::bpparam()
+  )
+  return(li_processed)
 }
 
 #' Get chemical formula for mass to charge ratio.
