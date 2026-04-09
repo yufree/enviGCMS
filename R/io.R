@@ -93,163 +93,170 @@ writeMSP <- function(list, name = 'unknown', sep = FALSE) {
 #' @return list a list with MSP information for annotation
 #' @export
 getMSP <- function(file) {
-        # this part is modified from compMS2Miner's code: https://github.com/WMBEdmands/compMS2Miner/blob/ee20d3d632b11729d6bbb5b5b93cd468b097251d/R/metID.matchSpectralDB.R
-        msp <- readLines(file)
-        # remove empty lines
-        msp <- msp[msp != '']
-        ncomp <- grep('^BEGIN IONS', msp, ignore.case = TRUE)
-        if(length(ncomp)==0){
-                ncomp <- grep("^Name", msp, ignore.case = TRUE)
+  msp <- readLines(file, warn = FALSE)
+  msp <- msp[msp != ""]
+
+  ncomp <- grep('^BEGIN IONS', msp, ignore.case = TRUE)
+  if (length(ncomp) == 0) {
+    ncomp <- grep("^Name", msp, ignore.case = TRUE)
+  }
+  splitFactorTmp <- rep(seq_along(ncomp), diff(c(ncomp, length(msp) + 1)))
+  li <- split(msp, f = splitFactorTmp)
+
+  # Precompile regex patterns for speed
+  patterns <- list(
+    name = '^NAME: |^TITLE=',
+    charge = '^CHARGE=',
+    ionmode = '^ION MODE:|^MODE:|^IONMODE:|^Ion_mode:',
+    prec = '^PRECURSORMZ: |^PRECURSOR M/Z: |^PRECURSOR MZ: |^PEPMASS: |^PrecursorMZ: |^PEPMASS=',
+    formula = '^FORMULA: |^Formula: ',
+    exactmass = '^ExactMass: ',
+    inchikey = '^InChIKey: ',
+    np = '^Num Peaks: ',
+    ce = 'COLLISIONENERGY: |Collision_energy: ',
+    rt = 'RETENTIONINDEX: |RTINSECONDS: |RTINSECONDS=|retention time\\s*=\\s*[^\\\"]+',
+    column = 'column\\s*=\\s*[^\\\"]+',
+    instr = 'Instrument_type: ',
+    msm = 'Spectrum_type: '
+  )
+  process_single_entry <- function(entry_lines, patterns) {
+    extracted_values <- character(length(patterns))
+    names(extracted_values) <- names(patterns)
+    for (nm in names(patterns)) {
+      pattern_to_search <- patterns[[nm]]
+      idx_matches <- grep(pattern_to_search,
+                          entry_lines,
+                          ignore.case = TRUE,
+                          perl = TRUE)
+
+      if (!length(idx_matches)) {
+        next
+      }
+
+      line_content <- entry_lines[idx_matches[1]]
+      val <- NA_character_
+
+      if (nm == "rt") {
+        rt_match_comment <- regexpr(
+          'retention time\\s*=\\s*[^\\\"]+',
+          line_content,
+          ignore.case = TRUE,
+          perl = TRUE
+        )
+        if (grepl(
+          "^(RETENTIONINDEX:|RTINSECONDS:|RTINSECONDS=)",
+          line_content,
+          ignore.case = TRUE
+        )) {
+          temp_val <- gsub(
+            "^(RETENTIONINDEX:|RTINSECONDS:|RTINSECONDS=)\\s*",
+            "",
+            line_content,
+            ignore.case = TRUE
+          )
+          val <- temp_val
+        } else if (rt_match_comment != -1) {
+          matched_text_list <- regmatches(line_content, rt_match_comment)
+          actual_match <- matched_text_list[[1]]
+          temp_val <- gsub("^retention time\\s*=",
+                           "",
+                           actual_match,
+                           ignore.case = TRUE)
+          x <- sapply(strsplit(temp_val, '\\ '), function (x)
+            x[2])
+          v <- sapply(strsplit(temp_val, '\\ '), function (x)
+            as.numeric(x[1]))
+          if (!is.na(x)&(x == 'min' | x == 'minute')) {
+            val <- v * 60
+          } else if (!is.na(x)&(x == 's' | x == 'sec')) {
+            val <- v
+          } else{
+            val <- NA
+          }
         }
-        splitFactorTmp <-
-                rep(seq_along(ncomp), diff(c(ncomp, length(msp) + 1)))
-
-        li <- split(msp, f = splitFactorTmp)
-        getmsp <- function(x) {
-                namet <- x[grep('^NAME: |^TITLE=', x, ignore.case = TRUE)]
-                name <-
-                        gsub('^NAME: |^TITLE=', '', namet, ignore.case = TRUE)
-                charget <- x[grep('^CHARGE=', x, ignore.case = TRUE)]
-                charge <-
-                        gsub('^CHARGE=', '', charget, ignore.case = TRUE)
-                ionmodet <-
-                        x[grep('^ION MODE:|^MODE:|^IONMODE:|^Ion_mode:',
-                               x,
-                               ignore.case = TRUE)]
-                ionmode <-
-                        gsub(
-                                '^ION MODE: |^MODE: |^IONMODE: |^Ion_mode: ',
-                                '',
-                                ionmodet,
-                                ignore.case = TRUE
-                        )
-                prect <-
-                        x[grep(
-                                '^PRECURSORMZ: |^PRECURSOR M/Z: |^PRECURSOR MZ: |^PEPMASS: |^PrecursorMZ: |^PEPMASS=',
-                                x,
-                                ignore.case = TRUE
-                        )]
-                prec <-
-                        as.numeric(
-                                gsub(
-                                        '^PRECURSORMZ: |^PRECURSOR M/Z: |^PRECURSOR MZ: |^PEPMASS: |^PrecursorMZ: |^PEPMASS=',
-                                        '',
-                                        prect,
-                                        ignore.case = TRUE
-                                )
-                        )
-                formt <-
-                        x[grep('^FORMULA: |^Formula: ', x, ignore.case = TRUE)]
-                formula <-
-                        gsub('^FORMULA: |^Formula: ',
-                             '',
-                             formt,
-                             ignore.case = TRUE)
-                npt <- x[grep('^Num Peaks: ', x, ignore.case = TRUE)]
-                np <- gsub('^Num Peaks: ', '', npt, ignore.case = TRUE)
-                cet <-
-                        x[grep('COLLISIONENERGY: |Collision_energy: ',
-                               x,
-                               ignore.case = TRUE)]
-                ce <-
-                        gsub('COLLISIONENERGY: |Collision_energy: ',
-                             '',
-                             cet,
-                             ignore.case = TRUE)
-                rtt <-
-                        x[grep('RETENTIONINDEX: |RTINSECONDS: |RTINSECONDS=',
-                               x,
-                               ignore.case = TRUE)]
-                rt <-
-                        as.numeric(
-                                gsub(
-                                        'RETENTIONINDEX: |RTINSECONDS: |RTINSECONDS=',
-                                        '',
-                                        rtt,
-                                        ignore.case = TRUE
-                                )
-                        )
-                instrt <-
-                        x[grep('Instrument_type: ', x, ignore.case = TRUE)]
-                instr <-
-                        gsub('Instrument_type: ', '', instrt, ignore.case = TRUE)
-                msmt <-
-                        x[grep('Spectrum_type: ', x, ignore.case = TRUE)]
-                msm <-
-                        gsub('Spectrum_type: ', '', msmt, ignore.case = TRUE)
-                # helper to parse mass/intensity pairs from MSP text
-                parse_peaks <- function(x) {
-                        massIntIndx <-
-                                which(grepl('^[0-9]', x) & !grepl(': ', x))
-                        massesInts <-
-                                unlist(strsplit(x[massIntIndx], '\t| '))
-                        massesInts <-
-                                as.numeric(massesInts[grep('^[0-9].*[0-9]$|^[0-9]$',
-                                                           massesInts)])
-                        mz <-
-                                massesInts[seq(1, length(massesInts), 2)]
-                        intensity <-
-                                massesInts[seq(2, length(massesInts), 2)]
-                        intensity <- intensity / max(intensity) * 100
-                        cbind.data.frame(mz = mz, intensity = intensity)
-                }
-
-                if (sum(grepl('^Num Peaks: ', x, ignore.case = TRUE)) ==
-                    0) {
-                        spectra <- parse_peaks(x)
-                        return(
-                                list(
-                                        name = name,
-                                        ionmode = ionmode,
-                                        charge = charge,
-                                        prec = prec,
-                                        formula = formula,
-                                        np = np,
-                                        rti = rt,
-                                        ce = ce,
-                                        instr = instr,
-                                        msm = msm,
-                                        spectra = spectra
-                                )
-                        )
-                } else if (as.numeric(np) > 0) {
-                        spectra <- parse_peaks(x)
-                        return(
-                                list(
-                                        name = name,
-                                        ionmode = ionmode,
-                                        charge = charge,
-                                        prec = prec,
-                                        formula = formula,
-                                        np = np,
-                                        rti = rt,
-                                        ce = ce,
-                                        instr = instr,
-                                        msm = msm,
-                                        spectra = spectra
-                                )
-                        )
-                }
-                else     {
-                        return(
-                                list(
-                                        name = name,
-                                        ionmode = ionmode,
-                                        charge = charge,
-                                        prec = prec,
-                                        formula = formula,
-                                        np = np,
-                                        rti = rt,
-                                        ce = ce,
-                                        instr = instr,
-                                        msm = msm
-                                )
-                        )
-                }
-
+      } else if (nm == "column") {
+        col_match_obj <- regexpr(pattern_to_search,
+                                 line_content,
+                                 ignore.case = TRUE,
+                                 perl = TRUE)
+        if (col_match_obj != -1) {
+          matched_text_list <- regmatches(line_content, col_match_obj)
+          if (length(matched_text_list) > 0 &&
+              length(matched_text_list[[1]]) > 0) {
+            actual_match <- matched_text_list[[1]]
+            val <- sub('^column\\s*=\\s*',
+                       '',
+                       actual_match,
+                       ignore.case = TRUE)
+          }
         }
-        li <- lapply(li, getmsp)
-        return(li)
+      } else {
+        temp_val <- gsub(pattern_to_search, '', line_content, ignore.case = TRUE)
+        if (nm == "prec" && !is.na(temp_val)) {
+          val <- strsplit(trimws(temp_val), "[ \t]+")[[1]][1]
+        } else {
+          val <- temp_val
+        }
+      }
+      if (!is.null(val) && length(val) > 0 && !is.na(val)) {
+        extracted_values[nm] <- trimws(val)
+      }
+    }
+    final_fields <- as.list(extracted_values)
+
+    # Parse specific fields to numeric after initial character extraction
+    final_fields$prec       <- suppressWarnings(as.numeric(final_fields$prec))
+    final_fields$exactmass  <- suppressWarnings(as.numeric(final_fields$exactmass))
+    final_fields$rt  <- suppressWarnings(as.numeric(final_fields$rt))
+    np_val                  <- suppressWarnings(as.numeric(final_fields$np))
+
+    # Get masses and intensities
+    massIntIndx <- which(grepl('^[0-9]', entry_lines) &
+                           !grepl(': ', entry_lines))
+
+    process_peaks_flag <- (length(massIntIndx) > 0) &&
+      ((!is.na(np_val) &&
+          np_val > 0) ||
+         is.na(np_val)) # Process if NumPeaks > 0 or if NumPeaks is unknown
+
+    if (process_peaks_flag) {
+      peak_lines <- entry_lines[massIntIndx]
+      # Robustly split by space, tab, or semicolon, and handle potential annotations
+      massesInts_str <- unlist(strsplit(peak_lines, '[ \t;]+'))
+      massesInts <- suppressWarnings(as.numeric(massesInts_str))
+      massesInts <- massesInts[!is.na(massesInts)] # Remove NAs from non-numeric parts
+
+      if (length(massesInts) > 0 &&
+          (length(massesInts) %% 2 == 0)) {
+        # Ensure pairs and non-empty
+        mz <- massesInts[seq(1, length(massesInts), by = 2)]
+        intensity <- massesInts[seq(2, length(massesInts), by = 2)]
+
+        if (length(intensity) > 0 &&
+            any(intensity > 0, na.rm = TRUE) &&
+            (max(intensity, na.rm = TRUE) > 0)) {
+          intensity <- intensity / max(intensity, na.rm = TRUE) * 100
+        } else if (length(intensity) > 0) {
+          intensity <- rep(0, length(intensity))
+        } else {
+          mz <- numeric(0)
+        }
+        final_fields$spectra <- data.frame(mz = mz, intensity = intensity)
+      } else {
+        final_fields$spectra <- data.frame(mz = numeric(0), intensity = numeric(0))
+      }
+    } else {
+      final_fields$spectra <- data.frame(mz = numeric(0), intensity = numeric(0))
+    }
+    return(final_fields)
+  }
+  li_processed <- BiocParallel::bplapply(
+    li,
+    FUN = process_single_entry,
+    patterns = patterns,
+    BPPARAM = BiocParallel::bpparam()
+  )
+  return(li_processed)
 }
 
 #' Get chemical formula for mass to charge ratio.
