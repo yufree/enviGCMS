@@ -1,3 +1,42 @@
+# enviGCMS 0.9.0
+
+## Breaking changes
+
+- Remove all deprecated functions from v0.7.x (32 functions including `getdata`, `getdata2`, `getmzrt2`, `svabatch`, `svaplot`, etc.). Users should migrate to current API.
+- Remove `Mode()` (statistical mode function) -- unused internally since `getmdg()` moved to pmd package.
+- Standardize API naming conventions:
+  - Intensity column renamed from `ins` to `intensity` in `getMSP()` and `writeMSP()` spectra data.frames.
+  - Rename `Integration()` to `integration()`, `GetIntegration()` to `getintegration()`, `Getisotopologues()` to `getisotopologues()` for consistent lowercase naming.
+
+## New features (merged from MSxplorer)
+
+- Add `HRMF()` for high-resolution mass filtering with forward/reverse scoring and Figure of Merit (FoM), based on Kwiecien et al. (2015). Uses Rdisop instead of rcdk/rJava -- no new hard dependencies.
+- Add `getHRMF()` for batch HRMF processing of entire MSP files.
+- Add `plotEIC()` for extracted ion chromatogram plotting from mzML/mzXML files using RaMS.
+- Add `plotTopMS1Peaks()` interactive Shiny app to extract top MS1 ions from MS2 chromatograms.
+- Add `plotTopMS2Peaks()` interactive Shiny app to extract top MS2 ions from MS1 chromatograms.
+
+## Bug fixes
+
+- Fix `getmdh()`: `cbind.data.frame(mz, MD1, MD1)` corrected to `cbind.data.frame(mz, MD1, MD2)` for ceiling method.
+- Fix `runMDPlot()`: filename case mismatch (`MDPlot.rmd` -> `mdplot.Rmd`).
+- Fix `getdoe()`: `sum(NROW(lv) > 1) != 0` (always TRUE) corrected to `NROW(lv) > 1`.
+- Fix `getMSP()`: extract duplicated peak-parsing code into internal helper.
+- Fix `getmzrtcsv()`: remove broken cross-reference to deleted `getmzrt`.
+
+## Dependency changes
+
+- Move `animation` from Imports to Suggests (only used by `gifmr()`).
+- Move `mixtools` from Imports to Suggests (only used by `getimputation()`).
+- Add `RaMS` to Suggests for lightweight mzML/mzXML access (replaces MSnbase).
+- Hard Imports reduced from 11 to 8 packages.
+
+## Code quality
+
+- Add 67 unit tests across 8 test files (was 1 test).
+- Refactor `HRMF()` from 285-line monolith into 135-line function with 4 internal helpers.
+- Remove 809 lines of dead deprecated code and 35 orphan man pages.
+
 # enviGCMS 0.8.0
 
 - remove the dependency of xcms package

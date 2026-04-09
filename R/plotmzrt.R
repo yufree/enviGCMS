@@ -1073,6 +1073,9 @@ gifmr <- function(list,
                   imputation = "i",
                   name = "test",
                   ...) {
+        if (!requireNamespace("animation", quietly = TRUE)) {
+                stop("Package 'animation' is required for gifmr. Install with: install.packages('animation')", call. = FALSE)
+        }
         list <- getdoe(list,
                        rsdcf = rsdcf,
                        inscf = inscf,

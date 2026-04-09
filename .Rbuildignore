@@ -4,9 +4,6 @@
 ^\.Rproj\.user$
 ^.travis.yml
 ^docs$
-zzz
-test.csv
-hmdb2.csv
-mix.csv
 _pkgdown.yaml
 .github
+.claude

@@ -1,7 +1,7 @@
 Package: enviGCMS
 Type: Package
 Title: GC/LC-MS Data Analysis for Environmental Science
-Version: 0.8.0
+Version: 0.9.0
 Authors@R: c(person(given = "Miao", family = "YU",
         role = c("aut", "cre"), 
         email = "yufreecas@gmail.com",
@@ -22,7 +22,10 @@ Suggests: knitr,
     shiny,
     rmarkdown,
     DT,
-    crosstalk
+    crosstalk,
+    animation,
+    mixtools,
+    RaMS
 VignetteBuilder: knitr
 biocViews:
 Depends: 
@@ -34,9 +37,7 @@ Imports:
     graphics, 
     stats, 
     utils,
-    animation (>= 2.2.3),
     RColorBrewer,
-    mixtools,
     data.table,
     igraph
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3

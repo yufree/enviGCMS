@@ -1,7 +1,7 @@
 #' Covert the peaks list csv file into list
 #' @param path the path to your csv file
 #' @return list with rtmz profile and group information as the first row
-#' @seealso \code{\link{getmzrt}}
+#' @seealso \code{\link{getMSP}}
 #' @export
 getmzrtcsv <- function(path) {
         dataraw <- utils::read.csv(path, skip = 1)
@@ -32,14 +32,14 @@ getmzrtcsv <- function(path) {
 #' @return none a MSP file will be created.
 #' @examples
 #' \dontrun{
-#' ins <- c(10000,20000,10000,30000,5000)
+#' intensity <- c(10000,20000,10000,30000,5000)
 #' mz <- c(101,143,189,221,234)
-#' writeMSP(list(list(spectra = cbind.data.frame(mz,ins))), name = 'test')
+#' writeMSP(list(list(spectra = cbind.data.frame(mz,intensity))), name = 'test')
 #' }
 #' @export
 writeMSP <- function(list, name = 'unknown', sep = FALSE) {
         writemsp <- function(list) {
-                mz <- paste(list$spectra$mz, list$spectra$ins)
+                mz <- paste(list$spectra$mz, list$spectra$intensity)
                 nPeaks <- length(mz)
                 cat(
                         "BEGIN IONS",
@@ -177,9 +177,8 @@ getMSP <- function(file) {
                         x[grep('Spectrum_type: ', x, ignore.case = TRUE)]
                 msm <-
                         gsub('Spectrum_type: ', '', msmt, ignore.case = TRUE)
-                if (sum(grepl('^Num Peaks: ', x, ignore.case = TRUE)) ==
-                    0) {
-                        # matrix of masses and intensities
+                # helper to parse mass/intensity pairs from MSP text
+                parse_peaks <- function(x) {
                         massIntIndx <-
                                 which(grepl('^[0-9]', x) & !grepl(': ', x))
                         massesInts <-
@@ -187,13 +186,17 @@ getMSP <- function(file) {
                         massesInts <-
                                 as.numeric(massesInts[grep('^[0-9].*[0-9]$|^[0-9]$',
                                                            massesInts)])
-                        # if any NAs remove from indx
                         mz <-
                                 massesInts[seq(1, length(massesInts), 2)]
-                        ins <-
+                        intensity <-
                                 massesInts[seq(2, length(massesInts), 2)]
-                        ins <- ins / max(ins) * 100
-                        spectra <- cbind.data.frame(mz = mz, ins = ins)
+                        intensity <- intensity / max(intensity) * 100
+                        cbind.data.frame(mz = mz, intensity = intensity)
+                }
+
+                if (sum(grepl('^Num Peaks: ', x, ignore.case = TRUE)) ==
+                    0) {
+                        spectra <- parse_peaks(x)
                         return(
                                 list(
                                         name = name,
@@ -210,21 +213,7 @@ getMSP <- function(file) {
                                 )
                         )
                 } else if (as.numeric(np) > 0) {
-                        # matrix of masses and intensities
-                        massIntIndx <-
-                                which(grepl('^[0-9]', x) & !grepl(': ', x))
-                        massesInts <-
-                                unlist(strsplit(x[massIntIndx], '\t| '))
-                        massesInts <-
-                                as.numeric(massesInts[grep('^[0-9].*[0-9]$|^[0-9]$',
-                                                           massesInts)])
-                        # if any NAs remove from indx
-                        mz <-
-                                massesInts[seq(1, length(massesInts), 2)]
-                        ins <-
-                                massesInts[seq(2, length(massesInts), 2)]
-                        ins <- ins / max(ins) * 100
-                        spectra <- cbind.data.frame(mz = mz, ins = ins)
+                        spectra <- parse_peaks(x)
                         return(
                                 list(
                                         name = name,

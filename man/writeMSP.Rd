@@ -21,8 +21,8 @@ Write MSP file for NIST search
 }
 \examples{
 \dontrun{
-ins <- c(10000,20000,10000,30000,5000)
+intensity <- c(10000,20000,10000,30000,5000)
 mz <- c(101,143,189,221,234)
-writeMSP(list(list(spectra = cbind.data.frame(mz,ins))), name = 'test')
+writeMSP(list(list(spectra = cbind.data.frame(mz,intensity))), name = 'test')
 }
 }

@@ -21,6 +21,6 @@ Get the high order unit based Mass Defect
 }
 \examples{
 \dontrun{
-getmdh(getmass('C2H4')))
+getmdh(getmass('C2H4'))
 }
 }
