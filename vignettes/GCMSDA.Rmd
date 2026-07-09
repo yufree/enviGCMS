@@ -84,17 +84,9 @@ If you want a graphical user interface for SCCPs analysis, a shiny application i
 
 In environmental non-target analysis, when multiple samples are collected, problem will raise from the heterogeneity among samples. For example, retention time would shift due to the column. In those cases, `xcms` package could be used to get a peaks list across samples within certain retention time and m/z. `enviGCMS` package has some wrapped function to get the peaks list. Besides, some specific functions such as group comparison, batch correction and visualization are also included. 
 
-### Wrap function for `xcms` package
+### Importing peaks list data
 
-*Since version 0.7.4, those functions have been removed from the package. *
-
-- `getdata` could be used to get the `xcmsSet` object in one step with optimized methods 
-
-- `getdata2` could be used to get the `XCMSnExp` object in one step with optimized methods 
-
-- `getmzrt` could get a list as `mzrt` object with peaks list, mz, retention time and class of samples from `xcmsSet`/`XCMSnExp` object. You could also save related `xcmsSet` and `xcmsEIC` object for further analysis. It also support to output the file for metaboanalyst, xMSannotator, Mummichog pathway analysis and paired mass distance(PMD) analysis.
-
-- `getmzrtcsv` could read in the csv files and return a list for peaks list as `mzrt` object
+- `getmzrtcsv` can read in a CSV file of the peaks list and return an `mzrt` list object with the peaks list, m/z, retention time, and sample groups.
 
 ### Data imputation and filtering
 

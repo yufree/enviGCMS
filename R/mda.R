@@ -268,7 +268,7 @@ getmdh <- function(mz,
                         md3 <- round(floor(tsmd) - tsmd,
                                      digits = 6)
                         tmd <- MD2 / md3
-                        MD1_3 <-
+                        MD3 <-
                                 round(floor(tmd) - tmd,
                                       digits = 6)
                         re <- cbind.data.frame(mz, MD1, MD2, MD3)
@@ -393,8 +393,8 @@ findohc <-
                                                                 abs(li2$mzr[1] - li2$mzr[2])
                                                 }
 
-                                                if (ratio > cutoffr &
-                                                    round(diff) == 2) {
+                                                 if (ratio > cutoffr &&
+                                                     any(round(diff) == 2)) {
                                                         li2 <- cbind.data.frame(li2, ratio)
                                                         result <-
                                                                 as.data.frame(rbind(result, li2))
@@ -446,11 +446,13 @@ findmet <-
 #' @export
 findlipid <-
         function(list, mode = 'pos') {
-                if (mode == 'pos' | mode == 'neg') {
+                if (mode == 'none') {
                         km <-
                                 (list$mz * 14 / 14.01565 - floor(list$mz * 14 / 14.01565)) / 0.0134
                 } else{
-                        adduct <- ifelse(mode == 'pos', 1.008, -1.008)
+                        # 'pos' assumes [M+H]+ (subtract a proton to reach the
+                        # neutral mass); 'neg' assumes [M-H]- (add a proton)
+                        adduct <- ifelse(mode == 'pos', -1.008, 1.008)
                         km <-
                                 (((list$mz + adduct) * 14 / 14.01565) - floor((list$mz + adduct) * 14 / 14.01565)) /
                                 0.0134

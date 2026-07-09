@@ -180,8 +180,8 @@ plotTopMS2Peaks <- function(filepath, featlist, numTopIons = 10,
                         )
                 }
         }
-        plotly::config(p, showTips = FALSE) |>
-                plotly::layout(showlegend = TRUE)
+        p <- plotly::config(p, showTips = FALSE)
+        plotly::layout(p, showlegend = TRUE)
 }
 
 

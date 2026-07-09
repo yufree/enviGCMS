@@ -40,4 +40,4 @@ Imports:
     RColorBrewer,
     data.table,
     igraph
-RoxygenNote: 7.3.3
+Config/roxygen2/version: 8.0.0

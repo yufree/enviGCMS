@@ -38,9 +38,8 @@ test_that("HRMF returns data.frame with expected columns", {
     )
     result <- HRMF(msp_entry, formula = "C8H8O", charge = 0,
                    mass_accuracy = 10, intensity_cutoff = 0)
-    if (!is.null(result)) {
-        expect_true(is.data.frame(result))
-        expect_true("Candidate" %in% colnames(result))
-        expect_true("FoM" %in% colnames(result))
-    }
+    skip_if(is.null(result), "HRMF returned NULL (no isotope match on this platform)")
+    expect_true(is.data.frame(result))
+    expect_true("Candidate" %in% colnames(result))
+    expect_true("FoM" %in% colnames(result))
 })

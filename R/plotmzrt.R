@@ -1070,7 +1070,7 @@ gifmr <- function(list,
                   ms = c(100, 500),
                   rsdcf = 30,
                   inscf = 5,
-                  imputation = "i",
+                  imputation = "l",
                   name = "test",
                   ...) {
         if (!requireNamespace("animation", quietly = TRUE)) {

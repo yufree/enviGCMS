@@ -57,6 +57,23 @@ test_that("getmdh works with ceiling method", {
     expect_true("MD1" %in% colnames(result))
 })
 
+test_that("getmdh returns MD1/MD2/MD3 for three cus across all methods", {
+    mz <- c(28.0313)
+    for (m in c('round', 'floor', 'ceiling')) {
+        result <- getmdh(mz, cus = 'CH2,H2,O', method = m)
+        expect_true(all(c("mz", "MD1", "MD2", "MD3") %in% colnames(result)),
+                    info = paste("method =", m))
+    }
+})
+
+test_that("getmdh handles more than three cus with floor method", {
+    # regression: floor branch previously assigned MD1_3 instead of MD3
+    mz <- c(28.0313)
+    expect_silent(res <- suppressMessages(
+        getmdh(mz, cus = 'CH2,H2,O,NH', method = 'floor')))
+    expect_true(all(c("mz", "MD1", "MD2", "MD3") %in% colnames(res)))
+})
+
 test_that("getmassdefect returns data.frame with correct dimensions", {
     mass <- c(100.1022, 245.2122, 267.3144)
     sf <- 0.9988

@@ -23,6 +23,14 @@
 - Fix `getdoe()`: `sum(NROW(lv) > 1) != 0` (always TRUE) corrected to `NROW(lv) > 1`.
 - Fix `getMSP()`: extract duplicated peak-parsing code into internal helper.
 - Fix `getmzrtcsv()`: remove broken cross-reference to deleted `getmzrt`.
+- Fix `integration()`: RT/noise window subsetting compared `> upper & < lower` (always empty), corrected to `> lower & < upper` so the function returns a real peak area.
+- Fix `getmdh()`: `floor` method with more than three units assigned to `MD1_3` instead of `MD3`, causing an "object 'MD3' not found" error.
+- Fix `getintegration()`: `m <= 2` branch referenced an undefined `t` and mis-parenthesised the per-scan `delta_t`; now computes `(last - first) / (n - 1)`.
+- Fix `findlipid()`: `mode` branch logic was inverted -- `pos`/`neg` applied no adduct correction while the neutral branch held an unreachable `ifelse`. `pos` now corrects `[M+H]+` and `neg` corrects `[M-H]-` to neutral mass; `none` is unchanged.
+- Fix `gifmr()`: default `imputation = "i"` was not a valid `getimputation()` method (silently skipped imputation); changed to `"l"`.
+- Register `c.mzrt()` as an S3 method so `c()` dispatches on `mzrt` objects.
+- `getcsv()`: warn instead of silently doing nothing when `type` contains none of `m`/`a`/`p`/`o`.
+- Remove dead code in `getpn()` (two discarded subset expressions).
 
 ## Dependency changes
 
@@ -33,7 +41,7 @@
 
 ## Code quality
 
-- Add 67 unit tests across 8 test files (was 1 test).
+- Add unit tests across 10 test files (was 1 test), including regression tests for the bug fixes above.
 - Refactor `HRMF()` from 285-line monolith into 135-line function with 4 internal helpers.
 - Remove 809 lines of dead deprecated code and 35 orphan man pages.
 

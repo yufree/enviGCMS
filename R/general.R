@@ -814,12 +814,12 @@ integration <- function(data,
                                 8.4),
                         smoothit = TRUE) {
         # subset the data
-        subdata <- data[data[, 1] > rt[2] & data[, 1] < rt[1],]
+        subdata <- data[data[, 1] > rt[1] & data[, 1] < rt[2],]
         # get the signal and the RT
         RTrange <- subdata[, 1]
         signal <- subdata[, 2]
         # subset the noise
-        subnoise <- data[data[, 1] > brt[2] & data[, 1] < brt[1],]
+        subnoise <- data[data[, 1] > brt[1] & data[, 1] < brt[2],]
         # get the noise and the RT
         RTrange2 <- subnoise[, 1]
         noise <- subnoise[, 2]
@@ -894,8 +894,8 @@ getintegration <- function(data,
                 # for n = 2 points; without linear regression (much
                 # faster) time per scan in millisec
                 delta_t <-
-                        (t[length(RTrangemsec)] - RTrangemsec[1] / (length(RTrangemsec) -
-                                                                            1))
+                        (RTrangemsec[length(RTrangemsec)] - RTrangemsec[1]) / (length(RTrangemsec) -
+                                                                            1)
                 for (i in 2:length(signal)) {
                         slopedata[i] <- (signal[i] - signal[i - 1]) / delta_t
                 }
