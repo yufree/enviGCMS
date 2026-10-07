@@ -4,7 +4,7 @@
 ^\.Rproj\.user$
 ^.travis.yml
 ^docs$
-_pkgdown.yaml
+_pkgdown.yml
 .github
 .claude
 ^tests/testthat/Rplots\.pdf$
