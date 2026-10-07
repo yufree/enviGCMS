@@ -2,6 +2,7 @@
 
 S3method(c,mzrt)
 export(HRMF)
+export(cleanMGF)
 export(findline)
 export(findlipid)
 export(findmet)

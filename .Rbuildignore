@@ -7,3 +7,4 @@
 _pkgdown.yaml
 .github
 .claude
+^tests/testthat/Rplots\.pdf$

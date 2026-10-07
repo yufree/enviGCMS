@@ -17,6 +17,74 @@
 #' @noRd
 .ELECTRON_MASS <- 0.00054857990924
 
+#' Built-in singly-charged adduct mass deltas (Da)
+#'
+#' Ion m/z = neutral fragment mass + delta. Names encode the charge sign.
+#' @noRd
+.ADDUCTS <- c(
+        "[M+H]+"      =  1.007276,
+        "[M+Na]+"     =  22.989221,
+        "[M+NH4]+"    =  18.033826,
+        "[M+K]+"      =  38.963158,
+        "[M+H-H2O]+"  = -17.003288,
+        "[M-H]-"      = -1.007276,
+        "[M+Cl]-"     =  34.969401,
+        "[M+HCOO]-"   =  44.998203,
+        "[M+CH3COO]-" =  59.013853
+)
+
+#' Resolve user-supplied adduct(s) into labels, deltas and charge signs
+#'
+#' Accepts built-in adduct names (see \code{.ADDUCTS}) or a named numeric
+#' vector of custom singly-charged adducts whose names must end with "+"
+#' or "-" to indicate the charge sign.
+#'
+#' @param adduct character vector of adduct names, or named numeric vector
+#'   of custom mass deltas (Da).
+#' @return A data.frame with columns \code{label}, \code{delta}, \code{charge}.
+#' @noRd
+.resolve_adducts <- function(adduct) {
+        if (is.numeric(adduct)) {
+                if (is.null(names(adduct)) || any(names(adduct) == "")) {
+                        stop("Custom adducts must be a named numeric vector, ",
+                             "e.g. c('[M+MeOH]+' = 33.033491).",
+                             call. = FALSE)
+                }
+                bad <- !grepl("[+-]$", names(adduct))
+                if (any(bad)) {
+                        stop("Custom adduct names must end with '+' or '-': ",
+                             paste(names(adduct)[bad], collapse = ", "),
+                             call. = FALSE)
+                }
+                delta <- adduct[!is.na(adduct)]
+                if (length(delta) == 0) {
+                        stop("'adduct' must not contain NA values.", call. = FALSE)
+                }
+        } else if (is.character(adduct)) {
+                if (length(adduct) == 0) {
+                        stop("'adduct' must not be empty.", call. = FALSE)
+                }
+                unknown <- setdiff(adduct, names(.ADDUCTS))
+                if (length(unknown) > 0) {
+                        stop("Unknown adduct(s): ", paste(unknown, collapse = ", "),
+                             ". Supported adducts: ",
+                             paste(names(.ADDUCTS), collapse = ", "),
+                             ". For other adducts pass a named numeric vector ",
+                             "of mass deltas, e.g. c('[M+MeOH]+' = 33.033491).",
+                             call. = FALSE)
+                }
+                delta <- .ADDUCTS[adduct]
+        } else {
+                stop("'adduct' must be a character vector or a named numeric ",
+                     "vector of mass deltas.", call. = FALSE)
+        }
+
+        label <- names(delta)
+        charge <- ifelse(grepl("\\+$", label), 1L, -1L)
+        data.frame(label = label, delta = unname(delta),
+                   charge = charge, stringsAsFactors = FALSE)
+}
+
 #' Match query m/z values against target m/z ranges
 #'
 #' For each query m/z, find the target row whose (min, max) range contains it.
@@ -108,10 +176,12 @@
 #' no matches are found.
 #'
 #' @param compound data.frame with columns mz, intensity, mz_min, mz_max.
+#' The m/z values must follow the Rdisop ion convention for \code{charge}:
+#' radical-cation/anion m/z for z = +/-1 (neutral mass -/+ electron mass),
+#' neutral masses for z = 0.
 #' @param element_str character, concatenated element symbols.
 #' @param min_str character, Rdisop minElements string.
 #' @param max_str character, Rdisop maxElements string.
-#' @param me numeric, electron mass adjustment.
 #' @param charge integer, charge state.
 #' @param mass_accuracy numeric, mass accuracy in ppm.
 #' @param IR_RelAb_cutoff numeric, relative abundance cutoff for isotopologues.
@@ -119,7 +189,7 @@
 #' @return A data.frame of theoretical isotopologues or NULL.
 #' @noRd
 .annotate_peaks <- function(compound, element_str, min_str, max_str,
-                            me, charge, mass_accuracy, IR_RelAb_cutoff,
+                            charge, mass_accuracy, IR_RelAb_cutoff,
                             formula_label) {
         windows <- mass_accuracy / 1e6 * compound$mz
         match_comp <- vector("list", nrow(compound))
@@ -129,7 +199,7 @@
 
                 mfSet <- tryCatch(
                         Rdisop::decomposeMass(
-                                compound$mz[i] + me,
+                                compound$mz[i],
                                 mzabs = windows[i],
                                 z = charge,
                                 elements = element_str,
@@ -139,7 +209,13 @@
                         error = function(e) list(formula = character(0), valid = character(0))
                 )
 
+                # Prefer chemically "Valid" candidates; fall back to all when
+                # Rdisop's parity heuristic rejects every candidate (e.g. the
+                # closed-shell molecular formula at z = +/-1, or EI radical ions)
                 valid_idx <- which(mfSet$valid == "Valid")
+                if (length(valid_idx) == 0) {
+                        valid_idx <- seq_along(mfSet$formula)
+                }
 
                 if (length(valid_idx) > 0) {
                         matched_formula <- mfSet$formula[valid_idx[1]]
@@ -243,7 +319,14 @@
 #'   containing at least a \code{spectra} element with columns \code{mz} and \code{intensity}.
 #' @param formula character vector. One or more candidate chemical formulae to evaluate.
 #' @param charge integer. Charge state: 1 for positive, -1 for negative, 0 for neutral.
-#'   Default 1 (radical cation in EI).
+#'   Default 1 (radical cation in EI). Ignored when \code{adduct} is supplied.
+#' @param adduct character vector of adduct names for singly-charged ESI ions
+#'   (e.g. \code{"[M+H]+"}, \code{c("[M+H]+", "[M+Na]+")}), or a named numeric
+#'   vector of custom mass deltas in Da with names ending in "+" or "-"
+#'   (e.g. \code{c("[M+MeOH]+" = 33.033491)}). Default NULL keeps the legacy
+#'   radical-ion/neutral behaviour governed by \code{charge}. Built-in adducts:
+#'   "[M+H]+", "[M+Na]+", "[M+NH4]+", "[M+K]+", "[M+H-H2O]+", "[M-H]-",
+#'   "[M+Cl]-", "[M+HCOO]-", "[M+CH3COO]-".
 #' @param mass_accuracy numeric. Mass accuracy in ppm. Default 5.
 #' @param intensity_cutoff numeric. Minimum absolute intensity to retain a peak. Default 1.
 #' @param IR_RelAb_cutoff numeric. Relative abundance cutoff (\%) for theoretical
@@ -251,10 +334,11 @@
 #' @param detailed logical. If TRUE, return detailed list with all_ions, compound,
 #'   and HRMF_scores for each formula. If FALSE (default), return a summary data.frame.
 #'
-#' @return If \code{detailed = FALSE}, a data.frame with one row per candidate formula
-#'   and columns: Candidate, peak_count_forw, df_theortomsp, HRMF_theor_score,
-#'   peak_count_rev, df_msptotheor, HRMF_msp_score, FoM.
-#'   If \code{detailed = TRUE}, a named list of detailed results per formula.
+#' @return If \code{detailed = FALSE}, a data.frame with one row per candidate
+#'   formula (and per adduct, if supplied) and columns: Candidate, Adduct,
+#'   peak_count_forw, df_theortomsp, HRMF_theor_score, peak_count_rev,
+#'   df_msptotheor, HRMF_msp_score, FoM.
+#'   If \code{detailed = TRUE}, a named list of detailed results per formula/adduct.
 #'
 #' @details
 #' Unlike the original MSxplorer implementation, this version uses \pkg{Rdisop}
@@ -266,20 +350,33 @@
 #' \code{\link{getMSP}}. For batch processing of entire MSP files, see
 #' \code{\link{getHRMF}}.
 #'
+#' For EI (GC-MS) radical ions use the default \code{charge} argument. For
+#' ESI (LC-MS/MS) data with even-electron adduct ions such as [M+H]+ or [M-H]-,
+#' supply \code{adduct} so that fragment m/z values are converted internally;
+#' the adduct should describe how fragment ions are formed (usually the same
+#' as the precursor adduct for singly-charged fragmentation).
+#'
 #' @seealso \code{\link{getHRMF}} for batch processing, \code{\link{getMSP}} for
 #'   reading MSP files.
 #'
 #' @examples
 #' \dontrun{
-#' # Read MSP file and run HRMF on the first compound
+#' # Read MSP file and run HRMF on the first compound (EI radical cation)
 #' msp_data <- getMSP("spectrum.msp")
 #' result <- HRMF(msp_data[[1]], formula = "C8H11NO")
 #'
 #' # Compare multiple candidates
 #' result <- HRMF(msp_data[[1]], formula = c("C8H11NO", "C7H9NO2"))
+#'
+#' # LC-MS/MS with protonated fragments
+#' result <- HRMF(msp_data[[1]], formula = "C8H10N4O2", adduct = "[M+H]+")
+#'
+#' # Multiple candidate adducts are scored separately
+#' result <- HRMF(msp_data[[1]], formula = "C8H10N4O2",
+#'                adduct = c("[M+H]+", "[M+Na]+"))
 #' }
 #' @export
-HRMF <- function(msp, formula, charge = 1, mass_accuracy = 5,
+HRMF <- function(msp, formula, charge = 1, adduct = NULL, mass_accuracy = 5,
                  intensity_cutoff = 1, IR_RelAb_cutoff = 1,
                  detailed = FALSE) {
 
@@ -302,13 +399,20 @@ HRMF <- function(msp, formula, charge = 1, mass_accuracy = 5,
                 return(NULL)
         }
 
-        # Electron mass adjustment for charged species
-        if (charge > 0) {
-                me <- .ELECTRON_MASS
-        } else if (charge == 0) {
-                me <- 0
+        # Build ionisation modes: user adducts or legacy radical/neutral charge.
+        # For each mode, ion m/z = neutral mass + delta; Rdisop's z convention
+        # uses radical-ion m/z (neutral -/+ electron mass), so experimental and
+        # theoretical m/z are shifted by offset = delta + electron mass.
+        if (!is.null(adduct)) {
+                modes <- .resolve_adducts(adduct)
         } else {
-                me <- -.ELECTRON_MASS
+                me_val <- if (charge > 0) .ELECTRON_MASS else if (charge == 0) 0 else -.ELECTRON_MASS
+                modes <- data.frame(
+                        label = if (charge > 0) "[M]+ (radical)" else if (charge == 0) "[M] (neutral)" else "[M]- (radical)",
+                        delta = -me_val,
+                        charge = charge,
+                        stringsAsFactors = FALSE
+                )
         }
 
         all_hrmf <- list()
@@ -322,83 +426,105 @@ HRMF <- function(msp, formula, charge = 1, mass_accuracy = 5,
                 min_str <- paste0(paste0(atoms$element, "0"), collapse = "")
                 max_str <- paste0(paste0(atoms$element, atoms$count), collapse = "")
 
-                # Annotate experimental peaks with sub-formulae and isotope patterns
-                all_ions <- .annotate_peaks(compound, element_str, min_str, max_str,
-                                            me, charge, mass_accuracy, IR_RelAb_cutoff,
-                                            formula[a])
-                if (is.null(all_ions)) next
+                # Loop through ionisation modes (adducts or legacy charge)
+                for (mi in seq_len(nrow(modes))) {
 
-                # Match theoretical isotope m/z against experimental peaks
-                matched_exp <- .match_mz_peaks(
-                        query_mz      = all_ions$Iso_mz,
-                        target_min    = compound$mz_min,
-                        target_max    = compound$mz_max,
-                        target_values = compound[, c("mz", "intensity"), drop = FALSE]
-                )
-                all_ions$Detected_mz  <- matched_exp$mz
-                all_ions$Detected_int <- matched_exp$intensity
+                        mode <- modes[mi, ]
+                        me <- if (mode$charge > 0) .ELECTRON_MASS else if (mode$charge == 0) 0 else -.ELECTRON_MASS
+                        offset <- mode$delta + me
+                        msg_lab <- paste0(formula[a], " (", mode$label, ")")
 
-                # Calculate mass errors and relative abundances for theoretical ions
-                windows2 <- mass_accuracy / 1e6 * all_ions$Iso_mz
-                all_ions$Iso_mz_min <- all_ions$Iso_mz - windows2
-                all_ions$Iso_mz_max <- all_ions$Iso_mz + windows2
+                        # Convert experimental m/z to the Rdisop ion convention
+                        compound_q <- compound
+                        compound_q$mz <- compound$mz - offset
 
-                all_ions$MassError_ppm <- ifelse(
-                        all_ions$Detected_mz > 1,
-                        round((all_ions$Detected_mz - all_ions$Iso_mz) /
-                                      all_ions$Iso_mz * 1e6, 1),
-                        NA
-                )
+                        # Annotate experimental peaks with sub-formulae and isotope patterns
+                        all_ions <- .annotate_peaks(compound_q, element_str, min_str, max_str,
+                                                    mode$charge, mass_accuracy, IR_RelAb_cutoff,
+                                                    msg_lab)
+                        if (is.null(all_ions)) next
 
-                # Expected intensity and relative abundances per mono-isotopic group
-                all_ions <- .calc_group_relab(all_ions, "Detected_int",
-                                             has_abundance = TRUE)
+                        # Convert theoretical isotope m/z back to true ion m/z
+                        all_ions$Iso_mz <- all_ions$Iso_mz + offset
 
-                # Rename for clarity
-                all_ions$Theor_RelAb <- all_ions$Abundance
-                all_ions$Abundance <- NULL
+                        # Match theoretical isotope m/z against experimental peaks
+                        matched_exp <- .match_mz_peaks(
+                                query_mz      = all_ions$Iso_mz,
+                                target_min    = compound$mz_min,
+                                target_max    = compound$mz_max,
+                                target_values = compound[, c("mz", "intensity"), drop = FALSE]
+                        )
+                        all_ions$Detected_mz  <- matched_exp$mz
+                        all_ions$Detected_int <- matched_exp$intensity
 
-                # Filter by expected intensity
-                all_ions <- all_ions[all_ions$Expected_int > intensity_cutoff, , drop = FALSE]
+                        # Calculate mass errors and relative abundances for theoretical ions
+                        windows2 <- mass_accuracy / 1e6 * all_ions$Iso_mz
+                        all_ions$Iso_mz_min <- all_ions$Iso_mz - windows2
+                        all_ions$Iso_mz_max <- all_ions$Iso_mz + windows2
 
-                if (nrow(all_ions) == 0) {
-                        message("No ions passed intensity filter for formula: ",
-                                formula[a], ". Skipping.")
-                        next
+                        all_ions$MassError_ppm <- ifelse(
+                                all_ions$Detected_mz > 1,
+                                round((all_ions$Detected_mz - all_ions$Iso_mz) /
+                                              all_ions$Iso_mz * 1e6, 1),
+                                NA
+                        )
+
+                        # Expected intensity and relative abundances per mono-isotopic group
+                        all_ions <- .calc_group_relab(all_ions, "Detected_int",
+                                                      has_abundance = TRUE)
+
+                        # Rename for clarity
+                        all_ions$Theor_RelAb <- all_ions$Abundance
+                        all_ions$Abundance <- NULL
+
+                        # Filter by expected intensity
+                        all_ions <- all_ions[all_ions$Expected_int > intensity_cutoff, , drop = FALSE]
+
+                        if (nrow(all_ions) == 0) {
+                                message("No ions passed intensity filter for formula: ",
+                                        msg_lab, ". Skipping.")
+                                next
+                        }
+
+                        # Match experimental peaks back to theoretical (reverse direction)
+                        comp_scored <- compound
+                        matched_theor <- .match_mz_peaks(
+                                query_mz      = comp_scored$mz,
+                                target_min    = all_ions$Iso_mz_min,
+                                target_max    = all_ions$Iso_mz_max,
+                                target_values = all_ions[, c("Iso_mz", "Isoformula",
+                                                             "MonoIsoFormula", "Theor_RelAb"),
+                                                         drop = FALSE]
+                        )
+                        comp_scored$Theor_mz       <- matched_theor$Iso_mz
+                        comp_scored$IsoFormula     <- matched_theor$Isoformula
+                        comp_scored$MonoIsoFormula <- matched_theor$MonoIsoFormula
+                        comp_scored$Theor_RelAb    <- matched_theor$Theor_RelAb
+
+                        comp_scored$MassError_ppm_rev <- ifelse(
+                                comp_scored$Theor_mz > 1,
+                                round((comp_scored$mz - comp_scored$Theor_mz) /
+                                              comp_scored$Theor_mz * 1e6, 1),
+                                NA
+                        )
+
+                        # Relative abundance for compound peaks per mono-isotopic group
+                        comp_scored <- .calc_group_relab(comp_scored, "intensity")
+
+                        HRMF_scores <- .calc_hrmf_scores(all_ions, comp_scored, formula[a])
+                        HRMF_scores$Adduct <- mode$label
+                        HRMF_scores <- HRMF_scores[, c("Candidate", "Adduct",
+                                                       setdiff(names(HRMF_scores),
+                                                               c("Candidate", "Adduct")))]
+
+                        entry_name <- if (is.null(adduct)) formula[a] else
+                                paste0(formula[a], " ", mode$label)
+                        all_hrmf[[entry_name]] <- list(
+                                all_ions = all_ions,
+                                compound = comp_scored,
+                                HRMF_scores = HRMF_scores
+                        )
                 }
-
-                # Match experimental peaks back to theoretical (reverse direction)
-                comp_scored <- compound
-                matched_theor <- .match_mz_peaks(
-                        query_mz      = comp_scored$mz,
-                        target_min    = all_ions$Iso_mz_min,
-                        target_max    = all_ions$Iso_mz_max,
-                        target_values = all_ions[, c("Iso_mz", "Isoformula",
-                                                     "MonoIsoFormula", "Theor_RelAb"),
-                                                 drop = FALSE]
-                )
-                comp_scored$Theor_mz       <- matched_theor$Iso_mz
-                comp_scored$IsoFormula     <- matched_theor$Isoformula
-                comp_scored$MonoIsoFormula <- matched_theor$MonoIsoFormula
-                comp_scored$Theor_RelAb    <- matched_theor$Theor_RelAb
-
-                comp_scored$MassError_ppm_rev <- ifelse(
-                        comp_scored$Theor_mz > 1,
-                        round((comp_scored$mz - comp_scored$Theor_mz) /
-                                      comp_scored$Theor_mz * 1e6, 1),
-                        NA
-                )
-
-                # Relative abundance for compound peaks per mono-isotopic group
-                comp_scored <- .calc_group_relab(comp_scored, "intensity")
-
-                HRMF_scores <- .calc_hrmf_scores(all_ions, comp_scored, formula[a])
-
-                all_hrmf[[formula[a]]] <- list(
-                        all_ions = all_ions,
-                        compound = comp_scored,
-                        HRMF_scores = HRMF_scores
-                )
         }
 
         if (length(all_hrmf) == 0) {
@@ -423,6 +549,9 @@ HRMF <- function(msp, formula, charge = 1, mass_accuracy = 5,
 #'
 #' @param file character. Path to an MSP file.
 #' @param charge integer. Charge state (see \code{\link{HRMF}}). Default 1.
+#'   Ignored when \code{adduct} is supplied.
+#' @param adduct character vector of adduct names or named numeric vector of
+#'   custom mass deltas (see \code{\link{HRMF}}). Default NULL.
 #' @param mass_accuracy numeric. Mass accuracy in ppm. Default 5.
 #' @param intensity_cutoff numeric. Minimum absolute intensity. Default 1.
 #' @param IR_RelAb_cutoff numeric. Relative abundance cutoff (\%) for
@@ -436,9 +565,12 @@ HRMF <- function(msp, formula, charge = 1, mass_accuracy = 5,
 #' @examples
 #' \dontrun{
 #' results <- getHRMF("library.msp")
+#'
+#' # LC-MS/MS library with protonated ions
+#' results <- getHRMF("library.msp", adduct = "[M+H]+")
 #' }
 #' @export
-getHRMF <- function(file, charge = 1, mass_accuracy = 5,
+getHRMF <- function(file, charge = 1, adduct = NULL, mass_accuracy = 5,
                     intensity_cutoff = 1, IR_RelAb_cutoff = 1) {
 
         compounds <- getMSP(file)
@@ -462,6 +594,7 @@ getHRMF <- function(file, charge = 1, mass_accuracy = 5,
                         HRMF(msp = comp,
                              formula = formula,
                              charge = charge,
+                             adduct = adduct,
                              mass_accuracy = mass_accuracy,
                              intensity_cutoff = intensity_cutoff,
                              IR_RelAb_cutoff = IR_RelAb_cutoff,

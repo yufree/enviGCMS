@@ -7,6 +7,7 @@
 getHRMF(
   file,
   charge = 1,
+  adduct = NULL,
   mass_accuracy = 5,
   intensity_cutoff = 1,
   IR_RelAb_cutoff = 1
@@ -15,7 +16,11 @@ getHRMF(
 \arguments{
 \item{file}{character. Path to an MSP file.}
 
-\item{charge}{integer. Charge state (see \code{\link{HRMF}}). Default 1.}
+\item{charge}{integer. Charge state (see \code{\link{HRMF}}). Default 1.
+Ignored when \code{adduct} is supplied.}
+
+\item{adduct}{character vector of adduct names or named numeric vector of
+custom mass deltas (see \code{\link{HRMF}}). Default NULL.}
 
 \item{mass_accuracy}{numeric. Mass accuracy in ppm. Default 5.}
 
@@ -35,6 +40,9 @@ chemical formula annotation.
 \examples{
 \dontrun{
 results <- getHRMF("library.msp")
+
+# LC-MS/MS library with protonated ions
+results <- getHRMF("library.msp", adduct = "[M+H]+")
 }
 }
 \seealso{

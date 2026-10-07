@@ -12,6 +12,8 @@
 
 - Add `HRMF()` for high-resolution mass filtering with forward/reverse scoring and Figure of Merit (FoM), based on Kwiecien et al. (2015). Uses Rdisop instead of rcdk/rJava -- no new hard dependencies.
 - Add `getHRMF()` for batch HRMF processing of entire MSP files.
+- Add `adduct` argument to `HRMF()`/`getHRMF()` for ESI adduct ions (`[M+H]+`, `[M+Na]+`, `[M+NH4]+`, `[M+K]+`, `[M+H-H2O]+`, `[M-H]-`, `[M+Cl]-`, `[M+HCOO]-`, `[M+CH3COO]-`, or user-defined named mass deltas); fragment m/z are converted internally and scores gain an `Adduct` column.
+- Add `cleanMGF()` to clean MGF files by keeping only fragment peaks explainable as sub-formulae of the best precursor formula candidate (derived from `PEPMASS`/`CHARGE` and the supplied adduct); the chosen formula is stored as a `FORMULA=` header.
 - Add `plotEIC()` for extracted ion chromatogram plotting from mzML/mzXML files using RaMS.
 - Add `plotTopMS1Peaks()` interactive Shiny app to extract top MS1 ions from MS2 chromatograms.
 - Add `plotTopMS2Peaks()` interactive Shiny app to extract top MS2 ions from MS1 chromatograms.
@@ -19,6 +21,7 @@
 ## Bug fixes
 
 - Fix `getmdh()`: `cbind.data.frame(mz, MD1, MD1)` corrected to `cbind.data.frame(mz, MD1, MD2)` for ceiling method.
+- Fix `HRMF()`: remove a doubled electron-mass shift (about 0.55 mDa bias) in the `decomposeMass()` query, and fall back to all candidates when Rdisop's parity filter rejects every sub-formula for a peak (the closed-shell molecular formula was never annotated at charge +/-1).
 - Fix `runMDPlot()`: filename case mismatch (`MDPlot.rmd` -> `mdplot.Rmd`).
 - Fix `getdoe()`: `sum(NROW(lv) > 1) != 0` (always TRUE) corrected to `NROW(lv) > 1`.
 - Fix `getMSP()`: extract duplicated peak-parsing code into internal helper.
