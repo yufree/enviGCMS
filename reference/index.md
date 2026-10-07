@@ -1,0 +1,160 @@
+# Package index
+
+## All functions
+
+- [`getintegration()`](https://yufree.github.io/enviGCMS/reference/GetIntegration.md)
+  : getintegration was mainly used for get the integration of certain
+  ion's chromatogram data and plot the data
+- [`getisotopologues()`](https://yufree.github.io/enviGCMS/reference/Getisotopologues.md)
+  : Get the selected isotopologues at certain MS data
+- [`HRMF()`](https://yufree.github.io/enviGCMS/reference/HRMF.md) : High
+  Resolution Mass Filtering (HRMF) for GC/LC HRMS data
+- [`integration()`](https://yufree.github.io/enviGCMS/reference/Integration.md)
+  : Just integrate data according to fixed rt and fixed noise area
+- [`TBBPA`](https://yufree.github.io/enviGCMS/reference/TBBPA.md) : Demo
+  data for TBBPA metabolism in Pumpkin
+- [`c(`*`<mzrt>`*`)`](https://yufree.github.io/enviGCMS/reference/c.mzrt.md)
+  : c method for mzrt object
+- [`cleanMGF()`](https://yufree.github.io/enviGCMS/reference/cleanMGF.md)
+  : Clean an MGF file by keeping only formula-explainable peaks
+- [`findline()`](https://yufree.github.io/enviGCMS/reference/findline.md)
+  : find line of the regression model for GC-MS
+- [`findlipid()`](https://yufree.github.io/enviGCMS/reference/findlipid.md)
+  : Find lipid class of metabolites base on referenced Kendrick mass
+  defect
+- [`findmet()`](https://yufree.github.io/enviGCMS/reference/findmet.md)
+  : Screen metabolites by Mass Defect
+- [`findohc()`](https://yufree.github.io/enviGCMS/reference/findohc.md)
+  : Screen organohalogen compounds by retention time, mass defect
+  analysis and isotope relationship modified by literature report. Also
+  support compounds with \[M\] and \[M+2\] ratio cutoff.
+- [`findpfc()`](https://yufree.github.io/enviGCMS/reference/findpfc.md)
+  : Find PFCs based on mass defect analysis
+- [`getHRMF()`](https://yufree.github.io/enviGCMS/reference/getHRMF.md)
+  : Batch High Resolution Mass Filtering for all compounds in an MSP
+  file
+- [`getMSP()`](https://yufree.github.io/enviGCMS/reference/getMSP.md) :
+  read in MSP file as list for ms/ms or ms(EI) annotation
+- [`getalign()`](https://yufree.github.io/enviGCMS/reference/getalign.md)
+  : Align two peaks vectors by mass to charge ratio and/or retention
+  time
+- [`getalign2()`](https://yufree.github.io/enviGCMS/reference/getalign2.md)
+  : Align mass to charge ratio and/or retention time to remove
+  redundancy
+- [`getcompare()`](https://yufree.github.io/enviGCMS/reference/getcompare.md)
+  : Align multiple peaks list to one peak list
+- [`getcsv()`](https://yufree.github.io/enviGCMS/reference/getcsv.md) :
+  Convert an list object to csv file.
+- [`getdoe()`](https://yufree.github.io/enviGCMS/reference/getdoe.md) :
+  Generate the group level rsd and average intensity based on DoE,
+- [`getdwtus()`](https://yufree.github.io/enviGCMS/reference/getdwtus.md)
+  : Density weighted intensity for one sample
+- [`getfilter()`](https://yufree.github.io/enviGCMS/reference/getfilter.md)
+  : Filter the data based on row and column index
+- [`getformula()`](https://yufree.github.io/enviGCMS/reference/getformula.md)
+  : Get chemical formula for mass to charge ratio.
+- [`getimputation()`](https://yufree.github.io/enviGCMS/reference/getimputation.md)
+  : Impute the peaks list data
+- [`getmass()`](https://yufree.github.io/enviGCMS/reference/getmass.md)
+  : Get the exact mass of the isotopologues from a chemical formula or
+  reaction's isotope patterns with the highest abundances
+- [`getmassdefect()`](https://yufree.github.io/enviGCMS/reference/getmassdefect.md)
+  : Get mass defect with certain scaled factor
+- [`getmdh()`](https://yufree.github.io/enviGCMS/reference/getmdh.md) :
+  Get the high order unit based Mass Defect
+- [`getmdr()`](https://yufree.github.io/enviGCMS/reference/getmdr.md) :
+  Get the raw Mass Defect
+- [`getms1anno()`](https://yufree.github.io/enviGCMS/reference/getms1anno.md)
+  : Annotation of MS1 data by compounds database by predefined paired
+  mass distance
+- [`getmzrtcsv()`](https://yufree.github.io/enviGCMS/reference/getmzrtcsv.md)
+  : Covert the peaks list csv file into list
+- [`getoverlappeak()`](https://yufree.github.io/enviGCMS/reference/getoverlappeak.md)
+  : Get the overlap peaks by mass and retention time range
+- [`getpn()`](https://yufree.github.io/enviGCMS/reference/getpn.md) :
+  Merge positive and negative mode data
+- [`getpower()`](https://yufree.github.io/enviGCMS/reference/getpower.md)
+  : Get the index with power restriction for certain study with BH
+  adjusted p-value and certain power.
+- [`getpqsi()`](https://yufree.github.io/enviGCMS/reference/getpqsi.md)
+  : Compute pooled QC linear index according to run order
+- [`getrangecsv()`](https://yufree.github.io/enviGCMS/reference/getrangecsv.md)
+  : Get a mzrt list and/or save mz and rt range as csv file.
+- [`getretcor()`](https://yufree.github.io/enviGCMS/reference/getretcor.md)
+  : Perform peaks list alignment and return features table
+- [`getrmd()`](https://yufree.github.io/enviGCMS/reference/getrmd.md) :
+  Get the Relative Mass Defect
+- [`gifmr()`](https://yufree.github.io/enviGCMS/reference/gifmr.md) :
+  plot scatter plot for rt-mz profile and output gif file for multiple
+  groups
+- [`list`](https://yufree.github.io/enviGCMS/reference/list.md) : Demo
+  data
+- [`ma()`](https://yufree.github.io/enviGCMS/reference/ma.md) : filter
+  data by average moving box
+- [`matrix`](https://yufree.github.io/enviGCMS/reference/matrix.md) :
+  Demo raw data matrix
+- [`plotEIC()`](https://yufree.github.io/enviGCMS/reference/plotEIC.md)
+  : Plot extracted ion chromatograms from raw mzML/mzXML data
+- [`plotTopMS1Peaks()`](https://yufree.github.io/enviGCMS/reference/plotTopMS1Peaks.md)
+  : Extract top MS1 ions from MS2 EIC interactively
+- [`plotTopMS2Peaks()`](https://yufree.github.io/enviGCMS/reference/plotTopMS2Peaks.md)
+  : Extract top MS2 ions from MS1 EIC interactively
+- [`plotcc()`](https://yufree.github.io/enviGCMS/reference/plotcc.md) :
+  plot the calibration curve with error bar, r squared and equation.
+- [`plotden()`](https://yufree.github.io/enviGCMS/reference/plotden.md)
+  : plot the density for multiple samples
+- [`plotdwtus()`](https://yufree.github.io/enviGCMS/reference/plotdwtus.md)
+  : plot density weighted intensity for multiple samples
+- [`plotgroup()`](https://yufree.github.io/enviGCMS/reference/plotgroup.md)
+  : Plot the response group of GC-MS
+- [`plothist()`](https://yufree.github.io/enviGCMS/reference/plothist.md)
+  : plot the density of the GC-MS data with EM algorithm to separate the
+  data into two log normal distribution.
+- [`plothm()`](https://yufree.github.io/enviGCMS/reference/plothm.md) :
+  Plot the heatmap of mzrt profiles
+- [`plotint()`](https://yufree.github.io/enviGCMS/reference/plotint.md)
+  : plot the information of integration
+- [`plotintslope()`](https://yufree.github.io/enviGCMS/reference/plotintslope.md)
+  : plot the slope information of integration
+- [`plotkms()`](https://yufree.github.io/enviGCMS/reference/plotkms.md)
+  : plot the kendrick mass defect diagram
+- [`plotmr()`](https://yufree.github.io/enviGCMS/reference/plotmr.md) :
+  plot the scatter plot for peaks list with threshold
+- [`plotmrc()`](https://yufree.github.io/enviGCMS/reference/plotmrc.md)
+  : plot the diff scatter plot for peaks list with threshold between two
+  groups
+- [`plotms()`](https://yufree.github.io/enviGCMS/reference/plotms.md) :
+  plot GC/LC-MS data as a heatmap with TIC
+- [`plotmz()`](https://yufree.github.io/enviGCMS/reference/plotmz.md) :
+  plot GC/LC-MS data as scatter plot
+- [`plotpca()`](https://yufree.github.io/enviGCMS/reference/plotpca.md)
+  : plot the PCA for multiple samples
+- [`plotpeak()`](https://yufree.github.io/enviGCMS/reference/plotpeak.md)
+  : plot intensity of peaks across samples or samples across peaks
+- [`plotridge()`](https://yufree.github.io/enviGCMS/reference/plotridge.md)
+  : plot ridgeline density plot
+- [`plotridges()`](https://yufree.github.io/enviGCMS/reference/plotridges.md)
+  : Relative Log Abundance Ridge (RLAR) plots for samples or peaks
+- [`plotrla()`](https://yufree.github.io/enviGCMS/reference/plotrla.md)
+  : Relative Log Abundance (RLA) plots
+- [`plotrsd()`](https://yufree.github.io/enviGCMS/reference/plotrsd.md)
+  : plot the rsd influences of data in different groups
+- [`plotrug()`](https://yufree.github.io/enviGCMS/reference/plotrug.md)
+  : plot 1-d density for multiple samples
+- [`plotsms()`](https://yufree.github.io/enviGCMS/reference/plotsms.md)
+  : Plot the intensity distribution of GC-MS
+- [`plotsub()`](https://yufree.github.io/enviGCMS/reference/plotsub.md)
+  : Plot the background of data
+- [`plott()`](https://yufree.github.io/enviGCMS/reference/plott.md) :
+  plot GC-MS data as a heatmap for constant speed of temperature rising
+- [`plottic()`](https://yufree.github.io/enviGCMS/reference/plottic.md)
+  : Plot Total Ion Chromatogram (TIC)
+- [`runMDPlot()`](https://yufree.github.io/enviGCMS/reference/runMDPlot.md)
+  : Shiny application for interactive mass defect plots analysis
+- [`runsccp()`](https://yufree.github.io/enviGCMS/reference/runsccp.md)
+  : Shiny application for Short-Chain Chlorinated Paraffins analysis
+- [`sccp`](https://yufree.github.io/enviGCMS/reference/sccp.md) :
+  Short-Chain Chlorinated Paraffins(SCCPs) peaks information for
+  quantitative analysis
+- [`writeMSP()`](https://yufree.github.io/enviGCMS/reference/writeMSP.md)
+  : Write MSP file for NIST search

@@ -1,0 +1,10 @@
+pandoc: 3.8.3
+pkgdown: 2.2.1
+pkgdown_sha: ~
+articles:
+  GCMSDA: GCMSDA.html
+  PooledQC: PooledQC.html
+last_built: 2026-10-07T09:33Z
+urls:
+  reference: https://yufree.github.io/enviGCMS/reference
+  article: https://yufree.github.io/enviGCMS/articles
