@@ -5,3 +5,13 @@
 inst/doc
 enviGCMS.Rproj
 zzz
+*.tar.gz
+cran-comments.md
+.claude/
+*.Rcheck/
+tests/testthat/Rplots.pdf
+src/*.o
+src/*.so
+src/*.dll
+src/*.dylib
+src/*.a

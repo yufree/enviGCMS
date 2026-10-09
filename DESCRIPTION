@@ -1,7 +1,7 @@
 Package: enviGCMS
 Type: Package
 Title: GC/LC-MS Data Analysis for Environmental Science
-Version: 0.9.0
+Version: 0.9.1
 Authors@R: c(person(given = "Miao", family = "YU",
         role = c("aut", "cre"), 
         email = "yufreecas@gmail.com",
@@ -30,7 +30,7 @@ VignetteBuilder: knitr
 Depends:
     R (>= 3.5)
 Imports: 
-    Rdisop,
+    Rcpp,
     BiocParallel,
     grDevices, 
     graphics, 
@@ -39,4 +39,6 @@ Imports:
     RColorBrewer,
     data.table,
     igraph
-Config/roxygen2/version: 8.0.0
+LinkingTo: 
+    Rcpp
+Config/roxygen2/version: 8.1.1

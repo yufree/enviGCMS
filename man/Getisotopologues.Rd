@@ -4,14 +4,16 @@
 \alias{getisotopologues}
 \title{Get the selected isotopologues at certain MS data}
 \usage{
-getisotopologues(formula = "C6H11O6", charge = 1, width = 0.3)
+getisotopologues(formula = "C6H11O6", charge = 1, width = 0.3, cutoff = 0.05)
 }
 \arguments{
-\item{formula}{the molecular formula.}
+\item{formula}{the molecular formula. 'C6H11O6' as default}
 
 \item{charge}{the charge of that molecular. 1 in EI mode as default}
 
 \item{width}{the width of the peak width on mass spectrum. 0.3 as default for low resolution mass spectrum.}
+
+\item{cutoff}{numeric, minimum relative abundance (fraction of base peak) to consider, default 0.05 (5\%).}
 }
 \description{
 Get the selected isotopologues at certain MS data

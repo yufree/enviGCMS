@@ -51,16 +51,16 @@ getmass <- function(data) {
         if (grepl('-', data)) {
                 name <- unlist(strsplit(data, '-'))
                 if (name[1] == '') {
-                        table2 <- Rdisop::getMolecule(name[2])$isotopes[[1]]
+                        table2 <- .getMolecule(name[2])$isotopes[[1]]
                         iso2 <-
                                 table2[1, which.max(table2[2, ])]
                         iso <- 0 - iso2
                 } else{
-                        table1 <- Rdisop::getMolecule(name[1])$isotopes[[1]]
+                        table1 <- .getMolecule(name[1])$isotopes[[1]]
                         iso1 <-
                                 table1[1, which.max(table1[2, ])]
                         table2 <-
-                                Rdisop::getMolecule(name[2])$isotopes[[1]]
+                                .getMolecule(name[2])$isotopes[[1]]
                         iso2 <-
                                 table2[1, which.max(table2[2, ])]
                         iso <-
@@ -68,7 +68,7 @@ getmass <- function(data) {
                 }
 
         } else{
-                table <- Rdisop::getMolecule(data)$isotopes[[1]]
+                table <- .getMolecule(data)$isotopes[[1]]
                 iso <- table[1, which.max(table[2, ])]
         }
         return(iso)
@@ -317,6 +317,8 @@ getmdh <- function(mz,
         return(re)
 }
 
+#' Screen organohalogen compounds
+#'
 #' Screen organohalogen compounds by retention time, mass defect analysis and isotope relationship modified by literature report. Also support compounds with [M] and [M+2] ratio cutoff.
 #' @param list list with data as peaks list, mz, rt and group information, retention time should be in seconds
 #' @param sf scale factor, default 78/77.91051(Br)
@@ -328,7 +330,7 @@ getmdh <- function(mz,
 #' @param cutoffr the cutoff of [M] and [M+2] ratio, default 0.4
 #' @param clustercf the cutoff of cluster analysis to separate two different ions groups for retention time, default 10
 #' @return list with filtered organohalogen compounds
-#' @references Identification of Novel Brominated Compounds in Flame Retarded Plastics Containing TBBPA by Combining Isotope Pattern and Mass Defect Cluster Analysis Ana Ballesteros-Gómez, Joaquín Ballesteros, Xavier Ortiz, Willem Jonker, Rick Helmus, Karl J. Jobst, John R. Parsons, and Eric J. Reiner Environmental Science & Technology 2017 51 (3), 1518-1526 DOI: 10.1021/acs.est.6b03294
+#' @references Identification of Novel Brominated Compounds in Flame Retarded Plastics Containing TBBPA by Combining Isotope Pattern and Mass Defect Cluster Analysis Ana Ballesteros-Gomez, Joaquin Ballesteros, Xavier Ortiz, Willem Jonker, Rick Helmus, Karl J. Jobst, John R. Parsons, and Eric J. Reiner Environmental Science & Technology 2017 51 (3), 1518-1526 DOI: 10.1021/acs.est.6b03294
 #' @export
 findohc <-
         function(list,
@@ -439,7 +441,7 @@ findmet <-
 #' @param list list with data as peaks list, mz, rt and group information, retention time should be in seconds
 #' @param mode 'pos' for positive mode, 'neg' for negative mode and 'none' for neutral mass, only support [M+H] and [M-H] for each mode
 #' @return list list with dataframe with the lipid referenced Kendrick mass defect(RKMD) and logical for class
-#' @references Method for the Identification of Lipid Classes Based on Referenced Kendrick Mass Analysis. Lerno LA, German JB, Lebrilla CB. Anal Chem. 2010 May 15;82(10):4236–45.
+#' @references Method for the Identification of Lipid Classes Based on Referenced Kendrick Mass Analysis. Lerno LA, German JB, Lebrilla CB. Anal Chem. 2010 May 15;82(10):4236-45.
 #' @examples
 #' data(list)
 #' RKMD <- findlipid(list)
@@ -503,7 +505,7 @@ findlipid <-
 #' Find PFCs based on mass defect analysis
 #' @param list list with data as peaks list, mz, rt and group information, retention time should be in seconds
 #' @return list list with potential PFCs compounds index
-#' @references Liu, Y.; D’Agostino, L. A.; Qu, G.; Jiang, G.; Martin, J. W. High-Resolution Mass Spectrometry (HRMS) Methods for Nontarget Discovery and Characterization of Poly- and per-Fluoroalkyl Substances (PFASs) in Environmental and Human Samples. TrAC Trends in Analytical Chemistry 2019, 121, 115420.
+#' @references Liu, Y.; D'Agostino, L. A.; Qu, G.; Jiang, G.; Martin, J. W. High-Resolution Mass Spectrometry (HRMS) Methods for Nontarget Discovery and Characterization of Poly- and per-Fluoroalkyl Substances (PFASs) in Environmental and Human Samples. TrAC Trends in Analytical Chemistry 2019, 121, 115420.
 #' @examples
 #' data(list)
 #' pfc <- findpfc(list)

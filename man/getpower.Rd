@@ -2,7 +2,7 @@
 % Please edit documentation in R/getmzrt.R
 \name{getpower}
 \alias{getpower}
-\title{Get the index with power restriction for certain study with BH adjusted p-value and certain power.}
+\title{Get the index with power restriction for certain study with BH adjusted p-value and certain power}
 \usage{
 getpower(list, pt = 0.05, qt = 0.05, powert = 0.8, imputation = "l")
 }
@@ -21,7 +21,7 @@ getpower(list, pt = 0.05, qt = 0.05, powert = 0.8, imputation = "l")
 list with current power and sample numbers for each peaks
 }
 \description{
-Get the index with power restriction for certain study with BH adjusted p-value and certain power.
+Get the index with power restriction for certain study with BH adjusted p-value and certain power
 }
 \examples{
 data(list)

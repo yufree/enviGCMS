@@ -3,7 +3,7 @@ enviGCMS: GC-MS Data Analysis for Environmental Science
 
 [![CRAN status](http://www.r-pkg.org/badges/version/enviGCMS)](https://cran.r-project.org/package=enviGCMS) [![Download counter](http://cranlogs.r-pkg.org/badges/enviGCMS)](https://cran.r-project.org/package=enviGCMS) [![Total downloads](https://cranlogs.r-pkg.org/badges/grand-total/enviGCMS)](https://cran.r-project.org/package=enviGCMS) [![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 
-`enviGCMS` provides functions for GC/LC-MS data analysis for environmental sciences.
+`enviGCMS` provides functions for GC/LC-MS data analysis for environmental sciences. It features the native **HORIZON** (Heavy-first Ordered Recursive Inference with Zero-loop Optimal Navigation) engine for high-performance chemical formula decomposition, isotope pattern simulation, and Kind & Fiehn Seven Golden Rules validation with zero external dependencies.
 
 Installation
 ------------

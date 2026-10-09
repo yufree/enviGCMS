@@ -59,10 +59,10 @@ Figure of Merit (FoM) for each candidate.
 The method is based on Kwiecien et al. (2015) \doi{10.1021/acs.analchem.5b01503}.
 
 
-Unlike the original MSxplorer implementation, this version uses \pkg{Rdisop}
-(already a dependency of enviGCMS) for both formula decomposition and isotope
-pattern calculation, instead of \pkg{rcdk}/\pkg{rJava}/\pkg{enviPat},
-requiring no additional dependencies.
+Unlike the original MSxplorer implementation, this version uses the native
+HORIZON (Heavy-first Ordered Recursive Inference with Zero-loop Optimal Navigation)
+engine via Rcpp for both high-performance formula decomposition and isotope pattern
+calculation, requiring no external dependencies.
 
 The input \code{msp} should be a single entry from the list returned by
 \code{\link{getMSP}}. For batch processing of entire MSP files, see

@@ -81,7 +81,7 @@
 #' Flag fragment peaks explainable as sub-formulae of a parent formula
 #'
 #' Uses the same ion-m/z conversion as \code{\link{HRMF}}: query =
-#' fragment m/z - (adduct delta + electron mass) at the Rdisop radical-ion
+#' fragment m/z - (adduct delta + electron mass) at the radical-ion
 #' convention.
 #'
 #' @param mz numeric vector of fragment m/z.
@@ -102,7 +102,7 @@
 
         vapply(qmz, function(m) {
                 mf <- tryCatch(
-                        Rdisop::decomposeMass(
+                        .decomposeMass(
                                 m,
                                 mzabs = mass_accuracy / 1e6 * max(abs(m), 1),
                                 z = charge,
@@ -120,7 +120,7 @@
 #'
 #' For each MS2 spectrum, the precursor neutral mass is derived from
 #' \code{PEPMASS}, \code{CHARGE} and the supplied \code{adduct}, candidate
-#' parent formulae are enumerated with \pkg{Rdisop}, and fragment peaks that
+#' parent formulae are enumerated with the native HORIZON engine, and fragment peaks that
 #' can be explained as sub-formulae of the best candidate (the one explaining
 #' the most peaks) are kept. Spectra without \code{PEPMASS} or without any
 #' candidate formula are written back unchanged.
@@ -214,7 +214,7 @@ cleanMGF <- function(file, out_file = NULL, adduct = "[M+H]+",
                 neutral <- prec * z - mode$delta * z
 
                 cand <- tryCatch(
-                        Rdisop::decomposeMass(
+                        .decomposeMass(
                                 neutral,
                                 mzabs = mass_accuracy / 1e6 * neutral,
                                 z = 0,

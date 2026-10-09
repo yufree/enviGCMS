@@ -37,7 +37,7 @@ c.mzrt <- function(x, ...) {
         class(re) <- "mzrt"
         return(re)
 }
-#' Convert an list object to csv file.
+#' Convert an list object to csv file
 #' @param list list with data as peaks list, mz, rt and group information
 #' @param name result name for csv and/or eic file, default NULL
 #' @param mzdigit m/z digits of row names of data frame, default 4
@@ -47,7 +47,7 @@ c.mzrt <- function(x, ...) {
 #' @param ... other parameters for `write.table`
 #' @return NULL, csv file
 #' @references Li, S.; Park, Y.; Duraisingham, S.; Strobel, F. H.; Khan, N.; Soltow, Q. A.; Jones, D. P.; Pulendran, B. PLOS Computational Biology 2013, 9 (7), e1003123.
-#' Xia, J., Sinelnikov, I.V., Han, B., Wishart, D.S., 2015. MetaboAnalyst 3.0—making metabolomics more meaningful. Nucl. Acids Res. 43, W251–W257.
+#' Xia, J., Sinelnikov, I.V., Han, B., Wishart, D.S., 2015. MetaboAnalyst 3.0 - making metabolomics more meaningful. Nucl. Acids Res. 43, W251-W257.
 #' @examples
 #' \dontrun{
 #' data(list)
@@ -156,7 +156,7 @@ getcsv <-
                         }
                 }
         }
-#' Get a mzrt list and/or save mz and rt range as csv file.
+#' Get a mzrt list and/or save mz and rt range as csv file
 #' @param list list with data as peaks list, mz, rt and group information
 #' @param name result name for csv and/or eic file, default NULL
 #' @param ... other parameters for `write.table`
@@ -411,7 +411,7 @@ getdoe <- function(list,
         }
 }
 
-#' Get the index with power restriction for certain study with BH adjusted p-value and certain power.
+#' Get the index with power restriction for certain study with BH adjusted p-value and certain power
 #' @param list list with data as peaks list, mz, rt and group information
 #' @param pt p value threshold, default 0.05
 #' @param qt q value threshold, BH adjust, default 0.05

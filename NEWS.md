@@ -1,3 +1,23 @@
+# enviGCMS 0.9.1
+
+## New features and improvements
+
+- **HORIZON Engine for formula decomposition**: Introduce the native **HORIZON** (Heavy-first Ordered Recursive Inference with Zero-loop Optimal Navigation) engine, completely eliminating the legacy dependency on Bioconductor's `Rdisop` and `imslib`. Provides microsecond-level mass decomposition via heavy-element priority ordering, double-sided mass horizon pruning, and O(1) analytical leaf solving.
+- **Fiehn Seven Golden Rules**: Integrate full heuristic chemical validation rules (Kind & Fiehn 2007) including Senior's valence rules (Senior 1951), Hydrogen-to-Carbon (H/C) ratio bounds, heteroatom ratios (N/C, O/C, P/C, S/C, Halogen/C), and Double Bond Equivalents (DBE). Added exported function `checkGoldenRules()`.
+- **Modern scoring metrics**: Added `scoreIsotopes()` computing Cosine similarity (unweighted spectral dot product), weighted dot product (MassBank/NIST style), and multinomial log-likelihood between experimental and theoretical isotopic distributions.
+- **High-resolution instrument modeling**: Added instrument resolution ($R = m/\text{FWHM}$) and FWHM-based isotope peak merging, accurately modeling Orbitrap, Q-TOF, and FT-ICR isotopic profiles.
+- **Batch vectorization and parallel computing**: Implemented vectorized and OpenMP multi-threaded mass decomposition (`rcpp_decompose_masses()`), enabling high-throughput chemical formula decomposition of thousands of features in fractions of a second. `getformula()` now supports vectorized input and multi-threading via `nthreads`.
+
+## Bug fixes
+
+- Fix `getisotopologues()`: resolve variable shadowing and indexing bugs in isotopologue pair selection, correct relative abundance calculations, and introduce `cutoff` parameter (default 0.05) with automatic fallback for molecules with few isotopic peaks.
+
+## Documentation and maintenance
+
+- Clean up documentation and references across manual pages, fixing trailing punctuation in titles and resolving non-ASCII character warnings.
+- Update documentation for `HRMF()`, `cleanMGF()`, and `getisotopologues()` to reflect the internal C++ formula engine instead of external package dependencies.
+- Ensure all exported functions have complete and valid Rd documentation.
+
 # enviGCMS 0.9.0
 
 ## Breaking changes

@@ -259,12 +259,22 @@ getMSP <- function(file) {
   return(li_processed)
 }
 
-#' Get chemical formula for mass to charge ratio.
+#' Get chemical formula for mass to charge ratio using the HORIZON algorithm
+#'
+#' Rapidly decomposes accurate mass-to-charge ratios into candidate chemical formulas
+#' using the native HORIZON (Heavy-first Ordered Recursive Inference with Zero-loop
+#' Optimal Navigation) engine. Supports chemical plausibility filtering via Double
+#' Bond Equivalents (DBE), Nitrogen rule, and Kind & Fiehn Seven Golden Rules.
+#'
 #' @param mz a vector with mass to charge ratio
 #' @param charge The charge value of the formula, default 0 for autodetect
 #' @param window The window accuracy in the same units as mass
 #' @param elements Elements list to take into account.
-#' @return list with chemical formula
+#' @param golden_rules logical, whether to filter by Fiehn Seven Golden Rules (default: TRUE)
+#' @param detailed logical, if TRUE return a list of data.frames with formula, exact mass, error, DBE, H/C ratio, Senior rules, and validation details; if FALSE (default), return a list of character vectors of valid formulas
+#' @param resolution numeric, mass spectrometer resolving power for isotope peak merging (default: 0)
+#' @param nthreads integer, number of OpenMP parallel threads for batch processing (default: 1)
+#' @return list of chemical formulas (or data.frames if detailed = TRUE)
 #' @export
 getformula <-
         function(mz,
@@ -277,39 +287,83 @@ getformula <-
                          O = c(0, 50),
                          P = c(0, 1),
                          S = c(0, 1)
-                 )) {
-                list <- list()
-                for (i in seq_along(mz)) {
-                        element <- paste(names(elements),
-                                         sep = "",
-                                         collapse = "")
-                        minelement <-
-                                vapply(elements, function(x)
-                                        x[1], 1)
-                        maxelement <-
-                                vapply(elements, function(x)
-                                        x[2], 1)
-                        minelement2 <-
-                                paste(paste0(names(minelement), minelement),
-                                      sep = "",
-                                      collapse = "")
-                        maxelement2 <-
-                                paste(paste0(names(maxelement), maxelement),
-                                      sep = "",
-                                      collapse = "")
-                        mfSet <-
-                                Rdisop::decomposeMass(
-                                        mz[i],
-                                        mzabs = window,
-                                        z = charge,
-                                        elements = element,
-                                        minElements = minelement2,
-                                        maxElements = maxelement2
-                                )
-                        formula <- mfSet$formula
-                        valid <- mfSet$valid
-                        list[[i]] <- formula[valid == 'Valid']
+                 ),
+                 golden_rules = TRUE,
+                 detailed = FALSE,
+                 resolution = 0,
+                 nthreads = 1) {
+                if (length(mz) == 0) return(list())
+                element <- paste(names(elements),
+                                 sep = "",
+                                 collapse = "")
+                minelement <-
+                        vapply(elements, function(x)
+                                x[1], 1)
+                maxelement <-
+                        vapply(elements, function(x)
+                                x[2], 1)
+                minelement2 <-
+                        paste(paste0(names(minelement), minelement),
+                              sep = "",
+                              collapse = "")
+                maxelement2 <-
+                        paste(paste0(names(maxelement), maxelement),
+                              sep = "",
+                              collapse = "")
 
+                decomp_res <- .decomposeMass(
+                        mz,
+                        mzabs = window,
+                        z = charge,
+                        elements = element,
+                        minElements = minelement2,
+                        maxElements = maxelement2,
+                        golden_rules = golden_rules,
+                        resolution = resolution,
+                        nthreads = nthreads
+                )
+
+                format_df <- function(res, target) {
+                        if (length(res$formula) == 0) {
+                                return(data.frame(
+                                        formula = character(0),
+                                        exactmass = numeric(0),
+                                        error_ppm = numeric(0),
+                                        dbe = numeric(0),
+                                        hc_ratio = numeric(0),
+                                        senior_rules = logical(0),
+                                        valid = character(0),
+                                        stringsAsFactors = FALSE
+                                ))
+                        }
+                        err_ppm <- round((res$exactmass - target) / target * 1e6, 2)
+                        data.frame(
+                                formula = res$formula,
+                                exactmass = res$exactmass,
+                                error_ppm = err_ppm,
+                                dbe = res$DBE,
+                                hc_ratio = round(res$hc_ratio, 3),
+                                senior_rules = res$senior_rules,
+                                valid = res$valid,
+                                stringsAsFactors = FALSE
+                        )
                 }
-                return(list)
+
+                if (detailed) {
+                        if (length(mz) == 1) {
+                                list(format_df(decomp_res, mz[1]))
+                        } else {
+                                lapply(seq_along(mz), function(i) {
+                                        format_df(decomp_res[[i]], mz[i])
+                                })
+                        }
+                } else {
+                        if (length(mz) == 1) {
+                                list(decomp_res$formula[decomp_res$valid == 'Valid'])
+                        } else {
+                                lapply(decomp_res, function(mfSet) {
+                                        mfSet$formula[mfSet$valid == 'Valid']
+                                })
+                        }
+                }
         }

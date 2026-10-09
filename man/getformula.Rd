@@ -2,14 +2,18 @@
 % Please edit documentation in R/io.R
 \name{getformula}
 \alias{getformula}
-\title{Get chemical formula for mass to charge ratio.}
+\title{Get chemical formula for mass to charge ratio using the HORIZON algorithm}
 \usage{
 getformula(
   mz,
   charge = 0,
   window = 0.001,
   elements = list(C = c(1, 50), H = c(1, 50), N = c(0, 50), O = c(0, 50), P = c(0, 1), S
-    = c(0, 1))
+    = c(0, 1)),
+  golden_rules = TRUE,
+  detailed = FALSE,
+  resolution = 0,
+  nthreads = 1
 )
 }
 \arguments{
@@ -20,10 +24,21 @@ getformula(
 \item{window}{The window accuracy in the same units as mass}
 
 \item{elements}{Elements list to take into account.}
+
+\item{golden_rules}{logical, whether to filter by Fiehn Seven Golden Rules (default: TRUE)}
+
+\item{detailed}{logical, if TRUE return a list of data.frames with formula, exact mass, error, DBE, H/C ratio, Senior rules, and validation details; if FALSE (default), return a list of character vectors of valid formulas}
+
+\item{resolution}{numeric, mass spectrometer resolving power for isotope peak merging (default: 0)}
+
+\item{nthreads}{integer, number of OpenMP parallel threads for batch processing (default: 1)}
 }
 \value{
-list with chemical formula
+list of chemical formulas (or data.frames if detailed = TRUE)
 }
 \description{
-Get chemical formula for mass to charge ratio.
+Rapidly decomposes accurate mass-to-charge ratios into candidate chemical formulas
+using the native HORIZON (Heavy-first Ordered Recursive Inference with Zero-loop
+Optimal Navigation) engine. Supports chemical plausibility filtering via Double
+Bond Equivalents (DBE), Nitrogen rule, and Kind & Fiehn Seven Golden Rules.
 }

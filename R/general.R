@@ -727,7 +727,7 @@ plotsms <- function(meanmatrix, rsdmatrix) {
         )
 }
 
-#' plot the density of the GC-MS data with EM algorithm to separate the data into two log normal distribution.
+#' Plot the density of the GC-MS data with EM algorithm to separate the data into two log normal distribution
 #' @param data imported data matrix of GC-MS
 #' @return NULL
 #' @examples
@@ -761,7 +761,7 @@ plothist <- function(data) {
                         "black")
         )
 }
-#' plot the calibration curve with error bar, r squared and equation.
+#' Plot the calibration curve with error bar, r squared and equation
 #' @param x concentration
 #' @param y response
 #' @param upper upper error bar
@@ -1010,9 +1010,10 @@ getintegration <- function(data,
 }
 
 #' Get the selected isotopologues at certain MS data
-#' @param formula the molecular formula.
+#' @param formula the molecular formula. 'C6H11O6' as default
 #' @param charge the charge of that molecular. 1 in EI mode as default
 #' @param width the width of the peak width on mass spectrum. 0.3 as default for low resolution mass spectrum.
+#' @param cutoff numeric, minimum relative abundance (fraction of base peak) to consider, default 0.05 (5\%).
 #' @examples
 #' \dontrun{
 #' # show isotopologues
@@ -1021,44 +1022,39 @@ getintegration <- function(data,
 #' @export
 getisotopologues <- function(formula = "C6H11O6",
                              charge = 1,
-                             width = 0.3) {
-        # input the formula and charge for your molecular,
-        formula <-  Rdisop::getMolecule(formula, z = charge, maxisotopes = 20)
-        # get the isotopes pattern of your molecular with high
-        # abundances. Here we suggest more than 10% abundance
-        # of your base peak would meet the SNR
-        isotopes <- data.frame(t(formula$isotopes[[1]]))
-        isotopes <- isotopes[isotopes[, 2] > 0.1,]
-        # order the intensity by the abundance
-        findpairs <-
-                isotopes[order(isotopes[, 2], decreasing = TRUE),]
-        # find the most similar pairs with high abundance
-        df <- outer(findpairs[, 1], findpairs[, 1], "/")
-        rownames(df) <- colnames(df) <- findpairs[, 1]
-        diag(df) <- df[upper.tri(df)] <- 0
-        t <- which(df == max(df), arr.ind = TRUE)
-        isotopologues1 <- as.numeric(rownames(df)[t[1]])
-        isotopologues2 <- as.numeric(colnames(df)[t[2]])
+                             width = 0.3,
+                             cutoff = 0.05) {
+        # input the formula and charge for your molecular
+        mol <- .getMolecule(formula, z = charge, maxisotopes = 20)
+        all_iso <- data.frame(t(mol$isotopes[[1]]))
+
+        # filter peaks by abundance relative to base peak
+        base_int <- max(all_iso[, 2])
+        isotopes <- all_iso[all_iso[, 2] >= cutoff * base_int, , drop = FALSE]
+
+        # if fewer than 2 peaks pass cutoff, fall back to the top 2 most abundant isotopologues
+        if (nrow(isotopes) < 2) {
+                isotopes <- all_iso[order(all_iso[, 2], decreasing = TRUE)[1:2], , drop = FALSE]
+        }
+
+        # order by abundance to identify the two strongest isotopologues
+        findpairs <- isotopes[order(isotopes[, 2], decreasing = TRUE), , drop = FALSE]
+        isotopologues1 <- findpairs[1, 1]
+        isotopologues2 <- findpairs[2, 1]
         isotopologuesL <- min(isotopologues1, isotopologues2)
         isotopologuesH <- max(isotopologues1, isotopologues2)
-        # get the caculated ratio at certain resolution
-        isotopes2 <-
-                data.frame(t(formula$isotopes[[1]]))
-        ratio <- sum(isotopes2[isotopes2[, 1] > isotopologuesL -
-                                       width &
-                                       isotopes2[, 1] < isotopologuesL + width,
-                               2]) / sum(isotopes2[isotopes2[, 1] > isotopologuesH -
-                                                           width &
-                                                           isotopes2[, 1] < isotopologuesH + width,
-                                                   2])
-        peak <-
-                c(
-                        round(isotopologuesL, digits = 5),
-                        round(isotopologuesH,
-                              digits = 5),
-                        round(ratio, digits = 5)
-                )
-        # peak <- as.character(peak)
+
+        # calculate ratio within specified peak width
+        ratio <- sum(all_iso[all_iso[, 1] > isotopologuesL - width &
+                             all_iso[, 1] < isotopologuesL + width, 2]) /
+                 sum(all_iso[all_iso[, 1] > isotopologuesH - width &
+                             all_iso[, 1] < isotopologuesH + width, 2])
+
+        peak <- c(
+                round(isotopologuesL, digits = 5),
+                round(isotopologuesH, digits = 5),
+                round(ratio, digits = 5)
+        )
         names(peak) <- c("light isotopologue",
                          "high isotopologue",
                          "caculated ratio")

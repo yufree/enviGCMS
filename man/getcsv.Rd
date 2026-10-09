@@ -2,7 +2,7 @@
 % Please edit documentation in R/getmzrt.R
 \name{getcsv}
 \alias{getcsv}
-\title{Convert an list object to csv file.}
+\title{Convert an list object to csv file}
 \usage{
 getcsv(list, name, mzdigit = 4, rtdigit = 1, type = "o", target = FALSE, ...)
 }
@@ -25,7 +25,7 @@ getcsv(list, name, mzdigit = 4, rtdigit = 1, type = "o", target = FALSE, ...)
 NULL, csv file
 }
 \description{
-Convert an list object to csv file.
+Convert an list object to csv file
 }
 \examples{
 \dontrun{
@@ -35,5 +35,5 @@ getcsv(list,name='demo')
 }
 \references{
 Li, S.; Park, Y.; Duraisingham, S.; Strobel, F. H.; Khan, N.; Soltow, Q. A.; Jones, D. P.; Pulendran, B. PLOS Computational Biology 2013, 9 (7), e1003123.
-Xia, J., Sinelnikov, I.V., Han, B., Wishart, D.S., 2015. MetaboAnalyst 3.0—making metabolomics more meaningful. Nucl. Acids Res. 43, W251–W257.
+Xia, J., Sinelnikov, I.V., Han, B., Wishart, D.S., 2015. MetaboAnalyst 3.0 - making metabolomics more meaningful. Nucl. Acids Res. 43, W251-W257.
 }

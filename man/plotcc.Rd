@@ -2,7 +2,7 @@
 % Please edit documentation in R/general.R
 \name{plotcc}
 \alias{plotcc}
-\title{plot the calibration curve with error bar, r squared and equation.}
+\title{Plot the calibration curve with error bar, r squared and equation}
 \usage{
 plotcc(x, y, upper, lower = upper, ...)
 }
@@ -18,7 +18,7 @@ plotcc(x, y, upper, lower = upper, ...)
 \item{...}{parameters for `plot` function}
 }
 \description{
-plot the calibration curve with error bar, r squared and equation.
+Plot the calibration curve with error bar, r squared and equation
 }
 \examples{
 \dontrun{

@@ -170,18 +170,18 @@
 
 #' Annotate experimental peaks with sub-formula matches and isotope patterns
 #'
-#' For each experimental peak, uses Rdisop to decompose the mass into
+#' For each experimental peak, decomposes the mass into
 #' sub-formulae consistent with the candidate formula constraints. Returns
 #' an \code{all_ions} data.frame of theoretical isotopologues, or NULL if
 #' no matches are found.
 #'
 #' @param compound data.frame with columns mz, intensity, mz_min, mz_max.
-#' The m/z values must follow the Rdisop ion convention for \code{charge}:
+#' The m/z values must follow the ion convention for \code{charge}:
 #' radical-cation/anion m/z for z = +/-1 (neutral mass -/+ electron mass),
 #' neutral masses for z = 0.
 #' @param element_str character, concatenated element symbols.
-#' @param min_str character, Rdisop minElements string.
-#' @param max_str character, Rdisop maxElements string.
+#' @param min_str character, minElements string.
+#' @param max_str character, maxElements string.
 #' @param charge integer, charge state.
 #' @param mass_accuracy numeric, mass accuracy in ppm.
 #' @param IR_RelAb_cutoff numeric, relative abundance cutoff for isotopologues.
@@ -198,7 +198,7 @@
                 match_list <- list(annotated = FALSE, annodf = NULL, isopat = NULL)
 
                 mfSet <- tryCatch(
-                        Rdisop::decomposeMass(
+                        .decomposeMass(
                                 compound$mz[i],
                                 mzabs = windows[i],
                                 z = charge,
@@ -232,9 +232,9 @@
                         )
 
                         mol <- tryCatch(
-                                Rdisop::getMolecule(matched_formula,
-                                                    z = charge,
-                                                    maxisotopes = 20),
+                                .getMolecule(matched_formula,
+                                             z = charge,
+                                             maxisotopes = 20),
                                 error = function(e) NULL
                         )
 
@@ -341,10 +341,10 @@
 #'   If \code{detailed = TRUE}, a named list of detailed results per formula/adduct.
 #'
 #' @details
-#' Unlike the original MSxplorer implementation, this version uses \pkg{Rdisop}
-#' (already a dependency of enviGCMS) for both formula decomposition and isotope
-#' pattern calculation, instead of \pkg{rcdk}/\pkg{rJava}/\pkg{enviPat},
-#' requiring no additional dependencies.
+#' Unlike the original MSxplorer implementation, this version uses the native
+#' HORIZON (Heavy-first Ordered Recursive Inference with Zero-loop Optimal Navigation)
+#' engine via Rcpp for both high-performance formula decomposition and isotope pattern
+#' calculation, requiring no external dependencies.
 #'
 #' The input \code{msp} should be a single entry from the list returned by
 #' \code{\link{getMSP}}. For batch processing of entire MSP files, see

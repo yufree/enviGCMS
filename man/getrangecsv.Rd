@@ -2,7 +2,7 @@
 % Please edit documentation in R/getmzrt.R
 \name{getrangecsv}
 \alias{getrangecsv}
-\title{Get a mzrt list and/or save mz and rt range as csv file.}
+\title{Get a mzrt list and/or save mz and rt range as csv file}
 \usage{
 getrangecsv(list, name, ...)
 }
@@ -17,5 +17,5 @@ getrangecsv(list, name, ...)
 NULL, csv file
 }
 \description{
-Get a mzrt list and/or save mz and rt range as csv file.
+Get a mzrt list and/or save mz and rt range as csv file
 }

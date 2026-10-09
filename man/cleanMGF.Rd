@@ -51,7 +51,7 @@ Invisibly, a data.frame with one row per spectrum: title, pepmass,
 \description{
 For each MS2 spectrum, the precursor neutral mass is derived from
 \code{PEPMASS}, \code{CHARGE} and the supplied \code{adduct}, candidate
-parent formulae are enumerated with \pkg{Rdisop}, and fragment peaks that
+parent formulae are enumerated with the native HORIZON engine, and fragment peaks that
 can be explained as sub-formulae of the best candidate (the one explaining
 the most peaks) are kept. Spectra without \code{PEPMASS} or without any
 candidate formula are written back unchanged.
