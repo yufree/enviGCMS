@@ -1,6 +1,6 @@
-# plot the calibration curve with error bar, r squared and equation.
+# Plot the calibration curve with error bar, r squared and equation
 
-plot the calibration curve with error bar, r squared and equation.
+Plot the calibration curve with error bar, r squared and equation
 
 ## Usage
 

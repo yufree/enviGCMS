@@ -2,10 +2,10 @@
 
 For each MS2 spectrum, the precursor neutral mass is derived from
 `PEPMASS`, `CHARGE` and the supplied `adduct`, candidate parent formulae
-are enumerated with Rdisop, and fragment peaks that can be explained as
-sub-formulae of the best candidate (the one explaining the most peaks)
-are kept. Spectra without `PEPMASS` or without any candidate formula are
-written back unchanged.
+are enumerated with the native HORIZON engine, and fragment peaks that
+can be explained as sub-formulae of the best candidate (the one
+explaining the most peaks) are kept. Spectra without `PEPMASS` or
+without any candidate formula are written back unchanged.
 
 ## Usage
 

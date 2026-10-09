@@ -11,7 +11,11 @@ state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 
 `enviGCMS` provides functions for GC/LC-MS data analysis for
-environmental sciences.
+environmental sciences. It features the native **HORIZON** (Heavy-first
+Ordered Recursive Inference with Zero-loop Optimal Navigation) engine
+for high-performance chemical formula decomposition, isotope pattern
+simulation, and Kind & Fiehn Seven Golden Rules validation with zero
+external dependencies.
 
 ## Installation
 

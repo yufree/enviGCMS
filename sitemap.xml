@@ -12,6 +12,7 @@
 <url><loc>https://yufree.github.io/enviGCMS/reference/Integration.html</loc></url>
 <url><loc>https://yufree.github.io/enviGCMS/reference/TBBPA.html</loc></url>
 <url><loc>https://yufree.github.io/enviGCMS/reference/c.mzrt.html</loc></url>
+<url><loc>https://yufree.github.io/enviGCMS/reference/checkGoldenRules.html</loc></url>
 <url><loc>https://yufree.github.io/enviGCMS/reference/cleanMGF.html</loc></url>
 <url><loc>https://yufree.github.io/enviGCMS/reference/findline.html</loc></url>
 <url><loc>https://yufree.github.io/enviGCMS/reference/findlipid.html</loc></url>
@@ -74,9 +75,15 @@
 <url><loc>https://yufree.github.io/enviGCMS/reference/plotsub.html</loc></url>
 <url><loc>https://yufree.github.io/enviGCMS/reference/plott.html</loc></url>
 <url><loc>https://yufree.github.io/enviGCMS/reference/plottic.html</loc></url>
+<url><loc>https://yufree.github.io/enviGCMS/reference/rcpp_check_golden_rules.html</loc></url>
+<url><loc>https://yufree.github.io/enviGCMS/reference/rcpp_decompose_mass.html</loc></url>
+<url><loc>https://yufree.github.io/enviGCMS/reference/rcpp_decompose_masses.html</loc></url>
+<url><loc>https://yufree.github.io/enviGCMS/reference/rcpp_get_molecule.html</loc></url>
+<url><loc>https://yufree.github.io/enviGCMS/reference/rcpp_score_isotopes.html</loc></url>
 <url><loc>https://yufree.github.io/enviGCMS/reference/runMDPlot.html</loc></url>
 <url><loc>https://yufree.github.io/enviGCMS/reference/runsccp.html</loc></url>
 <url><loc>https://yufree.github.io/enviGCMS/reference/sccp.html</loc></url>
+<url><loc>https://yufree.github.io/enviGCMS/reference/scoreIsotopes.html</loc></url>
 <url><loc>https://yufree.github.io/enviGCMS/reference/writeMSP.html</loc></url>
 </urlset>
 

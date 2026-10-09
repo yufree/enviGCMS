@@ -19,7 +19,7 @@ Figure of Merit (FoM) for each candidate."><!-- Global site tag (gtag.js) - Goog
 
     <a class="navbar-brand me-2" href="../index.html">enviGCMS</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -130,10 +130,10 @@ and HRMF_scores for each formula. If FALSE (default), return a summary data.fram
     <p>The method is based on Kwiecien et al. (2015) <a href="https://doi.org/10.1021/acs.analchem.5b01503" class="external-link">doi:10.1021/acs.analchem.5b01503</a>
 .</p>
 
-<p>Unlike the original MSxplorer implementation, this version uses <span class="pkg">Rdisop</span>
-(already a dependency of enviGCMS) for both formula decomposition and isotope
-pattern calculation, instead of <span class="pkg">rcdk</span>/<span class="pkg">rJava</span>/<span class="pkg">enviPat</span>,
-requiring no additional dependencies.</p>
+<p>Unlike the original MSxplorer implementation, this version uses the native
+HORIZON (Heavy-first Ordered Recursive Inference with Zero-loop Optimal Navigation)
+engine via Rcpp for both high-performance formula decomposition and isotope pattern
+calculation, requiring no external dependencies.</p>
 <p>The input <code>msp</code> should be a single entry from the list returned by
 <code><a href="getMSP.html">getMSP</a></code>. For batch processing of entire MSP files, see
 <code><a href="getHRMF.html">getHRMF</a></code>.</p>

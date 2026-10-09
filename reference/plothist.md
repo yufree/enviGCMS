@@ -1,7 +1,7 @@
-# plot the density of the GC-MS data with EM algorithm to separate the data into two log normal distribution.
+# Plot the density of the GC-MS data with EM algorithm to separate the data into two log normal distribution
 
-plot the density of the GC-MS data with EM algorithm to separate the
-data into two log normal distribution.
+Plot the density of the GC-MS data with EM algorithm to separate the
+data into two log normal distribution
 
 ## Usage
 

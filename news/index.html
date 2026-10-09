@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">enviGCMS</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,7 +44,33 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.9.0" id="envigcms-090">enviGCMS 0.9.0<a class="anchor" aria-label="anchor" href="#envigcms-090"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.9.1" id="envigcms-091">enviGCMS 0.9.1<a class="anchor" aria-label="anchor" href="#envigcms-091"></a></h2>
+<div class="section level3">
+<h3 id="new-features-and-improvements-0-9-1">New features and improvements<a class="anchor" aria-label="anchor" href="#new-features-and-improvements-0-9-1"></a></h3>
+<ul><li>
+<strong>HORIZON Engine for formula decomposition</strong>: Introduce the native <strong>HORIZON</strong> (Heavy-first Ordered Recursive Inference with Zero-loop Optimal Navigation) engine, completely eliminating the legacy dependency on Bioconductor’s <code>Rdisop</code> and <code>imslib</code>. Provides microsecond-level mass decomposition via heavy-element priority ordering, double-sided mass horizon pruning, and O(1) analytical leaf solving.</li>
+<li>
+<strong>Fiehn Seven Golden Rules</strong>: Integrate full heuristic chemical validation rules (Kind &amp; Fiehn 2007) including Senior’s valence rules (Senior 1951), Hydrogen-to-Carbon (H/C) ratio bounds, heteroatom ratios (N/C, O/C, P/C, S/C, Halogen/C), and Double Bond Equivalents (DBE). Added exported function <code><a href="../reference/checkGoldenRules.html">checkGoldenRules()</a></code>.</li>
+<li>
+<strong>Modern scoring metrics</strong>: Added <code><a href="../reference/scoreIsotopes.html">scoreIsotopes()</a></code> computing Cosine similarity (unweighted spectral dot product), weighted dot product (MassBank/NIST style), and multinomial log-likelihood between experimental and theoretical isotopic distributions.</li>
+<li>
+<strong>High-resolution instrument modeling</strong>: Added instrument resolution (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mo>=</mo><mi>m</mi><mi>/</mi><mtext mathvariant="normal">FWHM</mtext></mrow><annotation encoding="application/x-tex">R = m/\text{FWHM}</annotation></semantics></math>) and FWHM-based isotope peak merging, accurately modeling Orbitrap, Q-TOF, and FT-ICR isotopic profiles.</li>
+<li>
+<strong>Batch vectorization and parallel computing</strong>: Implemented vectorized and OpenMP multi-threaded mass decomposition (<code><a href="../reference/rcpp_decompose_masses.html">rcpp_decompose_masses()</a></code>), enabling high-throughput chemical formula decomposition of thousands of features in fractions of a second. <code><a href="../reference/getformula.html">getformula()</a></code> now supports vectorized input and multi-threading via <code>nthreads</code>.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-0-9-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-9-1"></a></h3>
+<ul><li>Fix <code><a href="../reference/Getisotopologues.html">getisotopologues()</a></code>: resolve variable shadowing and indexing bugs in isotopologue pair selection, correct relative abundance calculations, and introduce <code>cutoff</code> parameter (default 0.05) with automatic fallback for molecules with few isotopic peaks.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="documentation-and-maintenance-0-9-1">Documentation and maintenance<a class="anchor" aria-label="anchor" href="#documentation-and-maintenance-0-9-1"></a></h3>
+<ul><li>Clean up documentation and references across manual pages, fixing trailing punctuation in titles and resolving non-ASCII character warnings.</li>
+<li>Update documentation for <code><a href="../reference/HRMF.html">HRMF()</a></code>, <code><a href="../reference/cleanMGF.html">cleanMGF()</a></code>, and <code><a href="../reference/Getisotopologues.html">getisotopologues()</a></code> to reflect the internal C++ formula engine instead of external package dependencies.</li>
+<li>Ensure all exported functions have complete and valid Rd documentation.</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.9.0" id="envigcms-090">enviGCMS 0.9.0<a class="anchor" aria-label="anchor" href="#envigcms-090"></a></h2><p class="text-muted">CRAN release: 2026-10-07</p>
 <div class="section level3">
 <h3 id="breaking-changes-0-9-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-9-0"></a></h3>
 <ul><li>Remove all deprecated functions from v0.7.x (32 functions including <code>getdata</code>, <code>getdata2</code>, <code>getmzrt2</code>, <code>svabatch</code>, <code>svaplot</code>, etc.). Users should migrate to current API.</li>

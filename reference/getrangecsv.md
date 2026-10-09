@@ -1,6 +1,6 @@
-# Get a mzrt list and/or save mz and rt range as csv file.
+# Get a mzrt list and/or save mz and rt range as csv file
 
-Get a mzrt list and/or save mz and rt range as csv file.
+Get a mzrt list and/or save mz and rt range as csv file
 
 ## Usage
 

@@ -11,7 +11,11 @@ state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 
 `enviGCMS` provides functions for GC/LC-MS data analysis for
-environmental sciences.
+environmental sciences. It features the native **HORIZON** (Heavy-first
+Ordered Recursive Inference with Zero-loop Optimal Navigation) engine
+for high-performance chemical formula decomposition, isotope pattern
+simulation, and Kind & Fiehn Seven Golden Rules validation with zero
+external dependencies.
 
 ## Installation
 
@@ -60,6 +64,8 @@ vignettes in this package.
   data for TBBPA metabolism in Pumpkin
 - [`c(`*`<mzrt>`*`)`](https://yufree.github.io/enviGCMS/reference/c.mzrt.md)
   : c method for mzrt object
+- [`checkGoldenRules()`](https://yufree.github.io/enviGCMS/reference/checkGoldenRules.md)
+  : Check Chemical Formula against Fiehn Seven Golden Rules
 - [`cleanMGF()`](https://yufree.github.io/enviGCMS/reference/cleanMGF.md)
   : Clean an MGF file by keeping only formula-explainable peaks
 - [`findline()`](https://yufree.github.io/enviGCMS/reference/findline.md)
@@ -70,9 +76,7 @@ vignettes in this package.
 - [`findmet()`](https://yufree.github.io/enviGCMS/reference/findmet.md)
   : Screen metabolites by Mass Defect
 - [`findohc()`](https://yufree.github.io/enviGCMS/reference/findohc.md)
-  : Screen organohalogen compounds by retention time, mass defect
-  analysis and isotope relationship modified by literature report. Also
-  support compounds with \[M\] and \[M+2\] ratio cutoff.
+  : Screen organohalogen compounds
 - [`findpfc()`](https://yufree.github.io/enviGCMS/reference/findpfc.md)
   : Find PFCs based on mass defect analysis
 - [`getHRMF()`](https://yufree.github.io/enviGCMS/reference/getHRMF.md)
@@ -89,7 +93,7 @@ vignettes in this package.
 - [`getcompare()`](https://yufree.github.io/enviGCMS/reference/getcompare.md)
   : Align multiple peaks list to one peak list
 - [`getcsv()`](https://yufree.github.io/enviGCMS/reference/getcsv.md) :
-  Convert an list object to csv file.
+  Convert an list object to csv file
 - [`getdoe()`](https://yufree.github.io/enviGCMS/reference/getdoe.md) :
   Generate the group level rsd and average intensity based on DoE,
 - [`getdwtus()`](https://yufree.github.io/enviGCMS/reference/getdwtus.md)
@@ -97,7 +101,8 @@ vignettes in this package.
 - [`getfilter()`](https://yufree.github.io/enviGCMS/reference/getfilter.md)
   : Filter the data based on row and column index
 - [`getformula()`](https://yufree.github.io/enviGCMS/reference/getformula.md)
-  : Get chemical formula for mass to charge ratio.
+  : Get chemical formula for mass to charge ratio using the HORIZON
+  algorithm
 - [`getimputation()`](https://yufree.github.io/enviGCMS/reference/getimputation.md)
   : Impute the peaks list data
 - [`getmass()`](https://yufree.github.io/enviGCMS/reference/getmass.md)
@@ -120,11 +125,11 @@ vignettes in this package.
   Merge positive and negative mode data
 - [`getpower()`](https://yufree.github.io/enviGCMS/reference/getpower.md)
   : Get the index with power restriction for certain study with BH
-  adjusted p-value and certain power.
+  adjusted p-value and certain power
 - [`getpqsi()`](https://yufree.github.io/enviGCMS/reference/getpqsi.md)
   : Compute pooled QC linear index according to run order
 - [`getrangecsv()`](https://yufree.github.io/enviGCMS/reference/getrangecsv.md)
-  : Get a mzrt list and/or save mz and rt range as csv file.
+  : Get a mzrt list and/or save mz and rt range as csv file
 - [`getretcor()`](https://yufree.github.io/enviGCMS/reference/getretcor.md)
   : Perform peaks list alignment and return features table
 - [`getrmd()`](https://yufree.github.io/enviGCMS/reference/getrmd.md) :
@@ -145,7 +150,7 @@ vignettes in this package.
 - [`plotTopMS2Peaks()`](https://yufree.github.io/enviGCMS/reference/plotTopMS2Peaks.md)
   : Extract top MS2 ions from MS1 EIC interactively
 - [`plotcc()`](https://yufree.github.io/enviGCMS/reference/plotcc.md) :
-  plot the calibration curve with error bar, r squared and equation.
+  Plot the calibration curve with error bar, r squared and equation
 - [`plotden()`](https://yufree.github.io/enviGCMS/reference/plotden.md)
   : plot the density for multiple samples
 - [`plotdwtus()`](https://yufree.github.io/enviGCMS/reference/plotdwtus.md)
@@ -153,8 +158,8 @@ vignettes in this package.
 - [`plotgroup()`](https://yufree.github.io/enviGCMS/reference/plotgroup.md)
   : Plot the response group of GC-MS
 - [`plothist()`](https://yufree.github.io/enviGCMS/reference/plothist.md)
-  : plot the density of the GC-MS data with EM algorithm to separate the
-  data into two log normal distribution.
+  : Plot the density of the GC-MS data with EM algorithm to separate the
+  data into two log normal distribution
 - [`plothm()`](https://yufree.github.io/enviGCMS/reference/plothm.md) :
   Plot the heatmap of mzrt profiles
 - [`plotint()`](https://yufree.github.io/enviGCMS/reference/plotint.md)
@@ -201,6 +206,8 @@ vignettes in this package.
 - [`sccp`](https://yufree.github.io/enviGCMS/reference/sccp.md) :
   Short-Chain Chlorinated Paraffins(SCCPs) peaks information for
   quantitative analysis
+- [`scoreIsotopes()`](https://yufree.github.io/enviGCMS/reference/scoreIsotopes.md)
+  : Calculate Isotopic Pattern Similarity Scores
 - [`writeMSP()`](https://yufree.github.io/enviGCMS/reference/writeMSP.md)
   : Write MSP file for NIST search
 

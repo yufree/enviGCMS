@@ -1,7 +1,7 @@
-# Get the index with power restriction for certain study with BH adjusted p-value and certain power.
+# Get the index with power restriction for certain study with BH adjusted p-value and certain power
 
 Get the index with power restriction for certain study with BH adjusted
-p-value and certain power.
+p-value and certain power
 
 ## Usage
 

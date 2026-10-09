@@ -1,6 +1,6 @@
-# Convert an list object to csv file.
+# Convert an list object to csv file
 
-Convert an list object to csv file.
+Convert an list object to csv file
 
 ## Usage
 
@@ -52,8 +52,8 @@ NULL, csv file
 Li, S.; Park, Y.; Duraisingham, S.; Strobel, F. H.; Khan, N.; Soltow, Q.
 A.; Jones, D. P.; Pulendran, B. PLOS Computational Biology 2013, 9 (7),
 e1003123. Xia, J., Sinelnikov, I.V., Han, B., Wishart, D.S., 2015.
-MetaboAnalyst 3.0—making metabolomics more meaningful. Nucl. Acids Res.
-43, W251–W257.
+MetaboAnalyst 3.0 - making metabolomics more meaningful. Nucl. Acids
+Res. 43, W251-W257.
 
 ## Examples
 

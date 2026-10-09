@@ -1,4 +1,4 @@
-# Screen organohalogen compounds by retention time, mass defect analysis and isotope relationship modified by literature report. Also support compounds with \[M\] and \[M+2\] ratio cutoff.
+# Screen organohalogen compounds
 
 Screen organohalogen compounds by retention time, mass defect analysis
 and isotope relationship modified by literature report. Also support
@@ -68,7 +68,7 @@ list with filtered organohalogen compounds
 
 Identification of Novel Brominated Compounds in Flame Retarded Plastics
 Containing TBBPA by Combining Isotope Pattern and Mass Defect Cluster
-Analysis Ana Ballesteros-Gómez, Joaquín Ballesteros, Xavier Ortiz,
+Analysis Ana Ballesteros-Gomez, Joaquin Ballesteros, Xavier Ortiz,
 Willem Jonker, Rick Helmus, Karl J. Jobst, John R. Parsons, and Eric J.
 Reiner Environmental Science & Technology 2017 51 (3), 1518-1526 DOI:
 10.1021/acs.est.6b03294

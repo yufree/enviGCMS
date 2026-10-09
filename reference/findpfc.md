@@ -21,7 +21,7 @@ list list with potential PFCs compounds index
 
 ## References
 
-Liu, Y.; D’Agostino, L. A.; Qu, G.; Jiang, G.; Martin, J. W.
+Liu, Y.; D'Agostino, L. A.; Qu, G.; Jiang, G.; Martin, J. W.
 High-Resolution Mass Spectrometry (HRMS) Methods for Nontarget Discovery
 and Characterization of Poly- and per-Fluoroalkyl Substances (PFASs) in
 Environmental and Human Samples. TrAC Trends in Analytical Chemistry
